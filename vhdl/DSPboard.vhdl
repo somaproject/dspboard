@@ -82,7 +82,7 @@ architecture Behavioral of DSPBoard is
 	signal dina : std_logic_vector(15 downto 0) := (others => '0');
 	signal nexta, acka : std_logic := '0';
 
-   signal neweventsa , modersta, erda: std_logic := '0';
+   signal nevta , modersta, erda: std_logic := '0';
 	
 	signal raouta : std_logic_vector(10 downto 0) := (others => '0'); 
 	signal maddra : std_logic_vector(7 downto 0) := (others => '0'); 
@@ -111,7 +111,7 @@ architecture Behavioral of DSPBoard is
 	signal dinb : std_logic_vector(15 downto 0) := (others => '0');
 	signal nextb, ackb : std_logic := '0';
 
-   signal neweventsb, moderstb, erdb: std_logic := '0';
+   signal nevtb, moderstb, erdb: std_logic := '0';
 	signal raoutb : std_logic_vector(10 downto 0) := (others => '0'); 
 
 	signal maddrb : std_logic_vector(7 downto 0) := (others => '0'); 
@@ -255,32 +255,42 @@ architecture Behavioral of DSPBoard is
 				  DSPRESET : in std_logic);
 	end component;
 
-	component events is
+	component EventInputs is
 	    Port ( CLK : in std_logic;
 	           SYSCLK : in std_logic;
 	           RESET : in std_logic;
-	           DIN : in std_logic_vector(15 downto 0);
 	           DOUT : out std_logic_vector(15 downto 0);
 	           ADDR : in std_logic_vector(3 downto 0);
-	           WE : in std_logic;
 				  RD : in std_logic; 
 				  MODE : out std_logic;
 				  DSPRESET : out std_logic; 
 	           RAIN : out std_logic_vector(9 downto 0);
 	           RDIN : out std_logic_vector(15 downto 0);
 				  RWE : out std_logic; 
-	           EDATAO : out std_logic_vector(15 downto 0);
-	           EADDRO : out std_logic_vector(7 downto 0);
-	           EOE : out std_logic;
 	           EEVENT : in std_logic;
-	           ECE : in std_logic;
 	           EDATAI : in std_logic_vector(15 downto 0);
 	           EADDRI : in std_logic_vector(7 downto 0);
-			  	  NEWEVENTS : out std_logic;
+				  NEWEVENTS : out std_logic;
 				  MADDR : in std_logic_vector(7 downto 0);
-				  MODERST : in std_logic;
-				  NEWMYEVENT : out std_logic);
+				  MODERST : in std_logic);
 	end component;
+
+
+
+	component EventOutputs is
+	    Port ( CLK : in std_logic;
+	           SYSCLK : in std_logic;
+	           DIN : in std_logic_vector(15 downto 0);
+	           WE : in std_logic;
+	           ADDR : in std_logic_vector(3 downto 0);
+	           EDATA : out std_logic_vector(15 downto 0);
+	           EADDR : out std_logic_vector(7 downto 0);
+	           EOE : out std_logic;
+	           ECE : in std_logic;
+	           EEVENT : in std_logic;
+	           RESET : in std_logic);
+	end component;
+
 
 
 	component DCM
@@ -461,7 +471,7 @@ begin
 		RESET => RESETA,
 		NEWSAMPLE => newsamples,
 		SAMPLES => SAMPLESA,
-		NEWEVENTS => neweventsa,
+		NEWEVENTS => nevta,
 		EVENTS => EVENTSA,
 		TIMEINC => timeinc,
 		TINC => TINCA,
@@ -491,32 +501,37 @@ begin
 		DSPRESET => dspreseta); 
 
 
-	eventsa_inst : events port map (
+	eventsina: EventInputs port map(
 		CLK => clk,
 		SYSCLK => sysclk,
-		RESET => RESET,
-		DIN => douta,
+		RESET => reset,
 		DOUT => eventdina,
 		ADDR => addroa(3 downto 0),
-		WE => ewea,
 		RD => erda,
-		MODE => modea, 
+		MODE => modea,
 		DSPRESET => dspreseta,
 		RAIN => raina,
 		RDIN => rdina,
 		RWE => rwea,
-		EDATAO => edoa,
-		EADDRO => eaoa,
-		EOE => eoea, 
 		EEVENT => ea,
-		ECE => ecea,
 		EDATAI => edia,
 		EADDRI => eaia,
-		NEWEVENTS => neweventsa,
+		NEWEVENTS => nevta,
 		MADDR => maddra,
-		MODERST => modersta,
-		NEWMYEVENT => myeventa); 
-
+		MODERST => modersta) ;  
+		
+   eventsouta : EventOutputs port map (
+		CLK => clk,
+		SYSCLK => sysclk,
+		DIN => douta,
+		WE => ewea,
+		ADDR => addroa(3 downto 0),
+		EOE => eoea,
+		ECE => ecea,
+		EADDR => eaoa,
+		EDATA => edoa,
+		EEVENT => ea, 
+		RESET => reset); 
 
 	dspiob : dspio port map (
 		CLK => clk,
@@ -546,7 +561,7 @@ begin
 		RESET => RESETB,
 		NEWSAMPLE => newsamples,
 		SAMPLES => SAMPLESB,
-		NEWEVENTS => neweventsb,
+		NEWEVENTS => nevtb,
 		EVENTS => EVENTSB,
 		TIMEINC => timeinc,
 		TINC => TINCB,
@@ -576,31 +591,37 @@ begin
 		DSPRESET => dspresetb); 
 
 
-	eventsb_inst : events port map (
+	eventsinb: EventInputs port map(
 		CLK => clk,
 		SYSCLK => sysclk,
-		RESET => RESET,
-		DIN => doutb,
+		RESET => reset,
 		DOUT => eventdinb,
 		ADDR => addrob(3 downto 0),
-		WE => eweb,
 		RD => erdb,
-		MODE => modeb, 
+		MODE => modeb,
 		DSPRESET => dspresetb,
 		RAIN => rainb,
 		RDIN => rdinb,
 		RWE => rweb,
-		EDATAO => edob,
-		EADDRO => eaob,
-		EOE => eoeb, 
 		EEVENT => eb,
-		ECE => eceb,
 		EDATAI => edib,
 		EADDRI => eaib,
-		NEWEVENTS => neweventsb,
+		NEWEVENTS => nevtb,
 		MADDR => maddrb,
-		MODERST => moderstb,
-		NEWMYEVENT => myeventb);
+		MODERST => moderstb) ;  
+		
+   eventsoutb : EventOutputs port map (
+		CLK => clk,
+		SYSCLK => sysclk,
+		DIN => doutb,
+		WE => eweb,
+		ADDR => addrob(3 downto 0),
+		EOE => eoeb,
+		ECE => eceb,
+		EADDR => eaob,
+		EDATA => edob,
+		EEVENT => eb, 
+		RESET => reset); 
 		
 	process(clk) is 
 		variable cnt : integer range 0 to 10000000 := 0; 

@@ -27,9 +27,10 @@ architecture Behavioral of EventOutputs is
 -- bus in a circular buffer, and then writes them when ECE is asserted. 
 
 -- input side signals
-	signal dinl : std_logic_vector(15 downto 0) := (others=> '0'); 
-	signal aen, wel, well, wea : std_logic := (others => '0'); 
+	signal dinl, dia : std_logic_vector(15 downto 0) := (others=> '0'); 
+	signal aen, wel, well, wea : std_logic := '0'; 
 	signal aoh, aol : std_logic_vector(3 downto 0) := (others => '0'); 
+	signal addrl : std_logic_vector(3 downto 0) := (others => '0');
 	signal addra : std_logic_vector(9 downto 0) := (others => '0'); 
 	signal ecntin: std_logic_vector(5 downto 0) := (others => '0'); 
 
@@ -108,7 +109,7 @@ architecture Behavioral of EventOutputs is
 	        DOPA    : out STD_LOGIC_VECTOR (1 downto 0);
 	        DOPB    : out STD_LOGIC_VECTOR (3 downto 0)
 	       ); 
-
+ 	end component; 
 
 begin
 	circbuf: RAMB16_S18_S36 port map(	
@@ -151,19 +152,19 @@ begin
 			 X"5" when addrl = X"5" else
 			 X"7" when addrl = X"6" else
 			 X"9" when addrl = X"7" else
-			 X"11" when addrl = X"8" else
-			 X"12";
+			 X"B" when addrl = X"8" else
+			 X"C";
 
 	aol <= X"2" when addrl = X"0" else
 			 X"6" when addrl = X"1" else
-			 X"10" when addrl = X"2" else
+			 X"A" when addrl = X"2" else
 			 X"1" when addrl = X"3" else
 			 X"3" when addrl = X"4" else
 			 X"5" when addrl = X"5" else
 			 X"7" when addrl = X"6" else
 			 X"9" when addrl = X"7" else
-			 X"11" when addrl = X"8" else
-			 X"12";
+			 X"B" when addrl = X"8" else
+			 X"C";
 
 	clkmain: process(CLK) is
 	begin
@@ -185,7 +186,7 @@ begin
 	EOE <= ENOUT; 
 
 	eend <= '1' when wcnt = "110" else '0';
-	wen <= '1' when enout = '1' or (ece = '1' and eevent = '1'); 
+	wen <= '1' when enout = '1' or (ece = '1' and eevent = '1') else '0'; 
 
 	addrb <= ecntout & wcnt; 
 
