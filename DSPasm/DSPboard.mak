@@ -46,6 +46,9 @@ ifeq ($(MAKECMDGOALS),Debug)
 
 Debug : ./debug/dspboard.dxe 
 
+./debug/events.doj :./events.asm ./memory.h ../../../program\ files/analog\ devices/visualdsp/212xx/include/def21262.h ../../../program\ files/analog\ devices/visualdsp/212xx/include/def21266.h 
+	$(VDSP)/easm21k.exe -proc ADSP-21262  -o .\Debug\events.doj -g .\events.asm -MM
+
 ./debug/loader.doj :./loader.asm ../../../program\ files/analog\ devices/visualdsp/212xx/include/def21262.h ../../../program\ files/analog\ devices/visualdsp/212xx/include/def21266.h 
 	$(VDSP)/easm21k.exe -proc ADSP-21262  -o .\Debug\loader.doj -g .\loader.asm -MM
 
@@ -55,14 +58,15 @@ Debug : ./debug/dspboard.dxe
 ./debug/samples.doj :./memory.h ./samples.asm ../../../program\ files/analog\ devices/visualdsp/212xx/include/def21262.h ../../../program\ files/analog\ devices/visualdsp/212xx/include/def21266.h 
 	$(VDSP)/easm21k.exe -proc ADSP-21262  -o .\Debug\samples.doj -g .\samples.asm -MM
 
-./debug/dspboard.dxe :./dspboard.ldf ../../../program\ files/analog\ devices/visualdsp/212xx/lib/libc26x.dlb ../../../program\ files/analog\ devices/visualdsp/212xx/lib/libdsp26x.dlb ../../../program\ files/analog\ devices/visualdsp/212xx/lib/libio.dlb ./debug/loader.doj ./debug/main.doj ./debug/samples.doj 
-	$(VDSP)/cc21k.exe .\Debug\loader.doj .\Debug\main.doj .\Debug\samples.doj -T .\DSPboard.ldf -proc ADSP-21262 -L .\Debug -flags-link -od,.\Debug -o .\Debug\DSPboard.dxe -map .\Debug\DSPboard.map -flags-link -MM
+./debug/dspboard.dxe :./dspboard.ldf ../../../program\ files/analog\ devices/visualdsp/212xx/lib/libc26x.dlb ../../../program\ files/analog\ devices/visualdsp/212xx/lib/libdsp26x.dlb ../../../program\ files/analog\ devices/visualdsp/212xx/lib/libio.dlb ./debug/events.doj ./debug/loader.doj ./debug/main.doj ./debug/samples.doj 
+	$(VDSP)/cc21k.exe .\Debug\events.doj .\Debug\loader.doj .\Debug\main.doj .\Debug\samples.doj -T .\DSPboard.ldf -proc ADSP-21262 -L .\Debug -flags-link -od,.\Debug -o .\Debug\DSPboard.dxe -map .\Debug\DSPboard.map -flags-link -MM
 
 endif
 
 ifeq ($(MAKECMDGOALS),Debug_clean)
 
 Debug_clean:
+	$(RM) ".\Debug\events.doj"
 	$(RM) ".\Debug\loader.doj"
 	$(RM) ".\Debug\main.doj"
 	$(RM) ".\Debug\samples.doj"

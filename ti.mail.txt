@@ -1,0 +1,160 @@
+From support@ti.com Wed Jan 14 14:06:49 2004
+Date: 22 Nov 2003 04:48:30 -0500
+From: support@ti.com
+To: jonas@MIT.EDU
+Subject: RE: AAP, Email Technical Support, focus.ti.com, TPS54314
+
+    [ The following text is in the "windows-1252" character set. ]
+    [ Your display is set for the "US-ASCII" character set.  ]
+    [ Some characters may be displayed incorrectly. ]
+
+ERIC,
+
+The two equations in question are absolute worst case, they assume that all of the input current is sourced in equation 1 by the 10 uF bypass cap.  This is a low ESR ceramic type and the ESR is ignored.  In equation 2, it is assumed that all the ripple current goes thru the bulk cap.  This cap is typically some type of electrolytic, so the ESR is taken into account.  In real life, the ripple currents are shared, so the actual measured voltage will be smaller than what is calculated.  Also, depending on the output impedance of the source supply, some of the ripple current will be shared by that supply.  If the designer is going to distribute the SWIFT devices on his backplane so that each one is located adjacent to the daughter card slots, each SWIFT should have a 10 uF bypass ceramic X5R or X7R directly across the VIN and PGND leads as close to the device as possible.  One bulk capacitor at the point where the external PSU is connected to the backplane.  It is probably not necessary to have an individual bulk cap for each SWIFT, perhaps 4 distributed along the backplane would suffice.  Sanyo OSCON works well, they have low ESR.
+
+In general, if all the SWIFT devices were synchronized, the ripple currents would add and the resulting ripple voltage would increase.  In this case, the SWIFT internally compensated devices have no sync capability, so the current from each will be randomly out of or in phase, sometimes adding, sometimes not.
+
+Let me know if I can be of further help.
+
+Regards,
+Hanumantha
+
+[THREAD ID:1-IQZNV][SYS:Done]
+
+
+
+-----Original Message-----
+
+
+From:  jonas@MIT.EDU
+Sent:  11/20/03 3:10:22 PM
+To:  support@ti.com
+Cc:  jonas@cortical.MIT.EDU
+Subject:  AAP, Email Technical Support, focus.ti.com, TPS54314
+
+
+Hi! Sorry, my question may have been a bit poorly-defined. I have a
+backplane that has already been committed to implementation, I.e. I can't
+change anything on the backplane.
+
+This backplane is supposed to aggregate the data from 16 DSP cards, and
+provides each card with 3.3V, 2A. Now, the source of the backplane's power
+is a 40-A switching PSU, an off-the-shelf module that has some output
+ripple of  it's own.
+
+The reason the 16 Switching regulators will be in parallel is each will be
+getting its power from the backplane. Only their inputs will be in
+parallel, not their outputs.
+
+Attached is a diagram.
+
+Now, going off of equation 1 from app note SLVA111, the delat-Vin, i.e.
+"The maximum peak-to-peak input voltage without a bulk capacitor", is (at
+500 kHz switching and with Iout = 1.5A) 75 mV.
+
+As I understand it, this is ripple that the switching regulator
+_contributes_ to the output by causing a current inrush every 500 kHz.
+This suggests that connecting a large number of these inputs in parallel
+would create a  problem, as there would be (for my application, 16) 500
+khz switching supplies potentially cuasing 75 mV of supply ripple each, or
+1.2 V of supply ripple total.
+
+Now, equation 2 of the same app note suggests using a bluk capacitor to
+reduce ripple. But the Iout(max)*ESR(max) term pretty much guarantees that
+this won't actually _reduce_ ripple, as I can't seem to find any
+capacitors for which  the ESR < 0.1 ohm, and 1.5A * 0.1 ohm = 150 mV of ripple, or double our
+initial, no-bulk-capacitor result.
+
+So I'm at a bit of a loss as to how to connect a bunch of these
+daughtercards to the backplane without having horrible input ripple
+problems. Any ideas?
+          ...Eric
+
+
+
+
+On Thu, 20 Nov 2003 support@ti.com wrote:
+
+> Hi Eric,
+>
+> Regarding your query on parallelling 16 identicalTPS54314 devices, I am not able to understand your exact scheme. Is it that you are trying to parallel several of these devices to obtain more current or doing something else.
+>
+> Can you please send the schematic (and or block digramatic representation of your scheme), so I can review it and give proper recommendations.
+>
+>
+> Regards,
+>
+> Hanumantha Valluru
+>
+> Analog and Mixed Signal Product Specialist
+> Texas Instruments
+> Semiconductor Technical Support
+> http://www-k.ext.ti.com/sc/technical_support/pic/americas.htm
+>
+> If you have further questions please reply to this email.  And see the Analog Knowledge Base located at <http://www-k.ext.ti.com/sc/technical-support/knowledgebase.asp?aap>
+>
+> TI assumes no liability for applications assistance or customer product design. Customer is fully responsible for all design decisions and engineering with regard to its products, including decisions relating to application of TI products. By providing technical information, TI does not intend to offer or provide engineering services or advice concerning Customer's design. If Customer desires engineering services, the Customer should rely on its retained employees and consultants and/or procure engineering services from a licensed professional engineer (LPE).
+>
+> [THREAD ID:1-IQZNV][SYS:Done]
+>
+>
+>
+> -----Original Message-----
+>
+>
+> From:  jonas@cortical.mit.edu
+> Sent:  11/12/03 10:05:05 AM
+> To:  "support@ti.com" support@ti.com
+> Subject:  AAP, Email Technical Support, focus.ti.com, TPS54314
+>
+> This Email Sent From: Email Technical Support
+> http://focus.ti.com/general/docs/techsupport.jsp
+>
+> DATE / TIME (UTC): Wed, 12 Nov 2003 15:03:46 GMT
+> CUSTOMER'S REGIONAL LOCAL TIME: Wed Nov 12 10:03:46 2003
+>
+> NAME : Eric  Jonas
+>
+>                 FIRST NAME: Eric
+>                  LAST NAME: Jonas
+>                      TITLE: Research Engineer
+>                    COMPANY: MIT
+>                      EMAIL: jonas@cortical.mit.edu
+>                      PHONE: 617-252-1841
+>                        FAX:
+>                    ADDRESS1:
+>                    ADDRESS2:
+>                       CITY:
+>                      STATE:
+>                POSTAL CODE:
+>                    COUNTRY: USA
+> PART NUMBER or DESCRIPTION: TPS54314
+>              END EQUIPMENT: Industrial
+>                APPLICATION: DSP daughtercard
+>               DESIGN STAGE: Prototype
+>        PRODUCTION QUANTITY: 10 units/mo
+>
+>   <b><u>Amplifier / Comparator</u></b><br />* Signal input range(V):^Z
+>   * Signal output range(V):^Z
+>   * Gain bandwidth frequency (Hz):^Z
+>   <nobr>* What configuration?:^Z</nobr>
+>   * What Power Supply voltage(s) are you using? (Volts):^Z
+>   <br /><b><u>Data Transmission</u></b><br />* What standard?:^Z
+>   <b><u>Data Converter</u></b><br />* Conversion sampling rate? (MSPS):^Z
+>   * What is the resolution? (Bits):^Z
+>
+>   <br /><b><u>Power Management</u></b><br />* What is your input voltage/input voltage range? (Volts):^Z 3.3
+>   * What is your output voltage/output voltage range? (Volts):^Z 1.8
+>   * What is your output load? (mA):^Z 1.5
+>   <b><u>Battery Management</u></b><br />* What battery chemistry are you using?:^Z
+>   * Battery Capacity (mA-Hrs):^Z
+>   * What is the max output current? (mA):^Z
+>   * What is the max input current? (mA):^Z
+>   * What is the max charge current? (mA):^Z
+>   * What is the min charge current? (mA):^Z
+>
+> PROBLEM:
+> I'm designing a DSP daughtercard to interface with a backplane that provides 3.3V 2.5A. I have a bunch of components on the board that need lower voltages, but I'd really like the energy efficency of a buck converter. Will it be a problem to have 16  identical DC/DC converters in parallel (one on each card?) Unfortunately, I can't redesign the backplane. I'm especially worried about the effects of input ripple.
+>
+> STEPS NEEDED to RECREATE PROBLEM:
+>

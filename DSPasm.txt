@@ -42,14 +42,6 @@ INT1: New samples, process new chunk of data
 FLAG2: poll to see if there are new events!
 
 
-Event cycle ----------------------------
-   DMA-in an event
-   process event
-   DMA-out any result
-   perform any latent processing...stuff... (uhh, yea)
-
-   this lets us be sure that, during the normal loop, we can send events
-
 
 Data processing cycle ------------------
    For the tetrodes, to take advantage of SIMD, we have some interleaving-buffer issues, also which are present in the output data. 

@@ -162,6 +162,10 @@ EVENT:
    CMD = 0x06 sender = any : memory-write in response; body should be
 		       original packet
    CMD = 0x07 sender = any : boot process complete. 
+   CMD = 0x10 sender = any : link change (for NIC, etc. )
+		       dw0[0] = 1 if link up, 0 if link down
+
+   
 
 
    CMD = 0x40 - CMD = 0x4F : DSP-config events, defined in DSPasm.txt

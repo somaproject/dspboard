@@ -1,0 +1,201 @@
+
+
+-----------------------------------------------------------------------------
+EVENTS
+-----------------------------------------------------------------------------
+
+All events which modify signal processing parameters (Filter, gain, etc) cause a disable-flush-enable operation if you are in DATA mode, i.e. if interrupts are enabled. 
+
+
+Notes/layout of the events section of the assembly
+
+
+both of the following block:
+
+global, non-app-specific functions:
+
+read_event: reads an event and stores the result in registers
+write_event: writes an event, from registers
+
+
+global, event-related variables
+NEWSTAT: new status word, read fresh from the FPGA
+LINKSTAT : status of the fiber link
+SAMPLING : if the system is currently in SAMPLE interrupt-enabled mode
+CMDID : the most recently completed CMDID
+CMDIDPENDING : the waiting cmdid; -1 if we're not waiting on a cmdid
+ 
+
+functions:
+
+read_status: reads in new status word and saves in NEWSTAT
+
+check_link: checks for a change in link status, and if onee occurs, resets pending commands, updates LINKSTAT, sends a LINKCHANGE event, and calls update_sampling if the link is now down, passing it r0=0;
+
+update_sampling: 
+   change system SAMPLING state to r0; 
+   actually disables interrupts (or enables), 
+   sends an event about the change in status;
+   also filters buffers
+
+check_acqcmd : checks to see if the CMDID has been updated
+   this is the somewhat baroque way we have of dealing with the asynchronous nature of the acqboard. 
+   if newstat.cmdid = cmdidpendig then we've processed the command
+      we reset cmdidpending, and 
+      update the settings related to the acqboard with CMDPENDING
+      call broadcast_acqstate
+
+broadcast_acqstate:
+      sends an event re: current acqboard state
+
+read_event : just reads in an event
+
+dispatch_event:  calls the appropraite function based on the eventID
+
+set_sampling: just a wrapper to let the event call udate_sampling
+
+param_read, param_write : set internal config parameters (see below)
+    note an attempt at a param_write while SAMPLING=1 will cause an error
+
+acq_set: 
+    if SAMPLING=1 then generate sampling_err
+    if CMDIDPENDING >=0 then generates acq_set error
+    else (success) 
+        set CMDIDPENDING = CMDID + 1
+        set CMDPENDING = actual acqboard cmd
+acq_query: 
+    responds with a tetrode status event!!!
+
+user events: others
+
+
+we run a loop. 
+
+Event processing loop:
+   read status byte
+   if NEWSTAT.STATUS != LINKSTAT
+      send "the link is now up/down" event
+      LINKSTAT = NEWSTAT.STATUS; 
+      if  link now down, disable SAMPLE interrupts
+      CMDIDPENDING = -1; 
+   end if
+   if CMDIDPENDING >= 0 then (we're waiting to hear back from the acqboard)
+      if CMDIDPENDING = new cmdid we just read from sample buffer then
+         CMDID = CMDIDPENDING; 
+         CMDIDPENDING = -1
+         broadcast new event revealing our new state!
+	 update relevant state variables
+      else
+         not done with the event yet! 
+      end if; 
+   end if; 
+
+   if EVENTS = '1' then 
+      read event, process it!
+   end if; 
+   
+
+what if we have a 1-us timer? 
+well, the problem there is that we could interrupt ourselves
+i.e. if an event takes too long we abort it? or watchdog-like? 
+but some events will be short, and some will be long
+
+polling introduces jitter, which is bad. 
+
+we need atomic reads of events, samples, etc. 
+
+not just read; write too? ugh. 
+
+all off-chip 
+
+
+dispatch_event:
+   reads an event, and then dispatches to either
+      param_read
+      param_write
+      acqboard_set
+
+Read_event will read an event and return the results in the top set of registers. Note that this calls lock_mem, i.e. disables the interrupts that may also try and access DMA at the same time. 
+
+
+
+Generic configuration read and write : ---------------------------------
+
+41 : Read config parameter (param_read)
+42 : write config parameter (param_write)
+
+ For writing, things are indicated above. For reading, we use the Target and Addr similarly, but return the data in a manner that makes sense (i.e. the similar data words) to the SOURCE device. 
+
+
+write filter coefficients: 
+    TARGET = 0x10 : FIR FILTER for spike channel 1
+         0x11 : FIR FILTER for spike channel 2
+	 0x12 : FIR FILTER for spike channel 3
+	 0x13 : FIR FILTER for spike channel 4
+	 0x14 : FIR FILTER for constant chan
+    ADDR  =  coefficent number [0..255]
+    DW0 = word that goes at ADDR, IEEE 32-bit foo
+    DW1 = word that goes at ADDR+1, "
+
+write filter lengths:
+    TARGET = 0x20
+    ADDR = filter length target (0 = spike 1, 3 = spike 4, 5 = cont)
+    DW0[7:0] = length, unsigned int
+
+write filter IDs:
+    TARGET = 0x21
+    ADDR = filter for chan
+    DW0[15:0] = unique 16-bit filter ID
+
+change spike parameters: 
+    TARGET = 0x23 : spike length
+       DW0[7:0] = unsigned spike length
+    TARGET = 0x24 : notriggerlen
+       DW0[7:0]   : length of no trigger period 
+    TARGET = 0x25 : posttriglen
+       DW0[7:0] : length of post-trigger period
+
+
+change cont parms
+    TARGET = 0x26 : downsampling ratio for continuous
+         DW0[3:0]: downsampling ratio
+    TARGET = 0x27 : number of samples to output per continuous frame
+	 DW0[15:0] : actual number 
+
+40: Enable/disable spike / sample interrupt
+
+    flushes buffers, etc. 
+
+43 : events that change acq board settings:
+// hardware parameters:
+   when we're done changing a hardware parameter, we send a tetrode state broadcast event. Or something; still not quite sure. 
+hardware parameters are funny. See, there could be some arbitrary amount of time between when we say "change" and when it actually changes; 
+
+   if CMDPENDING < 0  then no pending events
+      CMDPENDING = CMDID++
+   else
+      generate error!
+   end if; 
+      
+   
+   TARGET = 0x0 : channel gain on acq board
+         ADDR = channel number
+         DW0[3:0] = gain setting on board
+   TARGET = 0x1 : HW filter on board
+	 ADDR = channel number
+         DW0[1:0] = channel 
+   TARGET = 0x2 Input selection for continuous channel
+	 DW0[1:0] = channel
+
+   the resulting error will be set back to whoever sent this
+   and we will give the target, addr, and command that failed
+   with error "CMDPENDING"
+
+
+
+every time the acqboard state changes, we send out a full broadcast frame with "updated acqboard state.
+45: query acqboard settings
+
+
+
+from adsp:
