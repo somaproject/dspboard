@@ -13,7 +13,7 @@ entity databuffer is
            CLKB : in std_logic;
 			  RESET : in std_logic; 
            BUFWE : in std_logic;
-           BUFADDRIN : in std_logic_vector(7 downto 0);
+           BUFADDRIN : in std_logic_vector(9 downto 0);
            BUFDIN : in std_logic_vector(15 downto 0);
            BUFERROR : out std_logic;
            BUFDOUT : out std_logic_vector(15 downto 0);
@@ -36,44 +36,50 @@ architecture Behavioral of databuffer is
 	signal bufwein, bufwdone : std_logic := '0';
 	signal fulla, fullb, fullc : std_logic := '0';
 	signal weaa, weab, weac : std_logic := '0';
-	signal addra : std_logic_vector(7 downto 0) := (others => '0');
-   signal buflenin, ra : std_logic_vector(7 downto 0) := (others => '0'); 
+	signal addra : std_logic_vector(9 downto 0) := (others => '0');
+   signal buflenin, ra : std_logic_vector(9 downto 0) := (others => '0'); 
 		type instates is (waita, a, waitb, b, waitc, c); 
 	signal incs, inns : instates := waita;
 	signal bufwea, bufweb, bufwec : std_logic := '0';  
 
 	-- ram output side
-	signal doaa, doab, doac : std_logic_vector(15 downto 0) := (others => '0');
 	signal doa : std_logic_vector(15 downto 0) := (others => '0'); 
 
 	-- buffer output side
 	signal doba, dobb, dobc, dob : std_logic_vector(15 downto 0) 
 				:= (others => '0');
 	signal outsel : integer range 0 to 2 := 0;
-	signal buflenout : std_logic_vector(7 downto 0) := (others => '0');
-	signal bufcnt : std_logic_vector(7 downto 0) := (others => '0');
+	signal buflenout : std_logic_vector(9 downto 0) := (others => '0');
+	signal bufcnt : std_logic_vector(9 downto 0) := (others => '0');
 	signal bufcnten, bufcntrst : std_logic := '0';
 	signal clra, clrb, clrc : std_logic := '0';
-	signal bufack : std_logic := '0'; 
 
-	type outstates is ( waita, a, donea, wnextouta,
-							  waitb, b, doneb, wnextoutb, 
-							  waitc, c, donec, wnextoutc);
+	type outstates is ( waita, a, donea, waitb, b, doneb, waitc, c, donec);
 	signal outcs, outns : outstates := waita; 
 
 	-- ram input side
-	signal rwea, rweb, rwec : std_logic := '0';
 	signal dia : std_logic_vector(15 downto 0) := (others => '0');
 
-	constant LENADDR : std_logic_vector(7 downto 0) := X"00"; 	
+	constant LENADDR : std_logic_vector(9 downto 0) := "0000000001"; 	
 	-- this is the location of the word that contains length info
 
 	 
 
-
-	component RAMB4_S16_S16
+	component RAMB16_S18_S18 
 	  generic (
-	       INIT_00 : bit_vector := X"00000000000000000000000000000000000000000000FFFFFFFFFFFFFFFFFFFF";
+	       WRITE_MODE_A : string := "WRITE_FIRST";
+	       WRITE_MODE_B : string := "WRITE_FIRST";
+	       INIT_A : bit_vector  := X"00000";
+	       SRVAL_A : bit_vector := X"00000";
+
+	       INIT_B : bit_vector  := X"00000";
+	       SRVAL_B : bit_vector := X"00000";
+
+	       INITP_00 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+	       INITP_01 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+	       INITP_02 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+	       INITP_03 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+	       INIT_00 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
 	       INIT_01 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
 	       INIT_02 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
 	       INIT_03 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
@@ -88,74 +94,111 @@ architecture Behavioral of databuffer is
 	       INIT_0C : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
 	       INIT_0D : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
 	       INIT_0E : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
-	       INIT_0F : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000" );
+	       INIT_0F : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+	       INIT_10 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+	       INIT_11 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+	       INIT_12 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+	       INIT_13 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+	       INIT_14 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+	       INIT_15 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+	       INIT_16 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+	       INIT_17 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+	       INIT_18 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+	       INIT_19 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+	       INIT_1A : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+	       INIT_1B : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+	       INIT_1C : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+	       INIT_1D : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+	       INIT_1E : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+	       INIT_1F : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000"
+	  );
+
 	  port (DIA    : in STD_LOGIC_VECTOR (15 downto 0);
 	        DIB    : in STD_LOGIC_VECTOR (15 downto 0);
+	        DIPA    : in STD_LOGIC_VECTOR (1 downto 0);
+	        DIPB    : in STD_LOGIC_VECTOR (1 downto 0);
 	        ENA    : in STD_logic;
 	        ENB    : in STD_logic;
 	        WEA    : in STD_logic;
 	        WEB    : in STD_logic;
-	        RSTA   : in STD_logic;
-	        RSTB   : in STD_logic;
+	        SSRA   : in STD_logic;
+	        SSRB   : in STD_logic;
 	        CLKA   : in STD_logic;
 	        CLKB   : in STD_logic;
-	        ADDRA  : in STD_LOGIC_VECTOR (7 downto 0);
-	        ADDRB  : in STD_LOGIC_VECTOR (7 downto 0);
+	        ADDRA  : in STD_LOGIC_VECTOR (9 downto 0);
+	        ADDRB  : in STD_LOGIC_VECTOR (9 downto 0);
 	        DOA    : out STD_LOGIC_VECTOR (15 downto 0);
-	        DOB    : out STD_LOGIC_VECTOR (15 downto 0)); 
+	        DOB    : out STD_LOGIC_VECTOR (15 downto 0);
+	        DOPA    : out STD_LOGIC_VECTOR (1 downto 0);
+	        DOPB    : out STD_LOGIC_VECTOR (1 downto 0)
+	       ); 
+
 	end component;
+
+
 
 
 begin
 
 	-- start with ram blocks:
-	buffera : RAMB4_S16_S16 port map (
+	buffera : RAMB16_S18_S18 port map (
 		DIA => dia,
 		DIB => X"0000",
-		ENA => '1',
-		ENB => '1',
+		DIPA => "00",
+		DIPB => "00", 
+		ENA => '1', 
+		ENB => '1', 
 		WEA => weaa,
 		WEB => '0',
-		RSTA => RESET,
-		RSTB => RESET,
+		SSRA => '0',
+		SSRB => '0',
 		CLKA => CLKA,
-		CLKB => CLKB,
+		CLKB => CLKB, 
 		ADDRA => addra,
 		ADDRB => bufcnt,
-		DOA => doaa,
-		DOB => doba); 
+		DOA => doa, 
+		DOB => doba);
 
-	bufferb : RAMB4_S16_S16 port map (
-		DIA => dia,
+	bufferb : RAMB16_S18_S18 port map (
+		DIA => BUFDIN,
 		DIB => X"0000",
-		ENA => '1',
-		ENB => '1',
-		WEA => weab,
+		DIPA => "00",
+		DIPB => "00", 
+		ENA => '1', 
+		ENB => '1', 
+		WEA => weab, 
 		WEB => '0',
-		RSTA => RESET,
-		RSTB => RESET,
+		SSRA => '0',
+		SSRB => '0',
 		CLKA => CLKA,
-		CLKB => CLKB,
-		ADDRA => addra,
+		CLKB => CLKB, 
+		ADDRA => BUFADDRIN,
 		ADDRB => bufcnt,
-		DOA => doab,
-		DOB => dobb); 
+		DOA => open, 
+		DOB => dobb);
 
-	bufferc : RAMB4_S16_S16 port map (
-		DIA => dia,
+	
+	bufferc : RAMB16_S18_S18 port map (
+		DIA => BUFDIN,
 		DIB => X"0000",
-		ENA => '1',
-		ENB => '1',
-		WEA => weac,
+		DIPA => "00",
+		DIPB => "00", 
+		ENA => '1', 
+		ENB => '1', 
+		WEA => weac, 
 		WEB => '0',
-		RSTA => RESET,
-		RSTB => RESET,
+		SSRA => '0',
+		SSRB => '0',
 		CLKA => CLKA,
-		CLKB => CLKB,
-		ADDRA => addra,
+		CLKB => CLKB, 
+		ADDRA => BUFADDRIN,
 		ADDRB => bufcnt,
-		DOA => doac,
-		DOB => dobc); 
+		DOA => open, 
+		DOB => dobc);
+
+	
+
+
 
 
 	-- CLKA side combinational
@@ -166,59 +209,24 @@ begin
 	bufweb <= '1' when bufwein = '1' and (incs = B) else '0';
 	bufwec <= '1' when bufwein = '1' and (incs = C) else '0';
 
-
-	rwea <= '1' when rwe = '1' and rain(9 downto 8) = "00" else '0';
-	rweb <= '1' when rwe = '1' and rain(9 downto 8) = "01" else '0';
-	rwec <= '1' when rwe = '1' and rain(9 downto 8) = "10" else '0';
-
-	weaa <= rwea when mode = '1' else bufwea; 
-	weab <= rweb when mode = '1' else bufweb; 
-	weac <= rwec when mode = '1' else bufwec; 
+	weaa <= RWE when mode = '1' else bufwea; 
+	weab <= '0' when mode = '1' else bufweb; 
+	weac <= '0' when mode = '1' else bufwec; 
 
 
 
 	dia <= rdin when mode = '1' else bufdin; 
 
 	
-	doa <= doaa when RAOUT(10 downto 9) = "00" else
-			 doab when RAOUT(10 downto 9) = "01" else
-			 doac; 
 	RDOUT <= doa(7 downto 0) when RAOUT(0) = '0' else
 				doa(15 downto 8); 
-	--BUFERROR <= '1' when  bufwe = '1' 	DEBUGGING!@
-	--				and (incs = A or incs = B or incs = C) else '0';
-	
+	BUFERROR <= '1' when  bufwe = '1' 
+					and (incs = A or incs = B or incs = C) else '0'; 
+
 	addra <= ra when mode = '1' else bufaddrin;
-	ra <= raout(8 downto 1) when DSPRESET = '1' else RAIN(7 downto 0); 
+	ra <= raout(10 downto 1) when DSPRESET = '1' else RAIN(9 downto 0); 
 
-   -- serirous debugging
-	process (clka) is
-		variable counter : integer := 0; 
-		variable toggle : std_logic := '0'; 
-		variable max : integer := 0;
-	begin
-		if rising_edge(clka) then
-			if outcs = waita then
-				max := 20000000;
-			elsif outcs = waitb then
-				max :=  5000000;
-			elsif outcs = waitc then
-				max :=  1000000; 
-			end if; 
-			
-			if counter > max then
-				counter := 0;
-				toggle := not toggle;
-			else
-				counter := counter + 1;
-			end if; 
-			
-			buferror <= toggle; 
-			 
-		end if; 
-	end process; 
 
-	--buferror <= nextout; 
 	clocka : process(CLKA, RESET) is
 	begin
 		if RESET = '1' then
@@ -229,9 +237,9 @@ begin
 
 				if incs = waita or incs = waitb or incs = waitc then
 					buflenin <= (others => '1'); 
-				else  
+				else
 					if bufaddrin = LENADDR and bufwe = '1' then
-						buflenin <= BUFDIN(15 downto 8); 
+						buflenin <=  BUFDIN(9 downto 0); 
 					end if; 
 				end if; 
 
@@ -325,7 +333,7 @@ begin
 					buflenout <= (others => '1');
 				else
 					if bufcnt = (LENADDR + 1) then
-						buflenout <= dob(15 downto 8); 
+						buflenout <= dob(9 downto 0); 
 					end if; 
 				end if; 
 				--BUFACKOUT <= bufack; 
@@ -368,33 +376,19 @@ begin
 				clrb <= '0';
 				clrc <= '0';
 				outsel <= 0; 
-				if bufcnt = buflenout or nextout = '0' then
+				if bufcnt = buflenout then
 					outns <= donea;
 				else
 					outns <= a;
 				end if; 
 			when donea => 
-				bufcnten <= '0';
+				bufcnten <= '1';
 				bufcntrst <= '0';
 				clra <= '1';
 				clrb <= '0';
 				clrc <= '0';
 				outsel <= 0; 
-				outns <= wnextouta; 
-			when wnextouta => 
-				bufcnten <= '0';
-				bufcntrst <= '0';
-				clra <= '0';
-				clrb <= '0';
-				clrc <= '0';
-				outsel <= 0; 
-				if nextout = '0' then
-					outns <= waitb;
-				else
-					outns <= wnextouta;
-				end if; 
-
-
+				outns <= waitb; 
 			when waitb => 
 				bufcnten <= '0';
 				bufcntrst <= '1';
@@ -402,7 +396,7 @@ begin
 				clrb <= '0';
 				clrc <= '0';
 				outsel <= 1; 
-				if fullb = '1' and nextout = '1' then
+				if fullc = '1' and nextout = '1' then
 					outns <= b;
 				else
 					outns <= waitb;
@@ -414,31 +408,19 @@ begin
 				clrb <= '0';
 				clrc <= '0';
 				outsel <= 1; 
-				if bufcnt = buflenout or nextout = '0' then
+				if bufcnt = buflenout then
 					outns <= doneb;
 				else
 					outns <= b;
 				end if; 
 			when doneb => 
-				bufcnten <= '0';
+				bufcnten <= '1';
 				bufcntrst <= '0';
 				clra <= '0';
 				clrb <= '1';
 				clrc <= '0';
 				outsel <= 1; 
-				outns <= wnextoutb; 
-			when wnextoutb => 
-				bufcnten <= '0';
-				bufcntrst <= '0';
-				clra <= '0';
-				clrb <= '0';
-				clrc <= '0';
-				outsel <= 1; 
-				if nextout = '0' then
-					outns <= waitc;
-				else
-					outns <= wnextoutb;
-				end if; 		
+				outns <= waitc; 
 			when waitc => 
 				bufcnten <= '0';
 				bufcntrst <= '1';
@@ -458,31 +440,19 @@ begin
 				clrb <= '0';
 				clrc <= '0';
 				outsel <= 2; 
-				if bufcnt = buflenout or nextout = '0' then
+				if bufcnt = buflenout then
 					outns <= donec;
 				else
 					outns <= c;
 				end if; 
 			when donec => 
-				bufcnten <= '0';
+				bufcnten <= '1';
 				bufcntrst <= '0';
 				clra <= '0';
 				clrb <= '0';
 				clrc <= '1';
 				outsel <= 2; 
-				outns <= wnextoutc; 
-			when wnextoutc => 
-				bufcnten <= '0';
-				bufcntrst <= '0';
-				clra <= '0';
-				clrb <= '0';
-				clrc <= '0';
-				outsel <= 2; 
-				if nextout = '0' then
-					outns <= waita;
-				else
-					outns <= wnextoutc;
-				end if; 			
+				outns <= waita;
 			when others => 
 				bufcnten <= '0';
 				bufcntrst <= '1';

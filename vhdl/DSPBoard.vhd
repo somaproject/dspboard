@@ -5,28 +5,29 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 --  Uncomment the following lines to use the declarations that are
 --  provided for instantiating Xilinx primitive components.
---library UNISIM;
---use UNISIM.VComponents.all;
+library UNISIM;
+use UNISIM.VComponents.all;
 
 		entity DSPBoard is
-    Port ( CLKIN : in std_logic;
-           SYSCLKIN : in std_logic;
+    Port ( SYSCLKIN : in std_logic;
 			  FIBERIN : in std_logic; 
 			  FIBEROUT : out std_logic; 
-           DATAA : inout std_logic_vector(15 downto 0);
-           ADDRA : in std_logic_vector(15 downto 0);
+           ADA : inout std_logic_vector(15 downto 0);
+			  ALEA : in std_logic; 
            WEA : in std_logic;
            RDA : in std_logic;
            RESETA : out std_logic;
-           SAMPLESA : out std_logic;
+			  DSPCLKA : out std_logic; 
+           SAMPLESA : out std_logic;												  
            EVENTSA : out std_logic;
            TINCA : out std_logic;
            TCLRA : out std_logic;
-           DATAB : inout std_logic_vector(15 downto 0);
-           ADDRB : in std_logic_vector(15 downto 0);
+           ADB : inout std_logic_vector(15 downto 0);
+           ALEB : in std_logic; 
            WEB : in std_logic;
            RDB : in std_logic;
            RESETB : out std_logic;
+			  DSPCLKB : out std_logic; 
            SAMPLESB : out std_logic;
            EVENTSB : out std_logic;
            TINCB : out std_logic;
@@ -52,7 +53,7 @@ architecture Behavioral of DSPBoard is
 
 
 	-- clocks
-	signal clk, sysclk : std_logic := '0';
+	signal clk, sysclk, clk_fb, sysclk_fb : std_logic := '0';
 
 	-- common signals
 	signal newsamples, timeinc, timeclr : std_logic := '0';
@@ -200,8 +201,8 @@ architecture Behavioral of DSPBoard is
 	    Port ( CLK : in std_logic;
 	           WE : in std_logic;
 	           RD : in std_logic;
-	           DATA : inout std_logic_vector(15 downto 0);
-	           ADDR : in std_logic_vector(15 downto 0);
+	           AD : inout std_logic_vector(15 downto 0);
+				  ALE : in std_logic;
 	           DELTARD : out std_logic;
 	           DOUT : out std_logic_vector(15 downto 0);
 	           ADDROUT : out std_logic_vector(15 downto 0);
@@ -240,7 +241,7 @@ architecture Behavioral of DSPBoard is
 	           CLKB : in std_logic;
 				  RESET : in std_logic; 
 	           BUFWE : in std_logic;
-	           BUFADDRIN : in std_logic_vector(7 downto 0);
+	           BUFADDRIN : in std_logic_vector(9 downto 0);
 	           BUFDIN : in std_logic_vector(15 downto 0);
 	           BUFERROR : out std_logic;
 	           BUFDOUT : out std_logic_vector(15 downto 0);
@@ -283,10 +284,72 @@ architecture Behavioral of DSPBoard is
 	end component;
 
 
+	component DCM
+	    generic ( 
+	             DFS_FREQUENCY_MODE : string := "LOW";
+	             CLKFX_DIVIDE : integer := 3;
+			    	CLKFX_MULTIPLY : integer := 10 ;
+			    	STARTUP_WAIT : boolean := FALSE;
+	             CLK_FEEDBACK : string := "NONE" 
+	            );  
+	    port ( CLKIN     : in  std_logic;
+	           DSSEN     : in  std_logic;
+	           PSINCDEC  : in  std_logic;
+	           PSEN      : in  std_logic;
+	           PSCLK     : in  std_logic;
+	           RST       : in  std_logic;
+	           CLK0      : out std_logic;
+	           CLK90     : out std_logic;
+	           CLK180    : out std_logic;
+	           CLK270    : out std_logic;
+	           CLK2X     : out std_logic;
+	           CLK2X180  : out std_logic;
+	           CLKDV     : out std_logic;
+	           CLKFX     : out std_logic;
+	           CLKFX180  : out std_logic;
+	           LOCKED    : out std_logic;
+	           PSDONE    : out std_logic;
+	           STATUS    : out std_logic_vector(7 downto 0)
+	          );
+	end component;
+
+	component BUFG 
+	  port (
+	  	I   : in std_logic;
+	   O    : out std_logic
+		); 
+	end component;
 begin
 	-- clocks
-	clk <= CLKIN; 
-	sysclk <= SYSCLKIN;
+
+	clock: DCM generic map (
+			DFS_FREQUENCY_MODE => "LOW",
+			CLKFX_DIVIDE => 3,
+			CLKFX_MULTIPLY => 10,
+			STARTUP_WAIT => false,
+			CLK_FEEDBACK => "NONE")
+			port map (
+			CLKIN => SYSCLKIN,
+			DSSEN => '0',
+			PSINCDEC => '0',
+			PSEN => '0',
+			PSCLK => '0', 
+			RST => RESET,
+			CLK0 => open, 
+			CLKFX => clk_fb); 
+
+
+
+	clkbufg: BUFG port map (
+			I=> clk_fb,
+			O=> clk); 
+	sysclkbufg : BUFG port map(
+			I=> SYSCLKIN,
+			O=> sysclk);
+
+  	DSPCLKA <= clk;
+	DSPCLKB <= clk; 
+
 	
 	-- signal aggregation
 	raouta <= addroa(2 downto 0) & douta(15 downto 8);
@@ -369,8 +432,8 @@ begin
 		CLK => clk,
 		WE => WEA, 
 		RD => RDA,
-		DATA => DATAA,
-		ADDR => ADDRA,
+		AD => ADA, 
+		ALE => ALEA,
 		DELTARD => deltarda,
 		DOUT => douta,
 		ADDROUT => addroa,
@@ -408,7 +471,7 @@ begin
 		CLKB => sysclk,
 		RESET => RESET,
 		BUFWE => dwea, 
-		BUFADDRIN => addroa(7 downto 0),
+		BUFADDRIN => addroa(9 downto 0),
 		BUFDIN => douta,
 		BUFERROR => open,
 		BUFDOUT => dina,
@@ -454,8 +517,8 @@ begin
 		CLK => clk,
 		WE => WEB, 
 		RD => RDB,
-		DATA => DATAB,
-		ADDR => ADDRB,
+		AD => ADB, 
+		ALE => ALEB,
 		DELTARD => deltardb,
 		DOUT => doutb,
 		ADDROUT => addrob,
@@ -493,7 +556,7 @@ begin
 		CLKB => sysclk,
 		RESET => RESET,
 		BUFWE => dweb, 
-		BUFADDRIN => addrob(7 downto 0),
+		BUFADDRIN => addrob(9 downto 0),
 		BUFDIN => doutb,
 		BUFERROR => leddspa,	 -- debugging!!!
 		BUFDOUT => dinb,

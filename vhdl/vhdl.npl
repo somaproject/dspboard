@@ -2,14 +2,14 @@ JDF G
 // Created by Project Navigator ver 1.0
 PROJECT vhdl
 DESIGN vhdl
-DEVFAM spartan2e
-DEVFAMTIME 0
-DEVICE xc2s200e
-DEVICETIME 1077149664
+DEVFAM spartan3
+DEVFAMTIME 1086376029
+DEVICE xc3s200
+DEVICETIME 1086376029
 DEVPKG pq208
 DEVPKGTIME 0
-DEVSPEED -6
-DEVSPEEDTIME 0
+DEVSPEED -4
+DEVSPEEDTIME 1086376029
 DEVTOPLEVELMODULETYPE HDL
 TOPLEVELMODULETYPETIME 0
 DEVSYNTHESISTOOL XST (VHDL/Verilog)
@@ -39,13 +39,9 @@ SOURCE test_acqboard.vhd
 STIMULUS test_acqboard_test.tbw
 DEPASSOC dspboard dspboard.ucf
 [Normal]
-p_parGenAsyDlyRpt=xstvhd, spartan2e, VHDL.t_par, 1078153052, True
-xilxBitgCfg_GenOpt_ASCIIFile=xstvhd, spartan2e, Implementation.t_bitFile, 1077136805, True
+xilxBitgCfg_GenOpt_ASCIIFile=xstvhd, spartan3, Implementation.t_bitFile, 1077136805, True
 [STATUS-ALL]
-datamux.ngcFile=WARNINGS,1079131689
-dspboard.ncdFile=WARNINGS,1079132413
-dspboard.ngcFile=WARNINGS,1079132360
-dspboard.ngdFile=WARNINGS,1079132401
-events.ngcFile=ERRORS,0
+dspboard.twrFile=WARNINGS,1086538863
+dspio.stxFile=WARNINGS,1086376368
 [STRATEGY-LIST]
 Normal=True

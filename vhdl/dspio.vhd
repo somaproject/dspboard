@@ -12,8 +12,8 @@ entity dspio is
     Port ( CLK : in std_logic;
            WE : in std_logic;
            RD : in std_logic;
-           DATA : inout std_logic_vector(15 downto 0);
-           ADDR : in std_logic_vector(15 downto 0);
+           AD : inout std_logic_vector(15 downto 0);
+			  ALE : in std_logic; 
            DELTARD : out std_logic;
            DOUT : out std_logic_vector(15 downto 0);
            ADDROUT : out std_logic_vector(15 downto 0);
@@ -62,7 +62,8 @@ architecture Behavioral of dspio is
 	signal mts : std_logic := '0'; 
 	signal dataoutl, dataout, dmux, smux : std_logic_vector(15 downto 0)
 			:= (others => '0');
-	signal addrl, laddrout : std_logic_vector(15 downto 0) := (others => '0'); 
+	signal addr, addrl, laddrout : std_logic_vector(15 downto 0) 
+			:= (others => '0'); 
 
 
 begin
@@ -80,25 +81,32 @@ begin
 	
 	dataout <= dmux when mode = '0' else (X"00" & rdin); 
 	
-	dmux <= smux when addr(15 downto 13) = "000" else 
-			  EVENTDIN when addr(15 downto 13) = "011" else
+	dmux <= smux when addrl(15 downto 13) = "000" else 
+			  EVENTDIN when addrl(15 downto 13) = "011" else
+			  smux when addrl(15 downto 13) = "111" else -- DEBUGGING!!
 			  X"0000";
 	  
 	smux <= ("0000" & CMDSTS & '0' & CMDID & "00" & TXERROR &  STATUS) 
-						when addr(2 downto 0) = "000" else
-			  sample1 when addr(2 downto 0) = "001" else
-			  sample2 when addr(2 downto 0) = "010" else
-			  sample3 when addr(2 downto 0) = "011" else
-			  sample4 when addr(2 downto 0) = "100" else
-			  sampleC when addr(2 downto 0) = "101" else
-			  X"0123" when addr(2 downto 0) = "110" else
-			  (X"00" & maddr) when addr(2 downto 0) = "111" else
+						when addrl(2 downto 0) = "000" else
+			  sample1 when addrl(2 downto 0) = "001" else
+			  sample2 when addrl(2 downto 0) = "010" else
+			  sample3 when addrl(2 downto 0) = "011" else
+			  sample4 when addrl(2 downto 0) = "100" else
+			  sampleC when addrl(2 downto 0) = "101" else
+			  X"0123" when addrl(2 downto 0) = "110" else
+			  (X"00" & maddr) when addrl(2 downto 0) = "111" else
 			  X"ABCD"; 
 
-	DATA(7 downto 0) <= dataout(7 downto 0) when RD = '0' else "ZZZZZZZZ";
-	DATA(15 downto 8) <= dataout(15 downto 8) when mts = '0' else "ZZZZZZZZ";
-	 														 
+	AD(7 downto 0) <= dataoutl(7 downto 0) when RD = '0' else "ZZZZZZZZ";
+	AD(15 downto 8) <= dataoutl(15 downto 8) when mts = '0' else "ZZZZZZZZ";
+	 
 
+	addrlatch: process(ALE) is
+	begin
+		if ALE = '0' then 
+			addr <= AD;
+		end if; 
+	end process addrlatch; 
 
 	clock: process(CLK) is
 	begin
@@ -111,15 +119,14 @@ begin
 			rdll <= rdl;
 			rdlll <= rdll; 
 
-			datainl <= DATA;
+			datainl <= AD;
 			datainll <= datainl;
 			datainlll <= datainll; 
 			DOUT <= datainlll; 
 
+			dataoutl <= dataout; 
 			
-			
-			addrl <= ADDR;  
-
+			addrl <= addr; 
 			laddrout <= addrl; 
 			ADDROUT <= laddrout; 
 
