@@ -89,16 +89,11 @@ main:
 	r0 = 32767; 
 	r1 = -32768; 
 	r2 = -15; 
-	r6 = 15; 
+	r1 = 10; 
+	r0 = 10; 
+	r1 = r1 - r0; 
 	
-	f3 = FLOAT r1 BY r2;
-	f4 = FLOAT r0 BY r2; 
-	r7 = -1; 
-	f5 = FLOAT r7 BY r2; 
 	
-	r8 = FIX f3 by r6;
-	r9 = FIX f4 by r6; 
-	r10 = FIX f5 by r6;
 	
 	
 init :  
@@ -161,13 +156,7 @@ sample_loop:
 	 
 	jump sample_loop; 
 	
-
-EVENT_LOOP:
-// EVENT PROCESSING LOOP:
-	call read_event; 	
 	
-	r4 = FEXT r0 by 8:8;	// get the command byte :)
- 	
 	
 samples:
 // Process inbound samples
@@ -898,16 +887,4 @@ sd_newsamples:
     
     
     rts; 
-    
-    
-/*---------------------------------------------------
-  readevent:
-     returns a read-event from FPGA:
-     r0 = data word 0 | command byte | sender byte
-     r1 = data word 2 | data word 1
-     r2 = data word 4 | data word 3;
----------------------------------------------------*/
 
-readevent:
-
- 

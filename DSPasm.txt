@@ -130,6 +130,12 @@ COFID : filter ID for continuous channel
 COHFID : hardware filter ID; 
 
 
+--Acboard-specific--------
+CMDSTS : previous command status
+CMDID : most recent completed CMDID
+PENDINGCMDID : pending CMDID
+PENDINGACQEVENT[4]  : pending acqboard event. 
+
 DAG configuration:
 DAG1[0] (i0) and DAG2[0] (i8) are for in-process mucking around
 
@@ -161,64 +167,104 @@ EVENTS
 All events which modify signal processing parameters (Filter, gain, etc) cause a disable-flush-enable operation if you are in DATA mode, i.e. if interrupts are enabled. 
 
 
+Event processing loop:
+   read status byte
+   if link status != previous link status
+      send "the link is now up/down" event
+      set previous link status = current status
+      if link now down, disable SAMPLE interrupts
+      CMDIDPENDING = -1; 
+   end if
+   if CMDIDPENDING >= 0 then (we're waiting to hear back from the acqboard)
+      if CMDIDPENDING = new cmdid we just read from sample buffer then
+         CMDIDPENDING = -1
+         broadcast new event revealing our new state!
+	 update relevant state variables
+      else
+         not done with the event yet! 
+      end if; 
+   end if; 
+
+   if EVENTS = '1' then 
+      read event, process it!
+   end if; 
+   
 
 
 
-10 : write configuration parameter
-11 : read configuration parameter
 
-[ TARGET | ADDR ] [32-bit Data Word 1] [32 bit data word 2] 
-[   DW0         ] [ DW2      DW1      ][  DW4      DW3	  ]
+
+Generic configuration read and write : ---------------------------------
+
+10 : Read config parameter
+11 : write config parameter
+
+For writing, things are indicated above. For reading, we use the Target and Addr similarly, but return the data in a manner that makes sense (i.e. the similar data words) to the SOURCE device. 
+
 
 write filter coefficients: 
-TARGET = 0x10 : FIR FILTER for spike channel 1
+    TARGET = 0x10 : FIR FILTER for spike channel 1
          0x11 : FIR FILTER for spike channel 2
 	 0x12 : FIR FILTER for spike channel 3
 	 0x13 : FIR FILTER for spike channel 4
 	 0x14 : FIR FILTER for constant chan
-ADDR  =  coefficent number [0..255]
-DW0 = word that goes at ADDR, IEEE 32-bit foo
-DW1 = word that goes at ADDR+1, "
+    ADDR  =  coefficent number [0..255]
+    DW0 = word that goes at ADDR, IEEE 32-bit foo
+    DW1 = word that goes at ADDR+1, "
 
 write filter lengths:
-TARGET = 0x20
-ADDR = filter length target (0 = spike 1, 3 = spike 4, 5 = cont)
-DW0[15:0] = length, unsigned int
+    TARGET = 0x20
+    ADDR = filter length target (0 = spike 1, 3 = spike 4, 5 = cont)
+    DW0[7:0] = length, unsigned int
 
 write filter IDs:
-Target = 0x21
-ADDR = filter for chan
-DW0[15:0] = unique 16-bit filter ID
-
-
+    TARGET = 0x21
+    ADDR = filter for chan
+    DW0[15:0] = unique 16-bit filter ID
 
 change spike parameters: 
-Target = 0x23 : spike length
+    TARGET = 0x23 : spike length
        DW0[7:0] = unsigned spike length
-Target = 0x24 : notriggerlen 
-target = 0x25 : posttriglen
+    TARGET = 0x24 : notriggerlen
+       DW0[7:0]   : length of no trigger period 
+    TARGET = 0x25 : posttriglen
+       DW0[7:0] : length of post-trigger period
+
 
 change cont parms
-Target = 0x26 : downsampling ratio for continuous (DW[3:0]); 
-target = 0x27 : length of continuous bufefr
-
-
-
+    TARGET = 0x26 : downsampling ratio for continuous
+         DW0[3:0]: downsampling ratio
+    TARGET = 0x27 : number of samples to output per continuous frame
+	 DW0[15:0] : actual number 
 
 // hardware parameters:
-Target = 0x30 : gain for cahnnels
-addr = chan num: 
-dw0[2:0] = gain value
-Target = 0x31 : HW filter for channels
-addr = chan num: 
-dw0[3:0] = hw filter sel
-Target = 0x32 : Input selection for cont. chan.
-dw0[1:0] = input selection
+   when we're done changing a hardware parameter, we send a tetrode state broadcast event. Or something; still not quite sure. 
 
+   hardware parameters are funny. See, there could be some arbitrary amount of time between when we say "change" and when it actually changes; 
+   only send one of these and then wait for the resulting broadcast "things changed" event!!!
+   otherwise we'll generate an error!!!
+
+   -- for all target writes... hmm, we're gonna duplicate a lot
+   of code for these sorts of things. That's bad. 
 
 
 
 12: Enable spike acquisition interrupt
     flushes buffers, etc. 
 13: disable spike acquisition interrupt
+14 : events that change acq board settings:
+   TARGET = 0x0 : channel gain on acq board
+         ADDR = channel number
+         DW0[3:0] = gain setting on board
+   TARGET = 0x1 : HW filter on board
+	 ADDR = channel number
+         DW0[1:0] = channel 
+   TARGET = 0x2 Input selection for continuous channel
+	 DW0[1:0] = channel
+
+   every time the acqboard state changes, we send out a full broadcast frame with "updated acqboard state. 
+15: query acqboard settings
+
+
+
 

@@ -32,7 +32,8 @@ entity events is
 			  BUFWR : in std_logic;
 			  NEWEVENTS : out std_logic;
 			  MADDR : in std_logic_vector(7 downto 0);
-			  MODERST : in std_logic);
+			  MODERST : in std_logic;
+			  NEWMYEVENT : out std_logic);
 end events;
 
 architecture Behavioral of events is
@@ -183,6 +184,8 @@ begin
 	addrb(6 downto 4) <= addrbw  when addrsel = '0' else addrbr; 
 
 	addrb(7) <= addrsel; 
+
+	NEWMYEVENT <= mine AND event ; 
 
 	clock: process(CLK, RESET) is
 	begin

@@ -85,7 +85,8 @@ architecture Behavioral of DSPBoard is
 	
 	signal raouta : std_logic_vector(10 downto 0) := (others => '0'); 
 	signal maddra : std_logic_vector(7 downto 0) := (others => '0'); 
-		
+	
+	signal myeventa, myeventb : std_logic := '0'; 	
 	
 	-- DSP B signals
 	signal sample1b, sample2b, sample3b, sample4b, samplecb :
@@ -269,7 +270,8 @@ architecture Behavioral of DSPBoard is
 			  	  BUFWR : in std_logic;
 			  	  NEWEVENTS : out std_logic;
 				  MADDR : in std_logic_vector(7 downto 0);
-				  MODERST : in std_logic);
+				  MODERST : in std_logic;
+				  NEWMYEVENT : out std_logic);
 	end component;
 
 
@@ -431,7 +433,8 @@ begin
 		BUFWR => ebufsela,
 		NEWEVENTS => neweventsa,
 		MADDR => maddra,
-		MODERST => modersta); 
+		MODERST => modersta,
+		NEWMYEVENT => myeventa); 
 
 
 	dspiob : dspio port map (
@@ -516,25 +519,51 @@ begin
 		BUFWR => ebufselb,
 		NEWEVENTS => neweventsb,
 		MADDR => maddrb,
-		MODERST => moderstb); 
+		MODERST => moderstb,
+		NEWMYEVENT => myeventb);
+		
+	process(sysclk) is 
+		variable cnt : integer range 0 to 10000000 := 0; 
+	begin
+	   if rising_edge(sysclk) then
+		   if myeventa = '1' or myeventb = '1' then 
+			   cnt := 1000000;
+			else
+			   if cnt /= 0 then
+				   cnt := cnt - 1;
+				end if;
+			end if; 
+			
+			if cnt /= 0 then
+			   LEDEVENT <= '1';
+			else
+			   LEDEVENT <= '0';
+			end if;
+		end if;
+	end process;  
 
+	LEDDSPA <= dspreseta;
+	LEDDSPB <= dspresetb; 
 
 	-- simple power LED:
-
-	LEDDSPA <= '1';
-	LEDDSPB <= '1';
-	LEDEVENT <= '1'; 
-	process(clk) is
+	process(sysclk) is
 		variable cnt : integer range 0 to 20000000 := 0;
+		variable trigger: std_logic := '0'; 
 	begin
-		if rising_edge(clk) then
+		if rising_edge(sysclk) then
 			if cnt = 20000000 then 
 				cnt := 0;
 			else
 				cnt := cnt + 1; 
 			end if; 
 
-			if cnt < 1000000 then
+			if cnt = 0 then 
+				trigger := '1';
+			elsif cnt = 1000000 then
+				trigger := '0';
+			end if; 
+
+			if trigger = '1' then
 				LEDPOWER <= '1';
 			else
 				LEDPOWER <= '0';
@@ -542,5 +571,8 @@ begin
 
 		end if; 
 	end process; 
+
+
+
 
 end Behavioral;

@@ -65,9 +65,10 @@ begin
 				esel <= not esel;
 			end if; 
 
+			
 			if ECE = '0' and  maddrset = '0' then
 				maddrset <= '1';
-				MADDR <= EDATA(7 downto 0);
+				MADDR <= EDATA(7 downto 0); 
 			end if; 
 				 
 		end if; 
