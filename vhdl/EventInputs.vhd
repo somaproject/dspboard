@@ -8,7 +8,7 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity EventInputs is
+entity EventReader is
     Port ( CLK : in std_logic;
            EADDR : in std_logic_vector(7 downto 0);
            EDATA : in std_logic_vector(15 downto 0);
@@ -18,10 +18,10 @@ entity EventInputs is
 			  MADDR : in std_logic_vector(6 downto 0); 
            MINE : out std_logic;
            EVENT : out std_logic);
-end EventInputs;
+end EventReader;
 
-architecture Behavioral of EventInputs is
--- EVENTINPUTS.VHD -- simple interface to the event bus that lets me
+architecture Behavioral of EventReader is
+-- EVENTREADER.VHD -- simple interface to the event bus that lets me
 -- read the event bus at CLK, and provides an asynchronous interface to 
 -- the higher-order event buffers
 
