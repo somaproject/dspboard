@@ -25,5 +25,167 @@ append to an output queue of events
 FPGA: circualr buffer? something like that? 
 
 
+For booting: 
+   The ADSP loads 256 32-bit words (1024 bytes) in 8-bit parallel mode (running very slowly) as the loader kernel
+   We can map in 2 blockselect+ RAMs for this purpose
 
 
+-----------------------------------------------------------------------------
+EVENTS
+-----------------------------------------------------------------------------
+is it reasonable to have an event interface where each side of the buffer is half-duplex?
+
+we're only going to be reading or writing the event bus, never both, esp if we don't read our own events. 
+
+What about the other side? well, for a memory-related interface, that's correct
+
+and writing events is so freaking fast!
+
+We care because it would be nice to use just one buffer for this. 
+seriously, though, that's queuing 14 events out, or 21 in. Hmm...
+
+it's a decent design decision, and we'll make it.
+
+At the same time, remember that the event buffer connected to the DSP is not the same as the event buffer that talks to the 
+
+FPGA must be able to decode events initially, for booting, etc. 
+
+FPGA receive the following events:
+  boot
+  boot byte
+  reset time
+
+------------------------------------------------------------------------------
+FPGA main data FIFO
+------------------------------------------------------------------------------
+a "mode" bit:
+   0 == normal operation as a data fifo
+   1 == just acting as RAM
+
+Signals:
+
+Random access memory signals for booting and boot control:
+RAIN[9:0] : random access address for input(writing)
+RAOUT[10*:0] : random access address for output(reading) 
+RDOUT[7:0] : random access data output
+RDIN[15:0] : random access data input
+RWE : ram write enable
+
+instead of being the obvious fifo, we'll use 3 blockselect+ blocks to do a triple-buffered block appraoch. This will let us have 3 512-byte blocks. x2 dsps, still leaves enough for the 1 event each. 
+
+to detect a done buffer: 
+   we have a register (BUFEND) at location foo that gets written whenever the address == the address of the length field. Each "newbuffer" resets that register to 0xFFFF, i.e. "not gonna get written". We consier a frame "done" when ADDR = BUFEND and there's a write. 
+
+buffer input side
+BUFWE : write this byte
+BUFADDRIN[7:0] : input address
+BUFDIN[15:0] : input data to write
+BUFERROR : occurs when we are in state AWAIT, and try to do a WE
+
+
+buffer outputs:
+BUFDOUT[15:0] : output data
+BUFNEXT: input to say "gimme the next frame"
+BUFACKOUT : high when BUFDOUT is a valid byte. 
+
+the output of this system is very similar to what's needed to talk to the data bus, to modularize that functionality and save myself some work. 
+
+
+CLKA : clock on the DSP side
+CLKB : clock on the data bus side
+
+
+
+
+
+
+------------------------------------------------------------------------------
+ADSP EXTERNAL MEMORY INTERFACE
+------------------------------------------------------------------------------
+The ADSP will do 16/32 packing. It seems smarter to pack 16-bit words on our side, i.e. for separate 16-bit values 0xAB and 0xCD, we send 0xABCD instead of 0x00AB and 0x00CD. The later takes four reads, the former two, and it's a lot easier once inside the DSP to split them. This isn't _always_ the case, mind you, but in general will be the .plan. 
+
+For external accesses, then, we need to remember that we're really accessing 32-bit values. We use the notion L to denote the low word and H to denote the high word. 
+
+The external memory space is partitioned into "regions", which begin on a 12-bit boundary. Hey, memory space is cheap :) However, parallel port doesn't support chaining. fuckers. 
+
+
+
+Region	Use:
+	
+0x0	this is the DMA-at-the-beginning-of-each-cycle word. 
+	0x0000L: sample from channel 0
+	0x0000H: sample from channel 1
+	0x0001L: sample from channel 2
+	0x0001H: sample from channel 3
+	0x0002L: sample from continuous channel
+
+0x1	0x1000 Output data buffer
+	How to actually do this? I think a fifo with word size at the beginning
+	is our best bet. But we will increment. Thus each write to 1000 signifies the start of a new packet. Ohh, cool. 
+	
+0x2	outbound events : write an event here:
+	0x2000 : low set of targets
+	0x2001 : high set of targets
+	0x2002L: cmd word
+	0x2002H: first word
+	0x2003L: second word
+	0x2003H: third word
+	0x2004 : next 2 words
+	0x2005 : a write here "commits" the event to the event out buffer
+
+0x3	inbound events:
+	0x3000L: cmd word
+	0x3000H: first word
+	0x3001 : next two words
+	0x3002 : next two words
+	0x3003 : a read here says "i'm done reading this event"
+
+0x4     acqboard control interface
+	0x4000 : status word
+
+
+	
+-----------------------------------------------------------------------------
+FPGA interface to Acq Board
+-----------------------------------------------------------------------------
+Need some way of partitioning the events as they come in
+some way of passing updated cmd bytes to the dsp
+some way of interpreting the writes to the cmd word as, well, commands
+
+
+
+----------------------------------------------------------------------------
+ADSP EXECUTION CYCLE
+----------------------------------------------------------------------------
+
+The ADSP normally runs a cycle where it checks for new events, processses them, and then writes out events. 
+
+We can use a circular buffer for pending events. the Pcode is:
+
+if eoutHead != eoutTail
+   send all events
+end if
+
+if EventWaitingFlag = '1' then
+   read in event
+   process event 
+     change gain, modify filter, whatever
+      possibly add output event
+end if
+
+INT 0 : 
+   triggers increment of sample time counter
+   this can be cleared by the appropriate event
+
+INT 1:
+   new sample loop
+   read in new samples
+   check to see if there is pending output data
+
+   process the samples, perform filtering, yadda yadda
+   if criteria meets foo, process output samples
+   begin dma write of output
+
+   
+
+   
