@@ -52,7 +52,7 @@ Debug : ./debug/dspboard.dxe
 ./debug/main.doj :./main.asm ../../../program\ files/analog\ devices/visualdsp/212xx/include/def21262.h ../../../program\ files/analog\ devices/visualdsp/212xx/include/def21266.h 
 	$(VDSP)/easm21k.exe -proc ADSP-21262  -o .\Debug\main.doj -g .\main.asm -MM
 
-./debug/dspboard.dxe :./debug/loader.doj ./debug/main.doj ./dspboard.ldf 
+./debug/dspboard.dxe :./dspboard.ldf ../../../program\ files/analog\ devices/visualdsp/212xx/lib/libc26x.dlb ../../../program\ files/analog\ devices/visualdsp/212xx/lib/libdsp26x.dlb ../../../program\ files/analog\ devices/visualdsp/212xx/lib/libio.dlb ./debug/loader.doj ./debug/main.doj 
 	$(VDSP)/cc21k.exe .\Debug\loader.doj .\Debug\main.doj -T .\DSPboard.ldf -proc ADSP-21262 -L .\Debug -flags-link -od,.\Debug -o .\Debug\DSPboard.dxe -map .\Debug\DSPboard.map -flags-link -MM
 
 endif

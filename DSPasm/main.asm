@@ -83,7 +83,6 @@
 	.VAR 	EVENTOUT[5]; 
 	
 	.GLOBAL EVENTIN, EVENTOUT, MYID;
-
 		
 .SECTION/DM seg_dm16da; 
 #define OUTSPIKELEN 300
@@ -108,14 +107,29 @@ unlock_mem:
 
 
 main: 
+	bit set flags FLG0O;  // DEBUGGING
 	nop;
 	r0 = 0; 
 main2:	
 	nop;
 	nop;
+	bit set flags FLG0; 
+	nop;
+	nop;
+	nop;
+	nop;
+	nop;
+	nop;
+	nop;
+	bit clr flags FLG0; 
+	nop;
+	nop;
+	nop;
 	
-	
-	
+	nop;
+	nop;
+	nop;
+	nop;
 	 
 	jump main; 
 	

@@ -55,8 +55,6 @@ loader_copy_done:	 // we arrive here following the
 	bit tst ustat4 PPDS;  // poll for dma status 
 	if tf jump (pc, -2); 
 	
-
-	bit set flags FLG0O;  // DEBUGGING
 	bit clr flags FLG3O; // flag 3 input
 
 	
@@ -85,9 +83,6 @@ loader_event_writemem:
 	// write the input word into memory
 	r0 = 0x80000; 
 	r0 = r0 + r13; 
-	
-	bit set flags FLG0; 
-	bit clr flags FLG0; 
 	
 	// r1 is upper 2 words
 	r1 = fdep r15 by 16:16; 
@@ -135,18 +130,14 @@ loader_event_writemem_done:
 	jump loader_event_loop; 
 	
 	
-	
 loader_event_boot:
 	// actually begin the booting process; 
-	
-	
-	nop;
-	nop;
-	nop;
-	nop; 
-	nop;
-	nop;
-	nop; 
+    JUMP 0x80004 (DB);	// jump to new location to execute
+    LIRPTL=0;            // clear IMASK on way to 0x80004
+
+    // and everything should be normal again!!!
+ 	nop;
+ 	nop;     
 loader_PP_ISR: RTI;
 	nop; 
 	nop;
