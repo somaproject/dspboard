@@ -50,8 +50,8 @@ begin
 	EADDR <= ao when ts = '0' else "ZZZZZZZZ";
 	EDATA <= do when ts = '0' else "ZZZZZZZZZZZZZZZZ";
 	
-	EA <= not EVENT;
-	EB <= not EVENT;
+	EA <= (not EVENT) and maddrset;
+	EB <= (not EVENT) and maddrset;
 	
 	CEA <= '1' when (esel = '1' and ECE = '0') else '0';
 	CEB <= '1' when (esel = '1' and ECE = '0') else '0';

@@ -24,7 +24,7 @@ vcom -93 -explicit test_acqboard.vhd
 vcom -93 -explicit dspboard_testbench.vhd
 
 
-vsim -t 1ps -L xilinxcorelib -lib work testbench
+vsim -t 1ps +notimingchecks -L xilinxcorelib -lib work testbench 
 view wave
 add wave *
 view structure

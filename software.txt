@@ -41,33 +41,17 @@ So, the design is probably not going to fit into the -50 part. But, I only know 
 -----------------------------------------------------------------------------
 EVENTS
 -----------------------------------------------------------------------------
-is it reasonable to have an event interface where each side of the buffer is half-duplex?
 
-we're only going to be reading or writing the event bus, never both, esp if we don't read our own events. 
+Okay, we're gonna be un-lame and re-do the event interface. Each Events component will have 2 rx fifos and 1 send fifo. 
 
-What about the other side? well, for a memory-related interface, that's correct
+RX fifo : 8 words/event = 32 events/block select = 64 events in queue total
+TX fifo : 16 words/event = 16 events total. Yea, well, don't send a ton of events !!
 
-and writing events is so freaking fast!
+This should really simplify the FSM!
 
-We care because it would be nice to use just one buffer for this. 
-seriously, though, that's queuing 14 events out, or 21 in. Hmm...
+We need to read MODE, MODERST, DSPRESET, RAIN, RWE, and RDIN. 
 
-it's a decent design decision, and we'll make it.
-
-At the same time, remember that the event buffer connected to the DSP is not the same as the event buffer that talks to the 
-
-So, the problem is that each event is 6 cycles, right? so we can't actually take an event out fast enough, because we're heading it with the 3 words of "target" information. Hmm. 
-
-So let's "clock this thing up" to, say, 60 MHz or something similar. Maybe even faster. This will result in us having to have the actual read and write interfaces cross a clock boundary, as well as the RAMs, but oh well. Plus, the ADSP memory interface side will probably be running at something close to this clockspeed anyway. 
-
-since we will be getting a new event every cyle of the event bus, that means a new 6-cycle event every 6 SYSCLK ticks, or 18 internal clocks (internal clock > 3x sysclk). 
-
-Arming an output event will take at least 9 ticks (3 for addr and 6 for data), and reading an input event at least 6 ticks.
-
-how to determine our own address? 
-
-
-
+however, there's nothing wrong with having these signals pass into the CLK domain (from SYSCLK) at the last minute. However, timing for the aggregate system will be _tight_, but that doesn't mean we can't just do things combinationally. 
 What if we sample EVENT to check for events to read, write, and we do all on each cyle? 
     eliminates the acknowledge issues for reading
     reading takes 7 ticks, writing 10? ouch!

@@ -81,7 +81,7 @@ architecture Behavioral of DSPBoard is
 	signal dina : std_logic_vector(15 downto 0) := (others => '0');
 	signal nexta, acka : std_logic := '0';
 
-   signal ebufsela, neweventsa , modersta, erda: std_logic := '0';
+   signal neweventsa , modersta, erda: std_logic := '0';
 	
 	signal raouta : std_logic_vector(10 downto 0) := (others => '0'); 
 	signal maddra : std_logic_vector(7 downto 0) := (others => '0'); 
@@ -110,7 +110,7 @@ architecture Behavioral of DSPBoard is
 	signal dinb : std_logic_vector(15 downto 0) := (others => '0');
 	signal nextb, ackb : std_logic := '0';
 
-   signal ebufselb, neweventsb, moderstb, erdb: std_logic := '0';
+   signal neweventsb, moderstb, erdb: std_logic := '0';
 	signal raoutb : std_logic_vector(10 downto 0) := (others => '0'); 
 
 	signal maddrb : std_logic_vector(7 downto 0) := (others => '0'); 
@@ -210,7 +210,6 @@ architecture Behavioral of DSPBoard is
 	           DWE : out std_logic;
 	           EWE : out std_logic;
 	           CWE : out std_logic;
-				  EBUFSEL : out std_logic; 
 	           STATUS : in std_logic;
 				  TXERROR : in std_logic; 
 	           CMDID : in std_logic_vector(2 downto 0);
@@ -276,7 +275,6 @@ architecture Behavioral of DSPBoard is
 	           ECE : in std_logic;
 	           EDATAI : in std_logic_vector(15 downto 0);
 	           EADDRI : in std_logic_vector(7 downto 0);
-			  	  BUFWR : in std_logic;
 			  	  NEWEVENTS : out std_logic;
 				  MADDR : in std_logic_vector(7 downto 0);
 				  MODERST : in std_logic;
@@ -292,8 +290,9 @@ begin
 	-- signal aggregation
 	raouta <= addroa(2 downto 0) & douta(15 downto 8);
 	raoutb <= addrob(2 downto 0) & doutb(15 downto 8);
-
-	maddrb <= maddra + 1; 
+								   
+	
+	maddrb <= maddra + 1;
 
 	FiberRX_inst: FiberRX port map (
 		CLK => clk,
@@ -380,7 +379,6 @@ begin
 		DWE => dwea,
 		EWE => ewea,
 		CWE => cwea,
-		EBUFSEL => ebufsela, 
 		STATUS => status,
 		TXERROR => txerrora,
 		CMDID => cmdida,
@@ -445,7 +443,6 @@ begin
 		ECE => ecea,
 		EDATAI => edia,
 		EADDRI => eaia,
-		BUFWR => ebufsela,
 		NEWEVENTS => neweventsa,
 		MADDR => maddra,
 		MODERST => modersta,
@@ -467,7 +464,6 @@ begin
 		DWE => dweb,
 		EWE => eweb,
 		CWE => cweb,
-		EBUFSEL => ebufselb,
 		STATUS => status,
 		TXERROR => txerrorb,
 		CMDID => cmdidb,
@@ -532,7 +528,6 @@ begin
 		ECE => eceb,
 		EDATAI => edib,
 		EADDRI => eaib,
-		BUFWR => ebufselb,
 		NEWEVENTS => neweventsb,
 		MADDR => maddrb,
 		MODERST => moderstb,
@@ -558,15 +553,56 @@ begin
 		end if;
 	end process;  
 
-	LEDDSPA <= dspreseta;
+
+	process(sysclk) is 
+		variable cnt : integer range 0 to 10000000 := 0; 
+	begin
+	   if rising_edge(sysclk) then
+		   if myeventa = '1' then 
+			   cnt := 1000000;
+			else
+			   if cnt /= 0 then
+				   cnt := cnt - 1;
+				end if;
+			end if; 
+			
+			if cnt /= 0 then
+			   --LEDDSPA <= '1';
+			else
+			   --LEDDSPA <= '0';
+			end if;
+		end if;
+	end process;  
+
+	process(sysclk) is 
+		variable cnt : integer range 0 to 10000000 := 0; 
+	begin
+	   if rising_edge(sysclk) then
+		   if myeventb = '1'  then 
+			   cnt := 1000000;
+			else
+			   if cnt /= 0 then
+				   cnt := cnt - 1;
+				end if;
+			end if; 
+			
+			if cnt /= 0 then
+			   --LEDDSPB <= '1';
+			else
+			   --LEDDSPB <= '0';
+			end if;
+		end if;
+	end process;  
+
+   LEDDSPA <= dspreseta;
 	LEDDSPB <= dspresetb; 
 
 	-- simple power LED:
-	process(sysclk) is
+	process(clk) is
 		variable cnt : integer range 0 to 20000000 := 0;
 		variable trigger: std_logic := '0'; 
 	begin
-		if rising_edge(sysclk) then
+		if rising_edge(clk) then
 			if cnt = 20000000 then 
 				cnt := 0;
 			else

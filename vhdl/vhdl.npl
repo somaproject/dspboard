@@ -41,6 +41,8 @@ DEPASSOC dspboard dspboard.ucf
 [Normal]
 xilxBitgCfg_GenOpt_ASCIIFile=xstvhd, spartan2e, VHDL.t_bitFile, 1077136805, True
 [STATUS-ALL]
+dspboard.ngcFile=WARNINGS,1077470642
+dspboard.ngdFile=WARNINGS,1077470679
 fibertx.ngcFileGroup=OK,1077389451
 [STRATEGY-LIST]
 Normal=True
