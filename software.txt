@@ -48,12 +48,96 @@ it's a decent design decision, and we'll make it.
 
 At the same time, remember that the event buffer connected to the DSP is not the same as the event buffer that talks to the 
 
+So, the problem is that each event is 6 cycles, right? so we can't actually take an event out fast enough, because we're heading it with the 3 words of "target" information. Hmm. 
+
+So let's "clock this thing up" to, say, 60 MHz or something similar. Maybe even faster. This will result in us having to have the actual read and write interfaces cross a clock boundary, as well as the RAMs, but oh well. Plus, the ADSP memory interface side will probably be running at something close to this clockspeed anyway. 
+
+since we will be getting a new event every cyle of the event bus, that means a new 6-cycle event every 6 SYSCLK ticks, or 18 internal clocks (internal clock > 3x sysclk). 
+
+Arming an output event will take at least 9 ticks (3 for addr and 6 for data), and reading an input event at least 6 ticks.
+
+how to determine our own address? 
+
+
+
+What if we sample EVENT to check for events to read, write, and we do all on each cyle? 
+    eliminates the acknowledge issues for reading
+    reading takes 7 ticks, writing 10? ouch!
+    This is going to require some creative, tight FSMing
+    
+    we get INPUT EVENTs 
+
+
+Event Input:
+    updated each input cycle
+    EMINE == the most recent event was for me
+    EVENT : registered inputs. This is delayed by 2 ticks (as is the final output register set) to deal with clock-transition issues
+    use 16 SRLE-16s for registers, always shift in new addr bytes, just compare at the end. let's us be programmable!
+       
+
+Pipeline chart:
+stage : 0   1   2   3   4   5   6   7   8   9   10   11   12  13  14  15
+EVENT:  1   0	1   1	1   1	1   0	1   1	1    1	  1   0	  1   1
+EVENTL: 1   1	0   1	1   1	1   1	0   1	1    1	  1   1	  0   1
+CNT	x   x	x   0	1   2	3   4	5   0	1    2	  3   4	  5   0
+DATA:	x   x	D01 D1	D2  D3	D4  D51	D02 D1	D2   D3	  D4  D52 D0  D1
+DATAL	x   x	x   D0	D1  D2	D3  D4	D51 D02	D1   D2	  D3  D4  D52 D0
+ADDR	x   x	A0  A1	A2  A3	A4  A5	A0  A1	A2   A3	  A4  A5  A0  A1
+ADDRL	x   x	x   A0	A1  A2	A3  A4	A5  A0	A1   A2	  A3  A4  A5  A0
+D0	x   x	x   x	D01 D01 D01 D01	D01 D01	D02  D02  D02 D02 D02 D02
+D5	x   x	x   x	x   x	x   x	x   D51 D51  D51  D51 D51 D51 D52
+for this one, myaddr: 0x20
+SMINE	x   x   x   x   x   x   1   1   1   0   0    0	  0   0   0   0
+MINE	x   x   x   x	x   x	x   x	x   1	0    0    0   0   0   0
+EMINE   x   x	x   x	x   x	x   x	x   x	1    1	  1   1	  1   1
+
+
+please note that the S/R latch for SMINE is very unusual in that the SET overrides the RESET
+
+
+Event output:
+    ADDR[3:0] : first 3 words are targets, next 6 are data
+    just write straight in
+    writing the last word(ADDR=8) arms
+    wait for EVENTWDONE to be high before writing again. 
+ 
+
+FSM notes:
+   we have simple single-states for DSP reset and boot mode setting
+   for an event (all events), we always write the first word to ram-- 
+     this has no effect, as the addr should always be pointing to the next addr in the circular buffer
+    Wow, this FSM is longer than I thought it would be. ouch. 
+
+
+    
+
 FPGA must be able to decode events initially, for booting, etc. 
 
 FPGA receive the following events:
   boot
   boot byte
   reset time
+  set board ID
+
+
+
+
+
+
+DSP side of event-interface: ---------------------------
+writing an event actually writes to a series of 9 registers, 
+
+
+
+EVENT:
+   CMD = 0x01 SENDER = any dw0[0] == new boot state
+   CMD = 0x02 SENDER = any dw0[0] == state of DSP RESET pin
+   CMD = 0x03 SENDER = any dw0 = addr of first word
+			   dw1 = first word to write dw=4 last word of 4
+
+
+
+   
 
 ------------------------------------------------------------------------------
 FPGA main data FIFO
@@ -123,45 +207,50 @@ The external memory space is partitioned into "regions", which begin on a 12-bit
 
 
 Region	Use:
-	
+	memory addr : FPGA addr
 0x0	this is the DMA-at-the-beginning-of-each-cycle word, along with metadata
-	0x0000 : metadata, i.e. are we connected, this sample was  bad, etc. 
-	0x0001L: sample from channel 0
-	0x0001H: sample from channel 1
-	0x0002L: sample from channel 2
-	0x0002H: sample from channel 3
-	0x0003L: sample from continuous channel
+	0x0000 : 0x0000 : metadata, i.e. are we connected, 
+			  this sample was  bad, etc. 
+	0x0001L: 0x0001 : sample from channel 0
+	0x0001H: 0x0002	: sample from channel 1
+	0x0002L: 0x0003 : sample from channel 2
+	0x0002H: 0x0004 : sample from channel 3
+	0x0003L: 0x0005 : sample from continuous channel
 
-0x1	0x1000 Output data buffer
+0x1	0x1000 : 0x2000 : Output data buffer
 		
 0x2	outbound events : write an event here:
-	0x2000 : low set of targets
-	0x2001 : high set of targets
-	0x2002L: cmd word
-	0x2002H: first word
-	0x2003L: second word
-	0x2003H: third word
-	0x2004 : next 2 words
-	0x2005 : a write here "commits" the event to the event out buffer
+	0x2000L: 0x4000 : low set of targets
+	0x2000H: 0x4001 : medium set of targets
+	0x2001H: 0x4002 : high set of targets
+	0x2002L: 0x4003 : cmd word
+	0x2002H: 0x4004 : first word
+	0x2003L: 0x4005 : second word
+	0x2003H: 0x4006 : third word
+	0x2004 : 0x4007 : next 2 words
+	0x2005 : 0x4008 : a write here "commits" the event 
+			  to the event out buffer
 
 0x3	inbound events:
-	0x3000L: cmd word
-	0x3000H: first word
-	0x3001 : next two words
-	0x3002 : next two words
-	0x3003 : a read here says "i'm done reading this event"
+	0x3000L: 0x6000 : cmd word
+	0x3000H: 0x6001 : first word
+	0x3001 : 0x6002 : next two words
+		 0x6003
+	0x3002 : 0x6004 : next two words
+		 0x6005 : next two words
+	0x3003 : 0x6006 : a read here says "i'm done reading this event"
 
 0x4     acqboard control interface
-	0x4000 : status word
-	0x4010L: command (bits 3:0)
-	0x4010H: cmdid (bits 2:0)
-	0x4011L: command words :
+	0x4000 : 0x8000 : status word
+	0x4010L: 0x8020 : command (bits 3:0)
+	0x4010H: 0x8021 : cmdid (bits 2:0)
+	0x4011L: 0x8022 : command words :
 		 0:7 one
 		 8:15 two
-	0x4011H: command words :
+	0x4011H: 0x8023 : command words :
 		 0:7 thee
 		 8:15 four
-	0x4012L: complete the CMD, i.e. send
+	0x4012L: 0x8024 : complete the CMD, i.e. send
 
 
 
@@ -240,4 +329,10 @@ INT 1:
 
    
 
+so, of our four flags we have:
+   new sample (INT1)
+   time inc (INT0)
+   time clear
+   new event
    
+      
