@@ -112,12 +112,9 @@ Clocks
 
 I was going to drive the DSP with clocks from the FPGA, but I really don't want to distribute the clocks over that distance, I'd be much happier using crystals. I worry, because designing with crystals can be hard. But they are inexpensive. 
 
+So now I'm using a clock-distribution chip, whcih I also have driving the FPGA. Should I be able to find the right 64 MHz 3.3 voltage oscillator to fit the footprint (which actually looks a bit difficult, sadly. 
 
-
-
-
-
-
+The board is currently designed for a 25 MHz oscillator. Ideally, I want to run the DSP in 3x mode and use the 64 MHz clock, and use the same one to drive the DSP. 
 
 
 

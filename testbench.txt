@@ -40,6 +40,7 @@ I've figured out how to use procedures!!!
 
 Things working: 
 
+Set device ID
 We can toggle RESET flag
 we can set the boot mode
 we can load up data into the ram for booting
@@ -49,6 +50,16 @@ We can write events from the DSP into the FPGA and read them on the event bus
 The event bus can trigger events and the DSP can read them out of the event queue. 
 
 
+dataw : write a packet of length N (n < 256 words) to the addr
+
+
+
+
+
+To do:
+   What about event overflow?
+   writing actual data buffers, and reading them out
+   
 
 
 
