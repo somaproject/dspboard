@@ -34,18 +34,22 @@ CLK : clock signal
 
 Now, we need a fake event interface too...
 
-We have:
+I've figured out how to use procedures!!!
 
-CMD(15:0)
-DIN0(15:0)
-DIN1(15:0)
-DIN2(15:0)
-DIN3(15:0)
-DIN4(15:0), similar DOUTs
-ADDR(47:0)
-SENDEVENT
-QUERYEVENT
-DONE
 
-Realy simple, you just call queryevent, wait for done, see if you get anything, wait a bit, etc. 
+
+Things working: 
+
+We can toggle RESET flag
+we can set the boot mode
+we can load up data into the ram for booting
+we can read data out during boot up in 8-bit mode successfully. 
+
+We can write events from the DSP into the FPGA and read them on the event bus
+The event bus can trigger events and the DSP can read them out of the event queue. 
+
+
+
+
+
 

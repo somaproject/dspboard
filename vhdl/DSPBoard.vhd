@@ -77,7 +77,7 @@ architecture Behavioral of DSPBoard is
 	signal dina : std_logic_vector(15 downto 0) := (others => '0');
 	signal nexta, acka : std_logic := '0';
 
-   signal ebufsela, neweventsa , modersta: std_logic := '0';
+   signal ebufsela, neweventsa , modersta, erda: std_logic := '0';
 	
 	signal raouta : std_logic_vector(10 downto 0) := (others => '0'); 
 	signal maddra : std_logic_vector(7 downto 0) := (others => '0'); 
@@ -104,7 +104,7 @@ architecture Behavioral of DSPBoard is
 	signal dinb : std_logic_vector(15 downto 0) := (others => '0');
 	signal nextb, ackb : std_logic := '0';
 
-   signal ebufselb, neweventsb, moderstb : std_logic := '0';
+   signal ebufselb, neweventsb, moderstb, erdb: std_logic := '0';
 	signal raoutb : std_logic_vector(10 downto 0) := (others => '0'); 
 
 	signal maddrb : std_logic_vector(7 downto 0) := (others => '0'); 
@@ -217,7 +217,8 @@ architecture Behavioral of DSPBoard is
 				  TIMECLR : in std_logic;
 				  TCLR : out std_logic;
 			      MADDR : in std_logic_vector(7 downto 0);
-					MODERST : out std_logic);
+					MODERST : out std_logic;
+					ERD : out std_logic);
 	end component;
 
 	component databuffer is
@@ -379,7 +380,8 @@ begin
 		TIMECLR => timeclr,
 		TCLR => tclra,
 		MADDR => maddra,
-		MODERST => modersta); 
+		MODERST => modersta,
+		ERD => erda); 
 
 	databuffera : databuffer port map (
 		CLKA => clk,
@@ -409,7 +411,7 @@ begin
 		DOUT => eventdina,
 		ADDR => addroa(3 downto 0),
 		WE => ewea,
-		RD => deltarda,
+		RD => erda,
 		MODE => modea, 
 		DSPRESET => dspreseta,
 		RAIN => raina,
@@ -463,7 +465,8 @@ begin
 		TIMECLR => timeclr,
 		TCLR => TCLRB,
 		MADDR => maddrb,
-		MODERST => moderstb); 
+		MODERST => moderstb,
+		ERD => erdb); 
 
 	databufferb : databuffer port map (
 		CLKA => clk,
@@ -493,7 +496,7 @@ begin
 		DOUT => eventdinb,
 		ADDR => addrob(3 downto 0),
 		WE => eweb,
-		RD => deltardb,
+		RD => erdb,
 		MODE => modeb, 
 		DSPRESET => dspresetb,
 		RAIN => rainb,

@@ -263,6 +263,14 @@ Region	Use:
 	0x0003L: 0x0005 : sample from continuous channel
 
 0x1	0x1000 : 0x2000 : Output data buffer
+	the length word is the length of the packet. If we don't write
+	the correct number of bytes, the packet won't be committed
+	If we write too many, the higher ones are ignored. 
+	Remember that, according to the  format, the first word we write
+	is of the form :
+	  7:0 : source
+	  15:8 : length, in 2-byte words
+	
 		
 0x2	outbound events : write an event here:
 	0x2000L: 0x4000 : low set of targets

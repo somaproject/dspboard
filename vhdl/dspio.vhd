@@ -43,7 +43,8 @@ entity dspio is
 			  TIMECLR : in std_logic;
 			  TCLR : out std_logic;
 			  MADDR : in std_logic_vector(7 downto 0);
-			  MODERST : out std_logic);
+			  MODERST : out std_logic;
+			  ERD : out std_logic);
 end dspio;
 
 architecture Behavioral of dspio is

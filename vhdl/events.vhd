@@ -234,7 +234,7 @@ begin
 				RDIN <= edout; 
 				RWE <= rainen; 
 				  
-				if addrbr =  dspbpw then
+				if addrbw =  dspbpr then
 					NEWEVENTS <= '0';
 				else
 					NEWEVENTS <= '1';
@@ -246,7 +246,6 @@ begin
 			end if; 
 		end if;
 	end process clock; 
-
 
 	fsm : process(cs, mine, edout, edin, dspbpw, addrbr, done, event) is
 	begin

@@ -12,7 +12,7 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 USE ieee.std_logic_signed.all; 
- use IEEE.STD_LOGIC_ARITH.ALL; 
+-- use IEEE.STD_LOGIC_ARITH.ALL; 
 use ieee.std_logic_textio.all;
 use std.textio.all;
 
@@ -169,7 +169,7 @@ BEGIN
 
 	RESET <= '0' after 100 ns; 
 
-
+	 
 
 -- *** Test Bench - User Defined Section ***
    tb : PROCESS
@@ -262,6 +262,26 @@ BEGIN
 		
 		end memr8;  
 
+		procedure dataw(len : in integer) is 
+			variable outword: std_logic_vector(15 downto 0); 
+
+		begin
+
+			-- remember, len < 256 and > 30
+			for i in 0 to (len -1) loop
+				-- we start writing at... 
+				if i = 0 then
+					outword := std_logic_vector(TO_UNSIGNED(len, 8)) & X"00"; 
+				else
+					outword := std_logic_vector(TO_UNSIGNED(i, 16)); 
+				end if; 
+
+				memw16(std_logic_vector(TO_UNSIGNED(i + 8192, 16)),
+						 outword); 
+			end loop; 
+		end dataw; 
+
+
 		variable loadbyte : std_logic_vector(7 downto 0);
 		variable loadword : std_logic_vector(15 downto 0);
 		 
@@ -297,6 +317,56 @@ BEGIN
 		memw16(X"4007", X"0003"); 
 		memw16(X"4008", X"0004"); 
 		memw16(X"4009", X"0000"); 
+
+
+ 		memw16(X"4000", X"0123"); 
+		memw16(X"4001", X"4567"); 
+		memw16(X"4002", X"89AB"); 
+		memw16(X"4003", X"0004"); -- BS event! 
+		memw16(X"4004", X"aaaa"); 
+		memw16(X"4005", X"bbbb"); 
+		memw16(X"4006", X"cccc"); 
+		memw16(X"4007", X"dddd"); 
+		memw16(X"4008", X"eeee"); 
+		memw16(X"4009", X"ffff"); 
+
+ 		memw16(X"4000", X"0123"); 
+		memw16(X"4001", X"4567"); 
+		memw16(X"4002", X"89AB"); 
+		memw16(X"4003", X"0004"); -- BS event! 
+		memw16(X"4004", X"aaaa"); 
+		memw16(X"4005", X"bbbb"); 
+		memw16(X"4006", X"cccc"); 
+		memw16(X"4007", X"dddd"); 
+		memw16(X"4008", X"eeee"); 
+		memw16(X"4009", X"ffff"); 
+
+ 		memw16(X"4000", X"FFFF"); 
+		memw16(X"4001", X"FFFF"); 
+		memw16(X"4002", X"FFFF"); 
+		memw16(X"4003", X"0005"); -- BS event! 
+		memw16(X"4004", X"aaaa"); 
+		memw16(X"4005", X"bbbb"); 
+		memw16(X"4006", X"cccc"); 
+		memw16(X"4007", X"dddd"); 
+		memw16(X"4008", X"eeee"); 
+		memw16(X"4009", X"ffff"); 
+
+
+		-- now we poll and read events:
+		while(1 = 1) loop
+			if rising_edge(dspclk) and EVENTSA = '1' then
+				memr16(X"6000", loadword); 
+				if loadword = X"0006" then 
+					report "DSP has read an 0x0006 event!";
+				end if;
+				
+				memr16(X"6006", loadword); 
+			end if; 
+			wait until rising_edge(dspclk); 
+
+		end loop;   
+
 
 
 
@@ -362,6 +432,7 @@ BEGIN
 				  wait until rising_edge(sysclk);
 				  EVENT <= '1';
 				  ECE <= '1';  
+				  wait until rising_edge(sysclk);
 				  cmd := EDATA;
 				  addr(7 downto 0) := EADDR; 
 				  wait until rising_edge(sysclk);
@@ -386,6 +457,46 @@ BEGIN
 				   
 			end procedure revent;  
 
+			procedure rdata(rxlen : out std_logic) is
+				type databuffer is array(0 to 511) of integer;
+				variable inbuf : databuffer := (others => 0);  
+				variable pos, timetilack, len : integer := 0; 
+			begin
+				pos := 0; 
+				timetilack := 6; 
+
+				wait until rising_edge(sysclk); 
+				wait until rising_edge(sysclk); 
+				wait until rising_edge(sysclk); 
+				wait until rising_edge(sysclk); 
+				wait until rising_edge(sysclk); 
+				dataen <= '0'; 
+				wait until rising_edge(sysclk); 
+				while pos < 1000 loop
+					timetilack := timetilack - 1; 
+					if dataack = '0' then
+						inbuf(pos) := TO_INTEGER(UNSIGNED(SYSDATA)); 
+						if pos = 0 then
+							len := TO_INTEGER(UNSIGNED(SYSDATA(15 downto 8))); 
+						end if; 
+
+
+						pos := pos + 1; 
+						wait until rising_edge(sysclk); 
+					end if;
+					
+					if pos = 0 and timetilack < 0 then 
+						-- whoa, not gonna send a frame, i guess
+						pos := 1000;
+					end if;
+
+					if pos = (len - 1) then 
+						pos := 1000; 
+					end if;
+				end loop; 
+				
+			end procedure rdata; 
+
 
 			variable laddr :  std_logic_vector(47 downto 0);
 			variable  lcmd, ldin0, ldin1, ldin2, ldin3, ldin4 
@@ -407,7 +518,7 @@ BEGIN
 			wevent(X"FFFFFFFFFFFF", X"0003", X"0000", X"0000", X"0001", X"0002", X"0003");
 			for i in 0 to 127 loop
 					
-				wevent(X"FFFFFFFFFFFF", X"0003", std_logic_vector(TO_UNSIGNED(i*4, 16)),
+				wevent(X"FFFFFFFFFFFF", X"0006", std_logic_vector(TO_UNSIGNED(i*4, 16)),
 															std_logic_vector(TO_UNSIGNED((i*8 + 1) mod 256, 8)) & 
 															std_logic_vector(TO_UNSIGNED((i*8 + 0) mod 256, 8)), 
 															std_logic_vector(TO_UNSIGNED((i*8 + 3) mod 256, 8)) & 
@@ -421,17 +532,27 @@ BEGIN
 			waitclk(30); 
 				wevent(X"FFFFFFFFFFFF", X"0002", X"0000", X"0000", X"0001", X"0002", X"0003");
 
-			-- now, we query for events!!
-			while (1 = 1) loop
+			-- now, we query for events until we read an 0x0005
+			while (lcmd /= X"0005") loop
 				revent(laddr, lcmd, ldin0, ldin1, ldin2, ldin3, ldin4); 
-				if lcmd = X"0004" then
-					report "Read event successfully!";
+				if lcmd = X"0005" then
+					report "0x0005 event was placed on bus successfully by dsp!";
 				end if;
 
 				waitclk(30); 
 
 			end loop;
-			 
+
+			for i in 0 to 3 loop
+				wevent(X"FFFFFFFFFFFF", X"0003", 
+							std_logic_vector(TO_UNSIGNED(i, 16)),
+							std_logic_vector(TO_UNSIGNED(i, 16)),
+							std_logic_vector(TO_UNSIGNED(i, 16)),
+							std_logic_vector(TO_UNSIGNED(i, 16)),
+							std_logic_vector(TO_UNSIGNED(i, 16)));
+			end loop;  
+
+
 
 	end process busclock; 
 
