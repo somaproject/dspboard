@@ -1,0 +1,29 @@
+Perhaps miss-named "software" file to design our general layout for what the hell the FPGA does:
+
+Memory addresses:
+one address to write a command
+
+
+
+To send a command to an acq board:
+There's a memory address that the DSP writes the acqboard command to, to say, change gain. Then it can read and poll. The question is, how long should it poll?
+
+well, it can only send one command per sample interval, obviously, and _at most_ that, as we have to wait for the other one. 
+
+maybe each DSP will have a linked list of to-acqboard? or a queue or something like that? 
+
+Every time an acqboard event is done, we send it. 
+
+Even CMDID for one DSP, odd for another. FPGA partitions them out. 
+
+
+how to read events, given they may be being written by the FPGA? need some sort of mutex or something. 
+
+read events, put them in an event queue, and process the queue
+append to an output queue of events
+
+FPGA: circualr buffer? something like that? 
+
+
+
+
