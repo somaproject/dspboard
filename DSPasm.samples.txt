@@ -92,6 +92,11 @@ send_spike_dma:
    DMAs out a spike, to the output data location.
    Does not block. 
 
+samples.resetdata:
+   zero appropriate buffers
+   reset all pointers
+   reload DAGs
+
 
 
 1. DMA-in new samples, in 16-bit fixed-point twos-complement form. 

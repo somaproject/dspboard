@@ -33,7 +33,8 @@
 .SECTION/DM seg_dm32da;
 	.VAR 	TIMESTAMP;  	// current 32-bit timestamp
 	.VAR 	MYID;  			// tetrode ID, read from DSP on start-up
-	.GLOBAL TIMESTAMP, MYID; 
+	.VAR	SAMPLING;		// is the SAMPLE interrupt enabled. 
+	.GLOBAL TIMESTAMP, MYID, SAMPLING; 
 	
 	 
 	// spike-specific	
@@ -76,6 +77,10 @@
 	// acqboard-related
 	.VAR	CMDID;
 	.VAR 	CMDIDPENDING; 
+	.VAR 	LINKSTAT; 
+	.VAR 	CMDPENDING; 
+	.VAR	NEWSTAT;
+	.global CMDID, CMDIDPENDING, CMDPENDING, LINKSTAT, NEWSTAT;  
 	
 	// event status
 	.VAR    EVENTIN[6];
@@ -115,6 +120,31 @@ main:
 	r9 =0;
 mainl:	
 	// test dma
+	
+	r0 = 0x00020003; dm(CMDPENDING) = r0; 
+	r0 = 0x00000100; dm(CMDPENDING+1) = r0;
+	call update_from_cmdpending; 
+
+	r0 = 0x00020003; dm(CMDPENDING) = r0; 
+	r0 = 0x00000205; dm(CMDPENDING+1) = r0;
+	call update_from_cmdpending; 
+	
+	
+	r0 = 0x00020003; dm(CMDPENDING) = r0; 
+	r0 = 0x00000307; dm(CMDPENDING+1) = r0;
+	call update_from_cmdpending; 
+
+	
+	r0 = 0x00020003; dm(CMDPENDING) = r0; 
+	r0 = 0x00000409; dm(CMDPENDING+1) = r0;
+	
+	call update_from_cmdpending; 
+	r0 = 0x00020002; dm(CMDPENDING) = r0; 
+	r0 = 0x00000209; dm(CMDPENDING+1) = r0;
+			
+	jump mainl; 
+	
+	
 	r9 = r9+1; 
 
 	r0 = 0xD000;

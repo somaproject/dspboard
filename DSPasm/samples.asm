@@ -820,4 +820,94 @@ filter_fir_simd:
 	bit tst ustat4 PPDS;  // poll for dma status 
 	if tf jump wait_dma_done; 
 	
+
+/*----------------------------------------------------------
+  zerodata:
+        zeros all input, output buffers
+        note that this does not impact the existing DAGs, 
+        i.e. they are NOT RESET
+        
+     input:
+        none
+                  
+     output:
+        all appropriate buffers are now filled with zeros:
+        SX12
+        SX34
+        COX
+        SY12
+        SY34
+        COY         
+         
+     modifies:
+	 	r0, i0-i3; 
+-------------------------------------------------------------*/ 
+samples.zerodata:	// global function to call from events
+.global samples.zerodata;
+zerodata:
+
+	// spike data chans 12, 34
 	
+	b0 = SX12;
+	m0 = 1; 
+	i0 = SX12;
+	l0 = SXSIZE; 
+	b1 = SX34; 
+	i1 = SX34;
+	l1 = SXSIZE; 
+	
+	f0 = 0.0; 
+	lcntr = SXSIZE; do zerodata.sx until lce; 
+		dm(i0, m0) = f0; 
+	zerodata.sx:	dm(i1, m0) = f0; 
+	
+	
+	// continuous input channel
+	
+	b0 = COX;
+	m0 = 1; 
+	i0 = COX;
+	l0 = COXSIZE; 
+	
+	f0 = 0.0; 
+	lcntr = COXSIZE; do zerodata.cox until lce; 
+		dm(i0, m0) = f0; 
+	zerodata.cox:	nop;
+		nop; 	
+
+	// spike output channels 1-4
+	
+	b8 = SY1;
+	m8 = 1; 
+	i8 = SY1;
+	l8 = SYSIZE; 
+	b9 = SY2; 
+	i9 = SY2;
+	l9 = SYSIZE; 
+	b10 = SY2; 
+	i10 = SY2;
+	l10 = SYSIZE; 
+	b11 = SY2; 
+	i11 = SY2;
+	l11 = SYSIZE; 
+	
+	f0 = 0.0; 
+	lcntr = SYSIZE; do zerodata.sy until lce; 
+		pm(i8, m8) = f0; 
+		pm(i9, m8) = f0; 
+		pm(i10, m8) = f0;		
+	zerodata.sy:		pm(i11, m8) = f0;  
+	
+	
+	// DAG2[3]: output pointer for continuous
+	b8 = COY;
+	m8 = 1; 
+	i8 = COY;
+	l8 = COYSIZE; 
+	
+	f0 = 0.0; 
+	lcntr = COYSIZE; do zerodata.coy until lce; 
+	zerodata.coy:		pm(i8, m8) = f0;  
+	
+	rts;
+	  		

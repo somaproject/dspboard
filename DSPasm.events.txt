@@ -43,10 +43,25 @@ check_acqcmd : checks to see if the CMDID has been updated
    if newstat.cmdid = cmdidpendig then we've processed the command
       we reset cmdidpending, and 
       update the settings related to the acqboard with CMDPENDING
+      call update_from_acqcmd
       call broadcast_acqstate
 
+update_from_acqcmd: reads cmdidpending, parses it, sets appropriate
+      internal state registers
+
+
+
 broadcast_acqstate:
-      sends an event re: current acqboard state
+   for each byte, we have: 
+   bits 0:3 : input gain
+   bits 4:5 : HP filter settings
+   bits 6:7 : input chan select
+   and are transmitted as:
+   dw1 = chan 2 msb, chan 1 lsb
+   dw2 = chan 4 msb, chan 3 lsb
+   dw3 = lsb cont channel, uses input chan select
+
+   
 
 read_event : just reads in an event
 
@@ -163,7 +178,7 @@ change cont parms
 	 DW0[15:0] : actual number 
 
 40: Enable/disable spike / sample interrupt
-
+    dw0[0] == state
     flushes buffers, etc. 
 
 43 : events that change acq board settings:

@@ -25,6 +25,7 @@
 
 .extern TIMESTAMP; 
 .extern MYID; 
+.extern SAMPLING;
 
 .extern NEWSAMPTMP; 
 .extern SPIKELEN;
@@ -56,6 +57,9 @@
 .extern PENDINGOUTCONT;
 .extern CMDID;
 .extern CMDIDPENDING;
+.extern NEWSTAT;
+.extern	LINKSTAT;
+.extern CMDPENDING; 
 .extern EVENTIN;
 .extern EVENTDONE;
 .extern EVENTOUT;
