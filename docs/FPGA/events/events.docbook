@@ -1,0 +1,124 @@
+<?xml version="1.0" ?>
+<article>
+  <articleinfo>
+    <title>The SOMA DSPboard : FPGA Events Interface</title>
+    <author>
+      <firstname>Eric</firstname>
+      <surname>Jonas</surname>
+    </author>
+  </articleinfo>
+  <section id="Events">
+    <title>DSP Events</title>
+    <para> The interface between the DSPs and the Event Bus provides
+    low-latency buffering of inbound and outbound events. Outbound
+    events are multiplexed between the two DSPs and are placed on the
+    bus during the appropriate stage in an Event Bus cycle. Only
+    events which target a given DSP are placed in its buffer. </para>
+
+    <para>Here is where we'd put an overview of the different
+    sub-components, and describe the input/output dichotomy
+
+    All parts of the event bus face challenges in switching from the CLK to the SYSCLK domain and vice-versa. </para>
+
+    <section  id="EventMux">
+      <title>Event Bus Multiplexor </title>
+      <para>
+      signals CEA and CEB for alternating DSPs A and B, alternating, via the ESEL signal
+      
+      Each DSP has a set of Address In (AI), Address Out (AO), Output Enable (OE), Data Out (DO), and Data In (DI) lines, as well as a signaling Clock Enable (CE). 
+
+      The setting of MADDR : need some way to set wake-up signal, something something. 
+
+      </para>
+
+    </section>
+    
+    <section id="Event Outputs">
+      
+      <para> The output side of the buffer is in the
+      <signal>SYSCLK</signal> domain, and uses the 32-bit wide
+      interface of the BlockSelect+ RAM to simultaneously read out the
+      <signal>DATA</signal> and <signal>ADDR</signal> portions of the
+      event. The 3-bit <signal>WCNT[2:0]</signal> counter sequences
+      through the individual Event words, and the 6-bit
+      <signal>ECNTOUT[5:0]</signal> counter selects the event from the
+      buffer. These combine to form the address input
+      <signal>ADDRB[8:0]</signal> to the RAM.  </para>
+   
+      <para>A complicated interplay of signals is necessary to
+      guarantee that <signal>EADDR[7:0]</signal> and
+      <signal>EDATA[15:0]</signal> are valid as soon as possible
+      following the <signal>SYSCLK</signal> edge that registers
+      <signal>ECE</signal>. Thus, when not transmitting an Event, the
+      counters point to the first word of the next event in the
+      buffer. </para>
+
+      <figure id="event.output.output">
+	<title>Event Output </title>
+	<timingobject name="event.output.output">
+	  <clock name="SYSCLK"> |   |   |   |   |   |   |   |   |   |   |   | 
+	  </clock>
+	  <signal name="ECE"  > L   L   L   H   L   L   L   L   L   L   L   L
+	  </signal>
+	  <signal name="EEVENT"> L   L   L   H   L   L   L   L   L   H   L   L 
+	  </signal>
+          <bus name="ECNTINL">
+	    <data>              n+1 n+1 n+1 n+1 n+1 n+1 n+1 n+1 n+1 n+1 n+1 n+1
+	    </data></bus>
+	  <bus name="ECNTOUT">
+	    <data>              n   n   n   n   n   n   n   n   n   n n+1 n+1
+	    </data></bus>
+	  <signal name="ENOUT"> L   L   L   L   H   H   H   H   H   H  L  L 
+	    </signal>
+	  <signal name="WEN">   L   L   L   H   H   H   H   H   H   H  L  L 
+	    </signal>
+	  <bus name="WCNT">
+	    <data>              0   0   0   0   1   2   3   4   5   6  0  0
+	    </data></bus>
+	  <signal name="EEND">  L   L   L   L   L   L   L   L   L   H  L  L
+	    </signal>    
+	  <bus name="EDATA">
+	    <data>              0   0   0   0   D0  D1  D2  D3  D4  D5 0  0 
+	    </data> 
+	    <class>             2   2   2   2   1    1  1   1   1   1  2  2
+	    </class></bus>
+	  <bus name="EADDR">
+	    <data>              0   0   0   0   A0  A1  A2  A3  A4  A5 0  0
+	    </data>
+	    <class>             2   2   2   2   1   1    1   1   1   1 2  2
+	    </class>
+	    </bus>
+	</timingobject>
+      </figure>
+
+      <para> An example event output can be seen in <xref
+      linkend="event.output.output"/>. <signal>ECNTINL[5:0]</signal>
+      is not equal to <signal>ECNTOUT</signal>, indicating the
+      presence of a pending event. Note that
+      <signal>ECNTINL[5:0]</signal> would only be incremented
+      following the complete write of an event, thus there are no
+      potential timing conflicts. The simultaneous assertion of
+      <signal>EEVENT</signal> and <signal>ECE</signal> with events in
+      the buffer leads to the setting of <signal>ENOUT</signal>. This
+      enables the output muxes to drive the output data and address
+      lines with the real values from the event buffer. </para>
+
+      <para> <signal>WCNT[2:0]</signal> is incremented while
+      <signal>ENOUT</signal> is high <emphasis>and</emphasis> when
+      <signal>EEVENT</signal> and <signal>ECE</signal> are
+      simultaneously asserted. Since the BlockSelect+ RAM is
+      synchronous (and thus the data output will follow the input
+      address by a clock signal) <signal>WCNT[2:0]</signal> must begin
+      incrementing early.</para>
+
+      <para><signal>EEND</signal> goes high when
+      <signal>WCNT[2:0]</signal> equals six, indicating the completion
+      of an event write. This resets <signal>ENOUT</signal> and thus
+      resets <signal>WCNT[2:0]</signal> while incrementing
+      <signal>ECNTOUT[5:0]</signal>. </para>
+
+    
+    </section>
+
+  </section>
+</article>
