@@ -31,3 +31,53 @@ We're going to use the parallel port for booting and data transfer. A few reason
    The FPGA controls the RESET pin. 
    FPGA is interfaced to the necessary FLAG pins
 
+DSP flag pin 4 is interfaced to the pin that runs CCLK, which also will contain the TINC signal
+
+
+---------------------------------------------------------------------------
+POWER
+---------------------------------------------------------------------------
+500 mA / DSP for 1.2 V int.
+
+Unfortunately, at 3.3V core, 1.2V/1A LDO would disappate ~3W, which totally sucks. 
+in addition to the 1W lost for the FPGA core. This suggests I'll want to use
+switching converters, versus LDOs, as with 16 of these boards, that's 50W of space heating going on. 
+
+
+So I thought I might use a 2A buck converter to 1.8V, and then from 1.8V to 1.2V with an LDO. 
+
+LT1764A appears to be the best LDO out there, and the adjustable one can go to 1.21 V, at 1.5A, and you can get it for $3.00 from the Linear store. 
+
+
+
+Buck-converter: 1.8V output TPS54314
+Equations were from SLAV111 from TI. Inductor? what the hell is an inductor?
+
+FSEL to VIN for 550 kHz switching. 
+Input cap: 10 uF 10V 1210 X5R cap  (i.e. panasonic ECJ-8YB1A106M)
+Bulk not needed as VIN ripple (per SLVA111 eq1) is 90 mV. Now, admittedly, we're going to have 16 of these things in series, so we should probably do the bulk dance anyway. 
+
+
+Sequencing issues:
+for the spartan-IIE : Vcco and Vcint at the same time (?)
+
+
+
+
+Pin counts:
+6 FPGA boot
+    2 TCK/TLK stuff (not to FPGA)
+DSP: 
+3 FLAGS
+1 RESET
+1 CLK
+19 parallel
+=23*2 = 44
+
+   26  event bus
+1 system 20 mhz clock
+18 system data bus
+
+2 system input clocks(40 MHz, 50 Mhz)
+
+
