@@ -1,0 +1,24 @@
+    *  Overview
+    * Design goals
+    * Data Bus and Event Bus interfaces ,fiber interface
+          o Event protocol description
+          o
+
+    * Hardware
+          o Overview
+                + DSPs
+                + Fpga
+          o hardware-hardware
+                + Power concerns, etc. 
+          o  interface between the two
+                + TINC/TCLR
+                + EVENTS
+                + SAMPLE
+                + Memory mapping
+          o FPGA desgin
+                + Overview - Dual interfaces
+                + DSPIO
+          o DSP Software
+                + Loading / booting
+          o
+

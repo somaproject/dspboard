@@ -327,7 +327,6 @@ Region	Use:
 	0x4007 : next 2 words
 	0x4009 : a write here "commits" the event 
 			  to the event out buffer
-
 0x6	FPGA_EVENTRD
 	inbound events:
 	0x6000 : cmd word
