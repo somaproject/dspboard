@@ -418,3 +418,8 @@ threshold_check:
 // Here we check to see if any of the four spike channels exceeds
 // their threshold, and if so, begin a countdown until we DMA the 
 // 
+m0 = -1; 
+i0 = i3; 
+f0 = dm(i0, m0);
+f0 = dm(i0);
+
