@@ -7,11 +7,12 @@ A Spartan-IIE-50 FPGA connected to the system bus
 fiber interfaces
 
 Now, the event bus and system busses run at 20 MHz. 
-The DSPs need a 25 MHz clock
+The DSPs need a 25 MHz clock or a 66 MHz clock. 
 The fiber interface requirers an 8 MHz clock. 
 
-We can drive the FPGA with a 50 MHz clock. CLK/2 can be sent to the DSPs, which at 8x gives us 200 MHz. 
-The FPGA can also have a 40 MHz clock that, divided down by 5, gives us our 8 MHz output. 
+The ideal situation is to 3x a 64 Mhz clock. 
+
+
 Another CLKIO is used for the 20 MHz system bus clock. 
 
 Power: We have an input 3.3 and 5V. 
@@ -105,6 +106,13 @@ for the spartan-IIE : Vcco and Vcint at the same time (?)
 
 So it looks as if the TPS54314 will "start" 4 ms after power is applied, worst-cas. And the National 1.2 Reg will start O(100 us). Given that the specs let this run -50 to 200 ms, we're well within spec.  
 
+------------------------------------------------------------------------------
+BOOTING
+------------------------------------------------------------------------------
+to prevent sequencing issues wrt booting, we'll have a 2k pulldown on each RESET pin. 
+
+
+
 
 ------------------------------------------------------------------------------
 Clocks
@@ -114,7 +122,7 @@ I was going to drive the DSP with clocks from the FPGA, but I really don't want 
 
 So now I'm using a clock-distribution chip, whcih I also have driving the FPGA. Should I be able to find the right 64 MHz 3.3 voltage oscillator to fit the footprint (which actually looks a bit difficult, sadly. 
 
-The board is currently designed for a 25 MHz oscillator. Ideally, I want to run the DSP in 3x mode and use the 64 MHz clock, and use the same one to drive the DSP. 
+We will use the 
+CB3LV-3C-64.0000-T 64 MHz from CTS. Damn, it's expensive. This will let us drive both FPGA and DSP with one clock. 
 
-
-
+Thus, the DSP will be in 3x clock mode. CLKCFG[1:0]="00", or 192 MHz total. I don't think we'll miss the extra 8 MHz. 
