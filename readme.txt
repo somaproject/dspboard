@@ -39,6 +39,7 @@ So, uhh, what we actually want to do is... use a latch and latch the address pin
 
 
 
+
 ---------------------------------------------------------------------------
 POWER
 ---------------------------------------------------------------------------
@@ -102,21 +103,21 @@ Output capacitor:
 Sequencing issues:
 for the spartan-IIE : Vcco and Vcint at the same time (?)
 
+So it looks as if the TPS54314 will "start" 4 ms after power is applied, worst-cas. And the National 1.2 Reg will start O(100 us). Given that the specs let this run -50 to 200 ms, we're well within spec.  
 
-Pin counts:
-6 FPGA boot
-    2 TCK/TLK stuff (not to FPGA)
-DSP: 
-3 FLAGS
-1 RESET
-1 CLK
-19 parallel
-=23*2 = 44
 
-   26  event bus
-1 system 20 mhz clock
-18 system data bus
+------------------------------------------------------------------------------
+Clocks
+------------------------------------------------------------------------------
 
-2 system input clocks(40 MHz, 50 Mhz)
+I was going to drive the DSP with clocks from the FPGA, but I really don't want to distribute the clocks over that distance, I'd be much happier using crystals. I worry, because designing with crystals can be hard. But they are inexpensive. 
+
+
+
+
+
+
+
+
 
 
