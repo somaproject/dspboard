@@ -82,6 +82,7 @@ begin
 	
 	dmux <= smux when addrl(15 downto 13) = "000" else 
 			  EVENTDIN when addrl(15 downto 13) = "011" else
+			  smux when addrl(15 downto 13) = "111" else -- DEBUGGING!!
 			  X"0000";
 	  
 	smux <= ("0000" & CMDSTS & '0' & CMDID & "00" & TXERROR &  STATUS) 
@@ -92,6 +93,7 @@ begin
 			  sample4 when addrl(2 downto 0) = "100" else
 			  sampleC when addrl(2 downto 0) = "101" else
 			  X"0123" when addrl(2 downto 0) = "110" else
+			  (X"00" & maddr) when addrl(2 downto 0) = "111" else
 			  X"ABCD"; 
 
 	DATA(7 downto 0) <= dataoutl(7 downto 0) when RD = '0' else "ZZZZZZZZ";

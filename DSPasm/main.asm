@@ -72,6 +72,8 @@
 	// acqboard-related
 	.VAR	CMDID;
 	.VAR 	CMDIDPENDING; 
+	.VAR    EVENTIN[6];
+	.VAR    EVENTDONE;  
 		
 .SECTION/DM seg_dm16da; 
 #define OUTSPIKELEN 300
@@ -85,24 +87,31 @@
 
 .SECTION/PM seg_pmco; 
 
+
 main: 
 	nop;
-	nop; 
-	R0 = 0x0;
+	r0 = 0; 
+main2:	
 	nop;
 	nop;
-	r0 = 32767; 
-	r1 = -32768; 
-	r2 = -15; 
-	r1 = 10; 
-	r0 = 10; 
-	r1 = r1 - r0; 
+	r0 = r0 + 1; 
+	jump main2;  
+	
+	call read_event; 
+	
+	
+	
+	
+	
+	jump main; 
 	
 	jump dispatch_event; 
 	
 	
 init :  
-	bit set mode1 CBUFEN; 
+
+	bit set mode1 CBUFEN; // enable circular buffers
+	
 	// DAG1[5]: input pointer for Spike chans 1 & 2
 	b5 = SX12;
 	m5 = 2; 
@@ -150,6 +159,13 @@ init :
 	m15 = 1; 
 	i15 = SY4;
 	l15 = SYSIZE; 
+	
+	// configure FLAG inputs
+	FLAGS = 0x00 ; //all inputs!
+	ustat1 = dm(SYSCTL); 
+	bit set ustat1 IRQ0EN | IRQ1EN; 
+	dm(SYSCTL) = ustat1; 
+	
 	
 		
 	call setup_data; // debugging!! 	
@@ -932,9 +948,39 @@ dispatch_event_end:
      r15 = data word 4 | data word 3;
 ---------------------------------------------------*/
 
-readevent:
-	nop; 
+read_event:
+
+	ustat3 = PPDUR16 | PPBHC | PP16 | PPEN | PPDEN;
+	ustat4 = PPDUR16 | PPBHC | PP16; 
 	
+	dm(PPCTL) = ustat4; 
+	
+	r0 = EVENTIN; 	dm(IIPP) = r0; 	// starting point
+	r0 = 1;			dm(IMPP) = r0; 
+	r0 = 4;			dm(ICPP) = r0; 
+	r0 = 1; 		dm(EMPP) = r0; 
+	r0 = 0x6000;	dm(EIPP) = r0; 
+	r0 = 8;			dm(ECPP) = r0; 
+
+	
+	
+	dm(PPCTL) = ustat3; 
+	
+	nop;
+	nop;
+read_event_wait:
+	ustat4 = dm(PPCTL); 
+	bit tst ustat4 PPDS;  // poll for dma status 
+	if tf jump read_event_wait; 
+	
+	r0 = dm(EVENTIN); 
+	r11 = FEXT r0 BY 0:8;
+	r12 = FEXT r0 BY 8:8;
+	r13 = FEXT r0 BY 16:16;
+	r14 = dm(EVENTIN+1);
+	r15 = dm(EVENTIN+2); 
+		
+	rts; 
 		
 /*-------------------------------------------------  
 event_write: takes in standard event registers
