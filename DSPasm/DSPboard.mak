@@ -49,16 +49,16 @@ ifeq ($(MAKECMDGOALS),DSPboard_Debug)
 DSPboard_Debug : ./Debug/DSPboard.dxe 
 
 ./Debug/events.doj :./events.asm ./memory.h $(ADI_DSP_MAKE)/212xx/include/def21262.h $(ADI_DSP_MAKE)/212xx/include/def21266.h $(ADI_DSP_MAKE)/212xx/include/def2126x.h 
-	$(VDSP)/easm21k.exe .\events.asm -proc ADSP-21262 -g -o .\Debug\events.doj -MM
+	$(VDSP)/easm21k.exe .\events.asm -proc ADSP-21262 -g -i C:\desktop\DSPboard\DSPasm -o .\Debug\events.doj -MM
 
 ./Debug/loader.doj :./loader.asm $(ADI_DSP_MAKE)/212xx/include/def21262.h $(ADI_DSP_MAKE)/212xx/include/def21266.h $(ADI_DSP_MAKE)/212xx/include/def2126x.h 
-	$(VDSP)/easm21k.exe .\loader.asm -proc ADSP-21262 -g -o .\Debug\loader.doj -MM
+	$(VDSP)/easm21k.exe .\loader.asm -proc ADSP-21262 -g -i C:\desktop\DSPboard\DSPasm -o .\Debug\loader.doj -MM
 
-./Debug/main.doj :./main.asm $(ADI_DSP_MAKE)/212xx/include/def21262.h $(ADI_DSP_MAKE)/212xx/include/def21266.h $(ADI_DSP_MAKE)/212xx/include/def2126x.h memory.h 
-	$(VDSP)/easm21k.exe .\main.asm -proc ADSP-21262 -g -o .\Debug\main.doj -MM
+./Debug/main.doj :./main.asm $(ADI_DSP_MAKE)/212xx/include/def21262.h $(ADI_DSP_MAKE)/212xx/include/def21266.h $(ADI_DSP_MAKE)/212xx/include/def2126x.h ./memory.h 
+	$(VDSP)/easm21k.exe .\main.asm -proc ADSP-21262 -g -i C:\desktop\DSPboard\DSPasm -o .\Debug\main.doj -MM
 
 ./Debug/samples.doj :./memory.h ./samples.asm $(ADI_DSP_MAKE)/212xx/include/def21262.h $(ADI_DSP_MAKE)/212xx/include/def21266.h $(ADI_DSP_MAKE)/212xx/include/def2126x.h 
-	$(VDSP)/easm21k.exe .\samples.asm -proc ADSP-21262 -g -o .\Debug\samples.doj -MM
+	$(VDSP)/easm21k.exe .\samples.asm -proc ADSP-21262 -g -i C:\desktop\DSPboard\DSPasm -o .\Debug\samples.doj -MM
 
 ./Debug/DSPboard.dxe :./DSPboard.ldf ./Debug/events.doj ./Debug/loader.doj ./Debug/main.doj ./Debug/samples.doj 
 	$(VDSP)/cc21k.exe .\Debug\events.doj .\Debug\loader.doj .\Debug\main.doj .\Debug\samples.doj -T .\DSPboard.ldf -map .\Debug\DSPboard.map.xml -L .\Debug -flags-link -od,.\Debug -o .\Debug\DSPboard.dxe -proc ADSP-21262 -flags-link -MM

@@ -8,7 +8,7 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 library UNISIM;
 use UNISIM.VComponents.all;
 
-		entity DSPBoard is
+entity DSPBoard is
     Port ( SYSCLKIN : in std_logic;
 			  FIBERIN : in std_logic; 
 			  FIBEROUT : out std_logic; 
@@ -39,7 +39,6 @@ use UNISIM.VComponents.all;
            SYSDATA : inout std_logic_vector(15 downto 0);
            DATAEN : in std_logic;
            DATAACK : inout std_logic;
-           RESET : in std_logic;
 			  LEDPOWER: out std_logic;
 			  LEDDSPA : out std_logic;
 			  LEDDSPB : out std_logic;
@@ -53,7 +52,7 @@ architecture Behavioral of DSPBoard is
 
 
 	-- clocks
-	signal clk, sysclk, clk_fb, sysclk_fb : std_logic := '0';
+	signal clk, sysclk, clk_fb, sysclk_fb, reset : std_logic := '0';
 
 	-- common signals
 	signal newsamples, timeinc, timeclr : std_logic := '0';
@@ -319,9 +318,15 @@ architecture Behavioral of DSPBoard is
 	   O    : out std_logic
 		); 
 	end component;
+
+	
+   component STARTUP_VIRTEX 
+   port (GSR: in std_logic);
+   end component;
+
 begin
 	-- clocks
-
+	   U1: TOC port map (O=>reset);
 	clock: DCM generic map (
 			DFS_FREQUENCY_MODE => "LOW",
 			CLKFX_DIVIDE => 3,
@@ -558,7 +563,7 @@ begin
 		BUFWE => dweb, 
 		BUFADDRIN => addrob(9 downto 0),
 		BUFDIN => doutb,
-		BUFERROR => leddspa,	 -- debugging!!!
+		BUFERROR => open, --leddspa,	 -- debugging!!!
 		BUFDOUT => dinb,
 		NEXTOUT => nextb,
 		BUFACKOUT => ackb,
@@ -621,7 +626,8 @@ begin
 
    
 
-	LEDDSPB <= flag0binput; 
+	LEDDSPB <= '1' when ADDROA(15 downto 0) = X"6006" else '0';
+	LEDDSPA <= modea;  
 
 	-- simple power LED:
 	process(clk) is

@@ -103,7 +103,7 @@ begin
 
 	addrlatch: process(ALE) is
 	begin
-		if ALE = '0' then 
+		if ALE = '1' then 
 			addr <= AD;
 		end if; 
 	end process addrlatch; 

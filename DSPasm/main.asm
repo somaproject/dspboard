@@ -11,6 +11,7 @@
 	nop; 
 	nop;
 	nop;  
+	
 	jump main; 
 
 
@@ -118,8 +119,13 @@ unlock_ppdma.end:
 
 main: 
 	r9 =0;
+	call init;
+	
 mainl:	
 	// test dma
+	
+
+	call read_event_test;
 	
 	jump mainl; 
 	
@@ -222,8 +228,9 @@ init :
 	
 	
 	
-		
-	call setup_data; // debugging!! 	
+	rts;
+	nop;
+	nop; 	
 	
 	
 sample_loop:
@@ -354,3 +361,43 @@ sd_newsamples:
     rts; 
 
     
+
+/*------------------------------------------------------
+  read_event_test: 
+
+  Largely test code. 	    
+ -------------------------------------------------------*/
+ 
+read_event_test:
+	call	lock_ppdma; 
+	ustat3 = PPDUR12 | PPBHC | PP16 | PPEN | PPDEN;
+	ustat4 = PPDUR12 | PPBHC | PP16; 
+	
+	dm(PPCTL) = ustat4; 
+	
+	r0 = EVENTIN; 		dm(IIPP) = r0; 	// starting point
+	r0 = 1;				dm(IMPP) = r0; 
+
+	r0 = 4;				dm(ICPP) = r0; 
+	r0 = 1; 			dm(EMPP) = r0; 
+	r0 = FPGA_EVENTRD;	dm(EIPP) = r0; 
+	r0 = 8;				dm(ECPP) = r0; 
+
+	
+	
+	dm(PPCTL) = ustat3; 
+	
+read_event_test.wait:
+	ustat4 = dm(PPCTL); 
+	bit tst ustat4 PPDS;  // poll for dma status 
+	if tf jump read_event_test.wait; 
+	
+	r0 = dm(EVENTIN); 
+	r11 = FEXT r0 BY 0:8;
+	r12 = FEXT r0 BY 8:8;
+	r13 = FEXT r0 BY 16:16;
+	r14 = dm(EVENTIN+1);
+	r15 = dm(EVENTIN+2); 
+	call	unlock_ppdma; 
+	
+	rts; 

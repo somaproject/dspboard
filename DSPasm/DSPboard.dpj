@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<visualdsp-project schema="16" name="DSPboard" file="C:\desktop\DSPboard\DSPasm\DSPboard.dpj" generated="Sat Apr 17 09:48:40 2004" expanded="yes">
+<visualdsp-project schema="16" name="DSPboard" file="C:\desktop\DSPboard\DSPasm\DSPboard.dpj" generated="Sun Jun 13 14:43:50 2004" expanded="yes">
 	<!-- Project build target -->
 	<target>
 		<processor>ADSP-21262</processor>
@@ -19,7 +19,7 @@
 					<option><![CDATA[|-Version>3.5|-O1>0|-Ov>100|-g>1|-double-size-32>1]]></option>
 				</tool>
 				<tool type="Assembler">
-					<option><![CDATA[|-Version>3.5|-g>1]]></option>
+					<option><![CDATA[|-Version>3.5|-g>1|-i>C:\desktop\DSPboard\DSPasm]]></option>
 				</tool>
 				<tool type="Linker">
 					<option><![CDATA[|-Version>3.5|NOSWITCH>1|-map>1]]></option>
