@@ -21,17 +21,22 @@ Power: We have an input 3.3 and 5V.
 1.8 : FPGA core power
 1.2 : DSP core power. 
 
+Uhh, okay, nevermind on that whole parallel-port thing, at least not yet. Keep in mind that it's an ASYNCHRONOUS port, where the ALE cycle is _at best_ 2 CCLKs long -- i.e. 10 ns!! Yikes! 
 
-We're going to use the parallel port for booting and data transfer. A few reasons: 
-   1. fewer pins
-   2. easy to interface with
-   3. sufficiently fast -- DMA in the input data, and use DMA chaining to output past data. 
-   4. easy to do, well, neat things with. Like, when we say "load new filter", it can just read it in from some location in IO space. 
+So, my first recourse was the SPI port, which in addition to letting me use fewer wires, can boot, etc. Just like the parallel port. However, the SPI port is running at max 50 MHz, i.e. 50 Mbps or 6.25 MBps. Ouch. This means that transferring the new set of samples costs 1.6 us, and transferring a full spike out costs 41 us! Yikes! 
 
-   The FPGA controls the RESET pin. 
-   FPGA is interfaced to the necessary FLAG pins
+Because, the ideal coding situation is:
+get new samples
+perform computation
+check for thresholding
+if necessary, send out spikes, eeg chunks, react to events, etc. (maybe events are a separate interrupt, but whatever)
 
-DSP flag pin 4 is interfaced to the pin that runs CCLK, which also will contain the TINC signal
+keep in mind that a sample cycle is 31.25 us. 
+
+So, uhh, what we actually want to do is... use a latch and latch the address pins! we can use a larger PQFP FPGA and we can use a decoder IC too, because you know, board space is free or something. 
+ 
+
+
 
 
 ---------------------------------------------------------------------------
