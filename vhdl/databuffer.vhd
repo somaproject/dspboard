@@ -56,7 +56,9 @@ architecture Behavioral of databuffer is
 	signal clra, clrb, clrc : std_logic := '0';
 	signal bufack : std_logic := '0'; 
 
-	type outstates is ( waita, a, donea, waitb, b, doneb, waitc, c, donec);
+	type outstates is ( waita, a, donea, wnextouta,
+							  waitb, b, doneb, wnextoutb, 
+							  waitc, c, donec, wnextoutc);
 	signal outcs, outns : outstates := waita; 
 
 	-- ram input side
@@ -183,13 +185,40 @@ begin
 			 doac; 
 	RDOUT <= doa(7 downto 0) when RAOUT(0) = '0' else
 				doa(15 downto 8); 
-	BUFERROR <= '1' when  bufwe = '1' 
-					and (incs = A or incs = B or incs = C) else '0'; 
-
+	--BUFERROR <= '1' when  bufwe = '1' 	DEBUGGING!@
+	--				and (incs = A or incs = B or incs = C) else '0';
+	
 	addra <= ra when mode = '1' else bufaddrin;
 	ra <= raout(8 downto 1) when DSPRESET = '1' else RAIN(7 downto 0); 
 
+   -- serirous debugging
+	process (clka) is
+		variable counter : integer := 0; 
+		variable toggle : std_logic := '0'; 
+		variable max : integer := 0;
+	begin
+		if rising_edge(clka) then
+			if outcs = waita then
+				max := 20000000;
+			elsif outcs = waitb then
+				max :=  5000000;
+			elsif outcs = waitc then
+				max :=  1000000; 
+			end if; 
+			
+			if counter > max then
+				counter := 0;
+				toggle := not toggle;
+			else
+				counter := counter + 1;
+			end if; 
+			
+			buferror <= toggle; 
+			 
+		end if; 
+	end process; 
 
+	--buferror <= nextout; 
 	clocka : process(CLKA, RESET) is
 	begin
 		if RESET = '1' then
@@ -200,7 +229,7 @@ begin
 
 				if incs = waita or incs = waitb or incs = waitc then
 					buflenin <= (others => '1'); 
-				else
+				else  
 					if bufaddrin = LENADDR and bufwe = '1' then
 						buflenin <= BUFDIN(15 downto 8); 
 					end if; 
@@ -339,19 +368,33 @@ begin
 				clrb <= '0';
 				clrc <= '0';
 				outsel <= 0; 
-				if bufcnt = buflenout then
+				if bufcnt = buflenout or nextout = '0' then
 					outns <= donea;
 				else
 					outns <= a;
 				end if; 
 			when donea => 
-				bufcnten <= '1';
+				bufcnten <= '0';
 				bufcntrst <= '0';
 				clra <= '1';
 				clrb <= '0';
 				clrc <= '0';
 				outsel <= 0; 
-				outns <= waitb; 
+				outns <= wnextouta; 
+			when wnextouta => 
+				bufcnten <= '0';
+				bufcntrst <= '0';
+				clra <= '0';
+				clrb <= '0';
+				clrc <= '0';
+				outsel <= 0; 
+				if nextout = '0' then
+					outns <= waitb;
+				else
+					outns <= wnextouta;
+				end if; 
+
+
 			when waitb => 
 				bufcnten <= '0';
 				bufcntrst <= '1';
@@ -359,7 +402,7 @@ begin
 				clrb <= '0';
 				clrc <= '0';
 				outsel <= 1; 
-				if fullc = '1' and nextout = '1' then
+				if fullb = '1' and nextout = '1' then
 					outns <= b;
 				else
 					outns <= waitb;
@@ -371,19 +414,31 @@ begin
 				clrb <= '0';
 				clrc <= '0';
 				outsel <= 1; 
-				if bufcnt = buflenout then
+				if bufcnt = buflenout or nextout = '0' then
 					outns <= doneb;
 				else
 					outns <= b;
 				end if; 
 			when doneb => 
-				bufcnten <= '1';
+				bufcnten <= '0';
 				bufcntrst <= '0';
 				clra <= '0';
 				clrb <= '1';
 				clrc <= '0';
 				outsel <= 1; 
-				outns <= waitc; 
+				outns <= wnextoutb; 
+			when wnextoutb => 
+				bufcnten <= '0';
+				bufcntrst <= '0';
+				clra <= '0';
+				clrb <= '0';
+				clrc <= '0';
+				outsel <= 1; 
+				if nextout = '0' then
+					outns <= waitc;
+				else
+					outns <= wnextoutb;
+				end if; 		
 			when waitc => 
 				bufcnten <= '0';
 				bufcntrst <= '1';
@@ -403,19 +458,31 @@ begin
 				clrb <= '0';
 				clrc <= '0';
 				outsel <= 2; 
-				if bufcnt = buflenout then
+				if bufcnt = buflenout or nextout = '0' then
 					outns <= donec;
 				else
 					outns <= c;
 				end if; 
 			when donec => 
-				bufcnten <= '1';
+				bufcnten <= '0';
 				bufcntrst <= '0';
 				clra <= '0';
 				clrb <= '0';
 				clrc <= '1';
 				outsel <= 2; 
-				outns <= waita;
+				outns <= wnextoutc; 
+			when wnextoutc => 
+				bufcnten <= '0';
+				bufcntrst <= '0';
+				clra <= '0';
+				clrb <= '0';
+				clrc <= '0';
+				outsel <= 2; 
+				if nextout = '0' then
+					outns <= waita;
+				else
+					outns <= wnextoutc;
+				end if; 			
 			when others => 
 				bufcnten <= '0';
 				bufcntrst <= '1';

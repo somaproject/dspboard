@@ -13,7 +13,6 @@
 	nop;  
 	jump main; 
 
-	
 
 
 .SECTION/PM seg_pmda;
@@ -84,7 +83,8 @@
 	.VAR 	EVENTOUT[5]; 
 	
 	.GLOBAL EVENTIN, EVENTOUT, MYID;
-		
+		.VAR	OUTSPIKE2[OUTSPIKELEN]; // space to assemble the output spike; 
+	
 .SECTION/DM seg_dm16da; 
 
 	.VAR	OUTSPIKE[OUTSPIKELEN]; // space to assemble the output spike; 
@@ -110,31 +110,36 @@ unlock_mem:
 
 
 main: 
-	bit set flags FLG0O;  // DEBUGGING
-	nop;
-	r0 = 0; 
-main2:	
-	nop;
-	nop;
-	bit set flags FLG0; 
-	nop;
-	nop;
-	nop;
-	nop;
-	nop;
-	nop;
-	nop;
-	bit clr flags FLG0; 
-	nop;
-	nop;
-	nop;
+	r9 =0;
+mainl:	
+	// test dma
+	r9 = r9+1; 
+
+	r0 = 0xD000;
+	r0 = r0 + r9;  
+	dm(OUTSPIKE) = r0;
 	
-	nop;
-	nop;
-	nop;
-	nop;
+	r0 = 0; 
+	r1 = OUTSPIKE; 
+	r1 = r1 + 1;
 	 
-	jump main; 
+	
+	lcntr = 0xD0, do mainloop until lce; 
+		i0 = r1; 
+		dm(0,i0) = r0; 
+		r0 = r0 + 1;
+		r1 = r1 + 1; 	
+	
+	mainloop:  nop; 
+	r0 = OUTSPIKE;
+	
+	.extern send_data_packet_dma;
+	
+	call send_data_packet_dma; 
+	
+
+	
+	jump mainl; 
 	
 	
 	
@@ -144,7 +149,10 @@ main2:
 init :  
 
 	bit set mode1 CBUFEN; // enable circular buffers
+	// make sure we're using the right register set
 	
+	bit clr mode1 SRCU | SRRFH | SRRFL | SRD1H | SRD1L | SRD2H | SRD2L;  
+
 	// DAG1[5]: input pointer for Spike chans 1 & 2
 	b5 = SX12;
 	m5 = 2; 

@@ -10,6 +10,10 @@ samples:
 
 	// disable our own interrupt
 	bit set imask IRQ0I;
+	bit set mode1 SRCU | SRRFH | SRRFL | SRD1H | SRD1L | SRD2H | SRD2L;  
+	
+	// switch to alternative register set
+	
 
 	call get_newsamples; 
 	
@@ -41,6 +45,10 @@ samples.process:
 		// finished out-putting all our DMA
 	// i guess we could do some user code here
 	
+	// switch back from alternative register set
+	bit clr mode1 SRCU | SRRFH | SRRFL | SRD1H | SRD1L | SRD2H | SRD2L;  
+	
+	
 	// reenable sample interrupts
 	bit clr	imask IRQ0I; 
 
@@ -56,24 +64,37 @@ samples.process:
 		uses len from 8 msbs of first word
 		
 		input: 
-	     i0 = pointer to buffer to tx; 
+	     r0 = pointer to buffer to tx in 16-bit memory
+	    // note that we must shift the address into the
+	    appropriate short-word address, and deal with the
+	    word count accordingly.  
 		
 -------------------------------------------------------*/
 send_data_packet_dma:
-
+.global send_data_packet_dma; 
+	r1 = 0x180000; 
+	r2 = r0 - r1; 
+	r2 = lshift r2 by -1; 
+	r1 = 0xC0000; 
+	r2 = r2 + r1; 
+	
+	i0 = r2; 
+	
 	r0 = dm(i0, 0); 
-	r1 = fext r0 by 8:8; // r0 now has length in 16-bit words
-
+	r1 = fext r0 by 8:8; // r1 now has length in 16-bit words
+	r3 = r1 + 1;		 // r3 = number of words / 2, rounded up
+	r3 = lshift r3 by -1; 
+	
 	ustat3 = PPDUR16 | PPTRAN | PPBHC | PP16 | PPEN | PPDEN;
 	ustat4 = PPDUR16 | PPTRAN | PPBHC | PP16; 
 	 
        
 	dm(PPCTL) = ustat4; 
 	
-	r0 = i0; 	dm(IIPP) = r0; 	// starting point
+	dm(IIPP) = r2; 	// starting point
 	r0 = 1;			dm(IMPP) = r0; 
 
-	dm(ICPP) = r1; 
+	dm(ICPP) = r3; 
 	
 	r0 = 1; 			dm(EMPP) = r0; 
 	r0 = FPGA_OUTDATA;	dm(EIPP) = r0; 
@@ -82,7 +103,8 @@ send_data_packet_dma:
 	
 	dm(PPCTL) = ustat3; 
 
-
+	rts; 
+	
 
 /* -----------------------------------------------------
    threshold:

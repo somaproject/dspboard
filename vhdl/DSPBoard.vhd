@@ -495,7 +495,7 @@ begin
 		BUFWE => dweb, 
 		BUFADDRIN => addrob(7 downto 0),
 		BUFDIN => doutb,
-		BUFERROR => open,
+		BUFERROR => leddspa,	 -- debugging!!!
 		BUFDOUT => dinb,
 		NEXTOUT => nextb,
 		BUFACKOUT => ackb,
@@ -556,9 +556,9 @@ begin
 
 
 
-   LEDDSPA <= FLAG0BINPUT;
+   
 
-	LEDDSPB <= modeb; 
+	LEDDSPB <= flag0binput; 
 
 	-- simple power LED:
 	process(clk) is
