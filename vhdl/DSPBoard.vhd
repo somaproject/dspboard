@@ -533,10 +533,10 @@ begin
 		MODERST => moderstb,
 		NEWMYEVENT => myeventb);
 		
-	process(sysclk) is 
+	process(clk) is 
 		variable cnt : integer range 0 to 10000000 := 0; 
 	begin
-	   if rising_edge(sysclk) then
+	   if rising_edge(clk) then
 		   if myeventa = '1' or myeventb = '1' then 
 			   cnt := 1000000;
 			else
@@ -554,47 +554,9 @@ begin
 	end process;  
 
 
-	process(sysclk) is 
-		variable cnt : integer range 0 to 10000000 := 0; 
-	begin
-	   if rising_edge(sysclk) then
-		   if myeventa = '1' then 
-			   cnt := 1000000;
-			else
-			   if cnt /= 0 then
-				   cnt := cnt - 1;
-				end if;
-			end if; 
-			
-			if cnt /= 0 then
-			   --LEDDSPA <= '1';
-			else
-			   --LEDDSPA <= '0';
-			end if;
-		end if;
-	end process;  
-
-	process(sysclk) is 
-		variable cnt : integer range 0 to 10000000 := 0; 
-	begin
-	   if rising_edge(sysclk) then
-		   if myeventb = '1'  then 
-			   cnt := 1000000;
-			else
-			   if cnt /= 0 then
-				   cnt := cnt - 1;
-				end if;
-			end if; 
-			
-			if cnt /= 0 then
-			   --LEDDSPB <= '1';
-			else
-			   --LEDDSPB <= '0';
-			end if;
-		end if;
-	end process;  
 
    LEDDSPA <= dspreseta;
+
 	LEDDSPB <= dspresetb; 
 
 	-- simple power LED:

@@ -35,6 +35,23 @@ entity events is
 			  NEWMYEVENT : out std_logic);
 end events;
 
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
+
+entity dpdistram is 
+ port (clk  : in std_logic; 
+ 	we   : in std_logic; 
+ 	a    : in std_logic_vector(2 downto 0); 
+ 	dpra : in std_logic_vector(2 downto 0); 
+ 	di   : in std_logic_vector(15 downto 0); 
+ 	spo  : out std_logic_vector(15 downto 0); 
+ 	dpo  : out std_logic_vector(15 downto 0)); 
+ end dpdistram;
+
 architecture Behavioral of events is
 -- EVENTS.VHD -- this is the combined events architecture for a DSP. The E* 
 -- outputs are to be connected to the event bus, with the EOE controlling
@@ -67,7 +84,16 @@ architecture Behavioral of events is
 
    signal mine, done, loaddone : std_logic := '0'; 
 
+	-- interface to async dist ram:
+	signal dra : std_logic_vector(2 downto 0) := (others => '0');
+	signal dwe : std_logic := '0';
+	signal ddi : std_logic_vector(15 downto 0) := (others => '0');
 
+	type dstates is (echk, drw0, drw1, drw2, drw3, drw4, drw5, waitread,
+					incaddr);
+	signal dcs, dns : dstates := echk; 
+	
+	 
 
 
 	component EventInputs is
@@ -167,6 +193,17 @@ architecture Behavioral of events is
 	end component;
 
 
+
+	component dpdistram is 
+	 port (clk  : in std_logic; 
+	 	we   : in std_logic; 
+	 	a    : in std_logic_vector(2 downto 0); 
+	 	dpra : in std_logic_vector(2 downto 0); 
+	 	di   : in std_logic_vector(15 downto 0); 
+	 	spo  : out std_logic_vector(15 downto 0); 
+	 	dpo  : out std_logic_vector(15 downto 0)); 
+	 end component;
+
 begin
 
 	-- other components, external connections, etc. 
@@ -199,7 +236,7 @@ begin
 		CLKB => clk,
 		ADDRA => adspin,
 		ADDRB => aein,
-		DOA => DOUT(7 downto 0),
+		DOA => ddi(7 downto 0),
 		DOB => open); 
 
 	fifoin_high: RAMB4_S8_S8 port map (
@@ -215,7 +252,7 @@ begin
 		CLKB => clk,
 		ADDRA => adspin,
 		ADDRB => aein,
-		DOA => DOUT(15 downto 8),
+		DOA => ddi(15 downto 8),
 		DOB => open); 
 
  	einputs: EventInputs port map(
@@ -243,26 +280,36 @@ begin
 		EEVENT => EEVENT,
 		ECE => ECE); 
 
+ 	outram: dpdistram port map (
+		clk => CLK,
+		we => dwe,
+		a => dra,
+		dpra => ADDR(2 downto 0),
+		di =>  ddi,
+		spo => open,
+		dpo => DOUT); 
+
 
 
 	-- combinational
 	adspout(3 downto 0) <= ADDR(3 downto 0); 
-	adspin(2 downto 0) <= ADDR(2 downto 0) ;
-	NEWEVENTS <= '1' when adspin(8 downto 3) /= aein(8 downto 3) else '0';
-	loaddone <= '1' when addr(3 downto 0) = X"9" and WE = '1'; 
+	
+	loaddone <= '1' when addr(3 downto 0) = X"9" and WE = '1' else '0'; 
 	eindelta <= einl and (not einll);
 
-	NEWMYEVENT <= mine and ein; 
-
+	--NEWMYEVENT <= mine and ein; 
+	NEWMYEVENT <= '1' when adspout(7 downto 4)  /= aeout(7 downto 4)  else '0'; 
 	clock: process(CLK, RESET) is
 	begin
 	    if RESET = '1' then
 		 	incs <= none; 
 			outcs <= eoutchk;
+			dcs <= echk; 
 		else
 			if rising_edge(CLK) then
 				incs <= inns;
 				outcs <= outns;
+				dcs <= dns; 
 
 				-- counters for event outs
 				if WE = '1' and ADDR = X"9" then
@@ -277,8 +324,7 @@ begin
 
 				--event input counters, etc. 
 
-				if RD = '1' and ADDR = X"6" and 
-					(adspin(8 downto 3) /= aein(8 downto 3) ) then
+				if dcs = incaddr then
 					adspin(8 downto 3) <= adspin(8 downto 3) + 1;
 				end if; 
 
@@ -326,7 +372,7 @@ begin
 				aeout(3 downto 0) <= X"0";
 				ewe <= '0';
 				eoutfaddrinc <= '0';
-				if adspout /= aeout then
+				if adspout(7 downto 4)  /= aeout(7 downto 4) then
 					outns <= evbufw0;
 				else
 					outns <= eoutchk;		
@@ -506,6 +552,99 @@ begin
 		end case;
 	end process infsm;  
 
-
+	dfsm: process (dcs, ADDR, RD, adspin, aein) is 
+	begin
+		case dcs is 
+			when echk => 
+				dra <= "000";
+				adspin(2 downto 0) <= "000";
+				dwe <= '0';
+				NEWEVENTS <= '0';
+				if adspin(8 downto 3) /= aein(8 downto 3) then
+					dns <= drw0;
+				else
+					dns <= echk; 
+			   end if; 
+			when drw0 =>
+				dra <= "000";
+				adspin(2 downto 0) <= "001";
+				dwe <= '1';
+				NEWEVENTS <= '0';
+				dns <= drw1; 
+			when drw1 =>
+				dra <= "001";
+				adspin(2 downto 0) <= "010";
+				dwe <= '1';
+				NEWEVENTS <= '0';
+				dns <= drw2; 
+			when drw2 =>
+				dra <= "010";
+				adspin(2 downto 0) <= "011";
+				dwe <= '1';
+				NEWEVENTS <= '0';
+				dns <= drw3; 
+			when drw3 =>
+				dra <= "011";
+				adspin(2 downto 0) <= "100";
+				dwe <= '1';
+				NEWEVENTS <= '0';
+				dns <= drw4; 
+			when drw4 =>
+				dra <= "100";
+				adspin(2 downto 0) <= "101";
+				dwe <= '1';
+				NEWEVENTS <= '0';
+				dns <= drw5; 
+			when drw5 =>
+				dra <= "101";
+				adspin(2 downto 0) <= "101";
+				dwe <= '1';
+				NEWEVENTS <= '0';
+				dns <= waitread; 
+			when waitread => 
+				dra <= "000";
+				adspin(2 downto 0) <= "000";
+				dwe <= '0';
+				NEWEVENTS <= '1'; 
+				if ADDR = X"6" and RD = '1' then
+					dns <= incaddr;		  
+				else
+					dns <= waitread; 
+			   end if; 
+			when incaddr =>
+				dra <= "000";
+				adspin(2 downto 0) <= "000";
+				dwe <= '0';
+				NEWEVENTS <= '0';
+				dns <= echk; 
+			when others =>
+				dra <= "000";
+				adspin(2 downto 0) <= "000";
+				dwe <= '0';
+				NEWEVENTS <= '0';
+				dns <= echk; 
+	  end case; 
+	end process dfsm; 
 		
 end Behavioral;
+
+ 
+ architecture syn of dpdistram is 
+ type ram_type is array (7 downto 0) of std_logic_vector (15 downto 0); 
+ signal RAM : ram_type; 
+ 
+ begin 
+ process (clk) 
+ begin 
+ 	if (clk'event and clk = '1') then  
+ 		if (we = '1') then 
+ 			RAM(conv_integer(a)) <= di; 
+ 		end if; 
+ 	end if; 
+ end process;
+ 
+ spo <= RAM(conv_integer(a)); 
+ dpo <= RAM(conv_integer(dpra)); 
+ 
+ end syn;
+ 

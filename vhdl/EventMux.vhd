@@ -44,6 +44,8 @@ begin
 	ao <= AOA when esel = '0' else AOB; 
 	ts <= (not OEA) when esel = '0' else (not OEB); 
 	do <= DOA when esel = '0' else DOB; 
+ 
+	
 	DIA <= EDATA;
 	DIB <= EDATA; 
 

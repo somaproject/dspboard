@@ -72,8 +72,12 @@
 	// acqboard-related
 	.VAR	CMDID;
 	.VAR 	CMDIDPENDING; 
+	
+	// event status
 	.VAR    EVENTIN[6];
-	.VAR    EVENTDONE;  
+	.VAR    EVENTDONE;
+	.VAR 	EVENTOUT[5]; 
+	  
 		
 .SECTION/DM seg_dm16da; 
 #define OUTSPIKELEN 300
@@ -87,6 +91,15 @@
 
 .SECTION/PM seg_pmco; 
 
+lock_mem:
+	bit set imask IRQ0I;
+	rts; 
+
+unlock_mem:
+	bit clr	imask IRQ0I; 
+	rts; 
+	
+
 
 main: 
 	nop;
@@ -95,9 +108,9 @@ main2:
 	nop;
 	nop;
 	r0 = r0 + 1; 
-	jump main2;  
+
 	
-	call read_event; 
+	call write_event; 
 	
 	
 	
@@ -165,6 +178,9 @@ init :
 	ustat1 = dm(SYSCTL); 
 	bit set ustat1 IRQ0EN | IRQ1EN; 
 	dm(SYSCTL) = ustat1; 
+	
+	bit set mode2 IRQ0E | IRQ1E; // IRQ0 and IRQ1 are edge-sensitive
+	
 	
 	
 		
@@ -922,24 +938,26 @@ sd_newsamples:
   
   -------------------------------------------------*/
 dispatch_event: 
-  r0 = 0x40; 
-  COMP(r0, r11);
-  if EQ jump event_write; 
-    
-  r0 = 0x41; 
-  COMP(r0, r11); 
-  if EQ jump event_read; 
-  
-  r0 = 0x44;
-  COMP(r0, r11);
-  if EQ jump event_acqboard_set; 
+
+	call read_event; 
+	
+	r0 = 0x40; 
+	COMP(r0, r11);
+	if EQ jump event_write; 
+	
+	r0 = 0x41; 
+	COMP(r0, r11); 
+	if EQ jump event_read; 
+	
+	r0 = 0x44;
+	COMP(r0, r11);
+	if EQ jump event_acqboard_set; 
    
-  
-  
+ 
 dispatch_event_end:
 // done with event
 /*---------------------------------------------------
-  readevent:
+  read_event:
      returns a read-event from FPGA:
      r11 = command byte 
      r12 = sender
@@ -949,17 +967,18 @@ dispatch_event_end:
 ---------------------------------------------------*/
 
 read_event:
-
-	ustat3 = PPDUR16 | PPBHC | PP16 | PPEN | PPDEN;
-	ustat4 = PPDUR16 | PPBHC | PP16; 
+	call	lock_mem; 
+	ustat3 = PPDUR10 | PPBHC | PP16 | PPEN | PPDEN;
+	ustat4 = PPDUR10 | PPBHC | PP16; 
 	
 	dm(PPCTL) = ustat4; 
 	
 	r0 = EVENTIN; 	dm(IIPP) = r0; 	// starting point
 	r0 = 1;			dm(IMPP) = r0; 
+
 	r0 = 4;			dm(ICPP) = r0; 
 	r0 = 1; 		dm(EMPP) = r0; 
-	r0 = 0x6000;	dm(EIPP) = r0; 
+	r0 = 0x4000;	dm(EIPP) = r0; 
 	r0 = 8;			dm(ECPP) = r0; 
 
 	
@@ -979,8 +998,57 @@ read_event_wait:
 	r13 = FEXT r0 BY 16:16;
 	r14 = dm(EVENTIN+1);
 	r15 = dm(EVENTIN+2); 
-		
+	call	unlock_mem; 
+	
 	rts; 
+
+
+/*---------------------------------------------------
+  write_event:
+     writes an event
+---------------------------------------------------*/
+
+write_event:
+	call	lock_mem; 
+	
+	// debugging;
+	r0 = 0xffffffff; 
+	dm(EVENTOUT) = r0; 
+	dm(EVENTOUT + 1) = r0; 
+	dm(EVENTOUT + 2) = r0; 
+	dm(EVENTOUT + 3) = r0; 
+	dm(EVENTOUT + 4) = r0; 
+	
+	
+	ustat3 = PPDUR32 | PPTRAN | PPBHC | PP16 | PPEN | PPDEN;
+	ustat4 = PPDUR32 | PPTRAN | PPBHC | PP16; 
+	
+	dm(PPCTL) = ustat4; 
+	
+	r0 = EVENTOUT; 	dm(IIPP) = r0; 	// starting point
+	r0 = 1;			dm(IMPP) = r0; 
+
+	r0 = 5;			dm(ICPP) = r0; 
+	r0 = 1; 		dm(EMPP) = r0; 
+	r0 = 0x4000;	dm(EIPP) = r0; 
+	r0 = 10;		dm(ECPP) = r0; 
+
+	
+	
+	dm(PPCTL) = ustat3; 
+	
+	nop;
+	nop;
+write_event_wait:
+	ustat4 = dm(PPCTL); 
+	bit tst ustat4 PPDS;  // poll for dma status 
+	if tf jump write_event_wait; 
+	
+	
+	call	unlock_mem; 
+	
+	rts; 
+
 		
 /*-------------------------------------------------  
 event_write: takes in standard event registers

@@ -4,6 +4,18 @@ Design concerns and considerations for the DSP assembly.
 The loader is a whole 'nother bag of worms that we'll hopefully tackle when we're more familiar with the tools
 
 
+Memory accesses: Please note that all memory accesses, including the following:
+read_status
+read_event
+write_event
+write_acqboard
+
+and the entire
+process_sample interrupt handler
+
+all disable the SAMPLE (INT0) interrupt. This is to prevent an interrupt occuring during a DMA action and thus breaking the DMA (since there is only one set of PP DMA registers)
+
+
 
 ----------------------------------------------------------------------------
 ADSP EXECUTION CYCLE
@@ -191,6 +203,19 @@ Event processing loop:
    end if; 
    
 
+what if we have a 1-us timer? 
+well, the problem there is that we could interrupt ourselves
+i.e. if an event takes too long we abort it? or watchdog-like? 
+but some events will be short, and some will be long
+
+polling introduces jitter, which is bad. 
+
+we need atomic reads of events, samples, etc. 
+
+not just read; write too? ugh. 
+
+all off-chip 
+
 
 
 
@@ -200,7 +225,7 @@ Generic configuration read and write : ---------------------------------
 40 : Read config parameter
 41 : write config parameter
 
-For writing, things are indicated above. For reading, we use the Target and Addr similarly, but return the data in a manner that makes sense (i.e. the similar data words) to the SOURCE device. 
+ For writing, things are indicated above. For reading, we use the Target and Addr similarly, but return the data in a manner that makes sense (i.e. the similar data words) to the SOURCE device. 
 
 
 write filter coefficients: 

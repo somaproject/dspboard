@@ -56,4 +56,14 @@ can read mem in 16-bit mode
 We can read events; flag behaves properly. Wow, the external memory interface on this system sucks. 
 
 Note that we can only seem to read reliably at PPDUR16, which gives 100 ns per 16 bits, or 20 MB/sec, or 25 us for 1 512-byte spike. That's a bit harsh, but 100 ns = 6.6 ticks of our 66 MHz clock. We could always try and double it, heh heh. 
-Plus, this is measured with the event bus; the latency may be less with the data bus, for writing. 
+Oh, and this also sucks because just erading a single event takes 600+ ns. ouch!!!
+
+When reading events, the best we can get it down to is PPDUR14. 
+
+Now, to start removing registers :) We got rid of dataoutl, and addrl. 
+
+PPDUR10   works now, reducing time from 800 ns to 540 ns. 
+
+when we get rid of ADDR registers alltogether, we can get down to PPDUR4, 304 ns for entire cycle. unfortunately, this only results in RD being low for 18.4 ns, which is -really short-, and barely guarantees we'll get anything out of it
+
+Plus, it appears to not be incrementnig the buffer. 
