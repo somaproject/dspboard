@@ -133,8 +133,8 @@ COHFID : hardware filter ID;
 --Acboard-specific--------
 CMDSTS : previous command status
 CMDID : most recent completed CMDID
-PENDINGCMDID : pending CMDID
-PENDINGACQEVENT[4]  : pending acqboard event. 
+CMDIDPENDING : pending CMDID
+PENDINGACQCMD[2]  : pending acqboard event. 
 
 DAG configuration:
 DAG1[0] (i0) and DAG2[0] (i8) are for in-process mucking around
@@ -177,6 +177,7 @@ Event processing loop:
    end if
    if CMDIDPENDING >= 0 then (we're waiting to hear back from the acqboard)
       if CMDIDPENDING = new cmdid we just read from sample buffer then
+         CMDID = CMDIDPENDING; 
          CMDIDPENDING = -1
          broadcast new event revealing our new state!
 	 update relevant state variables
@@ -196,8 +197,8 @@ Event processing loop:
 
 Generic configuration read and write : ---------------------------------
 
-10 : Read config parameter
-11 : write config parameter
+40 : Read config parameter
+41 : write config parameter
 
 For writing, things are indicated above. For reading, we use the Target and Addr similarly, but return the data in a manner that makes sense (i.e. the similar data words) to the SOURCE device. 
 
@@ -237,22 +238,24 @@ change cont parms
     TARGET = 0x27 : number of samples to output per continuous frame
 	 DW0[15:0] : actual number 
 
+
+
+
+42: Enable spike acquisition interrupt
+    flushes buffers, etc. 
+43: disable spike acquisition interrupt
+44 : events that change acq board settings:
 // hardware parameters:
    when we're done changing a hardware parameter, we send a tetrode state broadcast event. Or something; still not quite sure. 
+hardware parameters are funny. See, there could be some arbitrary amount of time between when we say "change" and when it actually changes; 
 
-   hardware parameters are funny. See, there could be some arbitrary amount of time between when we say "change" and when it actually changes; 
-   only send one of these and then wait for the resulting broadcast "things changed" event!!!
-   otherwise we'll generate an error!!!
-
-   -- for all target writes... hmm, we're gonna duplicate a lot
-   of code for these sorts of things. That's bad. 
-
-
-
-12: Enable spike acquisition interrupt
-    flushes buffers, etc. 
-13: disable spike acquisition interrupt
-14 : events that change acq board settings:
+   if CMDPENDING < 0  then no pending events
+      CMDPENDING = CMDID++
+   else
+      generate error!
+   end if; 
+      
+   
    TARGET = 0x0 : channel gain on acq board
          ADDR = channel number
          DW0[3:0] = gain setting on board
@@ -262,8 +265,14 @@ change cont parms
    TARGET = 0x2 Input selection for continuous channel
 	 DW0[1:0] = channel
 
-   every time the acqboard state changes, we send out a full broadcast frame with "updated acqboard state. 
-15: query acqboard settings
+   the resulting error will be set back to whoever sent this
+   and we will give the target, addr, and command that failed
+   with error "CMDPENDING"
+
+
+
+every time the acqboard state changes, we send out a full broadcast frame with "updated acqboard state.
+45: query acqboard settings
 
 
 

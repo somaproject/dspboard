@@ -24,6 +24,7 @@ entity dspio is
            EWE : out std_logic;
            CWE : out std_logic;
            STATUS : in std_logic;
+			  TXERROR : in std_logic; 
            CMDID : in std_logic_vector(2 downto 0);
            CMDSTS : in std_logic_vector(3 downto 0);
            SAMPLE1 : in std_logic_vector(15 downto 0);
@@ -83,7 +84,7 @@ begin
 			  EVENTDIN when addrl(15 downto 13) = "011" else
 			  X"0000";
 	  
-	smux <= ("0000" & CMDSTS & '0' & CMDID & "000" &  STATUS) 
+	smux <= ("0000" & CMDSTS & '0' & CMDID & "00" & TXERROR &  STATUS) 
 						when addrl(2 downto 0) = "000" else
 			  sample1 when addrl(2 downto 0) = "001" else
 			  sample2 when addrl(2 downto 0) = "010" else

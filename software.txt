@@ -159,7 +159,7 @@ EVENT:
 		       dw3  == low word of current time
    CMD = 0x05 sender = any : memory write-in for kernel loader
 
-   CMD = 0x10 - CMD = 0x20 : DSP-config events, defined in DSPasm.txt
+   CMD = 0x40 - CMD = 0x4F : DSP-config events, defined in DSPasm.txt
 
 
 So, for setting boot mode, we need to actually "set boot mode" and then wait for the DSP to clear it. We can't just have the DSP send an event, because the boot mode dictates that the FPGA still thinks the parallel port is in 8-bit mode.
@@ -274,8 +274,8 @@ Region	Use:
 	0x0000 : 0x0000 : metadata, i.e. are we connected, 
 			  this sample was  bad, etc.
 			  bit 0: STATUS (fiber status, 1=up, 2 =down)
-			  
-			  bits 4:7 : most recent CMDID
+			  bit 1: TXERROR : fiber command trasnmit error.
+		     bits 4:7 : most recent CMDID
 			  8:11 : CMDSTS
 	0x0001L: 0x0001 : sample from channel 0
 	0x0001H: 0x0002	: sample from channel 1
@@ -358,7 +358,25 @@ We just do this as a big FSM, which is conditioned on OUTBYTE. Simple stuff.
 CLK8 is an 8 MHz CLKEN, and OUTBYTE = 10x CLK8
 
 
+However, in this scenario, what happens when two DSPs try to writean event at the same time, we get a race condition. DSPA fills up its registers, DSPB fills up its regs, and we send them one after another. 
 
+One solution is to make the FPGA wait unitl the cmdevent is updated to switch to querying the other DSP. The problem then becomes... what happens if the event never arrives???? We can handle the disconnect state just fine, but what if the acqboard crashes, or something like that.... 
+
+We will have a watchdog "Acqboard timeout timer" on the fiber TX section. 
+Protocol is (again, symmetric wrt DSPs)
+1. if DSPA wants to send an event, send event
+   wait for CMDID update = DSPACMDID
+   if ACQTOUT = acqmax then 
+      set acqboardtimeout status bit for DSPA
+      bit is only cleared by another write from the DSP
+   end if
+2. process DSPB using a similar metric. 
+  
+
+Basically, the idea is that:
+   Both DSPs can write at once, but the FiberTX FSM will handle one at a time
+   Acqboard oddities will be handled thanks to a watchdog timer, which will invalidate the current event-writing and cause a transition to the trying to service the next DSP
+   
       
 
 

@@ -17,7 +17,12 @@ entity fibertx is
            DATAB : in std_logic_vector(15 downto 0);
            ADDRB : in std_logic_vector(2 downto 0);
            WRB : in std_logic;
-           FIBEROUT : out std_logic);
+           FIBEROUT : out std_logic;
+			  CMDIDA : in std_logic_vector(2 downto 0);
+			  CMDIDB : in std_logic_vector(2 downto 0);
+			  ERRORA : out std_logic;
+			  ERRORB : out std_logic;
+			  STATUS : in std_logic);
 end fibertx;
 
 architecture Behavioral of fibertx is
@@ -46,10 +51,17 @@ architecture Behavioral of fibertx is
   signal kin, sout : std_logic := '0';
   signal dout, doutreg : std_logic_vector(9 downto 0) := (others => '0');
 
-  type states is (chka, sendka, sendbytea, donea, chkb, sendkb, sendbyteb, doneb);
+  type states is (chka, sendka, sendbytea, donea, chkb, sendkb, sendbyteb, doneb,
+  					waita, waitb, error);
   signal cs, ns : states := chka; 
 
   signal timing : std_logic_vector(7 downto 0) := (others => '0'); 
+
+  -- watchdog-related signals
+  signal pcmdida, pcmdidb: std_logic_vector(2 downto 0); 
+  signal rsttimeout, seterr : std_logic := '0';
+  signal timeout : integer := 0; 
+
 
 	component encode8b10b IS
 		port (
@@ -122,7 +134,7 @@ begin
 				end if; 
 
 				if ADDRA = "001" and WRA = '1' then
-					cmda(6 downto 4) <= DATAA(2 downto 0);
+					cmda(7 downto 4) <= '0' & DATAA(2 downto 0);
 				end if; 
 
 				if ADDRA = "010" and WRA = '1' then
@@ -148,7 +160,7 @@ begin
 				end if; 
 
 				if ADDRB = "001" and WRB = '1' then
-					cmdb(6 downto 4) <= DATAB(2 downto 0);
+					cmdb(7 downto 4) <= '1' & DATAB(2 downto 0);
 				end if; 
 
 				if ADDRB = "010" and WRB = '1' then
@@ -198,6 +210,38 @@ begin
 					FIBEROUT <= sout; 
 				end if; 
 
+				-- timeout errors
+				if seterr = '1' then
+					ERRORA <= '1';
+				else
+					if WRA = '1' and ADDRA = "100" then
+						ERRORA <= '0';
+					end if; 
+				end if; 
+
+				
+				if seterr = '1' then
+					ERRORB <= '1';
+				else
+					if WRB = '1' and ADDRB = "100" then
+						ERRORB <= '0';
+					end if; 
+				end if; 
+
+				if rsttimeout = '1' then
+					timeout <= 200000000; 
+				else
+					if timeout /= 0 then
+						timeout <= timeout - 1;
+					end if; 
+				end if; 
+
+				if WRA = '1' and ADDRA = "100" then
+					pcmdida <= cmda(6 downto 4); 
+				end if; 
+				if WRB = '1' and ADDRB = "100" then
+					pcmdidb <= cmdb(6 downto 4); 
+				end if; 
 
 
 			end if;
@@ -212,6 +256,8 @@ begin
 				byteselrst <= '1'; 
 				rstcmda <= '0'; 
 				rstcmdb <= '0'; 
+				rsttimeout <= '1';
+				seterr <= '0'; 
 				if outbyte = '1' then
 					if newcmda = '1' then
 						ns <= sendka;
@@ -226,6 +272,8 @@ begin
 				byteselrst <= '1'; 
 				rstcmda <= '0'; 
 				rstcmdb <= '0'; 
+				rsttimeout <= '1';
+				seterr <= '0';
 				if outbyte = '1' then
 					ns <= sendbytea;
 				else
@@ -235,23 +283,45 @@ begin
 				modesel <= 0; 
 				byteselrst <= '0'; 
 				rstcmda <= '0'; 
-				rstcmdb <= '0'; 
+				rstcmdb <= '0';
+				rsttimeout <= '1';
+				seterr <= '0'; 
 				if outbyte = '1' and bytesel = 4	 then
-					ns <= donea;
+					ns <= waita;
 				else
 					ns <= sendbytea;
+				end if; 
+			when waita	=>
+				modesel <= 0; 
+				byteselrst <= '0'; 
+				rstcmda <= '0'; 
+				rstcmdb <= '0';
+				rsttimeout <= '0';
+				seterr <= '0'; 
+				if timeout = 0 or STATUS = '0' then
+					ns <= error;
+				else
+					if CMDIDA = pcmdida then
+						ns <= donea; 
+					else
+						ns <= waita;
+					end if;
 				end if; 
 			when donea =>
 				modesel <= 0; 
 				byteselrst <= '1'; 
 				rstcmda <= '1'; 
-				rstcmdb <= '0'; 
+				rstcmdb <= '0';
+				rsttimeout <= '1';
+				seterr <= '0'; 
 				ns <= chkb; 
 			when chkb => 
 				modesel <= 2; 
 				byteselrst <= '1'; 
 				rstcmda <= '0'; 
-				rstcmdb <= '0'; 
+				rstcmdb <= '0';
+				rsttimeout <= '1';
+				seterr <= '0'; 
 				if outbyte = '1' then
 					if newcmdb= '1' then
 						ns <= sendkb;
@@ -265,7 +335,9 @@ begin
 				modesel <= 1; 
 				byteselrst <= '1'; 
 				rstcmda <= '0'; 
-				rstcmdb <= '0'; 
+				rstcmdb <= '0';
+				rsttimeout <= '1';
+				seterr <= '0'; 
 				if outbyte = '1' then
 					ns <= sendbyteb;
 				else
@@ -276,22 +348,59 @@ begin
 				byteselrst <= '0'; 
 				rstcmda <= '0'; 
 				rstcmdb <= '0'; 
+				rsttimeout <= '1';
+				seterr <= '0';
 				if outbyte = '1' and bytesel = 4	 then
-					ns <= doneb;
+					ns <= waitb;
 				else
 					ns <= sendbyteb;
 				end if; 
+			when waitb	=>
+				modesel <= 0; 
+				byteselrst <= '0'; 
+				rstcmda <= '0'; 
+				rstcmdb <= '0';
+				rsttimeout <= '0';
+				seterr <= '0'; 
+				if timeout = 0 or STATUS = '0' then
+					ns <= error;
+				else
+					if CMDIDB = pcmdidb then
+						ns <= doneb; 
+					else
+						ns <= waitb;
+					end if;
+				end if; 
+
 			when doneb =>
 				modesel <= 0; 
 				byteselrst <= '1'; 
 				rstcmda <= '0'; 
 				rstcmdb <= '1'; 
+				rsttimeout <= '1';
+				seterr <= '0';
 				ns <= chka; 
+			when error	=>
+				modesel <= 0; 
+				byteselrst <= '0'; 
+				rstcmda <= '1'; 
+				rstcmdb <= '1';
+				rsttimeout <= '1';
+				seterr <= '1';
+				if STATUS = '1' then
+					ns <= chka;
+				else
+					ns <= error; 
+				end if; 
+				 
+
 			when others =>
 				modesel <= 0; 
 				byteselrst <= '1'; 
 				rstcmda <= '0'; 
 				rstcmdb <= '0';
+				rsttimeout <= '1';
+				seterr <= '0';
 				ns <= chka; 
 
 		end case;

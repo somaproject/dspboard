@@ -87,6 +87,7 @@ architecture Behavioral of DSPBoard is
 	signal maddra : std_logic_vector(7 downto 0) := (others => '0'); 
 	
 	signal myeventa, myeventb : std_logic := '0'; 	
+	signal txerrora : std_logic := '0'; 
 	
 	-- DSP B signals
 	signal sample1b, sample2b, sample3b, sample4b, samplecb :
@@ -114,6 +115,8 @@ architecture Behavioral of DSPBoard is
 
 	signal maddrb : std_logic_vector(7 downto 0) := (others => '0'); 
 
+  
+	signal txerrorb : std_logic := '0'; 
 
 	-- component declarations
 	component FiberRX is
@@ -146,7 +149,12 @@ architecture Behavioral of DSPBoard is
 	           DATAB : in std_logic_vector(15 downto 0);
 	           ADDRB : in std_logic_vector(2 downto 0);
 	           WRB : in std_logic;
-	           FIBEROUT : out std_logic);
+	           FIBEROUT : out std_logic;
+				  CMDIDA : in std_logic_vector(2 downto 0);
+				  CMDIDB : in std_logic_vector(2 downto 0);
+				  ERRORA : out std_logic;
+				  ERRORB : out std_logic;
+				  STATUS : in std_logic);
 	end component;
 
 	component DataMux is
@@ -204,6 +212,7 @@ architecture Behavioral of DSPBoard is
 	           CWE : out std_logic;
 				  EBUFSEL : out std_logic; 
 	           STATUS : in std_logic;
+				  TXERROR : in std_logic; 
 	           CMDID : in std_logic_vector(2 downto 0);
 	           CMDSTS : in std_logic_vector(3 downto 0);
 	           SAMPLE1 : in std_logic_vector(15 downto 0);
@@ -315,7 +324,12 @@ begin
 		DATAB => doutb, 
 		ADDRB => addrob(2 downto 0),
 		WRB => cweb,
-		FIBEROUT => FIBEROUT);
+		FIBEROUT => FIBEROUT,
+		CMDIDA => cmdida, 
+		CMDIDB => cmdidb,
+		STATUS => status,
+		ERRORA => txerrora, 
+		ERRORB => txerrorb);
 		
 	DataMux_inst : DataMux port map(
 		SYSCLK => sysclk,
@@ -368,6 +382,7 @@ begin
 		CWE => cwea,
 		EBUFSEL => ebufsela, 
 		STATUS => status,
+		TXERROR => txerrora,
 		CMDID => cmdida,
 		CMDSTS => cmdsts,
 		SAMPLE1 => sample1a,
@@ -454,6 +469,7 @@ begin
 		CWE => cweb,
 		EBUFSEL => ebufselb,
 		STATUS => status,
+		TXERROR => txerrorb,
 		CMDID => cmdidb,
 		CMDSTS => cmdsts,
 		SAMPLE1 => sample1b,
