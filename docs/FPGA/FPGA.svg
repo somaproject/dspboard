@@ -9,12 +9,12 @@
    width="612.00000pt"
    height="792.00000pt"
    sodipodi:docname="FPGA.svg"
-   sodipodi:docbase="/home/jonas/soma/developer/DSPboard/docs/FPGA"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xml="http://www.w3.org/XML/1998/namespace"
-   xmlns:xlink="http://www.w3.org/1999/xlink">
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   sodipodi:docbase="/home/jonas/soma/developer/DSPboard/docs/FPGA">
   <defs
      id="defs3">
     <marker
@@ -2749,7 +2749,7 @@
        x="426.60049"
        y="-308.15146"
        sodipodi:role="line"
-       id="tspan3191">RWEB</tspan></text>
+       id="tspan3191">RWEA</tspan></text>
   <text
      xml:space="preserve"
      style="font-size:6.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;text-anchor:middle;"
@@ -2761,7 +2761,7 @@
        x="426.60049"
        y="-317.52646"
        sodipodi:role="line"
-       id="tspan3194">RDINB</tspan></text>
+       id="tspan3194">RDINA</tspan></text>
   <text
      xml:space="preserve"
      style="font-size:6.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;text-anchor:middle;"
@@ -2773,7 +2773,7 @@
        x="426.60046"
        y="-327.50098"
        sodipodi:role="line"
-       id="tspan3197">RAINB</tspan></text>
+       id="tspan3197">RAINA</tspan></text>
   <path
      style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
      d="M 325.00000,224.37500 L 112.50000,224.37500 L 112.50000,305.62500"
