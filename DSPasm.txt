@@ -1,0 +1,127 @@
+Design concerns and considerations for the DSP assembly. 
+
+
+The loader is a whole 'nother bag of worms that we'll hopefully tackle when we're more familiar with the tools
+
+
+
+----------------------------------------------------------------------------
+ADSP EXECUTION CYCLE
+----------------------------------------------------------------------------
+
+The ADSP normally runs a cycle where it checks for new events, processses them, and then writes out events. 
+
+The interrupts either say "here's new data, process it" or 
+The timestamp has changed
+
+INT0: Increment timestamp, clear if FLAG3 = 1
+INT1: New samples, process new chunk of data
+
+FLAG2: poll to see if there are new events!
+
+
+Event cycle ----------------------------
+   DMA-in an event
+   process event
+   DMA-out any result
+   perform any latent processing...stuff... (uhh, yea)
+
+   this lets us be sure that, during the normal loop, we can send events
+
+
+Data processing cycle ------------------
+   For the tetrodes, to take advantage of SIMD, we have some interleaving-buffer issues, also which are present in the output data. 
+   Chan 1&2 are stored in a single word space, interleaved
+   Chan 3&4 are stored in a single word space, interleaved
+   Chan C&C' are stored in a single word space, interleaved
+   
+   how to store outputs?
+   obvious output buffers, sure -- but then how to DMA? parallel port can't do chained DMA... well, what we really want are 
+
+      
+
+
+Pcode pending interrupt for new samples:
+
+there are global no-trigger and lookback values
+
+Upon getting a trigger, we want to say:
+   don't re-trigger for n samples; this can be degremented and checked every sample
+   wait another m samples to record. 
+   
+
+
+1. DMA-in new samples, in 16-bit fixed-point twos-complement form. 
+2. convert new samples into 32-bit FP and save at appropriate point in circular input buffers
+2. Filter channels 1 - 4, 32-bit FP!
+2.5 save output in output circular buffers, as 16-bit twos-complement, scaled to be comparable with input. 
+
+3. check for threshold crossings:
+    decrement notrigger
+    if notrigger >= 0 then
+       notrigger--; 
+    else
+       for all channels: 
+           if outvals[n - lookback] >= threshold  
+              this is a spike! 
+              capture and send the past SPIKESIZE packets
+              // this creates latency issues, or something;
+	      write buffer ADDR to _PENDING_SPIKE_buffer
+	      notrigger := NOTRIGGER;  	      
+           end if
+    end if
+
+4. Filter continuous channel
+
+5. perform necessary down-sampling of continuous, by factor n (n=1,2,3,4, 5)
+6. store in filter output
+7. transfer filter samples if there are enough of them, something something
+8. done
+
+
+
+
+Variable notes:
+
+-- globals
+TIMESTAMP: 32-bit int time stamp
+MYID : tetrode number
+
+NEWSAMPLES[5]: DMA target for input sample reading. 
+
+
+--spike-specific --------------
+#compile-time defines:
+# SBUFSIZE: length of buffer, 1024 
+# SHSIZE : length of fir filter, 256
+# SYSIZE : length of output, 256
+
+SPIKELEN : how many samples do we want to include when we capture a spike
+POSTTRIGLEN : after a trigger, we want to see this many spikes
+NOTRIGGERLEN: after getting a trigger, don't re-trigger for this number of samples
+NOTRIGGER: counter; we only trigger when this is = 0, and each trigger reloads it with NOTRIGGERLEN. 
+
+SX12[2*SBUFSIZE] : (dm) interleaved sample circular buffer of chan 1 & 2
+SX34[2*SBUFSIZE] : (dm) interleaved sample circular buffer of chan 3 & 4
+SH12[2*HSIZE] : (pm) interleaved impulse response of filter for chan 1 & 2
+SH34[2*HSIZE] : (pm) interleaved impulse response of filter for chan 3 & 4
+SY1[256] ..SY4[256] : (dm) output buffers, 16-bit
+ 
+
+currentpos : current poisition in circular buffer for spike channels
+SGAIN[4] : gains of each chan (8-bit int, actual gain / 100) 
+SFID[4] : filter ID for each chan (16-bit int)
+SHFID[4] : hardware filter setting (8-bit int)
+STHRESH[4] : channel threshold (16-bit signed int); 
+
+
+--Continuous-specific-----
+CDOWNSAMPLE
+COX[1024] : direct circular buffer for EEG
+COH[256] : (pm)  filter buffer
+COY[512] : (dm) continuous circular output buffer
+COGAIN : gain of continuous channel
+COFID : filter ID for continuous channel
+COHFID : hardware filter ID; 
+
+  

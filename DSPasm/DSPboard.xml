@@ -1,0 +1,105 @@
+<?xml version="1.0" standalone="no"?>
+<?xml-stylesheet type="text/xsl" href="C:\Program Files\Analog Devices\VisualDSP\system\linker_map_ss1.xsl"?>
+<!DOCTYPE DOCUMENT SYSTEM "C:\Program Files\Analog Devices\VisualDSP\system\linker_map.dtd">
+<DOCUMENT>
+<LINKPROJECT name="P0" orig_file_name="$COMMAND_LINE_OUTPUT_FILE" id='01454B78'>
+<FILE_NAME><![CDATA[C:\desktop\DSPboard\DSPasm\Debug\DSPboard.dxe]]></FILE_NAME>
+<MEMORY id='01454998' name='seg_rth' start_address='0x80000' end_address='0x800ff' type='PM' qualifier='RAM' width='0x30' words_used='0x6' words_unused='0xfa'>
+<OUTPUT_SECTIONS>
+<OUTPUT_SECTION id='014559A0' name='seg_rth' type='SHT_PROGBITS' start_address='0x80000' word_size='0x6'>
+<INPUT_SECTIONS>
+<INPUT_SECTION id='0146C0E0' name='seg_rth' start_address='0x80000' size='0x6'><INPUT_FILE><![CDATA[C:\desktop\DSPboard\DSPasm\Debug\main.doj]]></INPUT_FILE>
+<SYMBOL name='seg_rth' address='0x80000' size='0x0' binding='LOCAL'><DEMANGLED_NAME><![CDATA[]]></DEMANGLED_NAME></SYMBOL>
+</INPUT_SECTION>
+</INPUT_SECTIONS>
+</OUTPUT_SECTION>
+</OUTPUT_SECTIONS>
+</MEMORY>
+<MEMORY id='0095FDF0' name='seg_init' start_address='0x80100' end_address='0x801ff' type='PM' qualifier='RAM' width='0x30' words_used='0x0' words_unused='0x100'>
+<OUTPUT_SECTIONS>
+<OUTPUT_SECTION id='01473558' name='seg_init' type='SHT_NULL' start_address='0x0' word_size='0x0'>
+</OUTPUT_SECTION>
+</OUTPUT_SECTIONS>
+</MEMORY>
+<MEMORY id='01454C60' name='seg_int_code' start_address='0x80200' end_address='0x80287' type='PM' qualifier='RAM' width='0x30' words_used='0x0' words_unused='0x88'>
+<OUTPUT_SECTIONS>
+<OUTPUT_SECTION id='017CF3D0' name='seg_int_code' type='SHT_NULL' start_address='0x0' word_size='0x0'>
+</OUTPUT_SECTION>
+</OUTPUT_SECTIONS>
+</MEMORY>
+<MEMORY id='01454CF8' name='seg_pmco' start_address='0x80288' end_address='0x841ff' type='PM' qualifier='RAM' width='0x30' words_used='0x23' words_unused='0x3f55'>
+<OUTPUT_SECTIONS>
+<OUTPUT_SECTION id='017FF450' name='seg_pmco' type='SHT_PROGBITS' start_address='0x80288' word_size='0x23'>
+<INPUT_SECTIONS>
+<INPUT_SECTION id='017FF660' name='seg_pmco' start_address='0x80288' size='0x23'><INPUT_FILE><![CDATA[C:\desktop\DSPboard\DSPasm\Debug\main.doj]]></INPUT_FILE>
+<SYMBOL name='seg_pmco' address='0x80288' size='0x0' binding='LOCAL'><DEMANGLED_NAME><![CDATA[]]></DEMANGLED_NAME></SYMBOL>
+<SYMBOL name='main' address='0x80288' size='0x0' binding='LOCAL'><DEMANGLED_NAME><![CDATA[]]></DEMANGLED_NAME></SYMBOL>
+<SYMBOL name='init' address='0x8028e' size='0x0' binding='LOCAL'><DEMANGLED_NAME><![CDATA[]]></DEMANGLED_NAME></SYMBOL>
+<SYMBOL name='samples' address='0x8029a' size='0x0' binding='LOCAL'><DEMANGLED_NAME><![CDATA[]]></DEMANGLED_NAME></SYMBOL>
+<SYMBOL name='macs' address='0x802a8' size='0x0' binding='LOCAL'><DEMANGLED_NAME><![CDATA[]]></DEMANGLED_NAME></SYMBOL>
+</INPUT_SECTION>
+</INPUT_SECTIONS>
+</OUTPUT_SECTION>
+</OUTPUT_SECTIONS>
+</MEMORY>
+<MEMORY id='01454D90' name='seg_pmda' start_address='0x86300' end_address='0x87fff' type='PM' qualifier='RAM' width='0x20' words_used='0x500' words_unused='0x1800'>
+<OUTPUT_SECTIONS>
+<OUTPUT_SECTION id='01861AF8' name='seg_pmda' type='SHT_PROGBITS' start_address='0x86300' word_size='0x500'>
+<INPUT_SECTIONS>
+<INPUT_SECTION id='01862B28' name='seg_pmda' start_address='0x86300' size='0x500'><INPUT_FILE><![CDATA[C:\desktop\DSPboard\DSPasm\Debug\main.doj]]></INPUT_FILE>
+<SYMBOL name='seg_pmda' address='0x86300' size='0x0' binding='LOCAL'><DEMANGLED_NAME><![CDATA[]]></DEMANGLED_NAME></SYMBOL>
+<SYMBOL name='SH12' address='0x86300' size='0x200' binding='LOCAL'><DEMANGLED_NAME><![CDATA[]]></DEMANGLED_NAME></SYMBOL>
+<SYMBOL name='SH34' address='0x86500' size='0x200' binding='LOCAL'><DEMANGLED_NAME><![CDATA[]]></DEMANGLED_NAME></SYMBOL>
+<SYMBOL name='COH' address='0x86700' size='0x100' binding='LOCAL'><DEMANGLED_NAME><![CDATA[]]></DEMANGLED_NAME></SYMBOL>
+</INPUT_SECTION>
+</INPUT_SECTIONS>
+</OUTPUT_SECTION>
+</OUTPUT_SECTIONS>
+</MEMORY>
+<MEMORY id='01454E70' name='seg_dm32da' start_address='0xc0000' end_address='0xc3fff' type='DM' qualifier='RAM' width='0x20' words_used='0x620' words_unused='0x39e0'>
+<OUTPUT_SECTIONS>
+<OUTPUT_SECTION id='018624D0' name='seg_dm32da' type='SHT_PROGBITS' start_address='0xc0000' word_size='0x620'>
+<INPUT_SECTIONS>
+<INPUT_SECTION id='018626B8' name='seg_dm32da' start_address='0xc0000' size='0x620'><INPUT_FILE><![CDATA[C:\desktop\DSPboard\DSPasm\Debug\main.doj]]></INPUT_FILE>
+<SYMBOL name='seg_dm32da' address='0xc0000' size='0x0' binding='LOCAL'><DEMANGLED_NAME><![CDATA[]]></DEMANGLED_NAME></SYMBOL>
+<SYMBOL name='TIMESTAMP' address='0xc0000' size='0x1' binding='LOCAL'><DEMANGLED_NAME><![CDATA[]]></DEMANGLED_NAME></SYMBOL>
+<SYMBOL name='TETRODEID' address='0xc0001' size='0x1' binding='LOCAL'><DEMANGLED_NAME><![CDATA[]]></DEMANGLED_NAME></SYMBOL>
+<SYMBOL name='NEWSAMPLES' address='0xc0002' size='0x5' binding='LOCAL'><DEMANGLED_NAME><![CDATA[]]></DEMANGLED_NAME></SYMBOL>
+<SYMBOL name='SPIKELEN' address='0xc0007' size='0x1' binding='LOCAL'><DEMANGLED_NAME><![CDATA[]]></DEMANGLED_NAME></SYMBOL>
+<SYMBOL name='POSTTRIGLEN' address='0xc0008' size='0x1' binding='LOCAL'><DEMANGLED_NAME><![CDATA[]]></DEMANGLED_NAME></SYMBOL>
+<SYMBOL name='NOTRIGGERLEN' address='0xc0009' size='0x1' binding='LOCAL'><DEMANGLED_NAME><![CDATA[]]></DEMANGLED_NAME></SYMBOL>
+<SYMBOL name='NOTRIGGER' address='0xc000a' size='0x1' binding='LOCAL'><DEMANGLED_NAME><![CDATA[]]></DEMANGLED_NAME></SYMBOL>
+<SYMBOL name='CURRENTPOS' address='0xc000b' size='0x1' binding='LOCAL'><DEMANGLED_NAME><![CDATA[]]></DEMANGLED_NAME></SYMBOL>
+<SYMBOL name='SX12' address='0xc000c' size='0x100' binding='LOCAL'><DEMANGLED_NAME><![CDATA[]]></DEMANGLED_NAME></SYMBOL>
+<SYMBOL name='SX34' address='0xc010c' size='0x100' binding='LOCAL'><DEMANGLED_NAME><![CDATA[]]></DEMANGLED_NAME></SYMBOL>
+<SYMBOL name='SGAIN' address='0xc020c' size='0x4' binding='LOCAL'><DEMANGLED_NAME><![CDATA[]]></DEMANGLED_NAME></SYMBOL>
+<SYMBOL name='SFID' address='0xc0210' size='0x4' binding='LOCAL'><DEMANGLED_NAME><![CDATA[]]></DEMANGLED_NAME></SYMBOL>
+<SYMBOL name='SHFID' address='0xc0214' size='0x4' binding='LOCAL'><DEMANGLED_NAME><![CDATA[]]></DEMANGLED_NAME></SYMBOL>
+<SYMBOL name='STHRESH' address='0xc0218' size='0x4' binding='LOCAL'><DEMANGLED_NAME><![CDATA[]]></DEMANGLED_NAME></SYMBOL>
+<SYMBOL name='CODOWNSAMPLE' address='0xc021c' size='0x1' binding='LOCAL'><DEMANGLED_NAME><![CDATA[]]></DEMANGLED_NAME></SYMBOL>
+<SYMBOL name='COX' address='0xc021d' size='0x400' binding='LOCAL'><DEMANGLED_NAME><![CDATA[]]></DEMANGLED_NAME></SYMBOL>
+<SYMBOL name='COGAIN' address='0xc061d' size='0x1' binding='LOCAL'><DEMANGLED_NAME><![CDATA[]]></DEMANGLED_NAME></SYMBOL>
+<SYMBOL name='COFID' address='0xc061e' size='0x1' binding='LOCAL'><DEMANGLED_NAME><![CDATA[]]></DEMANGLED_NAME></SYMBOL>
+<SYMBOL name='COHFID' address='0xc061f' size='0x1' binding='LOCAL'><DEMANGLED_NAME><![CDATA[]]></DEMANGLED_NAME></SYMBOL>
+</INPUT_SECTION>
+</INPUT_SECTIONS>
+</OUTPUT_SECTION>
+</OUTPUT_SECTIONS>
+</MEMORY>
+<MEMORY id='01454F80' name='seg_dm16da' start_address='0x188000' end_address='0x18ffff' type='DM' qualifier='RAM' width='0x10' words_used='0x400' words_unused='0x7c00'>
+<OUTPUT_SECTIONS>
+<OUTPUT_SECTION id='01893F20' name='seg_dm16da' type='SHT_PROGBITS' start_address='0x188000' word_size='0x400'>
+<INPUT_SECTIONS>
+<INPUT_SECTION id='01894130' name='seg_dm16da' start_address='0x188000' size='0x400'><INPUT_FILE><![CDATA[C:\desktop\DSPboard\DSPasm\Debug\main.doj]]></INPUT_FILE>
+<SYMBOL name='seg_dm16da' address='0x188000' size='0x0' binding='LOCAL'><DEMANGLED_NAME><![CDATA[]]></DEMANGLED_NAME></SYMBOL>
+<SYMBOL name='SY1' address='0x188000' size='0x100' binding='LOCAL'><DEMANGLED_NAME><![CDATA[]]></DEMANGLED_NAME></SYMBOL>
+<SYMBOL name='SY2' address='0x188100' size='0x100' binding='LOCAL'><DEMANGLED_NAME><![CDATA[]]></DEMANGLED_NAME></SYMBOL>
+<SYMBOL name='SY3' address='0x188200' size='0x100' binding='LOCAL'><DEMANGLED_NAME><![CDATA[]]></DEMANGLED_NAME></SYMBOL>
+<SYMBOL name='SY4' address='0x188300' size='0x100' binding='LOCAL'><DEMANGLED_NAME><![CDATA[]]></DEMANGLED_NAME></SYMBOL>
+</INPUT_SECTION>
+</INPUT_SECTIONS>
+</OUTPUT_SECTION>
+</OUTPUT_SECTIONS>
+</MEMORY>
+</LINKPROJECT>
+</DOCUMENT>
