@@ -4,8 +4,8 @@ PROJECT vhdl
 DESIGN vhdl
 DEVFAM spartan2e
 DEVFAMTIME 0
-DEVICE xc2s150e
-DEVICETIME 1075670137
+DEVICE xc2s200e
+DEVICETIME 1077149664
 DEVPKG pq208
 DEVPKGTIME 0
 DEVSPEED -6
@@ -40,8 +40,5 @@ STIMULUS test_acqboard_test.tbw
 DEPASSOC dspboard dspboard.ucf
 [Normal]
 xilxBitgCfg_GenOpt_ASCIIFile=xstvhd, spartan2e, VHDL.t_bitFile, 1077136805, True
-[STATUS-ALL]
-dspboard.ngcFile=WARNINGS,1077137978
-dspboard.ngdFile=WARNINGS,1077139683
 [STRATEGY-LIST]
 Normal=True
