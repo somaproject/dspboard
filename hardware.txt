@@ -155,3 +155,18 @@ The switch to the -3 brings that down to $332 for one board and $161.00 for each
 Currently we're using 129 pins, and if we switch we can go down to... 99, and that's just not enough, because we'll also want the additional outputs for the clocks to the DSPs, so we're really looking at 101, and with the INIT/DIN, that's 103, i.e. we're 6 short, and we can't just cut the LEDs.
 
 So we need the PQ208 part. Pity. 
+
+
+----------------------------------------------------------------------------
+IO
+----------------------------------------------------------------------------
+
+To add:
+DSPCLKA/B : output clocks
+latches for ADDR, ALE inputs
+
+DCM code
+
+hook up to internal clock net
+
+				   

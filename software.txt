@@ -201,6 +201,7 @@ a "mode" bit:
    1 == just acting as RAM
 
 Signals:
+Since we've switched to a spartan-3, each blockselect ram block is 4 times larger, thus we only need buffer A to hold the boot code. This will simplify things considerably. 
 
 Random access memory signals for booting and boot control:
 RAIN[9:0] : random access address for input(writing)
@@ -216,7 +217,7 @@ to detect a done buffer:
 
 buffer input side
 BUFWE : write this byte
-BUFADDRIN[7:0] : input address
+BUFADDRIN[9:0] : input address
 BUFDIN[15:0] : input data to write
 BUFERROR : occurs when we are in state AWAIT, and try to do a WE
 
@@ -232,11 +233,13 @@ the output of this system is very similar to what's needed to talk to the data b
 CLKA : clock on the DSP side
 CLKB : clock on the data bus side
 
-For internal data frames, the "length" argument is 2-byte words, always includes the total frame length, and is preceeded by a 1-word header that looks like:
-
+For internal data frames, the "length" argument is in 2-byte words, always includes the total frame length, and is preceeded by a 2-word header that looks like:
+word 0:
 bits 5:0 : source ID (tetrode number
 bit 7:6 : type (spike/eeg) spike = 0, eeg = 1
-bit 15:7 : total length of frame in 2-byte words (0 == 256 == 512b)
+
+word 1: 
+bit 9:0 : total length of frame in 2-byte words (0 == 1024 == 2048b)
 
 
 
@@ -306,10 +309,11 @@ Region	Use:
 	the length word is the length of the packet. If we don't write
 	the correct number of bytes, the packet won't be committed
 	If we write too many, the higher ones are ignored. 
-	Remember that, according to the  format, the first word we write
-	is of the form :
+	To accomodate the larger buffer sizes, we have 
+	word 0: 
 	  7:0 : source
-	  15:8 : length, in 2-byte words
+	word 1: 
+	  9:0 : length, in 2-byte words
 	
 	FPGA_EVENTWR:	
 0x4	outbound events : write an event here:
