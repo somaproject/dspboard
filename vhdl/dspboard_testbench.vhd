@@ -262,7 +262,7 @@ BEGIN
 		
 		end memr8;  
 
-		procedure dataw(len : in integer) is 
+		procedure dataw(len : in integer; base : in integer) is 
 			variable outword: std_logic_vector(15 downto 0); 
 
 		begin
@@ -273,7 +273,7 @@ BEGIN
 				if i = 0 then
 					outword := std_logic_vector(TO_UNSIGNED(len, 8)) & X"00"; 
 				else
-					outword := std_logic_vector(TO_UNSIGNED(i, 16)); 
+					outword := std_logic_vector(TO_UNSIGNED(i + base * 256, 16)); 
 				end if; 
 
 				memw16(std_logic_vector(TO_UNSIGNED(i + 8192, 16)),
@@ -373,9 +373,9 @@ BEGIN
 
 
 		--- then we try and write three events!
-		dataw(50); 
-		--dataw(50); 
-		--dataw(50); 
+		dataw(50, 0); 
+		dataw(100, 1); 
+		dataw(200, 2); 
 
 		memw16(X"4000", X"FFFF"); 
 		memw16(X"4001", X"FFFF"); 
@@ -389,6 +389,28 @@ BEGIN
 		memw16(X"4009", X"0000"); 
 
 
+		-- and then we wait for the 0x0009 event to say all pkts rxed
+		loopbreak := '0'; 
+		while(loopbreak = '0') loop
+			if rising_edge(dspclk) and EVENTSA = '1' then
+				memr16(X"6000", loadword); 
+				if loadword = X"0009" then 
+					report "DSP has read an 0x0009 event!";
+					loopbreak := '1'; 
+							
+					
+				end if;
+				memr16(X"6006", loadword); 
+			end if; 
+			wait until rising_edge(dspclk); 
+
+		end loop; 
+		
+		dataw(64, 3); 
+		dataw(128, 4); 
+		dataw(192, 5); 
+		
+		  
 
 		wait;	
 
@@ -544,7 +566,7 @@ BEGIN
 			wevent(X"FFFFFFFFFFFF", X"0003", X"0000", X"0000", X"0001", X"0002", X"0003");
 			for i in 0 to 127 loop
 					
-				wevent(X"FFFFFFFFFFFF", X"0006", std_logic_vector(TO_UNSIGNED(i*4, 16)),
+				wevent(X"FFFFFFFFFFFF", X"0003", std_logic_vector(TO_UNSIGNED(i*4, 16)),
 															std_logic_vector(TO_UNSIGNED((i*8 + 1) mod 256, 8)) & 
 															std_logic_vector(TO_UNSIGNED((i*8 + 0) mod 256, 8)), 
 															std_logic_vector(TO_UNSIGNED((i*8 + 3) mod 256, 8)) & 
@@ -601,11 +623,48 @@ BEGIN
 			pktlen := 0; 
 			while (pktlen = 0) loop
 				rdata(pktlen); 
-			end loop;
-			
+			end loop;		
 			datapktlen <= pktlen;  
 
-			wait; 
+			pktlen := 0; 
+			while (pktlen = 0) loop
+				rdata(pktlen); 
+			end loop;
+			datapktlen <= pktlen;  
+
+			pktlen := 0; 
+			while (pktlen = 0) loop
+				rdata(pktlen); 
+			end loop;
+			datapktlen <= pktlen;  
+			
+				wevent(X"FFFFFFFFFFFF", X"0009", 
+							X"0000",
+							X"0000",
+							X"0000",
+							X"0000",
+							X"0000"
+							);		
+
+
+			pktlen := 0; 
+			while (pktlen = 0) loop
+				rdata(pktlen); 
+			end loop;		
+			datapktlen <= pktlen;  
+
+			pktlen := 0; 
+			while (pktlen = 0) loop
+				rdata(pktlen); 
+			end loop;
+			datapktlen <= pktlen;  
+
+			pktlen := 0; 
+			while (pktlen = 0) loop
+				rdata(pktlen); 
+			end loop;
+			datapktlen <= pktlen;  
+
 
 	end process busclock; 
 
