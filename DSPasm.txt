@@ -54,7 +54,13 @@ Upon getting a trigger, we want to say:
 1. DMA-in new samples, in 16-bit fixed-point twos-complement form. 
 2. convert new samples into 32-bit FP and save at appropriate point in circular input buffers
 2. Filter channels 1 - 4, 32-bit FP!
-2.5 save output in output circular buffers, as 16-bit twos-complement, scaled to be comparable with input. 
+    FIR, using SIMD (thus in pairs), where we filter the max len, and
+    we thus must make sure that the end of each filter is all 0s. 
+
+2.5 save output in output circular buffers
+3. Filter continuous channel
+4. perform necessary down-sampling of continuous, by factor n (n=1,2,3,4, 5)
+6. store in filter output
 
 3. check for threshold crossings:
     decrement notrigger
@@ -71,10 +77,9 @@ Upon getting a trigger, we want to say:
            end if
     end if
 
-4. Filter continuous channel
 
-5. perform necessary down-sampling of continuous, by factor n (n=1,2,3,4, 5)
-6. store in filter output
+
+
 7. transfer filter samples if there are enough of them, something something
 8. done
 
@@ -105,7 +110,7 @@ SX12[2*SBUFSIZE] : (dm) interleaved sample circular buffer of chan 1 & 2
 SX34[2*SBUFSIZE] : (dm) interleaved sample circular buffer of chan 3 & 4
 SH12[2*HSIZE] : (pm) interleaved impulse response of filter for chan 1 & 2
 SH34[2*HSIZE] : (pm) interleaved impulse response of filter for chan 3 & 4
-SY1[256] ..SY4[256] : (dm) output buffers, 16-bit
+SY1[256] ..SY4[256] : (dm) output buffers, 32-bit
  
 
 currentpos : current poisition in circular buffer for spike channels
@@ -123,5 +128,15 @@ COY[512] : (dm) continuous circular output buffer
 COGAIN : gain of continuous channel
 COFID : filter ID for continuous channel
 COHFID : hardware filter ID; 
+
+
+DAG configuration:
+DAG1[0] (i0) and DAG2[0] (i8) are for in-process mucking around
+
+DAG1: (all circular) 
+
+5: Spike interleaved input buffers 1 & 2
+6: Spike interleaved input buffers 3 & 4
+7: continuous input buffer
 
   
