@@ -1,0 +1,51 @@
+DSPboard FPGA testbench
+
+Wow, this is going to be complicated. We need to fake:
+
+ADSP memory interface
+a series of things for the ADSP to actually _do_ 
+_both_ of them
+
+Data bus
+event bus
+
+fiber/acqboard
+wow, that's pretty rough
+
+The acqboard rx/dx part is actually pretty easy. 
+
+Ideally, we'll just code up what's essentially the DSP code. I.e. we can write functions that "Read" and "Write" from ram, etc. 
+
+I wish we could have a read() function, and a write() function. But i guess the best we can do are read() and write() modules, or better, one big memIO module. We'll be using physical addresses, but whatever :)
+
+So we have the following signals:
+MODE: whether we're in 8 or 16-bit mode
+ADDR: integer address (go behavioral vhdl!)
+DIN : unsigned short in
+DOUT : unsigned short out
+GO : start transaction
+RW : read or write (1 for read, 0 for write)
+DONE : tx is done, DOUT has result of most recent transaction
+MRD : read line for memory interface
+MWE : Write line for memory interface
+MADDR: 16-bit output address lines
+MDATA: 16-bit bidirectional data lines
+CLK : clock signal 
+
+Now, we need a fake event interface too...
+
+We have:
+
+CMD(15:0)
+DIN0(15:0)
+DIN1(15:0)
+DIN2(15:0)
+DIN3(15:0)
+DIN4(15:0), similar DOUTs
+ADDR(47:0)
+SENDEVENT
+QUERYEVENT
+DONE
+
+Realy simple, you just call queryevent, wait for done, see if you get anything, wait a bit, etc. 
+

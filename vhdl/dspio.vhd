@@ -85,6 +85,7 @@ begin
 			  sample3 when addrl(2 downto 0) = "011" else
 			  sample4 when addrl(2 downto 0) = "100" else
 			  sampleC when addrl(2 downto 0) = "101" else
+			  X"0123" when addrl(2 downto 0) = "110" else
 			  X"ABCD"; 
 
 	DATA(7 downto 0) <= dataoutl(7 downto 0) when RD = '0' else "ZZZZZZZZ";

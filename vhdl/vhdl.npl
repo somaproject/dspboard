@@ -31,8 +31,10 @@ SOURCE DataMux.vhd
 SOURCE EventMux.vhd
 SOURCE dspio.vhd
 SOURCE DSPBoard.vhd
+SOURCE test_mem.vhd
+STIMULUS test_mem_test.tbw
+SOURCE test_event.vhd
+STIMULUS dspboard_testbench.vhd
 DEPASSOC dspboard dspboard.ucf
-[STATUS-ALL]
-dspboard.nc1File=WARNINGS,0
 [STRATEGY-LIST]
 Normal=True
