@@ -153,7 +153,12 @@ EVENT:
    CMD = 0x03 SENDER = any dw0 = addr of first word
 			   dw1 = first word to write dw=4 last word of 4
    CMD = 0x04 sender = timer tells us the current time, and wehther or not
-		       to reset the timer. 
+		       to reset the timer.	  
+		       dw0[0] = 1 == reset the timer
+		       dw2  == high word of current time
+		       dw3  == low word of current time
+
+
 
 So, for setting boot mode, we need to actually "set boot mode" and then wait for the DSP to clear it. We can't just have the DSP send an event, because the boot mode dictates that the FPGA still thinks the parallel port is in 8-bit mode.
 
@@ -226,6 +231,18 @@ Data Mux:
    ACK = not ACKA, because again, we go from assert-high to assert-low
  
 
+
+-----------------------------------------------------------------------------
+TIMER INTERFACE
+-----------------------------------------------------------------------------
+
+We get the global TINC signal, and the "RESET CLOCK" event. 
+
+There is the system-wide TINC signal, which is clocking along at SYSCLK, and is a single tick. 
+
+When we get an EVENT with ID = 4 , we will reset the clock the next time we get a TINC. 
+
+The output of the TINC signal is delayed by three ticks, allowing the RX of the appropriate event to arm the TCLR flag. 
 
 
  

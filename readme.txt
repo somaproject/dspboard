@@ -109,9 +109,7 @@ So it looks as if the TPS54314 will "start" 4 ms after power is applied, worst-c
 ------------------------------------------------------------------------------
 BOOTING
 ------------------------------------------------------------------------------
-to prevent sequencing issues wrt booting, we'll have a 2k pulldown on each RESET pin. 
-
-
+to prevent sequencing issues wrt booting, we'll have a 2k pulldown on each RESET pin on the DSP. When the FPGA pulls this up, it'll only suck 1.5 A or something similar, i.e. the FPGA 
 
 
 ------------------------------------------------------------------------------
