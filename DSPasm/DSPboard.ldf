@@ -47,7 +47,7 @@ ARCHITECTURE(ADSP-21262)
 //   Block Recall Space for internal RAM
 //   ------------------------------------------------
 //                    0x8000 0000 to 0xFFFF FFFF  
-
+/*
 #ifdef _ADI_THREADS
 #ifdef __ADI_LIBEH__
 $LIBRARIES = libehmt.dlb, libc26xmt.dlb, libiomt.dlb, libdsp26x.dlb;
@@ -60,7 +60,9 @@ $LIBRARIES = libeh.dlb, libc26x.dlb, libio.dlb, libdsp26x.dlb;
 #else
 $LIBRARIES = libc26x.dlb, libio.dlb, libdsp26x.dlb;
 #endif
-#endif
+#endif*/
+
+
 
 // Libraries from the command line are included in COMMAND_LINE_OBJECTS.
 $OBJECTS = $COMMAND_LINE_OBJECTS;
@@ -88,44 +90,44 @@ PROCESSOR P0
 		// .text output section
 		seg_rth
 		{
-			INPUT_SECTIONS( $OBJECTS(seg_rth) $LIBRARIES(seg_rth))
+			INPUT_SECTIONS( $OBJECTS(seg_rth) )
 		} >seg_rth
 
 		seg_init
 		{
 			ldf_seginit_space = . ;
-			INPUT_SECTIONS( $OBJECTS(seg_init) $LIBRARIES(seg_init))
+			INPUT_SECTIONS( $OBJECTS(seg_init) )
 		} >seg_init
 
 		seg_int_code
 		{
-			INPUT_SECTIONS( $OBJECTS(seg_int_code) $LIBRARIES(seg_int_code))
+			INPUT_SECTIONS( $OBJECTS(seg_int_code) )
 		} >seg_int_code
 
 		seg_pmco
 		{
-			INPUT_SECTIONS( $OBJECTS(seg_pmco) $LIBRARIES(seg_pmco))
+			INPUT_SECTIONS( $OBJECTS(seg_pmco) )
 		} >seg_pmco
 		
 		seg_loader
 		{
-			INPUT_SECTIONS( $OBJECTS(seg_loader) $LIBRARIES(seg_loader))
+			INPUT_SECTIONS( $OBJECTS(seg_loader) )
 		} >seg_loader
 		
 		seg_pmda
 		{
-			INPUT_SECTIONS( $OBJECTS(seg_pmda) $LIBRARIES(seg_pmda))
+			INPUT_SECTIONS( $OBJECTS(seg_pmda) )
 		} >seg_pmda
 
 
 		seg_dm32da
 		{
-			INPUT_SECTIONS( $OBJECTS(seg_dm32da) $LIBRARIES(seg_dm32da))
+			INPUT_SECTIONS( $OBJECTS(seg_dm32da) )
 		} > seg_dm32da
 
 		seg_dm16da
 		{
-			INPUT_SECTIONS( $OBJECTS(seg_dm16da) $LIBRARIES(seg_dm16da))
+			INPUT_SECTIONS( $OBJECTS(seg_dm16da) )
 		} > seg_dm16da
 
 

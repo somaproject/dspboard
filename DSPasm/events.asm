@@ -1190,7 +1190,7 @@ acq_query:
 	modifies:
 		    
  -------------------------------------------------------*/
-acq_set; 
+acq_set: 
 	r0 = dm(CMDIDPENDING); 
 	r1 = -1; 
 	comp(r0, r1); 
@@ -1214,7 +1214,7 @@ acq_set;
     acq_set.gain_spike:
     // spike channel gain setting; 
     r0 = dm(MYID); 
-    bit tst r0 	
+    //bit tst r0 	
     
     acq_set.gain_cont:
     // continuous channel gain setting;
@@ -1228,7 +1228,7 @@ acq_set;
     
     
     
-    CMDIDPENDING = CMDID + 1;
+    //CMDIDPENDING = CMDID + 1;
      
     
 	

@@ -121,27 +121,6 @@ main:
 mainl:	
 	// test dma
 	
-	r0 = 0x00020003; dm(CMDPENDING) = r0; 
-	r0 = 0x00000100; dm(CMDPENDING+1) = r0;
-	call update_from_cmdpending; 
-
-	r0 = 0x00020003; dm(CMDPENDING) = r0; 
-	r0 = 0x00000205; dm(CMDPENDING+1) = r0;
-	call update_from_cmdpending; 
-	
-	
-	r0 = 0x00020003; dm(CMDPENDING) = r0; 
-	r0 = 0x00000307; dm(CMDPENDING+1) = r0;
-	call update_from_cmdpending; 
-
-	
-	r0 = 0x00020003; dm(CMDPENDING) = r0; 
-	r0 = 0x00000409; dm(CMDPENDING+1) = r0;
-	
-	call update_from_cmdpending; 
-	r0 = 0x00020002; dm(CMDPENDING) = r0; 
-	r0 = 0x00000209; dm(CMDPENDING+1) = r0;
-			
 	jump mainl; 
 	
 	

@@ -11,15 +11,17 @@
 # Makefile resides.
 
 # Supported targets:
-#     Debug
-#     Debug_clean
+#     DSPboard_Debug
+#     DSPboard_Debug_clean
 
-# Define ADI_DSP if it is not already defined.  Define this variable if you
-# wish to run this Makefile on a host other than the host that created
-# it and VisualDSP++ may be installed in a different directory.
+# Define this variable if you wish to run this Makefile on a host
+# other than the host that created it and VisualDSP++ may be installed
+# in a different directory.
 
-ifndef ADI_DSP
-ADI_DSP=C:\Program Files\Analog Devices\VisualDSP
+ADI_DSP=C:\Program Files\Analog Devices\VisualDSP 3.5 32-Bit
+
+ifndef ADI_DSP_MAKE
+ADI_DSP_MAKE=C:/Program\ Files/Analog\ Devices/VisualDSP\ 3.5\ 32-Bit
 endif
 
 # $VDSP is a gmake-friendly version of ADI_DIR
@@ -39,33 +41,33 @@ RM=command /C del
 endif
 
 #
-# Begin "Debug" configuration
+# Begin "DSPboard_Debug" configuration
 #
 
-ifeq ($(MAKECMDGOALS),Debug)
+ifeq ($(MAKECMDGOALS),DSPboard_Debug)
 
-Debug : ./debug/dspboard.dxe 
+DSPboard_Debug : ./Debug/DSPboard.dxe 
 
-./debug/events.doj :./events.asm ./memory.h ../../../program\ files/analog\ devices/visualdsp/212xx/include/def21262.h ../../../program\ files/analog\ devices/visualdsp/212xx/include/def21266.h 
-	$(VDSP)/easm21k.exe -proc ADSP-21262  -o .\Debug\events.doj -g .\events.asm -MM
+./Debug/events.doj :./events.asm ./memory.h $(ADI_DSP_MAKE)/212xx/include/def21262.h $(ADI_DSP_MAKE)/212xx/include/def21266.h $(ADI_DSP_MAKE)/212xx/include/def2126x.h 
+	$(VDSP)/easm21k.exe .\events.asm -proc ADSP-21262 -g -o .\Debug\events.doj -MM
 
-./debug/loader.doj :./loader.asm ../../../program\ files/analog\ devices/visualdsp/212xx/include/def21262.h ../../../program\ files/analog\ devices/visualdsp/212xx/include/def21266.h 
-	$(VDSP)/easm21k.exe -proc ADSP-21262  -o .\Debug\loader.doj -g .\loader.asm -MM
+./Debug/loader.doj :./loader.asm $(ADI_DSP_MAKE)/212xx/include/def21262.h $(ADI_DSP_MAKE)/212xx/include/def21266.h $(ADI_DSP_MAKE)/212xx/include/def2126x.h 
+	$(VDSP)/easm21k.exe .\loader.asm -proc ADSP-21262 -g -o .\Debug\loader.doj -MM
 
-./debug/main.doj :./main.asm ../../../program\ files/analog\ devices/visualdsp/212xx/include/def21262.h ../../../program\ files/analog\ devices/visualdsp/212xx/include/def21266.h memory.h 
-	$(VDSP)/easm21k.exe -proc ADSP-21262  -o .\Debug\main.doj -g .\main.asm -MM
+./Debug/main.doj :./main.asm $(ADI_DSP_MAKE)/212xx/include/def21262.h $(ADI_DSP_MAKE)/212xx/include/def21266.h $(ADI_DSP_MAKE)/212xx/include/def2126x.h memory.h 
+	$(VDSP)/easm21k.exe .\main.asm -proc ADSP-21262 -g -o .\Debug\main.doj -MM
 
-./debug/samples.doj :./memory.h ./samples.asm ../../../program\ files/analog\ devices/visualdsp/212xx/include/def21262.h ../../../program\ files/analog\ devices/visualdsp/212xx/include/def21266.h 
-	$(VDSP)/easm21k.exe -proc ADSP-21262  -o .\Debug\samples.doj -g .\samples.asm -MM
+./Debug/samples.doj :./memory.h ./samples.asm $(ADI_DSP_MAKE)/212xx/include/def21262.h $(ADI_DSP_MAKE)/212xx/include/def21266.h $(ADI_DSP_MAKE)/212xx/include/def2126x.h 
+	$(VDSP)/easm21k.exe .\samples.asm -proc ADSP-21262 -g -o .\Debug\samples.doj -MM
 
-./debug/dspboard.dxe :./dspboard.ldf ../../../program\ files/analog\ devices/visualdsp/212xx/lib/libc26x.dlb ../../../program\ files/analog\ devices/visualdsp/212xx/lib/libdsp26x.dlb ../../../program\ files/analog\ devices/visualdsp/212xx/lib/libio.dlb ./debug/events.doj ./debug/loader.doj ./debug/main.doj ./debug/samples.doj 
-	$(VDSP)/cc21k.exe .\Debug\events.doj .\Debug\loader.doj .\Debug\main.doj .\Debug\samples.doj -T .\DSPboard.ldf -proc ADSP-21262 -L .\Debug -flags-link -od,.\Debug -o .\Debug\DSPboard.dxe -map .\Debug\DSPboard.map -flags-link -MM
+./Debug/DSPboard.dxe :./DSPboard.ldf ./Debug/events.doj ./Debug/loader.doj ./Debug/main.doj ./Debug/samples.doj 
+	$(VDSP)/cc21k.exe .\Debug\events.doj .\Debug\loader.doj .\Debug\main.doj .\Debug\samples.doj -T .\DSPboard.ldf -map .\Debug\DSPboard.map.xml -L .\Debug -flags-link -od,.\Debug -o .\Debug\DSPboard.dxe -proc ADSP-21262 -flags-link -MM
 
 endif
 
-ifeq ($(MAKECMDGOALS),Debug_clean)
+ifeq ($(MAKECMDGOALS),DSPboard_Debug_clean)
 
-Debug_clean:
+DSPboard_Debug_clean:
 	$(RM) ".\Debug\events.doj"
 	$(RM) ".\Debug\loader.doj"
 	$(RM) ".\Debug\main.doj"
