@@ -91,3 +91,5 @@ We can write matlab code to test our thresholding, etc. esp. as a function of va
 
 After fixing errors in the DSPboard's pin assignment of fiberin and fiberout (we really need to make those consistent), we get 32 kHz interrupts triggered, and 
 What's neat is that the interrupts stop when I unplug it :)
+
+14 June 2004 : New DSPboards with Spartan-3s appear to work. Started documenting, but was too stressed; switching to acqboard work for the rest of the week. 

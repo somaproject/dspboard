@@ -1,4 +1,4 @@
-    *  Overview
+    * Overview
     * Design goals
     * Data Bus and Event Bus interfaces ,fiber interface
           o Event protocol description
@@ -21,4 +21,8 @@
           o DSP Software
                 + Loading / booting
           o
+
+How to do the doc thing... Well, first we describe the "modules", and show the "overview", and give a general idea of what the hell is going on. 
+
+There's an FPGA.docbook file that will reference all necessary VHDL and submodule code. 
 

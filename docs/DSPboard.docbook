@@ -81,7 +81,39 @@
 	<title>Interfaces</title>
 	<para> Data Bus </para>
 	<para> Event Bus </para>
-	
+	<section>
+	  <title> Signals </title>
+	  <para> The following single-wire signals allow the FPGA to
+	  signal the DSP about various sytem events: </para>
+	  <signaldef set="FPGA/DSP signals">
+	    <signal> 
+	      <name> SAMPLE </name>
+	      <info> A rising edge on this line tells the DSP that a
+	      new set of input samples is available from the
+	      FPGA. Occurs roughly every 31.25 microseconds. </info>
+	    </signal>
+	    <signal>
+	      <name> EVENTS </name>
+	      <info> A high indicates there are events waiting to be
+	      read in the FPGA's event bus queue. A successful
+	      read-out of all pending events by the DSP causes this
+	      line to go low. </info>
+	    </signal>
+	    <signal> 
+	      <name> TINC </name>
+	      <info> Timer increment: a rising edge on this line
+	      signals the beginning of a new timestamp, every 100
+	      microseconds. </info>
+	    </signal>
+	    <signal>
+	      <name> TCLR </name>
+	      <info> Clear timestamp counter. A high on this line
+	      coupled with a rising edge on TINC causes the timestamp
+	      counter to be reset to zero. </info>
+	    </signal>
+	  </signaldef>
+	</section>
+	  
 	<section> 
 	  <title>FPGA / DSP Interface </title>
 	  <para> The ADSP supports several external serial interfaces,
@@ -94,7 +126,10 @@
 	  (DMA). </para>
 
 	  <para> The external memory space is partitioned into five
-	  application-specific 12-bit regions: </para>
+	  application-specific 12-bit regions. Several of the regions
+	  support a "transaction complete" address that, when written
+	  or read, signals the FPGA that the necessary writes or reads
+	  for that particular piece of data are complete.  </para>
 
 	  <itemizedlist>
 	    <listitem>
@@ -103,28 +138,15 @@
 	      <para>This DSP-read-only region contains new sample data
 	      and status information.</para>
 	      <memmap title="Status and Data Samples">
-		<addr a="0x0000">
-		  <para>Acquisition Board status</para>
-		  <itemizedlist>
-		    
-		    <listitem><para><emphasis>Bit 0</emphasis>:
-		    STATUS, the status of the optical connection (1=
-		    link up)</para></listitem>
-		    
-		    <listitem><para><emphasis>Bit 1</emphasis>:
-		    TXERROR, fiber command transmit
-		    error</para></listitem>
-		    
-		    <listitem><para><emphasis>Bits 4:7</emphasis>:
-		    CMDID, the most recent command ID
-		    </para></listitem>
-		    
-		    <listitem><para><emphasis>Bits 8:11</emphasis>:
-		    CMDSTS, the most recent command status
-		    </para></listitem>
-		    
-		  </itemizedlist>
-		</addr>
+		<addr a="0x0000"> Acquisition Board Status </addr>
+		<addr a="0x0000" b="0:0"> STATUS, the status of the
+		optical connection (1= link up)</addr>
+		<addr a="0x0000" b="1:1"> TXERROR, fiber command
+		transmit error. </addr>
+		<addr a="0x0000" b="4:7"> CMDID, the most recent
+		command ID</addr>
+		<addr a="0x0000" b="8:11"> CMDSTS, the most recent
+		command status</addr>
 		<addr a="0x0001">Sample from channel 1</addr>
 		<addr a="0x0002">Sample from channel 2</addr>
 		<addr a="0x0003">Sample from channel 3</addr>
@@ -138,10 +160,70 @@
 	      </memmap>
 	    </listitem>
 
-	  </itemizedlist>
-	</section>
-      </section>
-    </section>
-  </section>
-</article>
+	    <listitem> 
+	      <para> 0x2nnn: Output data buffer</para>
+	      <para> This region allows for the full write of a data
+	      frame destined for the Data Bus, with a maximum length
+	      of 2048 bytes (1024 words).</para>
+	      <memmap title="Output Data Buffer">
+		<addr a="0x2000" b="7:0"> Data source ID.</addr>
+		<addr a="0x2001" b="9:0"> Total length of frame N, in
+		words.</addr>
+		<addr a="0x2002 to (0x2000 + 2N)"> Frame data for an
+		N-word frame.</addr>
+	      </memmap>
+	    </listitem>
 
+	    <listitem>
+	      <para> 0x4nnn: Event Output </para>
+	      <para> A write of an Event Bus event to this region
+	      queues it in the FPGA for transmission on the event
+	      bus.</para> 
+	      <memmap title="Event Output">
+		<addr a="0x4000"> Event target addresses A15:A0 </addr>
+		<addr a="0x4001"> Event target addresses A31:A16 </addr>
+		<addr a="0x4002"> Event target addresses A47:A32 </addr>
+		<addr a="0x4003"> Event command word </addr>
+		<addr a="0x4004 to 0x4008"> Event data words, in increasing
+		order </addr>
+		<addr a="0x4009"> Event complete. Write this address
+		to signal the completion of an Event write</addr>
+		
+
+	      </memmap>
+	    </listitem>
+
+	    <listitem>
+	      <para> 0x6nnn : Event Input </para>
+	      <para> The DSP can read new events from the Event Bus
+	      here. </para>
+	      <memmap title = "Event Input">
+		<addr a="0x6000"> Event command word </addr>
+		<addr a="0x6001 to 0x6005"> Event data words, in
+		increasing order</addr>
+		<addr a="0x6006"> A write here signals the FPGA that
+		the DSP has finished reading this event. </addr>
+	      </memmap>
+	    </listitem>
+
+	    <listitem>
+	      <para> 0x8nnn: Acqboard interface </para>
+	      <para> This region allows us to send commands to the
+	      acquisition board. </para>
+	      <memmap title="Acqboard Commands">
+		<addr a="0x8000" b="3:0"> Acqboard Command </addr>
+		<addr a="0x8001" b="2:0"> CMDID </addr>
+		<addr a="0x8002" b="7:0"> Data Byte 0 </addr>
+		<addr a="0x8002" b="15:8"> Data byte 1 </addr>
+		<addr a="0x8003" b="7:0"> Data Byte 2 </addr>
+		<addr a="0x8003" b="15:8"> Data byte 3 </addr>
+		<addr a="0x8004"> A write here signals the FPGA that
+		the buffer contains a new valid Acqboard command that
+		is to be sent to the Acqboard.</addr>
+	      </memmap>
+	    </listitem>
+
+
+
+</itemizedlist> </section> </section>
+	      </section> </section> </article>
