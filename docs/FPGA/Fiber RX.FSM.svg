@@ -9,12 +9,12 @@
    width="612.00000pt"
    height="792.00000pt"
    sodipodi:docname="Fiber RX.FSM.svg"
+   sodipodi:docbase="/home/jonas/soma/DSPboard/docs/FPGA"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xml="http://www.w3.org/XML/1998/namespace"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   sodipodi:docbase="/home/jonas/soma/DSPboard/docs/FPGA">
+   xmlns:xlink="http://www.w3.org/1999/xlink">
   <defs
      id="defs3">
     <marker
@@ -354,4 +354,21 @@
        id="tspan1677"
        x="178.72278"
        y="114.17072">or DSP_ERR = 1</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:normal;font-size:9.0000000;font-stretch:normal;font-variant:normal;text-anchor:middle;writing-mode:lr;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;"
+     x="133.58907"
+     y="174.81719"
+     id="text1041"
+     sodipodi:linespacing="100%"><tspan
+       id="tspan1042">STATUS = 1</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:9.0000000;stroke-width:1.2500000;font-family:Bitstream Vera Sans;text-anchor:middle;"
+     x="133.58907"
+     y="174.81718"
+     id="text1044"
+     sodipodi:linespacing="100%"
+     transform="translate(143.7500,0.000000)"><tspan
+       id="tspan1045">STATUS = 0</tspan></text>
 </svg>
