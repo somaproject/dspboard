@@ -22,8 +22,8 @@ entity EventMux is
            DIA : out std_logic_vector(15 downto 0);
            DIB : out std_logic_vector(15 downto 0);
            EDATA : inout std_logic_vector(15 downto 0);
-           EOB : out std_logic;
-           EOA : out std_logic;
+           EB : out std_logic;
+           EA : out std_logic;
            EVENT : in std_logic;
            ECE : in std_logic;
            CEA : out std_logic;
@@ -49,8 +49,8 @@ begin
 	EADDR <= ao when ts = '0' else "ZZZZZZZZ";
 	EDATA <= do when ts = '0' else "ZZZZZZZZZZZZZZZZ";
 	
-	EOA <= not EVENT;
-	EOB <= not EVENT;
+	EA <= not EVENT;
+	EB <= not EVENT;
 	
 	CEA <= '1' when (esel = '1' and ECE = '0') else '0';
 	CEB <= '1' when (esel = '1' and ECE = '0') else '0';

@@ -19,7 +19,7 @@ entity DSPBoard is
            RDA : in std_logic;
            RESETA : out std_logic;
            SAMPLESA : out std_logic;
-           NEWEVENTSA : out std_logic;
+           EVENTSA : out std_logic;
            TINCA : out std_logic;
            TCLRA : out std_logic;
            DATAB : inout std_logic_vector(15 downto 0);
@@ -28,7 +28,7 @@ entity DSPBoard is
            RDB : in std_logic;
            RESETB : out std_logic;
            SAMPLESB : out std_logic;
-           NEWEVENTSB : out std_logic;
+           EVENTSB : out std_logic;
            TINCB : out std_logic;
            TCLRB : out std_logic;
            EVENT : in std_logic;
@@ -63,21 +63,24 @@ architecture Behavioral of DSPBoard is
 
 	signal douta, addroa : std_logic_vector(15 downto 0) := (others => '0');
 	signal eventdina : std_logic_vector(15 downto 0) := (others => '0');
-	signal rdina : std_logic_vector(7 downto 0) := (others => '0');
+	signal rdina : std_logic_vector(15 downto 0) := (others => '0');
 	
 	signal rdouta : std_logic_vector(7 downto 0) := (others => '0');
 	signal raina : std_logic_vector(9 downto 0) := (others => '0'); 
 
-	signal dspreseta, eventsa, rwea : std_logic := '0';
+	signal dspreseta, rwea : std_logic := '0';
 
 	signal edia, edoa : std_logic_vector(15 downto 0) := (others => '0');
 	signal eaia, eaoa : std_logic_vector(7 downto 0) := (others => '0');
-	signal eoa, ecea, eoea : std_logic := '0';
+	signal ecea, eoea, ea : std_logic := '0';
 
 	signal dina : std_logic_vector(15 downto 0) := (others => '0');
 	signal nexta, acka : std_logic := '0';
 
+   signal ebufsela, neweventsa : std_logic := '0';
 	
+	signal raouta : std_logic_vector(10 downto 0) := (others => '0'); 
+		
 	
 	-- DSP B signals
 	signal sample1b, sample2b, sample3b, sample4b, samplecb :
@@ -91,15 +94,17 @@ architecture Behavioral of DSPBoard is
 	signal rdinb : std_logic_vector(15 downto 0) := (others => '0');
 	signal rdoutb : std_logic_vector(7 downto 0) := (others => '0');
 	signal rainb : std_logic_vector(9 downto 0) := (others => '0'); 
-	signal dspresetb, eventsb, rweb : std_logic := '0';
+	signal dspresetb,  rweb : std_logic := '0';
 
 	signal edib, edob : std_logic_vector(15 downto 0) := (others => '0');
 	signal eaib, eaob : std_logic_vector(7 downto 0) := (others => '0');
-	signal eob, eceb , eoeb : std_logic := '0';
+	signal eceb , eoeb, eb : std_logic := '0';
 
 	signal dinb : std_logic_vector(15 downto 0) := (others => '0');
 	signal nextb, ackb : std_logic := '0';
 
+   signal ebufselb, neweventsb : std_logic := '0';
+	signal raoutb : std_logic_vector(10 downto 0) := (others => '0'); 
 
 
 	-- component declarations
@@ -163,8 +168,8 @@ architecture Behavioral of DSPBoard is
 	           DIA : out std_logic_vector(15 downto 0);
 	           DIB : out std_logic_vector(15 downto 0);
 	           EDATA : inout std_logic_vector(15 downto 0);
-	           EOB : out std_logic;
-	           EOA : out std_logic;
+	           EB : out std_logic;
+	           EA : out std_logic;
 	           EVENT : in std_logic;
 	           ECE : in std_logic;
 	           CEA : out std_logic;
@@ -188,6 +193,7 @@ architecture Behavioral of DSPBoard is
 	           DWE : out std_logic;
 	           EWE : out std_logic;
 	           CWE : out std_logic;
+				  EBUFSEL : out std_logic; 
 	           STATUS : in std_logic;
 	           CMDID : in std_logic_vector(2 downto 0);
 	           CMDSTS : in std_logic_vector(3 downto 0);
@@ -234,7 +240,7 @@ architecture Behavioral of DSPBoard is
 	           RESET : in std_logic;
 	           DIN : in std_logic_vector(15 downto 0);
 	           DOUT : out std_logic_vector(15 downto 0);
-	           ADDR : in std_logic_vector(15 downto 0);
+	           ADDR : in std_logic_vector(3 downto 0);
 	           WR : in std_logic;
 				  RD : in std_logic; 
 				  MODE : out std_logic;
@@ -248,11 +254,21 @@ architecture Behavioral of DSPBoard is
 	           EEVENT : in std_logic;
 	           ECE : in std_logic;
 	           EDATAI : in std_logic_vector(15 downto 0);
-	           EADDRI : in std_logic_vector(7 downto 0));
+	           EADDRI : in std_logic_vector(7 downto 0);
+			  	  BUFWR : in std_logic;
+			  	  NEWEVENTS : out std_logic);
 	end component;
 
 
 begin
+	-- clocks
+	clk <= CLKIN; 
+	sysclk <= SYSCLKIN;
+	
+	-- signal aggregation
+	raouta <= addroa(2 downto 0) & douta(15 downto 8);
+	raoutb <= addrob(2 downto 0) & doutb(15 downto 8);
+
 	FiberRX_inst: FiberRX port map (
 		CLK => clk,
 		RESET => RESET,
@@ -300,14 +316,14 @@ begin
 		SYSCLK => sysclk,
 		DIA => edia,
 		AIA => eaia,
-		EOA => eoa,
+		EA => ea,
 		DOA => edoa,
 		AOA => eaoa,
 		CEA => ecea,
 		OEA => eoea,
 		DIB => edib,
 		AIB => eaib,
-		EOB => eob,
+		EB => eb,
 		DOB => edob,
 		AOB => eaob,
 		CEB => eceb,
@@ -332,6 +348,7 @@ begin
 		DWE => dwea,
 		EWE => ewea,
 		CWE => cwea,
+		EBUFSEL => ebufsela, 
 		STATUS => status,
 		CMDID => cmdida,
 		CMDSTS => cmdsts,
@@ -363,7 +380,7 @@ begin
 		NEXTOUT => nexta,
 		BUFACKOUT => acka,
 		RAIN => raina, 
-		RAOUT => addroa(2 downto 0) & douta(15 downto 8), 
+		RAOUT => raouta, 
 		RDOUT => rdouta, 
 		RDIN => rdina,
 		RWE => rwea,
@@ -371,13 +388,13 @@ begin
 		DSPRESET => dspreseta); 
 
 
-	eventsa : events port map (
+	eventsa_inst : events port map (
 		CLK => clk,
 		SYSCLK => sysclk,
 		RESET => RESET,
 		DIN => douta,
 		DOUT => eventdina,
-		ADDR => addroa,
+		ADDR => addroa(3 downto 0),
 		WR => ewea,
 		RD => deltarda,
 		MODE => modea, 
@@ -386,12 +403,14 @@ begin
 		RDIN => rdina,
 		RWE => rwea,
 		EDATAO => edoa,
-		EADDRO => edoa,
+		EADDRO => eaoa,
 		EOE => eoea, 
 		EEVENT => ea,
 		ECE => ecea,
 		EDATAI => edia,
-		EADDRI => eaia); 
+		EADDRI => eaia,
+		BUFWR => ebufsela,
+		NEWEVENTS => neweventsa); 
 
 
 	dspiob : dspio port map (
@@ -409,6 +428,7 @@ begin
 		DWE => dweb,
 		EWE => eweb,
 		CWE => cweb,
+		EBUFSEL => ebufselb,
 		STATUS => status,
 		CMDID => cmdidb,
 		CMDSTS => cmdsts,
@@ -440,7 +460,7 @@ begin
 		NEXTOUT => nextb,
 		BUFACKOUT => ackb,
 		RAIN => rainb, 
-		RAOUT => addrob(2 downto 0) & doutb(15 downto 8), 
+		RAOUT => raoutb, 
 		RDOUT => rdoutb, 
 		RDIN => rdinb,
 		RWE => rweb,
@@ -448,13 +468,13 @@ begin
 		DSPRESET => dspresetb); 
 
 
-	eventsb : events port map (
+	eventsb_inst : events port map (
 		CLK => clk,
 		SYSCLK => sysclk,
 		RESET => RESET,
-		DIN => doutob,
+		DIN => doutb,
 		DOUT => eventdinb,
-		ADDR => addrb,
+		ADDR => addrob(3 downto 0),
 		WR => eweb,
 		RD => deltardb,
 		MODE => modeb, 
@@ -463,12 +483,14 @@ begin
 		RDIN => rdinb,
 		RWE => rweb,
 		EDATAO => edob,
-		EADDRO => edob,
+		EADDRO => eaob,
 		EOE => eoeb, 
 		EEVENT => eb,
 		ECE => eceb,
 		EDATAI => edib,
-		EADDRI => eaib); 
+		EADDRI => eaib,
+		BUFWR => ebufselb,
+		NEWEVENTS => neweventsb); 
 
 
 end Behavioral;

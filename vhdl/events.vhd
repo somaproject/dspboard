@@ -14,7 +14,7 @@ entity events is
            RESET : in std_logic;
            DIN : in std_logic_vector(15 downto 0);
            DOUT : out std_logic_vector(15 downto 0);
-           ADDR : in std_logic_vector(15 downto 0);
+           ADDR : in std_logic_vector(3 downto 0);
            WR : in std_logic;
 			  RD : in std_logic; 
 			  MODE : out std_logic;
@@ -28,7 +28,9 @@ entity events is
            EEVENT : in std_logic;
            ECE : in std_logic;
            EDATAI : in std_logic_vector(15 downto 0);
-           EADDRI : in std_logic_vector(7 downto 0));
+           EADDRI : in std_logic_vector(7 downto 0);
+			  BUFWR : in std_logic;
+			  NEWEVENTS : out std_logic);
 end events;
 
 architecture Behavioral of events is
@@ -169,11 +171,11 @@ begin
 
 
 	-- strictly combinational
-	bdspa(6 downto 4) <= dspbpw when addr(15 downto 12) = X"4" else dspbpr; 
-	bdspa(7) <= '1' when addr(15 downto 12) = X"4" else '0';
+	bdspa(6 downto 4) <= dspbpw when BUFWR = '1' else dspbpr; 
+	bdspa(7) <= '1' when BUFWR = '1' else '0';
 	bdspa(3 downto 0) <= addr(3 downto 0); 
 
-	wea <= '1' when ((WR = '1')  and  (addr(15 downto 12) = X"4")) else '0';
+	wea <= '1' when ((WR = '1')  and  BUFWR = '1') else '0';
 
 	addrb(6 downto 4) <= addrbw  when addrsel = '1' else addrbr; 
 
@@ -188,10 +190,10 @@ begin
 				cs <= ns; 
 
 				-- dsp side counters
-				if RD = '1' and ADDR = X"6006" then
+				if RD = '1' and ADDR = X"6" then
 					dspbpr <= dspbpr + 1; 
 				end if; 
-				if WR = '1' and ADDR = X"4008" then
+				if WR = '1' and ADDR = X"8" then
 					dspbpw <= dspbpw + 1; 
 				end if;
 				
@@ -224,6 +226,12 @@ begin
 				RDIN <= edout; 
 				RWE <= rainen; 
 				  
+				if addrbw =  dspbpw then
+					NEWEVENTS <= '0';
+				else
+					NEWEVENTS <= '1';
+				end if; 
+
 
 
 				

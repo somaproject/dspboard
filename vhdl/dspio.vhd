@@ -37,6 +37,7 @@ entity dspio is
 			  SAMPLES : out std_logic;
 			  NEWEVENTS : in std_logic;
 			  EVENTS : out std_logic; 
+			  EBUFSEL : out std_logic; 
 			  TIMEINC : in std_logic;
 			  TINC : out std_logic;
 			  TIMECLR : in std_logic;
@@ -110,6 +111,12 @@ begin
 			
 			addrl <= ADDR; 
 			ADDROUT <= addrl; 
+
+			if addrl (15 downto 12) = X"4" then
+				EBUFSEL <= '1';
+			else
+				EBUFSEL <= '0';
+			end if; 
 
 			RESET <= DSPRESET;
 			SAMPLES <= NEWSAMPLE;

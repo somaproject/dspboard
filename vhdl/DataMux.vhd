@@ -30,7 +30,7 @@ architecture Behavioral of DataMux is
 	end component;   
 
 begin
-	din <= dina when bufsel = '0' else dinb; 
+	din <= DINA when bufsel = '0' else DINB; 
 
 	ack <= acka when bufsel = '0' else ackb; 
 

@@ -125,6 +125,8 @@ FSM notes:
     Wow, this FSM is longer than I thought it would be. ouch. 
 
 
+note that the BUFSEL line is just a decoding of the higher-order bits of the address, but in keeping with our plan to do all decoding in DSPIO, we take in this line. note BUFWR = 1 => higher chunk of address space in the buffer =>
+
     
 
 FPGA must be able to decode events initially, for booting, etc. 
