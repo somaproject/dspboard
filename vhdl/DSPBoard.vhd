@@ -38,7 +38,11 @@ entity DSPBoard is
            SYSDATA : inout std_logic_vector(15 downto 0);
            DATAEN : in std_logic;
            DATAACK : inout std_logic;
-           RESET : in std_logic);
+           RESET : in std_logic;
+			  LEDPOWER: out std_logic;
+			  LEDDSPA : out std_logic;
+			  LEDDSPB : out std_logic;
+			  LEDEVENT : out std_logic);
 end DSPBoard;
 
 architecture Behavioral of DSPBoard is
@@ -514,5 +518,29 @@ begin
 		MADDR => maddrb,
 		MODERST => moderstb); 
 
+
+	-- simple power LED:
+
+	LEDDSPA <= '1';
+	LEDDSPB <= '1';
+	LEDEVENT <= '1'; 
+	process(clk) is
+		variable cnt : integer range 0 to 20000000 := 0;
+	begin
+		if rising_edge(clk) then
+			if cnt = 20000000 then 
+				cnt := 0;
+			else
+				cnt := cnt + 1; 
+			end if; 
+
+			if cnt < 1000000 then
+				LEDPOWER <= '1';
+			else
+				LEDPOWER <= '0';
+			end if; 
+
+		end if; 
+	end process; 
 
 end Behavioral;

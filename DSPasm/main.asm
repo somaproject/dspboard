@@ -17,25 +17,25 @@
 #define SYSIZE 256
 #define COXSIZE 1024
 #define COHSIZE 256
-#define COYSIZE 256
+#define COYSIZE 1024
 	
 .SECTION/PM seg_pmda;
 
 	// FILTERS
-	.VAR 	SH12[2*SHSIZE]; 		// interleaved filter coeff for channels 1 & 2
-	.VAR 	SH34[2*SHSIZE]; 		// interleaved filter coeff for channels 3 & 4
-	.VAR 	COH[COHSIZE];	  	 	// filter coefficients for continuous channel
+	.VAR 	SH12[2*SHSIZE]; // interleaved filter coeff for channels 1 & 2
+	.VAR 	SH34[2*SHSIZE]; // interleaved filter coeff for channels 3 & 4
+	.VAR 	COH[COHSIZE];	// filter coefficients for continuous channel
 
-	.VAR 	SY1[SYSIZE];   			// spike channel 1 output circular buffer
-	.VAR 	SY2[SYSIZE];   			// spike channel 2 output circular buffer   
-	.VAR 	SY3[SYSIZE];   			// spike channel 3 output circular buffer
-	.VAR 	SY4[SYSIZE];   			// spike channel 4 output circular buffer
-	.VAR 	COY[COYSIZE];			// continuous channel output circular buffer
+	.VAR 	SY1[SYSIZE];   	// spike channel 1 output circular buffer
+	.VAR 	SY2[SYSIZE];   	// spike channel 2 output circular buffer   
+	.VAR 	SY3[SYSIZE];   	// spike channel 3 output circular buffer
+	.VAR 	SY4[SYSIZE];   	// spike channel 4 output circular buffer
+	.VAR 	COY[COYSIZE];	// continuous channel output circular buffer
   	
 	
 .SECTION/DM seg_dm32da;
 	.VAR 	TIMESTAMP;  	// current 32-bit timestamp
-	.VAR 	MYID;  	// tetrode ID, read from DSP on start-up
+	.VAR 	MYID;  			// tetrode ID, read from DSP on start-up
 	
 	// spike-specific	
 	.VAR 	SPIKELEN; 		// how many samples in a spike
@@ -56,20 +56,26 @@
 	.VAR    SHLEN[4]; 
 	
 	// continuous-specific variables
-	.VAR 	CODOWNSAMPLE;
+	.VAR 	CODOWNSAMPLE;   // downsample ratio
 	.VAR 	COX[COXSIZE]; 	// direct circular buffer for continuous channel
-	.VAR 	COGAIN;
-	.VAR 	COFID;
-	.VAR 	COHFID; 
-	.VAR    COHLEN; 
+	.VAR 	COGAIN;			// GAIN of continuous channel
+	.VAR 	COCHAN;			// which channel is this continuous channel sampling
+	.VAR 	COFID;			// ID of continuous FIR filter
+	.VAR 	COHFID; 		// ID of continuous hardware filter
+	.VAR    COHLEN;			// length of continuous filter
+	.VAR    CONTLEN; 		// how many downsampled-samples of eeg we output; 
+ 	.VAR 	CONTCNT; 		// countdown until we send a packet; 
 	 	
-
+	.VAR 	PENDINGOUTSPIKE;	// is there a pending out spike packet? 
+	.VAR 	PENDINGOUTCONT; 	// is there a pending out continuous packet
 .SECTION/DM seg_dm16da; 
 #define OUTSPIKELEN 300
 
 	.VAR	OUTSPIKE[OUTSPIKELEN]; // space to assemble the output spike; 
 	.VAR 	NEWSAMPLES[5]; 	// new input samples
-	
+#define OUTCONTLEN 200
+	.VAR 	OUTCONT[OUTCONTLEN]; // output space for continuous
+		
 	
 
 .SECTION/PM seg_pmco; 
@@ -155,7 +161,13 @@ sample_loop:
 	 
 	jump sample_loop; 
 	
+
+EVENT_LOOP:
+// EVENT PROCESSING LOOP:
+	call read_event; 	
 	
+	r4 = FEXT r0 by 8:8;	// get the command byte :)
+ 	
 	
 samples:
 // Process inbound samples
@@ -163,12 +175,31 @@ samples:
 // 
 // update NEWSAMPLES[5]
 
-// check if there was a previously-complete spike, and
-// send it.
+	r0 = dm(PENDINGOUTSPIKE);
+	r0 = r0;  
+	if GT jump samples_dmaspike; 
+	r0 = dm(PENDINGOUTCONT);
+	r0 = r0;  
+	if GT jump samples_dmacont; 
+	jump samples_convertnew; 
+	
+
+samples_dmaspike:
+ 	// dma out the spike
+samples_dmacont:
+	// dma out the continuous. We rely on the fact that
+	// we'll only be sending a continuous frame every
+	// CONTLEN * CONTDOWNSAMPLE (say, 64x4) samples, and at most
+	// we're sending a spike packet every NOTRIGERLEN samples. 
+	// this guarantees a maximum wait for the cont packet of 1
+	// sample. 
+	
+	
+
 
 // convert new samples to FP and save in circular buffers
 	// we store the new sample at location n+1; 
-
+samples_convertnew: 
 	i0 = NEWSAMPLES; 
 	m0 = 1; 
 	r1 = -15; 
@@ -356,10 +387,41 @@ samples_send_spike:
 	r0 = dm(SPIKELEN);
 	
 	call create_spike_packet;  
+
+	r0 = 1; 
+	dm(PENDINGOUTSPIKE) = r0; 
+	
 	
 samples_threshold_done:
-  	
-  	
+		
+check_continuous:
+	r0 = dm(CONTCNT); 
+	r1 = r0 - 1;
+	dm(CONTCNT) = r1; 
+	if GT jump continuous_done; 
+	
+	r0 = dm(CONTLEN); 	// update countdown
+	dm(CONTCNT) = r0; 
+	r1 = dm(CODOWNSAMPLE); // get downsample factor
+	
+	m8 = m11; 
+	b8 = b11; 
+	i8 = i11; 
+	l8 = l11; 
+	
+	
+	call create_continuous_packet; 
+	r0 = 1; 
+	dm(PENDINGOUTCONT) = r0; 
+	
+
+	
+continuous_done:
+ 
+
+
+
+ 	
   	
   	
 	
@@ -627,6 +689,105 @@ create_spike_packet_channel_data:
 	 
 	rts;
 	
+/*---------------------------------------------------------------
+  create_continuous_packet : create packet of downsampled
+  continuous data; 
+
+  m8/i8/l8/b8 : pointer to continuous output circular buffer,
+  				pointing to empty sample AFTER x[n]
+  r0 = number of samples; 
+  r1 = negative of downsample ratio; 
+  
+*/
+
+create_continuous_packet:
+	bit set mode1 CBUFEN; 
+	i0 = OUTCONT; // set up base
+	m0 = 1; 
+	b0 = OUTCONT; 
+	
+// create length & ID word
+	// each packet has 7 words of header
+	r3 = 4; 
+	r3 = r0 + r3; 	
+	
+	
+	r2 = dm(MYID);	// MYID is in lower 8 bits
+	r2 = r2 OR FDEP R3 BY 8:8;  // R3 in 8 MSBs!	
+	
+	dm(i0, m0) = r2 ; // store LENGTH && MYID
+	
+
+// timestamp
+	r2 = dm(TIMESTAMP);
+	r3 = FEXT r2 by 0:16; 
+	dm(i0, m0) = r3;
+	r3 = FEXT r2 by 16:16;
+	dm(i0, m0) = r3;  
+
+// sample and gain
+	r3 = dm(COGAIN); // channel gain
+	r2 = dm(COCHAN); // channel is lower 8 bits
+	r2 = r2 OR FDEP r3 BY 8:8; 
+	dm(i0, m0) = r2; 
+	
+	r2 = dm(COFID); 
+	dm(i0, m0) = r2; 
+	
+	r2 = dm(COHFID); 
+	dm(i0, m0) = r2; 
+	
+	// r1 is downsample factor
+	r2 = r0; 	// number of samples
+	r2 = r2 OR FDEP r1 BY 8:8; 
+	dm(i0, m0) = r2; 
+	
+	// we set m8 so we can go back to the most recently written sample:
+	m8 = -1;
+	
+	r2 = pm(i8, m8); 	// dummy read to position pointer back to most recent
+						// sample.
+	
+	r1 = - r1; 			// the downsample factor == the decrement
+	m8 = r1; 			// through the buffer.
+	
+	
+	b1 = b0; 
+	m1 = -1; 
+	l1 = OUTCONTLEN;
+	
+	// i0 currently points to next empty spot to be filled
+	// our index starts out pointing r0 words in the future, -1
+	r1 = i0; 
+	r1 = r1 - 1;  
+	r1 = r1 + r0; // r1 = current outbuf point + num samples
+	i1 = r1; 
+		
+	r4 = 15;  // conversion factor
+	
+	f3 = pm(i8, m8); // start the pipeline
+	lcntr = r0, do cont_write_data until lce; 
+		// we simultaneously get the next sample AND convert
+		// the current sample
+		r2 = FIX f3 by r4, f3 = pm(i8, m8);   
+	cont_write_data: dm(i1, m1) = r2;
+	// now, we need to update i1; 
+	
+	r2 = i0; 
+	r2 = r2 + r0;
+	i0 = r2; // update pointer to point to end of frame; 
+	
+	rts;
+	
+/* -------------------------------------------------------
+	dma_read : reads in r0 32-bit packed words from external
+			   address r1 to location pointed to by r2; 
+			   
+----------------------------------------------------------*/ 
+
+
+	
+	 
 	
 setup_data:
     // test code to setup vectors for testing things. 
@@ -737,3 +898,16 @@ sd_newsamples:
     
     
     rts; 
+    
+    
+/*---------------------------------------------------
+  readevent:
+     returns a read-event from FPGA:
+     r0 = data word 0 | command byte | sender byte
+     r1 = data word 2 | data word 1
+     r2 = data word 4 | data word 3;
+---------------------------------------------------*/
+
+readevent:
+
+ 

@@ -157,7 +157,9 @@ EVENT:
 		       dw0[0] = 1 == reset the timer
 		       dw2  == high word of current time
 		       dw3  == low word of current time
+   CMD = 0x05 sender = any : memory write-in for kernel loader
 
+   CMD = 0x10 - CMD = 0x20 : DSP-config events, defined in DSPasm.txt
 
 
 So, for setting boot mode, we need to actually "set boot mode" and then wait for the DSP to clear it. We can't just have the DSP send an event, because the boot mode dictates that the FPGA still thinks the parallel port is in 8-bit mode.
@@ -170,12 +172,12 @@ However, if the FPGA is in 8 bit mode (expecting DATA(15:8) to be driven) and th
 ------------------------------------------------------------------------------
 DEVICE ID ASSIGNMENT
 ------------------------------------------------------------------------------
-Upon bootup, each device on the bus will need to learn its event bus ID. This is done by putting the device's ID on the event bus and triggering both EVENT and ECE. DSP boards get two IDs, the one assigned and the one after them. For example:
+Upon bootup, each device on the bus will need to learn its event bus ID. This is done by putting the device's ID on the event bus data lines (7:0) and triggering both EVENT and ECE. DSP boards get two IDs, the one assigned and the one after them. For example:
 
 DSPboard is given ID 30
 then Tetrode A is 30, Tetrode B is 31
 
-   
+
 
 ------------------------------------------------------------------------------
 FPGA main data FIFO
@@ -371,44 +373,3 @@ some way of interpreting the writes to the cmd word as, well, commands
 
 
 
-----------------------------------------------------------------------------
-ADSP EXECUTION CYCLE
-----------------------------------------------------------------------------
-
-The ADSP normally runs a cycle where it checks for new events, processses them, and then writes out events. 
-
-We can use a circular buffer for pending events. the Pcode is:
-
-if eoutHead != eoutTail
-   send all events
-end if
-
-if EventWaitingFlag = '1' then
-   read in event
-   process event 
-     change gain, modify filter, whatever
-      possibly add output event
-end if
-
-INT 0 : 
-   triggers increment of sample time counter
-   this can be cleared by the appropriate event
-
-INT 1:
-   new sample loop
-   read in new samples
-   check to see if there is pending output data
-
-   process the samples, perform filtering, yadda yadda
-   if criteria meets foo, process output samples
-   begin dma write of output
-
-   
-
-so, of our four flags we have:
-   new sample (INT1)
-   time inc (INT0)
-   time clear
-   new event
-   
-      

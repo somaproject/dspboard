@@ -121,7 +121,7 @@ STHRESH[4] : channel threshold (16-bit signed int);
 
 
 --Continuous-specific-----
-CDOWNSAMPLE
+CODOWNSAMPLE : downsample ratio. 
 COX[1024] : direct circular buffer for EEG
 COH[256] : (pm)  filter buffer
 COY[512] : (dm) continuous circular output buffer
@@ -139,4 +139,86 @@ DAG1: (all circular)
 6: Spike interleaved input buffers 3 & 4
 7: continuous input buffer
 
+DAG2:
+11: Continuous output buffer
+12: Spike output buffer for channel 1
+13: Spike output buffer for channel 2
+14: Spike output buffer for channel 3
+15: Spike output buffer for channel 4
+
+
+All internal buffers are in 32-bit floating point. When we call a create_packet function, we perform the necessary fixed-point conversion via FIX. 
+
+Since SIMD filtering is just SISD filtering with different pointers, we essentially use the same code for both. 
+
   
+
+
+-----------------------------------------------------------------------------
+EVENTS
+-----------------------------------------------------------------------------
+
+All events which modify signal processing parameters (Filter, gain, etc) cause a disable-flush-enable operation if you are in DATA mode, i.e. if interrupts are enabled. 
+
+
+
+
+
+10 : write configuration parameter
+11 : read configuration parameter
+
+[ TARGET | ADDR ] [32-bit Data Word 1] [32 bit data word 2] 
+[   DW0         ] [ DW2      DW1      ][  DW4      DW3	  ]
+
+write filter coefficients: 
+TARGET = 0x10 : FIR FILTER for spike channel 1
+         0x11 : FIR FILTER for spike channel 2
+	 0x12 : FIR FILTER for spike channel 3
+	 0x13 : FIR FILTER for spike channel 4
+	 0x14 : FIR FILTER for constant chan
+ADDR  =  coefficent number [0..255]
+DW0 = word that goes at ADDR, IEEE 32-bit foo
+DW1 = word that goes at ADDR+1, "
+
+write filter lengths:
+TARGET = 0x20
+ADDR = filter length target (0 = spike 1, 3 = spike 4, 5 = cont)
+DW0[15:0] = length, unsigned int
+
+write filter IDs:
+Target = 0x21
+ADDR = filter for chan
+DW0[15:0] = unique 16-bit filter ID
+
+
+
+change spike parameters: 
+Target = 0x23 : spike length
+       DW0[7:0] = unsigned spike length
+Target = 0x24 : notriggerlen 
+target = 0x25 : posttriglen
+
+change cont parms
+Target = 0x26 : downsampling ratio for continuous (DW[3:0]); 
+target = 0x27 : length of continuous bufefr
+
+
+
+
+// hardware parameters:
+Target = 0x30 : gain for cahnnels
+addr = chan num: 
+dw0[2:0] = gain value
+Target = 0x31 : HW filter for channels
+addr = chan num: 
+dw0[3:0] = hw filter sel
+Target = 0x32 : Input selection for cont. chan.
+dw0[1:0] = input selection
+
+
+
+
+12: Enable spike acquisition interrupt
+    flushes buffers, etc. 
+13: disable spike acquisition interrupt
+
