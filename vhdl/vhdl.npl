@@ -28,6 +28,7 @@ SOURCE EventInputs.vhd
 SOURCE EventOutputs.vhd
 SOURCE events.vhd
 SOURCE DataMux.vhd
+SOURCE EventMux.vhd
 [STATUS-ALL]
 events.ngcFileGroup=OK,1075313650
 fiberrx.ngcFileGroup=OK,1075313684
