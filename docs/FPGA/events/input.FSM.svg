@@ -215,8 +215,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="2.7725341"
-     inkscape:cx="399.26899"
-     inkscape:cy="470.99674"
+     inkscape:cx="271.94864"
+     inkscape:cy="429.87911"
      inkscape:window-width="1596"
      inkscape:window-height="1159"
      showgrid="true"
@@ -308,7 +308,7 @@
        sodipodi:role="line"
        id="tspan991"
        x="137.72495"
-       y="261.60579">EINFWE=1</tspan><tspan
+       y="261.60579">EINWE=1</tspan><tspan
        sodipodi:role="line"
        id="tspan993"
        x="137.72495"
@@ -345,7 +345,7 @@
        sodipodi:role="line"
        id="tspan1003"
        x="290.84995"
-       y="261.60577">EINFWE=0</tspan><tspan
+       y="261.60577">EINWE=0</tspan><tspan
        sodipodi:role="line"
        id="tspan1005"
        x="290.84995"
@@ -387,7 +387,7 @@
        sodipodi:role="line"
        id="tspan1694"
        x="415.84998"
-       y="261.60577">EINFWE=0</tspan><tspan
+       y="261.60577">EINWE=0</tspan><tspan
        sodipodi:role="line"
        id="tspan1696"
        x="415.84998"
@@ -450,7 +450,7 @@
        sodipodi:role="line"
        id="tspan1715"
        x="225.22495"
-       y="377.23077">EINFWE=0</tspan><tspan
+       y="377.23077">EINWE=0</tspan><tspan
        sodipodi:role="line"
        id="tspan1717"
        x="225.22495"
@@ -491,7 +491,7 @@
        sodipodi:role="line"
        id="tspan1731"
        x="328.34995"
-       y="377.23077">EINFWE=0</tspan><tspan
+       y="377.23077">EINWE=0</tspan><tspan
        sodipodi:role="line"
        id="tspan1733"
        x="328.34995"
@@ -532,7 +532,7 @@
        sodipodi:role="line"
        id="tspan1745"
        x="431.47495"
-       y="377.23077">EINFWE=0</tspan><tspan
+       y="377.23077">EINWE=0</tspan><tspan
        sodipodi:role="line"
        id="tspan1747"
        x="431.47495"
@@ -573,7 +573,7 @@
        sodipodi:role="line"
        id="tspan1759"
        x="534.59998"
-       y="377.23077">EINFWE=0</tspan><tspan
+       y="377.23077">EINWE=0</tspan><tspan
        sodipodi:role="line"
        id="tspan1761"
        x="534.59998"
@@ -643,7 +643,7 @@
        sodipodi:role="line"
        id="tspan1783"
        x="225.22495"
-       y="474.10577">EINFWE=1</tspan><tspan
+       y="474.10577">EINWE=1</tspan><tspan
        sodipodi:role="line"
        id="tspan1785"
        x="225.22495"
@@ -684,7 +684,7 @@
        sodipodi:role="line"
        id="tspan1797"
        x="328.34995"
-       y="474.10577">EINFWE=1</tspan><tspan
+       y="474.10577">EINWE=1</tspan><tspan
        sodipodi:role="line"
        id="tspan1799"
        x="328.34995"
@@ -725,7 +725,7 @@
        sodipodi:role="line"
        id="tspan1811"
        x="431.47495"
-       y="474.10577">EINFWE=0</tspan><tspan
+       y="474.10577">EINWE=1</tspan><tspan
        sodipodi:role="line"
        id="tspan1813"
        x="431.47495"
@@ -766,7 +766,7 @@
        sodipodi:role="line"
        id="tspan1825"
        x="534.59998"
-       y="474.10577">EINFWE=0</tspan><tspan
+       y="474.10577">EINWE=1</tspan><tspan
        sodipodi:role="line"
        id="tspan1827"
        x="534.59998"
