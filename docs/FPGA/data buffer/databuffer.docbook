@@ -24,7 +24,7 @@
       <title> Data Buffer Overview </title>
       <mediaobject>
 	<imageobject>
-	  <imagedata fileref="Data Buffer.ai" format="PDF" 
+	  <imagedata fileref="Data Buffer.eps" format="EPS" 
 		     contentwidth="7.0in"/>
 	  </imageobject>
       </mediaobject>
@@ -58,7 +58,7 @@
 	<title>Data Buffer input FSM</title>
 	<mediaobject>
 	  <imageobject>
-	    <imagedata fileref="input FSM.ai" format="PDF"
+	    <imagedata fileref="input FSM.eps" format="EPS"
 		       contentwidth="7.0in"/>
 	  </imageobject>
 	</mediaobject>
@@ -83,7 +83,7 @@
 	<title>Data Buffer Output FSM</title>
 	<mediaobject>
 	  <imageobject>
-	    <imagedata fileref="output FSM.ai" format="PDF"
+	    <imagedata fileref="output FSM.eps" format="EPS"
 		       contentwidth="7.0in"/>
 	  </imageobject>
 	</mediaobject>
