@@ -194,9 +194,16 @@ begin
 				cs <= ns; 
 
 				-- dsp side counters
-				if RD = '1' and ADDR = X"6" then
+				if RD = '1' and ADDR = X"6" and (addrbw /=  dspbpr) then
+					-- i.e. only inc if we have new events and 
+					-- the dsp is saying it's done with a read. 
+					-- 
+					-- this is to prevent the DSP artificially 
+					-- incing. 
 					dspbpr <= dspbpr + 1; 
 				end if; 
+
+
 				if WE = '1' and ADDR = X"9" then
 					dspbpw <= dspbpw + 1; 
 				end if;

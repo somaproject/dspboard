@@ -158,7 +158,7 @@ begin
 
 	-- CLKA side combinational
 	bufwein <= bufwe and (not mode);
-	bufwdone <= '1' when bufwein = '1' and buflenin = BUFADDRIN else
+	bufwdone <= '1' when bufwein = '1' and (buflenin -1) = BUFADDRIN  else
 					'0';
 	bufwea <= '1' when bufwein = '1' and (incs = A) else '0';
 	bufweb <= '1' when bufwein = '1' and (incs = B) else '0';
@@ -198,10 +198,13 @@ begin
 			if rising_edge(CLKA) then
 				incs <= inns; 
 
-				if bufaddrin = LENADDR and bufwe = '1' then
-					buflenin <= BUFDIN(8 downto 1); 
+				if incs = waita or incs = waitb or incs = waitc then
+					buflenin <= (others => '1'); 
+				else
+					if bufaddrin = LENADDR and bufwe = '1' then
+						buflenin <= BUFDIN(15 downto 8); 
+					end if; 
 				end if; 
-
 
 				-- buffer full set/reset registers
 				if clra = '1' then
@@ -289,13 +292,16 @@ begin
 			if rising_edge(CLKB) then
 				outcs <= outns; 
 
-				if bufaddrin = (LENADDR) then
-					buflenout <= dob(7 downto 0); 
+				if outcs = waita or outcs = waitb or outcs = waitc then
+					buflenout <= (others => '1');
+				else
+					if bufcnt = (LENADDR + 1) then
+						buflenout <= dob(15 downto 8); 
+					end if; 
 				end if; 
+				--BUFACKOUT <= bufack; 
 
-				BUFACKOUT <= bufack; 
-
-				bufack <= bufcnten; 
+				BUFACKOUT <= bufcnten; 
 				
 				if bufcntrst = '1' then
 					bufcnt <= (others => '0');

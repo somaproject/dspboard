@@ -36,7 +36,7 @@ architecture Behavioral of EventOutputs is
 	-- sysclk domain signals
 	signal cnt : integer range 0 to 7 := 0; 
 	signal outsel : integer range 0 to 7 := 0; 
-	signal cel, loaded, eventl, ldrst,  soe : std_logic := '0';
+	signal cel, loaded, eventl, ldrst, go,  soe : std_logic := '0';
 	 
 	 	
 begin
@@ -56,9 +56,10 @@ begin
 
 
 
-	outsel <=  cnt; 
+	outsel <=  cnt when eventl = '0' else 0; 
 
-	EOE <= soe; 
+	EOE <= soe or go; 
+	 go <= cel and loaded; 
 
 	
 
@@ -122,14 +123,14 @@ begin
 			loaded <= lloaded; 
 
 			if eventl = '1' then 
-				cnt <= 0;
+				cnt <= 1;
 			else
 				if cnt < 6 then
 					cnt <= cnt + 1; 
 				end if;
 			end if; 
 			
-			if cel = '1' and loaded = '1'  then
+			if go =  '1'  then
 				soe <= '1';
 			else
 				if outsel = 5 then

@@ -32,9 +32,9 @@ architecture Behavioral of DataMux is
 begin
 	din <= DINA when bufsel = '0' else DINB; 
 
-	ack <= acka when bufsel = '0' else ackb; 
+	ack <=  (not acka) when bufsel = '0' else (not ackb); 
 
-	NEXTA <= '1' when (bufsel = '1' and DATAEN = '0') else '0';
+	NEXTA <= '1' when (bufsel = '0' and DATAEN = '0') else '0';
 	NEXTB <= '1' when (bufsel = '1' and DATAEN = '0') else '0';
 
 	newen <= enl and (not enll); 

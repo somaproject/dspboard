@@ -67,14 +67,14 @@ architecture Behavioral of dspio is
 begin
 
 	deltawe <= well and (not welll); 
-	DWE <= '1' when deltawe = '1'  and addr(15 downto 12) = X"2" else '0';
-	EWE <= '1' when deltawe = '1'  and addr(15 downto 12) = X"4" else '0';
-	CWE <= '1' when deltawe = '1'  and addr(15 downto 12) = X"8" else '0';
-	MODERST <= '1' when rdll = '1' and rdlll = '0' and addr(15 downto 12) = X"F" else '0';
+	DWE <= '1' when deltawe = '1'  and laddrout(15 downto 12) = X"2" else '0';
+	EWE <= '1' when deltawe = '1'  and laddrout(15 downto 12) = X"4" else '0';
+	CWE <= '1' when deltawe = '1'  and laddrout(15 downto 12) = X"8" else '0';
+	MODERST <= '1' when rdll = '1' and rdlll = '0' and laddrout(15 downto 12) = X"F" else '0';
 
 	 
 	DELTARD <= rdll and (not rdlll); 
-	
+	erd <= '1' when addrl(15 downto 12) = X"6" and rdll = '0' else '0'; 
 	mts <= RD or MODE; 
 	
 	dataout <= dmux when mode = '0' else (X"00" & rdin); 

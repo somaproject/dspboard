@@ -86,7 +86,7 @@ ARCHITECTURE behavior OF testbench IS
 	SIGNAL DATAEN :  std_logic := '1';
 	SIGNAL DATAACK :  std_logic;
 	SIGNAL RESET :  std_logic := '1';
-
+	signal 	datapktlen:  integer := 0; 
 	component test_event is
 	    Port ( CLK : in std_logic;
 	           CMDIN : in std_logic_vector(15 downto 0);
@@ -211,7 +211,7 @@ BEGIN
 			ADDRA <= addr; 
 			waitclk(3); 
 			RDA <= '0'; 
-			waitclk(5); 
+			waitclk(12); 
 		   dataout := DATAA; 
 			wait until rising_edge(dspclk); 
 			RDA <= '1'; 
@@ -233,7 +233,7 @@ BEGIN
 			waitclk(3); 
 			WEA <= '0'; 
 		   DATAA <= data; 
-			waitclk(9); 
+			waitclk(15); 
 			wait until rising_edge(dspclk); 
 			WEA <= '1'; 
 			wait until rising_edge(dspclk); 
@@ -284,7 +284,8 @@ BEGIN
 
 		variable loadbyte : std_logic_vector(7 downto 0);
 		variable loadword : std_logic_vector(15 downto 0);
-		 
+		variable loopbreak : std_logic := '0';
+		  
 	begin
 		ADDRA <= (others => '0');
 		RDA <= '1';
@@ -317,7 +318,6 @@ BEGIN
 		memw16(X"4007", X"0003"); 
 		memw16(X"4008", X"0004"); 
 		memw16(X"4009", X"0000"); 
-
 
  		memw16(X"4000", X"0123"); 
 		memw16(X"4001", X"4567"); 
@@ -354,19 +354,39 @@ BEGIN
 
 
 		-- now we poll and read events:
-		while(1 = 1) loop
+		loopbreak := '0'; 
+		while(loopbreak = '0') loop
 			if rising_edge(dspclk) and EVENTSA = '1' then
 				memr16(X"6000", loadword); 
 				if loadword = X"0006" then 
 					report "DSP has read an 0x0006 event!";
+					loopbreak := '1'; 
+							
+					
 				end if;
-				
 				memr16(X"6006", loadword); 
 			end if; 
 			wait until rising_edge(dspclk); 
 
 		end loop;   
 
+
+
+		--- then we try and write three events!
+		dataw(50); 
+		--dataw(50); 
+		--dataw(50); 
+
+		memw16(X"4000", X"FFFF"); 
+		memw16(X"4001", X"FFFF"); 
+		memw16(X"4002", X"FFFF"); 
+		memw16(X"4003", X"0008"); -- Event to say we're done writing data! 
+		memw16(X"4004", X"0000"); 
+		memw16(X"4005", X"0001"); 
+		memw16(X"4006", X"0002"); 
+		memw16(X"4007", X"0003"); 
+		memw16(X"4008", X"0004"); 
+		memw16(X"4009", X"0000"); 
 
 
 
@@ -391,31 +411,31 @@ BEGIN
 								  din0, din1, din2, din3, din4 
 								  		: in std_logic_vector(15 downto 0)) is
 			begin	
+				  wait until rising_edge(sysclk); -- initial wait
+				  ECE <= '1' after 20 ns;
+				  EVENT <= '0' after 20 ns; 
 				  wait until rising_edge(sysclk);
-				  ECE <= '1';
-				  EVENT <= '0'; 
+				  EVENT <= '1' after 20 ns; 
+				  EDATA <= cmd after 20 ns; 
+				  EADDR <= addr(7 downto 0) after 20 ns; 
 				  wait until rising_edge(sysclk);
-				  EVENT <= '1'; 
-				  EDATA <= cmd; 
-				  EADDR <= addr(7 downto 0); 
+				  EDATA <= din0 after 20 ns; 
+				  EADDR <= addr(7 downto 0) after 20 ns;
 				  wait until rising_edge(sysclk);
-				  EDATA <= din0; 
-				  EADDR <= addr(7 downto 0); 
+				  EDATA <= din1 after 20 ns; 
+				  EADDR <= addr(7 downto 0) after 20 ns; 
 				  wait until rising_edge(sysclk);
-				  EDATA <= din1; 
-				  EADDR <= addr(7 downto 0); 
+				  EDATA <= din2 after 20 ns; 
+				  EADDR <= addr(7 downto 0) after 20 ns; 
 				  wait until rising_edge(sysclk);
-				  EDATA <= din2; 
-				  EADDR <= addr(7 downto 0); 
+				  EDATA <= din3 after 20 ns; 
+				  EADDR <= addr(7 downto 0) after 20 ns; 
 				  wait until rising_edge(sysclk);
-				  EDATA <= din3; 
-				  EADDR <= addr(7 downto 0); 
+				  EDATA <= din4 after 20 ns;
+				  EADDR <= addr(7 downto 0) after 20 ns;
 				  wait until rising_edge(sysclk);
-				  EDATA <= din4; 
-				  EADDR <= addr(7 downto 0);
-				  wait until rising_edge(sysclk);
-				  EDATA <= (others => 'Z'); 
-				  EADDR <= (others => 'Z');
+				  EDATA <= (others => 'Z') after 20 ns; 
+				  EADDR <= (others => 'Z') after 20 ns;
 				  
 
 				   
@@ -426,15 +446,16 @@ BEGIN
 								  din0, din1, din2, din3, din4 
 								  		: out std_logic_vector(15 downto 0)) is
 			begin	
+				  wait until rising_edge(sysclk); -- initial wait!
+
+				  ECE <= '0' after 10 ns;
+				  EVENT <= '0' after 10 ns;
 				  wait until rising_edge(sysclk);
-				  ECE <= '0';
-				  EVENT <= '0'; 
-				  wait until rising_edge(sysclk);
-				  EVENT <= '1';
-				  ECE <= '1';  
+				  EVENT <= '1' after 10 ns;
+				  ECE <= '1' after 10 ns;  
 				  wait until rising_edge(sysclk);
 				  cmd := EDATA;
-				  addr(7 downto 0) := EADDR; 
+				  addr(7 downto 0) := EADDR;
 				  wait until rising_edge(sysclk);
 				  din0 := EDATA; 
 				  addr(7 downto 0) := EADDR; 
@@ -457,7 +478,7 @@ BEGIN
 				   
 			end procedure revent;  
 
-			procedure rdata(rxlen : out std_logic) is
+			procedure rdata(rxlen : out integer) is
 				type databuffer is array(0 to 511) of integer;
 				variable inbuf : databuffer := (others => 0);  
 				variable pos, timetilack, len : integer := 0; 
@@ -482,9 +503,9 @@ BEGIN
 
 
 						pos := pos + 1; 
-						wait until rising_edge(sysclk); 
+						
 					end if;
-					
+					wait until rising_edge(sysclk); 
 					if pos = 0 and timetilack < 0 then 
 						-- whoa, not gonna send a frame, i guess
 						pos := 1000;
@@ -494,6 +515,9 @@ BEGIN
 						pos := 1000; 
 					end if;
 				end loop; 
+				dataen <= '1'; 
+
+				rxlen := len; 
 				
 			end procedure rdata; 
 
@@ -501,6 +525,8 @@ BEGIN
 			variable laddr :  std_logic_vector(47 downto 0);
 			variable  lcmd, ldin0, ldin1, ldin2, ldin3, ldin4 
 								  		: std_logic_vector(15 downto 0);
+		
+			variable pktlen : integer := 0; 
 	begin
 		wait until falling_edge(RESET); 
 			ECE <= '1'; 
@@ -552,7 +578,34 @@ BEGIN
 							std_logic_vector(TO_UNSIGNED(i, 16)));
 			end loop;  
 
+				wevent(X"FFFFFFFFFFFF", X"0006", 
+							X"0000",
+							X"0000",
+							X"0000",
+							X"0000",
+							X"0000"
+							);
 
+			-- now we wait for the completion of the 3 data writes:
+
+			while (lcmd /= X"0008") loop
+				revent(laddr, lcmd, ldin0, ldin1, ldin2, ldin3, ldin4); 
+				if lcmd = X"0008" then
+					report "DSP is done writing data events";
+				end if;
+
+				waitclk(30); 
+
+			end loop;
+			
+			pktlen := 0; 
+			while (pktlen = 0) loop
+				rdata(pktlen); 
+			end loop;
+			
+			datapktlen <= pktlen;  
+
+			wait; 
 
 	end process busclock; 
 
