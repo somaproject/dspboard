@@ -55,14 +55,14 @@ AnnotateSuffix=
 DoLibraryUpdate=1
 DoDatabaseUpdate=1
 [Document7]
-DocumentPath=DSPboard.PCBDOC
+DocumentPath=outputs.OUTJOB
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotateSuffix=
 DoLibraryUpdate=1
 DoDatabaseUpdate=1
 [Document8]
-DocumentPath=outputs.OUTJOB
+DocumentPath=DSPboard.PCBDOC
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotateSuffix=
