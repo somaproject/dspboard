@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<article>
+  <articleinfo>
+    <title>The SOMA DSPboard : FPGA Data Buffer</title>
+    <author>
+      <firstname>Eric</firstname>
+      <surname>Jonas</surname>
+    </author>
+  </articleinfo>
+  <section id="DSPboard.FPGA.DataBuffer">
+    
