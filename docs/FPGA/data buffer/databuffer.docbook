@@ -7,11 +7,13 @@
       <surname>Jonas</surname>
     </author>
   </articleinfo>
-  <section id="DSPboard.FPGA.DataBuffer">
+  <section id="DataBuffer">
     <title>Data Buffer</title>
-    <para> The Data Buffer is responsible for triple-buffering data
-    packets from the DSP to the Data Bus, and providing a temporary
-    storage location for the DSP's 256-op loader kernel prior to boot. </para>
+    <para> The Data Buffer <xref
+    linkend="DataBufferOverview"/>is responsible for
+    triple-buffering data packets from the DSP to the Data Bus, and
+    providing a temporary storage location for the DSP's 256-op loader
+    kernel prior to boot. </para>
     
     <para> Triple-buffering of data is accomplished using 3 blocks of
     BlockSelect+ RAM in the Spartan-3 FPGA, with a total of 2048 bytes
@@ -20,13 +22,17 @@
     and overwrites result in the overwriting packet being lost -- thus
     overwrites lead to lost, not corrupt, packets.  </para>
 
-    <figure id="DSPboard.FPGA.DataBufferOverview">
+    <figure id="DataBufferOverview">
       <title> Data Buffer Overview </title>
       <mediaobject>
 	<imageobject>
-	  <imagedata fileref="Data Buffer.eps" format="EPS" 
-		     contentwidth="7.0in"/>
+	  <imagedata fileref="databuffer.eps" format="EPS" 
+		     contentwidth="5.0in"/>
 	  </imageobject>
+	  <imageobject>
+	    <imagedata fileref="databuffer.png" format="PNG"/>
+	  </imageobject>
+
       </mediaobject>
     </figure>
 
@@ -54,12 +60,14 @@
       SR flip-flop is set, and the FSM moves into a WAIT{A,B,C}
       state. </para>
 
-      <figure id="DSPboard.FPGA.databuffer.inputFSM">
+      <figure id="inputFSM">
 	<title>Data Buffer input FSM</title>
 	<mediaobject>
 	  <imageobject>
-	    <imagedata fileref="input FSM.eps" format="EPS"
-		       contentwidth="7.0in"/>
+	    <imagedata fileref="input.FSM.eps" format="EPS"/>
+	  </imageobject>
+	  <imageobject>
+	    <imagedata fileref="input.FSM.png" format="PNG"/>
 	  </imageobject>
 	</mediaobject>
       </figure>
@@ -79,12 +87,14 @@
       determine total packet length.</para>
 
 
-      <figure id="DSPboard.FPGA.databuffer.outputFSM">
+      <figure id="outputFSM">
 	<title>Data Buffer Output FSM</title>
 	<mediaobject>
 	  <imageobject>
-	    <imagedata fileref="output FSM.eps" format="EPS"
-		       contentwidth="7.0in"/>
+	    <imagedata fileref="output.FSM.eps" format="EPS" />
+	  </imageobject>
+	  <imageobject>
+	    <imagedata fileref="output.FSM.png" format="PNG"/>
 	  </imageobject>
 	</mediaobject>
       </figure>

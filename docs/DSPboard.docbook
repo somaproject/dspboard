@@ -90,7 +90,7 @@
 	      <name> SAMPLE </name>
 	      <info> A rising edge on this line tells the DSP that a
 	      new set of input samples is available from the
-	      FPGA. Occurs roughly every 31.25 microseconds. </info>
+	      FPGA. Occurs  every 31.25 microseconds. </info>
 	    </signal>
 	    <signal>
 	      <name> EVENTS </name>
@@ -221,9 +221,10 @@
 		the buffer contains a new valid Acqboard command that
 		is to be sent to the Acqboard.</addr>
 	      </memmap>
-	    </listitem>
-
-
-
-</itemizedlist> </section> </section>
-	      </section> </section> </article>
+	    </listitem>  
+	  </itemizedlist> 
+	</section> 
+      </section>
+    </section> 
+  </section> 
+</article>
