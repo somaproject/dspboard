@@ -87,7 +87,7 @@ begin
 						wait until rising_edge(CLK);
 						wait until rising_edge(CLK);
 						wait until rising_edge(CLK);
-						DOUT <= X"00" & MDATA(7 downto 0); ;
+						DOUT <= X"00" & MDATA(7 downto 0); 
 						wait until rising_edge(CLK);
 						MRD <= '1';
 						wait until rising_edge(CLK);

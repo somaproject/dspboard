@@ -185,6 +185,7 @@ begin
 	begin
 		if RESET = '1' then
 			cs <= none;
+			DSPRESET <= '1'; 
 		else
 			if rising_edge(CLK) then
 				cs <= ns; 
@@ -202,7 +203,7 @@ begin
 					addrbr <= addrbr + 1;
 				end if;
 				if addrbenw = '1' then
-					addrbw <= addrbw + 1;
+					addrbw <= addrbw + 1;	
 				end if; 
 				
 				-- output latches
@@ -265,11 +266,11 @@ begin
 				rainen <= '0';
 				ewe <= '0';
 				if mine = '1' then
-					if edin = X"01" then
+					if edout = X"01" then
 						ns <= modeen;
-					elsif edin = X"02" then
+					elsif edout = X"02" then
 						ns <= dspen;
-					elsif edin = X"03" then
+					elsif edout = X"03" then
 						ns <= bramwevt;
 					else
 						ns <= dspram1;

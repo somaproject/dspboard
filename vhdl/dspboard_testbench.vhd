@@ -12,10 +12,10 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 
-ENTITY dspboard_testbench IS
-END dspboard_testbench;
+ENTITY testbench IS
+END testbench;
 
-ARCHITECTURE behavior OF dspboard_testbench IS 
+ARCHITECTURE behavior OF testbench IS 
 
 	COMPONENT dspboard
 	PORT(
@@ -74,7 +74,7 @@ ARCHITECTURE behavior OF dspboard_testbench IS
 	SIGNAL EVENTSB :  std_logic;
 	SIGNAL TINCB :  std_logic;
 	SIGNAL TCLRB :  std_logic;
-	SIGNAL EVENT :  std_logic;
+	SIGNAL EVENT :  std_logic := '1';
 	SIGNAL ECE :  std_logic;
 	SIGNAL EADDR :  std_logic_vector(7 downto 0);
 	SIGNAL EDATA :  std_logic_vector(15 downto 0);
@@ -104,7 +104,7 @@ ARCHITECTURE behavior OF dspboard_testbench IS
 				  EDATA : inout std_logic_vector(15 downto 0);
 				  EADDR : inout std_logic_vector(7 downto 0);  
 				  ECE : out std_logic;
-				  EEVENT : out std_logic;
+				  EEVENT : out std_logic
 				  );
 	end component;
 	
@@ -112,8 +112,9 @@ ARCHITECTURE behavior OF dspboard_testbench IS
 			edout0, edout1, edout2, edout3, edout4 : std_logic_vector(15 downto 0)
 			 := (others => '0');
 	signal eaddrin : std_logic_vector(47 downto 0) := (others => '0'); 
-	signal sendevent, queryevent, done : std_logic := '0';
+	signal sendevent, queryevent, eventdone : std_logic := '0';
 
+	signal clk, sysclk : std_logic := '0'; 
 	  
 		
 
@@ -131,7 +132,7 @@ BEGIN
 			ADDRIN => eaddrin,
 			SENDEVENT => sendevent,
 			QUERYEVENT => queryevent,
-			DONE => done,
+			DONE => eventdone,
 			CMDOUT => ecmdout, 
 			DOUT0 => edout0,
 			DOUT1 => edout1,
@@ -141,7 +142,7 @@ BEGIN
 			EADDR => EADDR,  
 			EDATA => EDATA,
 			ECE => ECE,
-			EEVENT => EEVENT) ; 
+			EEVENT => EVENT) ; 
 
 
 	uut: dspboard PORT MAP(
@@ -179,11 +180,13 @@ BEGIN
 
 
 
-	CLKIN <= not CLKIN after 7.8125 ns; -- 64 MHz
-	SYSCLK <= not SYSCLK after 25 ns; -- 20 MHz; 
+	clk <= not clk after 7.8125 ns; -- 64 MHz
+	sysclk <= not sysclk after 25 ns; -- 20 MHz; 
+
+	CLKIN <= CLK;
+	SYSCLKIN <= sysclk; 
 
 	RESET <= '0' after 100 ns; 
-
 
 
 
@@ -193,5 +196,40 @@ BEGIN
       wait; -- will wait forever
    END PROCESS;
 -- *** End Test Bench - User Defined Section ***
+
+	busclock: process is
+			procedure waitclk(duration : in integer) is
+			begin
+				for i in 0 to duration loop
+					wait until rising_edge(clk);
+				end loop; 
+			end procedure waitclk;
+
+			procedure wevent(addr : in std_logic_vector(47 downto 0);
+								  cmd : in std_logic_vector(15 downto 0); 
+								  din0, din1, din2, din3, din4 
+								  		: in std_logic_vector(15 downto 0)) is
+			begin
+				  ecmdin <= cmd;
+				  eaddrin <= addr; 
+				  edin0 <= din0; 
+				  edin1 <= din1; 
+				  edin2 <= din2; 
+				  edin3 <= din3; 
+				  edin4 <= din4;
+				  sendevent <= '1';
+				  wait until rising_edge(sysclk);
+				  sendevent <= '0';
+			end procedure wevent;  
+
+	begin
+		wait until falling_edge(RESET); 
+			waitclk(30); 
+			wevent(X"FFFFFFFFFFFF", X"0002", X"0000", X"0000", X"0000", X"0000", X"0000");
+
+		wait; 
+
+
+	end process busclock; 
 
 END;

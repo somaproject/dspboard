@@ -29,7 +29,7 @@ entity test_event is
 			  EDATA : inout std_logic_vector(15 downto 0);
 			  EADDR : inout std_logic_vector(7 downto 0);  
 			  ECE : out std_logic;
-			  EEVENT : out std_logic;
+			  EEVENT : out std_logic
 			  );
 end test_event;
 
@@ -39,7 +39,9 @@ begin
 	process is
 	begin
 		while (1 = 1) loop
-			wait until rising_edge(CLK)
+			EEVENT <= '1'; 
+			ECE <= '1'; 
+			wait until rising_edge(CLK);
 			if SENDEVENT = '1' then
 				DONE <= '0'; 
 				ECE <= '1';

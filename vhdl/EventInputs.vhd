@@ -30,7 +30,8 @@ architecture Behavioral of EventInputs is
 	signal addrsel, smine, lmine : std_logic := '0'; 
 	
 	-- event managemnt
-	signal eventl : std_logic := '0';
+	signal eventl, eventll, eventl3, eventl4, eventl5, eventl6, eventl7, eventl8
+				 : std_logic := '0';
 	signal cnt : std_logic_vector(2 downto 0) := (others => '0'); 
 	 
 	
@@ -81,9 +82,10 @@ begin
 				lmine <= '0';
 			end if; 
 
-			if cnt = "000" then
+			if eventl8 = '1' then
 				MINE <= lmine;
 			end if; 
+
 
 			if cnt = "000" then 
 				d0 <= datal; 
@@ -114,8 +116,15 @@ begin
 			end if; 
 
 			-- event stuff
-			eventl <= EEVENT; 
-			EVENT <= eventl;
+			eventl <= EEVENT;
+			eventll <= eventl; 
+			eventl3 <= eventll; 
+			eventl4 <= eventl3;
+			eventl5 <= eventl4;
+			eventl6 <= eventl5;
+			eventl7 <= eventl6; 
+			EVENT <= eventl7;
+			eventl8 <= eventl7;  
 			
 
 			if eventl = '1' then
