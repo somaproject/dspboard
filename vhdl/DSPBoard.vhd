@@ -42,6 +42,7 @@ entity DSPBoard is
 			  LEDPOWER: out std_logic;
 			  LEDDSPA : out std_logic;
 			  LEDDSPB : out std_logic;
+			  FLAG0BINPUT: in std_logic; -- DEBUGGING!!!
 			  LEDEVENT : out std_logic);
 end DSPBoard;
 
@@ -555,7 +556,7 @@ begin
 
 
 
-   LEDDSPA <= eoeb;
+   LEDDSPA <= FLAG0BINPUT;
 
 	LEDDSPB <= dspresetb; 
 

@@ -70,9 +70,10 @@ MEMORY
   seg_rth  { TYPE(PM RAM) START(0x00080000) END(0x000800ff) WIDTH(48) }
   seg_init { TYPE(PM RAM) START(0x00080100) END(0x000801ff) WIDTH(48) }
   seg_int_code { TYPE(PM RAM) START(0x00080200) END(0x00080287) WIDTH(48) }
-  seg_pmco { TYPE(PM RAM) START(0x00080288) END(0x000841ff) WIDTH(48) }
+  seg_pmco { TYPE(PM RAM) START(0x00080288) END(0x000840ff) WIDTH(48) }
+  seg_loader { TYPE (PM RAM) START(0x00084100) END(0x000841ff) WIDTH(48)}
   seg_pmda { TYPE(PM RAM) START(0x00086300) END(0x00087fff) WIDTH(32) }
-
+  
 	seg_dm32da { TYPE(DM RAM) START(0x000c0000) END(0x000c3fff) WIDTH(32) }
 	seg_dm16da { TYPE(DM RAM) START(0x00188000) END(0x0018ffff) WIDTH(16) }
 }
@@ -105,7 +106,12 @@ PROCESSOR P0
 		{
 			INPUT_SECTIONS( $OBJECTS(seg_pmco) $LIBRARIES(seg_pmco))
 		} >seg_pmco
-
+		
+		seg_loader
+		{
+			INPUT_SECTIONS( $OBJECTS(seg_loader) $LIBRARIES(seg_loader))
+		} >seg_loader
+		
 		seg_pmda
 		{
 			INPUT_SECTIONS( $OBJECTS(seg_pmda) $LIBRARIES(seg_pmda))

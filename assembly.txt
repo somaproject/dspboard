@@ -73,3 +73,5 @@ Okay, having changed the fsm design, we're going to see how tight we can get thi
 
 5 mar 2004
 Finally works at reading events; was a problem with the GPIF wait states.  
+
+Trying to engineer boot setup. 

@@ -301,4 +301,29 @@ every time the acqboard state changes, we send out a full broadcast frame with "
 
 
 
+-----------------------------------------------------------------------------
+BOOTING
+-----------------------------------------------------------------------------
+or, how to make my own loader kernel. 
+We know that on startup, 1024 bytes (256 instruction words?) will be loaded into the device. 
 
+Somewhat oddly, the docs seem to suggest that the reading actually begins externally at 0x000, and internally at 0x80000. So the loader really will have to over-write itself. 
+
+But! but! 
+we can do the following: essentially move the location of the loader kernel to the last 100 instructions in memory. This will of course be a total mindfuck for anyone who ever wants to use that space, but we make sure our linker won't let us put code there anyway. 
+
+We will read in 
+
+Note that all instructions here must be PC-relative, otherwise, ouch! 
+
+
+1. load in kernel
+2. kernel copies kernel to last 100 instructions (600 bytes) of program memory
+3. transferrs control to there
+4. reads in events to write various locations in memory
+5. ?
+
+
+To generate the DSP code we execute
+elfspl12k.exe -ram -f b -pm -o DSPboard.stk DSPboard.dxe
+where dxe is the executable format. 

@@ -4,6 +4,8 @@
 ====================================================================*/
 #include <def21262.h>
 
+
+
 .SECTION/PM seg_rth;
 	nop; 
 	nop; 
@@ -12,6 +14,7 @@
 	nop;  
 	jump main; 
 
+	
 #define SXSIZE 300 
 #define SHSIZE 256
 #define SYSIZE 256
@@ -107,9 +110,17 @@ main:
 main2:	
 	nop;
 	nop;
-	r0 = r0 + 1; 
+	r0 = 0x69; 
+	dm(MYID) = r0; 
 
+	r0 = 0xDDCCBBAA; 
+	r1 = 0xFFEE; 
+	r2 = 0x20; 
+    r3 = 0x60; 
+	r4 = 0x76543210;
+	r5 = 0xfedcba98;  
 	
+	jump loadertest; 
 	call write_event; 
 	
 	
@@ -1005,32 +1016,52 @@ read_event_wait:
 
 /*---------------------------------------------------
   write_event:
-     writes an event
+     writes an event to the event bus:
+     r0 =  address bits 31:0
+     r1 =  address bits 47:32 (in LSBs)
+     r2 =  command (8 lower bits)
+     r3 =  data word 1
+     r4 =  dw 3 | 2
+     r5 = dw 5 | 4; 
+     
 ---------------------------------------------------*/
 
 write_event:
 	call	lock_mem; 
 	
 	// debugging;
-	r0 = 0x4567CCDD; 	dm(EVENTOUT) = r0;
-	r0 = 0xFDA189ab; 	dm(EVENTOUT + 1) = r0;
-	r0 = 0x22221111; 	dm(EVENTOUT + 2) = r0;
-	r0 = 0x44443333; 	dm(EVENTOUT + 3) = r0;
-	r0 = 0x66665555;	dm(EVENTOUT + 4) = r0;
+	dm(EVENTOUT) = r0; // first two address words verbatim
+	r0 = fext r1 by 0:16;  // r0 has last address word as lsw
+	r0 = r0 or fdep r2 by 16:8; // put in the command
+	r2 = dm(MYID); 	         
+	r0 = r0 or fdep r2 by 24:8; // put my ID in there
+	dm(EVENTOUT+1) = r0; 
+	// assemble next three words; 
+	r3 = r3 or fdep r4 by 16:16; 
+    dm(EVENTOUT+2) = r3; 
 	
+    r4 = fext r4 by 16:16; 
+    r4 = r4 or fdep r5 by 16:16;
+	dm(EVENTOUT+3) = r4;
 	
-	ustat3 = PPDUR32 | PPTRAN | PPBHC | PP16 | PPEN | PPDEN;
-	ustat4 = PPDUR32 | PPTRAN | PPBHC | PP16; 
+	r5 = fext r5 by 16:16; 
+	dm(EVENTOUT+4) = r5; 
+	 
+	
+	 
+	
+	ustat3 = PPDUR16 | PPTRAN | PPBHC | PP16 | PPEN | PPDEN;
+	ustat4 = PPDUR16 | PPTRAN | PPBHC | PP16; 
 	
 	dm(PPCTL) = ustat4; 
 	
 	r0 = EVENTOUT; 	dm(IIPP) = r0; 	// starting point
 	r0 = 1;			dm(IMPP) = r0; 
 
-	r0 = 6;			dm(ICPP) = r0; 
+	r0 = 5;			dm(ICPP) = r0; 
 	r0 = 1; 		dm(EMPP) = r0; 
 	r0 = 0x4000;	dm(EIPP) = r0; 
-	r0 = 12;		dm(ECPP) = r0; 
+	r0 = 10;		dm(ECPP) = r0; 
 
 	
 	
@@ -1348,4 +1379,33 @@ event_acqboard_set_end:
 
 	rts; 
     
-
+.SECTION/PM seg_loader;
+	// our lame attempt at a loader; 
+	
+loadertest:
+	nop; 
+	nop; 
+	nop; 
+	nop;
+	nop;  
+	
+	nop;
+	nop; 
+	r0 = 100; 
+	
+	bit set flags FLG0O; 
+	
+	
+	nop;
+	nop; 
+	nop;
+	nop; 
+	nop; 
+	bit set flags FLG0; 
+	nop;
+	nop;
+	nop;
+	nop;
+	bit clr flags FLG0;    
+	jump (pc,-11); 
+   
