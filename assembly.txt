@@ -78,3 +78,16 @@ Trying to engineer boot setup.
 
 9 mar 2004
 successfully load entire main program via event interface
+
+
+10 Mar 2004
+Testing the acqboard interface:
+
+to generate a robust set of data, that we know deterministcally, to test, we will send the sequences of a 16-bit LFSR. We can also send in a series of impulses, every foo samples. 
+
+
+
+We can write matlab code to test our thresholding, etc. esp. as a function of various filters. Ohh, and time-stamping too. 
+
+After fixing errors in the DSPboard's pin assignment of fiberin and fiberout (we really need to make those consistent), we get 32 kHz interrupts triggered, and 
+What's neat is that the interrupts stop when I unplug it :)

@@ -5,8 +5,6 @@
 #include <def21262.h>
 
 
-		  
-
 .SECTION/PM seg_rth;
 	nop; 
 	nop; 

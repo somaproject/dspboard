@@ -52,7 +52,8 @@ ARCHITECTURE behavior OF testbench IS
 		SAMPLESB : OUT std_logic;
 		EVENTSB : OUT std_logic;
 		TINCB : OUT std_logic;
-		TCLRB : OUT std_logic
+		TCLRB : OUT std_logic;
+		FLAG0BINPUT : in std_logic 
 		);
 	END COMPONENT;
 
@@ -126,10 +127,10 @@ ARCHITECTURE behavior OF testbench IS
 	           FIBERIN : in std_logic);
 	end component;
 		
-
+	signal flag0binput: std_logic; 
 BEGIN
 
-
+	
 	uut: dspboard PORT MAP(
 		CLKIN => CLKIN,
 		SYSCLKIN => SYSCLKIN,
@@ -160,7 +161,8 @@ BEGIN
 		SYSDATA => SYSDATA,
 		DATAEN => DATAEN,
 		DATAACK => DATAACK,
-		RESET => RESET
+		RESET => RESET,
+		FLAG0BINPUT => flag0binput
 	);
 
 	acqtest: test_acqboard port map (
