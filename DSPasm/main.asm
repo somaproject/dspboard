@@ -80,8 +80,19 @@ main:
 	R0 = 0x0;
 	nop;
 	nop;
+	r0 = 32767; 
+	r1 = -32768; 
+	r2 = -15; 
+	r6 = 15; 
 	
-
+	f3 = FLOAT r1 BY r2;
+	f4 = FLOAT r0 BY r2; 
+	r7 = -1; 
+	f5 = FLOAT r7 BY r2; 
+	
+	r8 = FIX f3 by r6;
+	r9 = FIX f4 by r6; 
+	r10 = FIX f5 by r6;
 	
 	
 init :  
@@ -259,20 +270,97 @@ samples:
 	r0 = dm(COHLEN); // length of filter
 	call filter_fir; 
 	
-	pm(i15, m15) = f0;	// save result from continuous
+	pm(i11, m11) = f0;	// save result from continuous
 
 // check for thresholds
+samples_threshold:
     // this is a whee-bit ghetto because we need to manually
     // figure out what the address for POSTTRIGLEN is:
+
+    r0 = dm(NOTRIGGER);
+    r0 = r0 - 1; 
+    dm(NOTRIGGER) = r0; 
+    
+    if GT jump samples_threshold_done; // we're still in a no-trigger phase
+    
+       
     r0 = dm(POSTTRIGLEN); 
-  	r1 = i12; // chan 12
+ 	i0 = STHRESH; 
+  	
+ 	// channel 1 threshold check 
+  	r1 = i12; 			// chan 1 index
   	r2 = b12; 
   	r4 = l12; 
-  	r3 = r1 - r0;	// r3 = position back the necessary samples
-  	r5 = r3 - r2;  // R5 = location back - base 
+  	r3 = r1 - r0;		// r3 = position back the necessary samples
+  	r5 = r3 - r2;  		// R5 = location back - base 
   	if LT r3 = r3 + r4; // if we went past the end of the buffer
 	i8 = r3; 
-  	f0 = pm(0, i8); 
+  	f1 = pm(0, i8);		// read the sample POSTTRIGLEN back
+  	 
+  	f2 = dm(0, i0); 	// get the threshold
+  	f2 = f1 - f2; 
+  	if GE jump samples_send_spike; 
+ 
+ 	// channel 2 threshold check 
+  	r1 = i13; 			// chan 2 index
+  	r2 = b13; 
+  	r4 = l13; 
+  	r3 = r1 - r0;		// r3 = position back the necessary samples
+  	r5 = r3 - r2;  		// R5 = location back - base 
+  	if LT r3 = r3 + r4; // if we went past the end of the buffer
+	i8 = r3; 
+  	f1 = pm(0, i8);		// read the sample POSTTRIGLEN back
+  	 
+  	f2 = dm(1, i0); 	// get the threshold
+  	f2 = f1 - f2; 
+  	if GE jump samples_send_spike; 
+
+  	// channel 3 threshold check 
+  	r1 = i14; 			// chan 3 index
+  	r2 = b14; 
+  	r4 = l14; 
+  	r3 = r1 - r0;		// r3 = position back the necessary samples
+  	r5 = r3 - r2;  		// R5 = location back - base 
+  	if LT r3 = r3 + r4; // if we went past the end of the buffer
+	i8 = r3; 
+  	f1 = pm(0, i8);		// read the sample POSTTRIGLEN back
+  	 
+  	f2 = dm(0, i0); 	// get the threshold
+  	f2 = f1 - f2; 
+  	if GE jump samples_send_spike; 
+ 	
+ 	// channel 4 threshold check 
+  	r1 = i15; 			// chan 4 index
+  	r2 = b15; 
+  	r4 = l15; 
+  	r3 = r1 - r0;		// r3 = position back the necessary samples
+  	r5 = r3 - r2;  		// R5 = location back - base 
+  	if LT r3 = r3 + r4; // if we went past the end of the buffer
+	i8 = r3; 
+  	f1 = pm(0, i8);		// read the sample POSTTRIGLEN back
+  	 
+  	f2 = dm(0, i0); 	// get the threshold
+  	f2 = f1 - f2; 
+  	if GE jump samples_send_spike; 
+	
+  	jump samples_threshold_done; 
+  
+  	  	
+samples_send_spike:
+	// we have a threshold crossing!
+	
+	
+	r0 = dm(NOTRIGGERLEN);	// reset no-trigger window
+	dm(NOTRIGGER) = r0; 
+	
+	r0 = dm(SPIKELEN);
+	
+	call create_spike_packet;  
+	
+samples_threshold_done:
+  	
+  	
+  	
   	
 	
 
@@ -491,7 +579,9 @@ create_spike_packet_channel_data:
 	
 	// threshold!!!
 	i1 = STHRESH;
-	r2 = dm(m1, i1); 
+	r3 = 15; 
+	f2 = dm(m1, i1);
+	r2 = FIX f2 by r3;  
 	dm(i0, m0) = r2; 
 	
 	
@@ -543,8 +633,12 @@ setup_data:
     // filter lengths
     
     
- 	r0 = 15; 
+ 	r0 = 16; 
 	dm(POSTTRIGLEN) = r0;     
+	r0 = 32; 
+	dm(SPIKELEN) = r0 ; 
+	r0 = 32;
+	dm(NOTRIGGERLEN) = r0 ; 
     m8 = 1;    
     f0 = 0.0;
     f1 = 1.0/32768.0;
@@ -578,6 +672,8 @@ setup_data:
     
     // other settings
 	r0 = 0; 
+   	f2 = -10000.0; 
+
     lcntr = 4, do sd_spikeothers until lce;
     	m0 = r0;  
     	i0 = SGAIN;
@@ -593,8 +689,9 @@ setup_data:
     	dm(m0, i0) = r1; 
     	
     	i0 = STHRESH;
-    	r1 = 0x1234; 
-    	dm(m0, i0) = r1; 
+    	dm(m0, i0) = f2; 
+		f3 = 2.0;
+		f2 = f2 * f3; 		    	
     	
     	i0 = SHLEN;
     	r1 = 100; 
@@ -614,9 +711,9 @@ setup_data:
 	m8 = 1;
 	f0 = 0.0;  
 	pm(i8, m8) = 1.0; 
-	pm(i8, m8) = 2.0; 
-	pm(i9, m8) = 3.0;
-	pm(i9, m8) = 4.0; 
+	pm(i8, m8) = 1.0; 
+	pm(i9, m8) = 1.0;
+	pm(i9, m8) = 1.0; 
 	
 	lcntr = SHSIZE * 2 - 2 , do sd_clrh until lce; 
 		pm(i8, m8) = f0; 
@@ -627,11 +724,15 @@ sd_newsamples:
 	r0 = dm(NEWSAMPLES); 
 	r0 = r0 + 1; 
 	
-	dm(NEWSAMPLES) = r0; 
-	dm(NEWSAMPLES + 1) = r0; 
-	dm(NEWSAMPLES + 2) = r0; 
-	dm(NEWSAMPLES + 3) = r0; 
-	dm(NEWSAMPLES + 4) = r0; 
+	dm(NEWSAMPLES) = r0;
+	r1 = lshift r0 by 1;  
+	dm(NEWSAMPLES + 1) = r1; 
+	r1 = lshift r1 by 1;  
+	dm(NEWSAMPLES + 2) = r1; 
+	r1 = lshift r1 by 1;  
+	dm(NEWSAMPLES + 3) = r1; 
+	r1 = lshift r1 by 1;  
+	dm(NEWSAMPLES + 4) = r1; 
 	
     
     
