@@ -97,7 +97,7 @@ begin
 
 	DATA(7 downto 0) <= dataout(7 downto 0) when RD = '0' else "ZZZZZZZZ";
 	DATA(15 downto 8) <= dataout(15 downto 8) when mts = '0' else "ZZZZZZZZ";
-	 
+	 														 
 
 
 	clock: process(CLK) is

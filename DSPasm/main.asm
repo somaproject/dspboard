@@ -110,24 +110,38 @@ main:
 main2:	
 	nop;
 	nop;
-	r0 = 0x69; 
-	dm(MYID) = r0; 
 
-	r0 = 0xDDCCBBAA; 
-	r1 = 0xFFEE; 
-	r2 = 0x20; 
-    r3 = 0x60; 
-	r4 = 0x76543210;
-	r5 = 0xfedcba98;  
+	ustat3 = PPDUR23 | PPBHC | PPEN | PPDEN;
+	ustat4 = PPDUR23 | PPBHC ; 
 	
-	jump loadertest; 
-	call write_event; 
+	dm(PPCTL) = ustat4; 
+	
+	r0 = COX;		dm(IIPP) = r0; 	// starting point
+	r0 = 1;			dm(IMPP) = r0; 
+
+	r0 = 384;		dm(ICPP) = r0; 
+	r0 = 1; 		dm(EMPP) = r0; 
+	r0 = 0x0000;	dm(EIPP) = r0; 
+	r0 = 1536;		dm(ECPP) = r0; 
+
 	
 	
+	dm(PPCTL) = ustat3; 
 	
+	nop;
+	nop;
+testtest:	
+	r0 = 0x01234567;
+	r1 = 0x89ABCDEF; 
+	px1 = r0;
+	px2 = r1;
+	px = pm(testtest); 
+	pm(testtest+1) = px; 
 	
-	
+	 
 	jump main; 
+	
+	
 	
 	jump dispatch_event; 
 	
@@ -1065,11 +1079,10 @@ write_event:
 
 	
 	
-	dm(PPCTL) = ustat3; 
-	
 	nop;
 	nop;
 write_event_wait:
+	dm(PPCTL) = ustat3; 
 	ustat4 = dm(PPCTL); 
 	bit tst ustat4 PPDS;  // poll for dma status 
 	if tf jump write_event_wait; 
@@ -1381,14 +1394,55 @@ event_acqboard_set_end:
     
 .SECTION/PM seg_loader;
 	// our lame attempt at a loader; 
-	
-loadertest:
+	// keep in mind that this is loaded at 0x80000, but
+	// execution begins at 0x80005, hence lots of initial nops
+	nop;
+	nop;
+	nop;
+	nop;
 	nop; 
-	nop; 
-	nop; 
+loader_copy:
+
+	// first, we copy ourselves to far memory
+	i8 = 0x80000; // base location
+	i9 = 0x84100; // target location
+	m8 = 1; 
+	lcntr = 256; do (pc, 3) UNTIL LCE; 	// loop 256 times
+		px = pm(i8, m8); 
+		pm(i9, m8) = px; 
+		nop; 
+		nop;
+	jump loader_copy_done;
+
+loader_copy_done:	 // we arrive here following the
+					 // jump
 	nop;
 	nop;  
+	// dma read to disable boot mode
+
+
+	ustat3 = PPDUR23 | PPBHC | PPEN | PPDEN;
+	ustat4 = PPDUR23 | PPBHC ; 
 	
+	dm(PPCTL) = ustat4; 
+	
+	r0 = COX;		dm(IIPP) = r0; 	// dummy point
+	r0 = 1;			dm(IMPP) = r0; 
+
+	r0 = 1;			dm(ICPP) = r0; 
+	r0 = 1; 		dm(EMPP) = r0; 
+	r0 = 0xF00000;	dm(EIPP) = r0; 
+	r0 = 4;			dm(ECPP) = r0; 
+	
+	dm(PPCTL) = ustat3; 	
+	
+	// 
+read_event_wait:
+	ustat4 = dm(PPCTL); 
+	bit tst ustat4 PPDS;  // poll for dma status 
+	if tf jump (pc -2); 
+	
+    	
 	nop;
 	nop; 
 	r0 = 100; 
@@ -1408,4 +1462,72 @@ loadertest:
 	nop;
 	bit clr flags FLG0;    
 	jump (pc,-11); 
-   
+   	
+	nop;
+	nop;
+	nop;
+	nop; 
+	nop;
+	nop;
+	nop;
+	nop; 
+	nop;
+	nop;
+	nop;
+	nop; 
+	nop;
+	nop;
+	nop;
+	nop; 
+	nop;
+	nop;
+	nop;
+	nop; 
+	nop;
+	nop;
+	nop;
+	nop; 
+	nop;
+	nop;
+	nop;
+	nop; 
+	nop;
+	nop;
+	nop;
+	nop; 
+	nop;
+	nop;
+	nop; 
+	nop;
+	nop;
+	nop;
+	nop; 
+	nop;
+	nop;
+	nop;
+	nop; 
+	nop;
+	nop;
+	nop; 
+	nop;
+	nop;
+	nop;
+	nop; 
+	nop;
+	nop;
+	nop;
+	nop; 
+loader_PP_ISR: RTI;
+	nop; 
+	nop;
+	nop;
+	nop;
+	nop; 
+loader_PP_ISR2: RTI;
+	nop; 
+	nop;
+	nop;
+	nop;
+
+   		
+	

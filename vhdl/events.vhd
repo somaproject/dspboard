@@ -515,12 +515,6 @@ begin
 				einfwe <= '0';
 				einfaddrinc <= '0';
 				rainen <= '1';   
-				inns <= bramw3; 
-			when bramw3 => 
-				aein(2 downto 0) <= "101";
-				einfwe <= '0';
-				einfaddrinc <= '0';
-				rainen <= '1';   
 				inns <= none; 
 			when dspram1 => 
 				aein(2 downto 0) <= "001";

@@ -128,13 +128,6 @@ memseg readS3::range(int low, int high) {
   for ( it = tmpmem.begin(); it != tmpmem.end(); ++it) {
    unsigned long long foo(0); 
     
-    cout <<(unsigned int)  it->second[5] << ' ';
-    cout << (unsigned int) it->second[4] << ' ';
-    cout << (unsigned int) it->second[3] << ' ';
-    cout << (unsigned int) it->second[2] << ' ';
-    cout << (unsigned int) it->second[1] << ' ';
-    cout <<(unsigned int)  it->second[0] << endl; 
- 
 
     foo = it->second[5];
     foo = (foo<<8) | it->second[4];

@@ -8,7 +8,7 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity DSPBoard is
+		entity DSPBoard is
     Port ( CLKIN : in std_logic;
            SYSCLKIN : in std_logic;
 			  FIBERIN : in std_logic; 

@@ -29,6 +29,7 @@ The timestamp has changed
 INT0: Increment timestamp, clear if FLAG3 = 1
 INT1: New samples, process new chunk of data
 
+
 FLAG2: poll to see if there are new events!
 
 
@@ -312,7 +313,8 @@ Somewhat oddly, the docs seem to suggest that the reading actually begins extern
 But! but! 
 we can do the following: essentially move the location of the loader kernel to the last 100 instructions in memory. This will of course be a total mindfuck for anyone who ever wants to use that space, but we make sure our linker won't let us put code there anyway. 
 
-We will read in 
+Note that the boot process loads 256 ops to 0x80000, but then when done vectors to 0x80050, the PP interrupt location; thus we need to KEEP AN RTI AT 0x80050!!! which will then return execution to 0x80005. 
+
 
 Note that all instructions here must be PC-relative, otherwise, ouch! 
 
@@ -320,10 +322,42 @@ Note that all instructions here must be PC-relative, otherwise, ouch!
 1. load in kernel
 2. kernel copies kernel to last 100 instructions (600 bytes) of program memory
 3. transferrs control to there
-4. reads in events to write various locations in memory
-5. ?
+4. read in MyID
+5. reads in events to write various locations in memory
+   because boot code is so mission-critical, each written-in byte will
+   be replied to
+
 
 
 To generate the DSP code we execute
-elfspl12k.exe -ram -f b -pm -o DSPboard.stk DSPboard.dxe
+elfspl12k.exe -ram -f S3 -pm -o DSPboard.S3 DSPboard.dxe
 where dxe is the executable format. 
+Note that this creates six files, with DSPboard.s_0 containing all of the LSBytes, and DSPboard.s_5 the MSBs. 
+
+We've created the readS3 class which , when passed an S3 file base name, will parse all necessary files. We can then request a name, which will return a map, whcih we can iterate over to build events. 
+
+Note that our boot memory is stored from [0x84100, 0x84200).
+
+to transfer words from PM to PM, use:
+px = pm(oldloc)
+pm(newloc) = px; 
+
+
+then we loop for memory write events:
+event in:
+   ID = 0x05
+   dw0 = address to write - 0x80000
+   dw1 = lower two words
+   dw2 = middle two words
+   dw3 = upper two words
+Event out:
+   send to : original sender
+   ID = 0x06
+   SENDER = MYID
+   dw0-dw3: identical to those originally sent
+
+if we get an event of ID 0x7 then we're done!
+ 
+
+ 
+

@@ -138,13 +138,31 @@ EVENT:
    CMD = 0x01 SENDER = any dw0[0] == set into boot mode0
    CMD = 0x02 SENDER = any dw0[0] == state of DSP RESET pin
    CMD = 0x03 SENDER = any dw0 = addr of first word
-			   dw1 = first word to write dw=4 last word of 4
+			   dw1 = first word to write dw=3 last word of 3
+			
+			note that the addresses are a bit confusing, as they
+			correspond to 16-bit values in the internal
+			ram buffers, which are then read out by the DSP.
+			
+			We also only write 3 16-bit words (A full instruction)
+			per event. 
+			    
+			address mapping:
+			DSPaddr: 0x0000
+			Event addr: 0x0000
+			DSPaddr: 0x0001  Raw addr: 0x06 Event addr: 0x03
+
+   
    CMD = 0x04 sender = timer tells us the current time, and wehther or not
 		       to reset the timer.	  
 		       dw0[0] = 1 == reset the timer
 		       dw2  == high word of current time
 		       dw3  == low word of current time
    CMD = 0x05 sender = any : memory write-in for kernel loader
+   CMD = 0x06 sender = any : memory-write in response; body should be
+		       original packet
+   CMD = 0x07 sender = any : boot process complete. 
+
 
    CMD = 0x40 - CMD = 0x4F : DSP-config events, defined in DSPasm.txt
 
@@ -378,6 +396,7 @@ FPGA interface to Acq Board
 Need some way of partitioning the events as they come in
 some way of passing updated cmd bytes to the dsp
 some way of interpreting the writes to the cmd word as, well, commands
+
 
 
 
