@@ -43,13 +43,13 @@
       <signal>BUFDIN[15:0]</signal>, and
       <signal>BUFADDRIN[9:0]</signal> write data bytes into the input
       buffers when <signal>MODE</signal> is low, i.e. the system is
-      not in boot mode. <signal>BUFLENIN[9:0]</signal> is set when the
+      not in boot mode. Register <signal>BUFLENIN[9:0]</signal> is latched when the
       address corresponding to the Length field in the data packet is
       written, thus setting <signal>BUFLENIN[9:0]</signal> to the
       total length of the data packet. The last write of the packet
       occurs when <signal>BUFADDRIN[9:0]</signal> is equal to one less
       than <signal>BUFLENIN[9:0]</signal>, and results in
-      <signal>BUFWDONE</signal> being asserted. </para>
+      <signal>BUFWDONE</signal> being asserted.
 
       <para>The input state machine <signal>incs</signal> is
       responsible for selecting the currently written buffer. When
@@ -58,7 +58,7 @@
       BUFWEC</signal> is enabled, respectively. When <signal>
       BUFWDONE</signal> is asserted, the corresponding FULL{A,B,C}
       SR flip-flop is set, and the FSM moves into a WAIT{A,B,C}
-      state. </para>
+      state. </para> 
 
       <figure id="inputFSM">
 	<title>Data Buffer input FSM</title>
@@ -74,7 +74,9 @@
 
       <para>The next packet can only be written when the next buffer
       is empty, and the system has moved out of the corresponding WAIT
-      state. </para>
+      state. While <signal>incs</signal> is in a wait state, the
+      <signal>BUFLENIN[9:0]</signal> register is reset to the
+      highest-possible value to prevent accidental triggering. </para>
       
     </section>
     <section>
