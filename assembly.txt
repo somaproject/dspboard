@@ -67,3 +67,9 @@ PPDUR10   works now, reducing time from 800 ns to 540 ns.
 when we get rid of ADDR registers alltogether, we can get down to PPDUR4, 304 ns for entire cycle. unfortunately, this only results in RD being low for 18.4 ns, which is -really short-, and barely guarantees we'll get anything out of it
 
 Plus, it appears to not be incrementnig the buffer. 
+
+1 mar 2004
+Okay, having changed the fsm design, we're going to see how tight we can get this. Starting at PPD16 -- got down to PPD10
+
+5 mar 2004
+Finally works at reading events; was a problem with the GPIF wait states.  

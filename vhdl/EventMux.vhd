@@ -42,9 +42,11 @@ begin
 	AIA <= EADDR; 
 	AIB <= EADDR;
 	ao <= AOA when esel = '0' else AOB; 
+	
 	ts <= (not OEA) when esel = '0' else (not OEB); 
 	do <= DOA when esel = '0' else DOB; 
- 
+	
+ 	
 	
 	DIA <= EDATA;
 	DIB <= EDATA; 
@@ -56,9 +58,8 @@ begin
 	EB <= (not EVENT) and maddrset;
 	
 	CEA <= '1' when (esel = '1' and ECE = '0') else '0';
-	CEB <= '1' when (esel = '1' and ECE = '0') else '0';
-
-
+	CEB <= '1' when (esel = '0' and ECE = '0') else '0';
+	
 	process(SYSCLK) is
 	begin
 

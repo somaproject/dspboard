@@ -64,7 +64,8 @@ architecture Behavioral of events is
 	signal edin : std_logic_vector(15 downto 0) := (others => '0'); 
 
 	type outstates is (eoutchk, evbufw0, evbufw1, evbufw2, evbufw3,
-							 evbufw4, evbufw5, evbufw6, evbufw7, evbufw8, waitdone);
+							 evbufw4, evbufw5, evbufw6, evbufw7, evbufw8, 
+							 wndone, waitdone);
 							 
 	signal outcs, outns : outstates := eoutchk;  
 	-- event in signals
@@ -297,8 +298,7 @@ begin
 	loaddone <= '1' when addr(3 downto 0) = X"9" and WE = '1' else '0'; 
 	eindelta <= einl and (not einll);
 
-	--NEWMYEVENT <= mine and ein; 
-	NEWMYEVENT <= '1' when adspout(7 downto 4)  /= aeout(7 downto 4)  else '0'; 
+	NEWMYEVENT <= mine and ein; 
 	clock: process(CLK, RESET) is
 	begin
 	    if RESET = '1' then
@@ -421,7 +421,16 @@ begin
 				aeout(3 downto 0) <= X"8";
 				ewe <= '1';
 				eoutfaddrinc <= '1';
-				outns <= waitdone; 
+				outns <= wndone; 
+			when wndone => 
+				aeout(3 downto 0) <= X"8";
+				ewe <= '0';
+				eoutfaddrinc <= '0';
+				if done = '0' then
+					outns <= waitdone;
+				else
+					outns <= wndone; 
+				end if;  
 			when waitdone => 
 				aeout(3 downto 0) <= X"0";
 				ewe <= '0';

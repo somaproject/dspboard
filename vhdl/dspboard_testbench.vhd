@@ -317,9 +317,9 @@ BEGIN
 		memr16(X"F000", loadword); 
 
 		-- write an event!
-		memw16(X"4000", X"FFFF"); 
-		memw16(X"4001", X"FFFF"); 
-		memw16(X"4002", X"FFFF"); 
+		memw16(X"4000", X"4718"); 
+		memw16(X"4001", X"abc6"); 
+		memw16(X"4002", X"2837"); 
 		memw16(X"4003", X"0004"); -- BS event! 
 		memw16(X"4004", X"0000"); 
 		memw16(X"4005", X"0001"); 
@@ -386,9 +386,9 @@ BEGIN
 		dataw(100, 1); 
 		dataw(200, 2); 
 
-		memw16(X"4000", X"FFFF"); 
-		memw16(X"4001", X"FFFF"); 
-		memw16(X"4002", X"FFFF"); 
+		memw16(X"4000", X"0123"); 
+		memw16(X"4001", X"4567"); 
+		memw16(X"4002", X"89AB"); 
 		memw16(X"4003", X"0008"); -- Event to say we're done writing data! 
 		memw16(X"4004", X"0000"); 
 		memw16(X"4005", X"0001"); 

@@ -555,7 +555,7 @@ begin
 
 
 
-   LEDDSPA <= dspreseta;
+   LEDDSPA <= eoeb;
 
 	LEDDSPB <= dspresetb; 
 

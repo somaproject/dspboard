@@ -1012,12 +1012,11 @@ write_event:
 	call	lock_mem; 
 	
 	// debugging;
-	r0 = 0xffffffff; 
-	dm(EVENTOUT) = r0; 
-	dm(EVENTOUT + 1) = r0; 
-	dm(EVENTOUT + 2) = r0; 
-	dm(EVENTOUT + 3) = r0; 
-	dm(EVENTOUT + 4) = r0; 
+	r0 = 0x4567CCDD; 	dm(EVENTOUT) = r0;
+	r0 = 0xFDA189ab; 	dm(EVENTOUT + 1) = r0;
+	r0 = 0x22221111; 	dm(EVENTOUT + 2) = r0;
+	r0 = 0x44443333; 	dm(EVENTOUT + 3) = r0;
+	r0 = 0x66665555;	dm(EVENTOUT + 4) = r0;
 	
 	
 	ustat3 = PPDUR32 | PPTRAN | PPBHC | PP16 | PPEN | PPDEN;
@@ -1028,10 +1027,10 @@ write_event:
 	r0 = EVENTOUT; 	dm(IIPP) = r0; 	// starting point
 	r0 = 1;			dm(IMPP) = r0; 
 
-	r0 = 5;			dm(ICPP) = r0; 
+	r0 = 6;			dm(ICPP) = r0; 
 	r0 = 1; 		dm(EMPP) = r0; 
 	r0 = 0x4000;	dm(EIPP) = r0; 
-	r0 = 10;		dm(ECPP) = r0; 
+	r0 = 12;		dm(ECPP) = r0; 
 
 	
 	

@@ -47,7 +47,7 @@ begin
 				a1(15 downto 8) when outsel = 3 else 
 				a2(7 downto 0) when outsel = 4 else
 				a2(15 downto 8); 
-	EDATA <= d0 when outsel = 0 else
+	EDATA <= d0 when outsel = 0 else 
 				d1 when outsel = 1 else
 				d2 when outsel = 2 else
 				d3 when outsel = 3 else
@@ -61,7 +61,7 @@ begin
 	EOE <= soe or go; 
 	 go <= cel and loaded; 
 
-	
+	--a0 <= X"98F6"; -- DEBUGGING
 
 	-- clk timing
 	clockfast: process(CLK) is
@@ -70,7 +70,8 @@ begin
 			-- latch data
 			if WE = '1' then
 				if ADDR = "0000" then
-					a0 <= DIN; 
+					a0 <= DIN; -- DEBUGGING
+					 
 				end if;
 				if ADDR = "0001" then
 					a1 <= DIN; 
@@ -101,7 +102,7 @@ begin
 			if ldrst = '1' then
 				lloaded <= '0'; 
 			else	
-				if LOADDONE = '1' then
+				if WE = '1' and  ADDR = X"8" then
 					lloaded <= '1';
 				end if;
 			end if; 
