@@ -75,3 +75,6 @@ Okay, having changed the fsm design, we're going to see how tight we can get thi
 Finally works at reading events; was a problem with the GPIF wait states.  
 
 Trying to engineer boot setup. 
+
+9 mar 2004
+successfully load entire main program via event interface

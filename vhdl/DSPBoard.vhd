@@ -558,7 +558,7 @@ begin
 
    LEDDSPA <= FLAG0BINPUT;
 
-	LEDDSPB <= dspresetb; 
+	LEDDSPB <= modeb; 
 
 	-- simple power LED:
 	process(clk) is
