@@ -18,34 +18,26 @@ DEVSIMULATOR Modelsim
 SIMULATORTIME 0
 DEVGENERATEDSIMULATIONMODEL VHDL
 GENERATEDSIMULATIONMODELTIME 0
-SOURCE databuffer.vhd
 SOURCE decoder.vhd
 SOURCE decode8b10b.xco
 SOURCE FiberRX.vhd
 SOURCE fibertx.vhd
 SOURCE encode8b10b.xco
 SOURCE EventInputs.vhd
-SOURCE EventOutputs.vhd
 SOURCE events.vhd
 SOURCE DataMux.vhd
 SOURCE EventMux.vhd
-SOURCE dspio.vhd
-SOURCE DSPBoard.vhd
 SOURCE test_mem.vhd
 STIMULUS test_mem_test.tbw
 SOURCE test_event.vhd
 STIMULUS dspboard_testbench.vhd
 SOURCE test_acqboard.vhd
 STIMULUS test_acqboard_test.tbw
-DEPASSOC dspboard dspboard.ucf
+SOURCE DSPboard.vhdl
+SOURCE dspio.vhdl
+SOURCE databuffer.vhdl
+SOURCE EventOutputs.vhdl
 [Normal]
 xilxBitgCfg_GenOpt_ASCIIFile=xstvhd, spartan3, Implementation.t_bitFile, 1077136805, True
-[STATUS-ALL]
-dspboard.bitFile=WARNINGS,1087157263
-dspboard.ncdFile=WARNINGS,1087157188
-dspboard.ngcFile=WARNINGS,1087157115
-dspboard.ngdFile=WARNINGS,1087157174
-events.bitFile=WARNINGS,1087156107
-events.ngcFile=WARNINGS,1087156065
 [STRATEGY-LIST]
 Normal=True
