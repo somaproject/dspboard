@@ -8,4 +8,126 @@
     </author>
   </articleinfo>
   <section id="DSPboard.FPGA.DataBuffer">
+    <title>Data Buffer</title>
+    <para> The Data Buffer is responsible for triple-buffering data
+    packets from the DSP to the Data Bus, and providing a temporary
+    storage location for the DSP's 256-op loader kernel prior to boot. </para>
     
+    <para> Triple-buffering of data is accomplished using 3 blocks of
+    BlockSelect+ RAM in the Spartan-3 FPGA, with a total of 2048 bytes
+    per block. Thus the maximum size of a data packet is 2048 bytes,
+    including header. Packets are guaranteed to be read out in full,
+    and overwrites result in the overwriting packet being lost -- thus
+    overwrites lead to lost, not corrupt, packets.  </para>
+
+    <figure id="DSPboard.FPGA.DataBufferOverview">
+      <title> Data Buffer Overview </title>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="Data Buffer.ai" format="PDF" 
+		     contentwidth="7.0in"/>
+	  </imageobject>
+      </mediaobject>
+    </figure>
+
+    <section>
+      <title> Data Buffer Input </title>
+      
+      <para> The <signal>BUFWE</signal>,
+      <signal>BUFDIN[15:0]</signal>, and
+      <signal>BUFADDRIN[9:0]</signal> write data bytes into the input
+      buffers when <signal>MODE</signal> is low, i.e. the system is
+      not in boot mode. <signal>BUFLENIN[9:0]</signal> is set when the
+      address corresponding to the Length field in the data packet is
+      written, thus setting <signal>BUFLENIN[9:0]</signal> to the
+      total length of the data packet. The last write of the packet
+      occurs when <signal>BUFADDRIN[9:0]</signal> is equal to one less
+      than <signal>BUFLENIN[9:0]</signal>, and results in
+      <signal>BUFWDONE</signal> being asserted. </para>
+
+      <para>The input state machine <signal>incs</signal> is
+      responsible for selecting the currently written buffer. When
+      <signal>incs</signal> is in state A, B, or C, the corresponding
+      <signal>BUFWEA</signal>, <signal>BUFWEB</signal>, or <signal>
+      BUFWEC</signal> is enabled, respectively. When <signal>
+      BUFWDONE</signal> is asserted, the corresponding FULL{A,B,C}
+      SR flip-flop is set, and the FSM moves into a WAIT{A,B,C}
+      state. </para>
+
+      <figure id="DSPboard.FPGA.databuffer.inputFSM">
+	<title>Data Buffer input FSM</title>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="input FSM.ai" format="PDF"
+		       contentwidth="7.0in"/>
+	  </imageobject>
+	</mediaobject>
+      </figure>
+
+      <para>The next packet can only be written when the next buffer
+      is empty, and the system has moved out of the corresponding WAIT
+      state. </para>
+      
+    </section>
+    <section>
+      <title> Data Buffer Output</title>
+      
+      <para> The outputs of the three buffers are multiplexed into the
+      <signal> BUFDOUT[15:0]</signal> signal, which is optimized for
+      interfacing with the system Data Bus. Similar to the input
+      stage, the output reads the Length word in the data header to
+      determine total packet length.</para>
+
+
+      <figure id="DSPboard.FPGA.databuffer.outputFSM">
+	<title>Data Buffer Output FSM</title>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="output FSM.ai" format="PDF"
+		       contentwidth="7.0in"/>
+	  </imageobject>
+	</mediaobject>
+      </figure>
+
+      <para> The output FSM (<signal>outcs</signal>) consists of three
+      similar phases, one for each buffer. The system sits in a WAIT
+      state until the corresponding <signal>FULL{A,B,C}</signal> is
+      asserted coincident with the <signal>NEXTOUT</signal>, advancing
+      to the corresponding A, B, or C. The resulting high on
+      <signal>BUFCNTEN</signal> causes the
+      <signal>BUFCNT[9:0]</signal> counter to advance on each output
+      word. <signal>BUFLENOUT[9:0]</signal> latches the appropriate
+      length word. <signal>BUFCNTEN</signal> is delayed by one tick
+      and output as <signal>BUFACKOUT</signal> to the
+      <signal>DACK</signal> on the Data Bus. </para>
+
+      <para>Upon <signal>BUFLENOUT[9:0]</signal> equaling
+      <signal>BUFCNT[9:0]</signal>, the writing of the packet is
+      complete, and the transition to the DONE state clears the
+      corresponding <signal>FULL{A,B,C}</signal>. The FSM then waits
+      for the deassertion of <signal>NEXTOUT</signal> before advancing
+      to the wait state for the next buffer.  </para>
+    </section>
+
+    
+    <section> 
+      <title> Boot Buffer</title> 
+      <para>BlockSelect+ RAM Buffer A is also used to store the loader
+      kernel for the DSP. This allows us to buffer the loader kernel
+      into the FPGA before booting the DSP, which expects to rapidly
+      read the kernel from RAM. The EEPROM-based boot mode of the DSP
+      uses the Parallel port in 8-bit mode.</para>
+
+      <para>When the DSP is in boot mode (<signal>MODE</signal> is
+      high) and the DSP is held in a reset state
+      (<signal>DSPRESET</signal>=1), <signal>RWE</signal>,
+      <signal>RAIN[9:0]</signal>, and <signal>RDIN[15:0]</signal> can
+      write to the FPGA. The deassertion of <signal>DSPRESET</signal>
+      switches the buffer address input to the 11-bit
+      <signal>RAOUT[10:0]</signal>, with the 10 MSBs selecting the
+      data word from the buffer and the LSB controlling which byte
+      drives <signal>RDOUT[7:0]</signal></para> 
+
+    </section>
+  </section>
+</article>
