@@ -94,6 +94,18 @@ the output of this system is very similar to what's needed to talk to the data b
 CLKA : clock on the DSP side
 CLKB : clock on the data bus side
 
+For internal data frames, the "length" argument is 2-byte words, always includes the total frame length, and is preceeded by a 1-word header that looks like:
+
+bits 5:0 : source ID (tetrode number
+bit 7:6 : type (spike/eeg) spike = 0, eeg = 1
+bit 15:7 : total length of frame in 2-byte words (0 == 256 == 512b)
+
+
+
+
+
+
+ 
 
 
 
@@ -112,17 +124,16 @@ The external memory space is partitioned into "regions", which begin on a 12-bit
 
 Region	Use:
 	
-0x0	this is the DMA-at-the-beginning-of-each-cycle word. 
-	0x0000L: sample from channel 0
-	0x0000H: sample from channel 1
-	0x0001L: sample from channel 2
-	0x0001H: sample from channel 3
-	0x0002L: sample from continuous channel
+0x0	this is the DMA-at-the-beginning-of-each-cycle word, along with metadata
+	0x0000 : metadata, i.e. are we connected, this sample was  bad, etc. 
+	0x0001L: sample from channel 0
+	0x0001H: sample from channel 1
+	0x0002L: sample from channel 2
+	0x0002H: sample from channel 3
+	0x0003L: sample from continuous channel
 
 0x1	0x1000 Output data buffer
-	How to actually do this? I think a fifo with word size at the beginning
-	is our best bet. But we will increment. Thus each write to 1000 signifies the start of a new packet. Ohh, cool. 
-	
+		
 0x2	outbound events : write an event here:
 	0x2000 : low set of targets
 	0x2001 : high set of targets
@@ -142,6 +153,47 @@ Region	Use:
 
 0x4     acqboard control interface
 	0x4000 : status word
+	0x4010L: command (bits 3:0)
+	0x4010H: cmdid (bits 2:0)
+	0x4011L: command words :
+		 0:7 one
+		 8:15 two
+	0x4011H: command words :
+		 0:7 thee
+		 8:15 four
+	0x4012L: complete the CMD, i.e. send
+
+
+
+Booting occurs in 8-bit mode, which uses the ALE cycle to put the 16 MSBs of a 24-bit address on the line. Thus during boot, we see ADDR on the FPGA == 0x0800. 
+------------------------------------------------------------------------------
+FPGA FIBER RX / TX
+------------------------------------------------------------------------------
+
+We want to be able to receive command updates, send commands, and send an event when there are lots of errors, or something like that. 
+
+How do we tell the difference between "lots of errors" and "no cable connected"?
+Solution: you don't. Every error you get triggers a "disconnected" state
+
+You only reconnect when you get two straight frames of no error. 
+
+the transition from disconnected to connected causes us to generate an event, but we'll let the DSP (which is polling the connected bit) handle that. 
+
+we just read in bytes, count up
+if we get an error, reset counter, change status from sync to nosync
+dsp flushes buffers
+
+
+Normally, the command interface just sends out frames full of zeros. But should it get a command, it will write it out once. 
+
+We just do this as a big FSM, which is conditioned on OUTBYTE. Simple stuff. 
+
+CLK8 is an 8 MHz CLKEN, and OUTBYTE = 10x CLK8
+
+
+
+      
+
 
 
 	

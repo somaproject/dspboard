@@ -62,6 +62,12 @@ architecture Behavioral of databuffer is
 	-- ram input side
 	signal rwea, rweb, rwec : std_logic := '0';
 
+	constant LENADDR : std_logic_vector(7 downto 0) := X"00"; 	
+	-- this is the location of the word that contains length info
+
+	 
+
+
 	component RAMB4_S16_S16
 	  generic (
 	       INIT_00 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
@@ -175,7 +181,7 @@ begin
 			if rising_edge(CLKA) then
 				incs <= inns; 
 
-				if bufaddrin = X"0A" and bufwe = '1' then
+				if bufaddrin = LENADDR and bufwe = '1' then
 					buflenin <= BUFDIN(8 downto 1); 
 				end if; 
 
@@ -272,7 +278,7 @@ begin
 			if rising_edge(CLKB) then
 				outcs <= outns; 
 
-				if bufaddrin = (X"0B") then
+				if bufaddrin = (LENADDR) then
 					buflenout <= dob(7 downto 0); 
 				end if; 
 
