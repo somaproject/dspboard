@@ -95,13 +95,22 @@ ___lib_TMZLI:   RTI;RTI;RTI;RTI;
    This is also where the output buffers are. */ 
 FILTERS:
 #define FILTERN 200
-.VAR FILTER1[FILTERN] = "filter.dat";
+.VAR FILTER1[FILTERN] = "FIRtest.dat";
 .VAR FILTERTYPE1 = 0;
-.VAr FILTERLEN1 = 100;
-.VAR FILTER2[FILTERN], FILTERTYPE2, FILTERLEN2;
-.VAR FILTER3[FILTERN], FILTERTYPE3, FILTERLEN3;
-.VAR FILTER4[FILTERN], FILTERTYPE4, FILTERLEN4;
-.VAR FILTERC[FILTERN], FILTERTYPEC, FILTERLENC;
+.VAR FILTERLEN1 = 100;
+.VAR FILTER2[FILTERN] = "FIRtest.dat";
+.VAR FILTERTYPE2 = 0;
+.VAR FILTERLEN2 = 100;
+.VAR FILTER3[FILTERN] = "FIRtest.dat";
+.VAR FILTERTYPE3 = 0;
+.VAR FILTERLEN3 = 100;
+.VAR FILTER4[FILTERN] = "FIRtest.dat";
+.VAR FILTERTYPE4 = 0;
+.VAR FILTERLEN4 = 100;
+.VAR FILTERC[FILTERN] = "FIRtest.dat";
+.VAR FILTERTYPEC = 0;
+.VAR FILTERLENC = 100;
+
 
 #define SPIKEOUTN 160
 #define CONTOUTN 40
@@ -205,13 +214,13 @@ boot: // boot routine
 
 	R0 = 10000; 
 dummyloop:
-	R0 = R0 + 1; 
-	r2 = pm(FILTERTYPE1);
-
-	r2 = 0; 
+	R0 = fix f2;  
+	R1 = trunc f2; 
+	f3 = float R4;
 	nop;
 	nop;
 	nop;
+	call sample; 
 	jump dummyloop;
 
 timer:	
@@ -246,9 +255,20 @@ sample:
 
 	// Check to see if we need to DMA_out a spike chunk, and start the DMA
 
+	call filtering; // filter all incoming data
+
+	//call threshold_check; // check to see if any channels exceed
+						  // threshold 
+
+
+
+
+
+	rts; //rti; 
+
+filtering:
 	// Filter the data !
 	
-
 	m8 = 1;  m0 = -1; // directions for buffers; we want to work backwards through x[n].
     l2 = YLEN;
    	m1 = 1; 
@@ -259,25 +279,109 @@ sample:
 		l0 = XLEN; 
 		b0 = b3; 
 		i0 = i3; 
-		f0 = dm(i0, m0);  // load f0 with most recent value, push ponter back one, 
- 	    						   
+		f8 = dm(i0, m0);  // load f0 with most recent value, push ponter back one, 
+ 	    f8 = dm(i0, 0); 				   
 		b8 = FILTER1;
 		b1 = D1; 
 		m0 = -1; 
 		
-		call filterchannel; 
+		call filter_single_channel; 
 
 		b2 = Y1;				// setup dmDAG register set 2 for output
 		i2 = dm(YPOS1); 
 		
 		r1 = fix f8, dm(i2, m1) = f8;	// save result in circular buffer
-		pm(i14, m14) = r1; 		// save output sample in spike buffer;
+		r12 = r12 xor r12, pm(i14, m14) = r1; 		// save output sample in spike buffer;
 		dm(YPOS1) = i2; 
 
-	rti; 
+	channel_2:
+		r2 = pm(FILTERTYPE2);
+	    r1 = pm(FILTERLEN2);		// get length of filter
+		l0 = XLEN; 
+		b0 = b4; 
+		i0 = i4; 
+		f8 = dm(i0, m0);  // load f0 with most recent value, push ponter back one, 
+ 	    f8 = dm(i0, 0); 				   
+		b8 = FILTER2;
+		b1 = D2; 
+		m0 = -1; 
+		
+		call filter_single_channel; 
 
+		b2 = Y2;				// setup dmDAG register set 2 for output
+		i2 = dm(YPOS2); 
+		
+		// fix is a bit of an ass-command; 
+		r1 = fix f8, dm(i2, m1) = f8;	// save result in circular buffer
+		r12 = r12 xor r12, pm(i14, m14) = r1; 		// save output sample in spike buffer;
+		dm(YPOS2) = i2; 
 
-filterchannel:
+	channel_3:
+		r2 = pm(FILTERTYPE3);
+	    r1 = pm(FILTERLEN3);		// get length of filter
+		l0 = XLEN; 
+		b0 = b5; 
+		i0 = i5; 
+		f8 = dm(i0, m0);  // load f0 with most recent value, push ponter back one, 
+ 	    f8 = dm(i0, 0); 				   
+		b8 = FILTER3;
+		b1 = D3; 
+		m0 = -1; 
+		
+		call filter_single_channel; 
+
+		b2 = Y3;				// setup dmDAG register set 2 for output
+		i2 = dm(YPOS3); 
+		
+		r1 = fix f8, dm(i2, m1) = f8;	// save result in circular buffer
+		r12 = r12 xor r12, pm(i14, m14) = r1; 		// save output sample in spike buffer;
+		dm(YPOS3) = i2; 
+
+	channel_4:
+		r2 = pm(FILTERTYPE4);
+	    r1 = pm(FILTERLEN4);		// get length of filter
+		l0 = XLEN; 
+		b0 = b6; 
+		i0 = i6; 
+		f8 = dm(i0, m0);  // load f0 with most recent value, push ponter back one, 
+ 	    f8 = dm(i0, 0); 				   
+		b8 = FILTER4;
+		b1 = D4; 
+		m0 = -1; 
+		
+		call filter_single_channel; 
+
+		b2 = Y4;				// setup dmDAG register set 2 for output
+		i2 = dm(YPOS4); 
+		
+		r1 = fix f8, dm(i2, m1) = f8;	// save result in circular buffer
+		r12 = r12 xor r12, pm(i14, m14) = r1; 		// save output sample in spike buffer;
+		dm(YPOS4) = i2; 
+
+	channel_C:
+		r2 = pm(FILTERTYPEC);
+	    r1 = pm(FILTERLENC);		// get length of filter
+		l0 = XLEN; 
+		b0 = b7; 
+		i0 = i7; 
+		f8 = dm(i0, m0);  // load f0 with most recent value, push ponter back one, 
+ 	    f8 = dm(i0, 0); 				   
+		b8 = FILTERC;
+		b1 = DC; 
+		m0 = -1; 
+		
+		call filter_single_channel; 
+
+		b2 = YC;				// setup dmDAG register set 2 for output
+		i2 = dm(YPOSC); 
+		
+		r1 = fix f8, dm(i2, m1) = f8;	// save result in circular buffer
+		r12 = r12 xor r12, pm(i15, m15) = r1; 		// save output sample in spike buffer;
+		dm(YPOSC) = i2; 
+
+rts;
+
+filter_single_channel:
 /* call this to filter the channel, with 
 	R2 = filter type
 	R1 = Filter length
@@ -307,3 +411,10 @@ filterchannel_fir:
 	nop;
 filterchannel_end:
 	rts; 
+
+
+
+threshold_check: 
+// Here we check to see if any of the four spike channels exceeds
+// their threshold, and if so, begin a countdown until we DMA the 
+// 
