@@ -1,0 +1,33 @@
+7 Februrary 2004. Assembly begins!!
+
+First, all we want to do is see if we have made a functional switching powersupply, and look at the ripple output. BUT WE HAVE A SHORT!! DAMN IT!
+
+The powerpad design resulted in expansion holes not being formed around the necessary planes, such that all power planes are shorted together. That sucks. $400 down the drain!!
+
+As long as we're making changes:
+   1. use different clock so we cna drive everything with 64 MHz. 
+
+17 February 2004 : Let's try this again
+soldered connector ... and no horrible horrible shorts! Yay!!
+
+Switching regulator works!!! +1.758 V!  80 mV pp output spikes every 1 uS or so (1 MHz? )
+
+Now, using the multimeter, we can draw 2500 mA while using 1.93 - .32 = 1.61 A input. At 3.3V, that's 5.3 W input for 4.5W output, or 85% efficiency, which is awesome. 
+
+18 February 2004
+
+What the hell have I done? on one board, it won't boot; on another board, it won't boot _AND_ somehow the SYSCLK pin is shorted to ground. Process problems, perhaps?  I don't know, but I'm getting sick of this,  _and_ this is getting expensive (on six layer boards!!)
+
+ideas: Process problem? via expansion in internal layers too small? 
+Via outer-layer pad is too large; shrink by 4 mil? 
+
+NO! I WAS COMPILING FOR THE WRONG TARGET FPGA! BECAUSE I FUCKING SUCK!!
+
+21 February 2004
+Now have clock distribution IC, 66 MHz clock on-board. Will need to adjust FPGA counters to deal with this. 
+
+22 February 2004
+Following some bizarre crap-on-68-pin-connector issues (wtf?) we've got to the point where the current codebase will handle the reset event properly, which is awesome. Both DSPRESETA and DSPRESETB behave as expected, from the protointerface. 
+
+23 February 2004
+Well, the JTAG connector (Summit-ICE) can talk to the board, but it turns out we're dealing with revision 0.0 silicon, meaning all manner of crap could be going wrong. Contacting analog to try and get newer chips. 

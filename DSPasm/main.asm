@@ -68,6 +68,11 @@
 	 	
 	.VAR 	PENDINGOUTSPIKE;	// is there a pending out spike packet? 
 	.VAR 	PENDINGOUTCONT; 	// is there a pending out continuous packet
+
+	// acqboard-related
+	.VAR	CMDID;
+	.VAR 	CMDIDPENDING; 
+		
 .SECTION/DM seg_dm16da; 
 #define OUTSPIKELEN 300
 
