@@ -24,7 +24,8 @@ entity databuffer is
            RDOUT : out std_logic_vector(7 downto 0);
            RDIN : in std_logic_vector(15 downto 0);
            RWE : in std_logic;
-           MODE : in std_logic);
+           MODE : in std_logic;
+			  DSPRESET : in std_logic);
 end databuffer;
 
 architecture Behavioral of databuffer is
@@ -32,14 +33,14 @@ architecture Behavioral of databuffer is
 -- events to the databus. uses 3 blockselect+ rams. 
 
 	-- buffer input side
-	signal bufwein, bufwedone : std_logic := '0';
+	signal bufwein, bufwdone : std_logic := '0';
 	signal fulla, fullb, fullc : std_logic := '0';
 	signal weaa, weab, weac : std_logic := '0';
 	signal addra : std_logic_vector(7 downto 0) := (others => '0');
-   signal buflenin : std_logic_vector(7 downto 0) := (others => '0'); 
-	signal bufwdone : std_logic := '0'; 
-	type instates is (waita, a, waitb, b, waitc, c); 
-	signal incs, inns : instates := waita; 
+   signal buflenin, ra : std_logic_vector(7 downto 0) := (others => '0'); 
+		type instates is (waita, a, waitb, b, waitc, c); 
+	signal incs, inns : instates := waita;
+	signal bufwea, bufweb, bufwec : std_logic := '0';  
 
 	-- ram output side
 	signal doaa, doab, doac : std_logic_vector(15 downto 0) := (others => '0');
@@ -54,13 +55,13 @@ architecture Behavioral of databuffer is
 	signal bufcnten, bufcntrst : std_logic := '0';
 	signal clra, clrb, clrc : std_logic := '0';
 	signal bufack : std_logic := '0'; 
-	signal addrb : std_logic_vector(7 downto 0) := (others => '0');
 
 	type outstates is ( waita, a, donea, waitb, b, doneb, waitc, c, donec);
 	signal outcs, outns : outstates := waita; 
 
 	-- ram input side
 	signal rwea, rweb, rwec : std_logic := '0';
+	signal dia : std_logic_vector(15 downto 0) := (others => '0');
 
 	constant LENADDR : std_logic_vector(7 downto 0) := X"00"; 	
 	-- this is the location of the word that contains length info
@@ -107,50 +108,50 @@ begin
 
 	-- start with ram blocks:
 	buffera : RAMB4_S16_S16 port map (
-		DIA => BUFDIN,
-		DIB => RDIN,
+		DIA => dia,
+		DIB => X"0000",
 		ENA => '1',
 		ENB => '1',
 		WEA => weaa,
-		WEB => rwea,
+		WEB => '0',
 		RSTA => RESET,
 		RSTB => RESET,
 		CLKA => CLKA,
 		CLKB => CLKB,
 		ADDRA => addra,
-		ADDRB => addrb,
+		ADDRB => bufcnt,
 		DOA => doaa,
 		DOB => doba); 
 
 	bufferb : RAMB4_S16_S16 port map (
-		DIA => BUFDIN,
-		DIB => RDIN,
+		DIA => dia,
+		DIB => X"0000",
 		ENA => '1',
 		ENB => '1',
 		WEA => weab,
-		WEB => rweb,
+		WEB => '0',
 		RSTA => RESET,
 		RSTB => RESET,
 		CLKA => CLKA,
 		CLKB => CLKB,
 		ADDRA => addra,
-		ADDRB => addrb,
+		ADDRB => bufcnt,
 		DOA => doab,
 		DOB => dobb); 
 
 	bufferc : RAMB4_S16_S16 port map (
-		DIA => BUFDIN,
-		DIB => RDIN,
+		DIA => dia,
+		DIB => X"0000",
 		ENA => '1',
 		ENB => '1',
 		WEA => weac,
-		WEB => rwec,
+		WEB => '0',
 		RSTA => RESET,
 		RSTB => RESET,
 		CLKA => CLKA,
 		CLKB => CLKB,
 		ADDRA => addra,
-		ADDRB => addrb,
+		ADDRB => bufcnt,
 		DOA => doac,
 		DOB => dobc); 
 
@@ -159,19 +160,35 @@ begin
 	bufwein <= bufwe and (not mode);
 	bufwdone <= '1' when bufwein = '1' and buflenin = BUFADDRIN else
 					'0';
-	weaa <= '1' when bufwein = '1' and (incs = A) else '0';
-	weab <= '1' when bufwein = '1' and (incs = B) else '0';
-	weac <= '1' when bufwein = '1' and (incs = C) else '0';
+	bufwea <= '1' when bufwein = '1' and (incs = A) else '0';
+	bufweb <= '1' when bufwein = '1' and (incs = B) else '0';
+	bufwec <= '1' when bufwein = '1' and (incs = C) else '0';
+
+
+	rwea <= '1' when rwe = '1' and rain(9 downto 8) = "00" else '0';
+	rweb <= '1' when rwe = '1' and rain(9 downto 8) = "01" else '0';
+	rwec <= '1' when rwe = '1' and rain(9 downto 8) = "10" else '0';
+
+	weaa <= rwea when mode = '1' else bufwea; 
+	weab <= rweb when mode = '1' else bufweb; 
+	weac <= rwec when mode = '1' else bufwec; 
+
+
+
+	dia <= rdin when mode = '1' else bufdin; 
+
 	
-	doa <= doaa when RAIN(10 downto 9) = "00" else
-			 doab when RAIN(10 downto 9) = "01" else
+	doa <= doaa when RAOUT(10 downto 9) = "00" else
+			 doab when RAOUT(10 downto 9) = "01" else
 			 doac; 
-	RDOUT <= doa(7 downto 0) when rain(0) = '0' else
+	RDOUT <= doa(7 downto 0) when RAOUT(0) = '0' else
 				doa(15 downto 8); 
 	BUFERROR <= '1' when  bufwe = '1' 
 					and (incs = A or incs = B or incs = C) else '0'; 
 
-	addra <= bufaddrin when mode = '0' else RAIN(8 downto 1);  
+	addra <= ra when mode = '1' else bufaddrin;
+	ra <= raout(8 downto 1) when DSPRESET = '1' else RAIN(7 downto 0); 
+
 
 	clocka : process(CLKA, RESET) is
 	begin
@@ -190,7 +207,7 @@ begin
 				if clra = '1' then
 					fulla <= '0';
 				else
-					if bufwedone = '1' and incs = A then
+					if bufwdone = '1' and incs = A then
 						fulla <= '1';
 					end if;
 				end if; 
@@ -198,7 +215,7 @@ begin
 				if clrb = '1' then
 					fullb <= '0';
 				else
-					if bufwedone = '1' and incs = B then
+					if bufwdone = '1' and incs = B then
 						fullb <= '1';
 					end if;
 				end if; 
@@ -206,7 +223,7 @@ begin
 				if clrc = '1' then
 					fullc <= '0';
 				else
-					if bufwedone = '1' and incs = C then
+					if bufwdone = '1' and incs = C then
 						fullc <= '1';
 					end if;
 				end if; 
@@ -264,12 +281,6 @@ begin
 			 dobc; 
 	BUFDOUT <= dob; 
 	
-	rwea <= '1' when rwe = '1' and rain(9 downto 8) = "00";
-	rweb <= '1' when rwe = '1' and rain(9 downto 8) = "01";
-	rwec <= '1' when rwe = '1' and rain(9 downto 8) = "10";
-
-	addrb <= bufcnt when mode = '0' else RAIN(7 downto 0); 
-
 	clockb: process(CLKB, RESET) is
 	begin
 		if RESET = '1' then
@@ -341,7 +352,7 @@ begin
 				clra <= '0';
 				clrb <= '0';
 				clrc <= '0';
-				outsel <= 0; 
+				outsel <= 1; 
 				if fullc = '1' and nextout = '1' then
 					outns <= b;
 				else
@@ -353,7 +364,7 @@ begin
 				clra <= '0';
 				clrb <= '0';
 				clrc <= '0';
-				outsel <= 0; 
+				outsel <= 1; 
 				if bufcnt = buflenout then
 					outns <= doneb;
 				else
@@ -365,7 +376,7 @@ begin
 				clra <= '0';
 				clrb <= '1';
 				clrc <= '0';
-				outsel <= 0; 
+				outsel <= 1; 
 				outns <= waitc; 
 			when waitc => 
 				bufcnten <= '0';
@@ -373,7 +384,7 @@ begin
 				clra <= '0';
 				clrb <= '0';
 				clrc <= '0';
-				outsel <= 0; 
+				outsel <= 2; 
 				if fullc = '1' and nextout = '1' then
 					outns <= c;
 				else
@@ -385,7 +396,7 @@ begin
 				clra <= '0';
 				clrb <= '0';
 				clrc <= '0';
-				outsel <= 0; 
+				outsel <= 2; 
 				if bufcnt = buflenout then
 					outns <= donec;
 				else
@@ -397,7 +408,7 @@ begin
 				clra <= '0';
 				clrb <= '0';
 				clrc <= '1';
-				outsel <= 0; 
+				outsel <= 2; 
 				outns <= waita;
 			when others => 
 				bufcnten <= '0';

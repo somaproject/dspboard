@@ -4,8 +4,8 @@ PROJECT vhdl
 DESIGN vhdl
 DEVFAM spartan2e
 DEVFAMTIME 0
-DEVICE xc2s50e
-DEVICETIME 1074786287
+DEVICE xc2s100e
+DEVICETIME 1075313611
 DEVPKG pq208
 DEVPKGTIME 0
 DEVSPEED -6
@@ -23,7 +23,14 @@ SOURCE decoder.vhd
 SOURCE decode8b10b.xco
 SOURCE FiberRX.vhd
 SOURCE fibertx.vhd
+SOURCE encode8b10b.xco
+SOURCE EventInputs.vhd
+SOURCE EventOutputs.vhd
+SOURCE events.vhd
+SOURCE DataMux.vhd
 [STATUS-ALL]
-decoder.ngcFileGroup=OK,1074924814
+events.ngcFileGroup=OK,1075313650
+fiberrx.ngcFileGroup=OK,1075313684
+fibertx.ngcFileGroup=OK,1075313725
 [STRATEGY-LIST]
 Normal=True
