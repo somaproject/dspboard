@@ -275,6 +275,7 @@ We need to adopt a policy that any component can be re-mapped anywhere in the ad
 
 Region	Use:
 	memory addr : FPGA addr
+	FPGA_SAMPLES
 0x0	this is the DMA-at-the-beginning-of-each-cycle word, along with metadata
 	0x0000 : metadata, i.e. are we connected, 
 			  this sample was  bad, etc.
@@ -290,8 +291,9 @@ Region	Use:
 	0x0006 : debug 0x1234
 	0x0007 : My device ID
 
-
-0x2	0x2000 : Output data buffer
+	
+0x2	0x2000 : Output data buffer 
+	FPGA_OUTDATA
 	the length word is the length of the packet. If we don't write
 	the correct number of bytes, the packet won't be committed
 	If we write too many, the higher ones are ignored. 
@@ -300,7 +302,7 @@ Region	Use:
 	  7:0 : source
 	  15:8 : length, in 2-byte words
 	
-		
+	FPGA_EVENTWR:	
 0x4	outbound events : write an event here:
 	0x4000 : low set of targets
 	0x4001 : medium set of targets
@@ -313,7 +315,8 @@ Region	Use:
 	0x4009 : a write here "commits" the event 
 			  to the event out buffer
 
-0x6	inbound events:
+0x6	FPGA_EVENTRD
+	inbound events:
 	0x6000 : cmd word
 	0x6001 : first word
 	0x6002 : next two words
@@ -322,7 +325,8 @@ Region	Use:
 	0x6005 : next two words
 	0x6006 : a read here says "i'm done reading this event"
 
-0x8     acqboard control interface
+0x8     FPGA_ACQBOARD
+	acqboard control interface
 	0x8000 : status word
 	0x8020 : command (bits 3:0)
 	0x8021 : cmdid (bits 2:0)
@@ -337,9 +341,6 @@ Region	Use:
 Booting occurs in 8-bit mode, which uses the ALE cycle to put the 16 MSBs of a 24-bit address on the line. Thus during boot, we see ADDR on the FPGA == 0x0800. 
 
 We use the inbound RD\ to control the TS. When RD = 1, the DSP isn't reading, therefor we're not writing, and thus the output should be tristated. This results in us tristating as quickly as possible following the RD cycle. What a neat idea!
-
-
-
 
 ------------------------------------------------------------------------------
 FPGA FIBER RX / TX

@@ -16,6 +16,15 @@ process_sample interrupt handler
 all disable the SAMPLE (INT0) interrupt. This is to prevent an interrupt occuring during a DMA action and thus breaking the DMA (since there is only one set of PP DMA registers)
 
 
+naming convention: 
+to make a function global, also name it as
+filename.functionname
+and then .global that symbol
+
+note that all function names use underscores, and jump points within
+them use .dots
+
+
 
 ----------------------------------------------------------------------------
 ADSP EXECUTION CYCLE
@@ -101,74 +110,9 @@ Upon getting a trigger, we want to say:
 
 Variable notes:
 
--- globals
-TIMESTAMP: 32-bit int time stamp
-MYID : tetrode number
-
-NEWSAMPLES[5]: DMA target for input sample reading. 
 
 
---spike-specific --------------
-#compile-time defines:
-# SBUFSIZE: length of buffer, 1024 
-# SHSIZE : length of fir filter, 256
-# SYSIZE : length of output, 256
 
-SPIKELEN : how many samples do we want to include when we capture a spike
-POSTTRIGLEN : after a trigger, we want to see this many spikes
-NOTRIGGERLEN: after getting a trigger, don't re-trigger for this number of samples
-NOTRIGGER: counter; we only trigger when this is = 0, and each trigger reloads it with NOTRIGGERLEN. 
-
-SX12[2*SBUFSIZE] : (dm) interleaved sample circular buffer of chan 1 & 2
-SX34[2*SBUFSIZE] : (dm) interleaved sample circular buffer of chan 3 & 4
-SH12[2*HSIZE] : (pm) interleaved impulse response of filter for chan 1 & 2
-SH34[2*HSIZE] : (pm) interleaved impulse response of filter for chan 3 & 4
-SY1[256] ..SY4[256] : (dm) output buffers, 32-bit
- 
-
-currentpos : current poisition in circular buffer for spike channels
-SGAIN[4] : gains of each chan (8-bit int, actual gain / 100) 
-SFID[4] : filter ID for each chan (16-bit int)
-SHFID[4] : hardware filter setting (8-bit int)
-STHRESH[4] : channel threshold (16-bit signed int); 
-
-
---Continuous-specific-----
-CODOWNSAMPLE : downsample ratio. 
-COX[1024] : direct circular buffer for EEG
-COH[256] : (pm)  filter buffer
-COY[512] : (dm) continuous circular output buffer
-COGAIN : gain of continuous channel
-COFID : filter ID for continuous channel
-COHFID : hardware filter ID; 
-
-
---Acboard-specific--------
-CMDSTS : previous command status
-CMDID : most recent completed CMDID
-CMDIDPENDING : pending CMDID
-PENDINGACQCMD[2]  : pending acqboard event. 
-
-DAG configuration:
-DAG1[0] (i0) and DAG2[0] (i8) are for in-process mucking around
-
-DAG1: (all circular) 
-
-5: Spike interleaved input buffers 1 & 2
-6: Spike interleaved input buffers 3 & 4
-7: continuous input buffer
-
-DAG2:
-11: Continuous output buffer
-12: Spike output buffer for channel 1
-13: Spike output buffer for channel 2
-14: Spike output buffer for channel 3
-15: Spike output buffer for channel 4
-
-
-All internal buffers are in 32-bit floating point. When we call a create_packet function, we perform the necessary fixed-point conversion via FIX. 
-
-Since SIMD filtering is just SISD filtering with different pointers, we essentially use the same code for both. 
 
   
 
