@@ -226,8 +226,18 @@ BEGIN
 		procedure memw16(addr : in std_logic_vector(15 downto 0);
 							  data : in std_logic_vector(15 downto 0)) is
 		begin
-
-
+			DATAA <= (others => 'Z'); 
+			wait until rising_edge(dspclk); 
+			 
+			ADDRA <= addr; 
+			waitclk(3); 
+			WEA <= '0'; 
+		   DATAA <= data; 
+			waitclk(9); 
+			wait until rising_edge(dspclk); 
+			WEA <= '1'; 
+			wait until rising_edge(dspclk); 
+			DATAA <= (others => 'Z'); 	
 		end memw16; 
 
 		-- MEMR8
@@ -273,7 +283,21 @@ BEGIN
 					severity note; 
 		end loop; 
 
+		-- switch boot modes -- go into 8-bit interface
 		memr16(X"F000", loadword); 
+
+		-- write an event!
+		memw16(X"4000", X"FFFF"); 
+		memw16(X"4001", X"FFFF"); 
+		memw16(X"4002", X"FFFF"); 
+		memw16(X"4003", X"0004"); -- BS event! 
+		memw16(X"4004", X"0000"); 
+		memw16(X"4005", X"0001"); 
+		memw16(X"4006", X"0002"); 
+		memw16(X"4007", X"0003"); 
+		memw16(X"4008", X"0004"); 
+		memw16(X"4009", X"0000"); 
+
 
 
 		wait;	
@@ -287,7 +311,7 @@ BEGIN
 			procedure waitclk(duration : in integer) is
 			begin
 				for i in 0 to duration loop
-					wait until rising_edge(clk);
+					wait until rising_edge(sysclk);
 				end loop; 
 			end procedure waitclk;
 
@@ -327,6 +351,45 @@ BEGIN
 				   
 			end procedure wevent;  
 
+			procedure revent(addr : out std_logic_vector(47 downto 0);
+								  cmd : out std_logic_vector(15 downto 0); 
+								  din0, din1, din2, din3, din4 
+								  		: out std_logic_vector(15 downto 0)) is
+			begin	
+				  wait until rising_edge(sysclk);
+				  ECE <= '0';
+				  EVENT <= '0'; 
+				  wait until rising_edge(sysclk);
+				  EVENT <= '1';
+				  ECE <= '1';  
+				  cmd := EDATA;
+				  addr(7 downto 0) := EADDR; 
+				  wait until rising_edge(sysclk);
+				  din0 := EDATA; 
+				  addr(7 downto 0) := EADDR; 
+				  wait until rising_edge(sysclk);
+				  din1 := EDATA; 
+				  addr(7 downto 0) := EADDR; 
+				  wait until rising_edge(sysclk);
+				  din2 := EDATA; 
+				  addr(7 downto 0) := EADDR; 
+				  wait until rising_edge(sysclk);
+				  din3 := EDATA; 
+				  addr(7 downto 0) := EADDR; 
+				  wait until rising_edge(sysclk);
+				  din4 := EDATA; 
+				  addr(7 downto 0) := EADDR;
+				  wait until rising_edge(sysclk);
+
+				  
+
+				   
+			end procedure revent;  
+
+
+			variable laddr :  std_logic_vector(47 downto 0);
+			variable  lcmd, ldin0, ldin1, ldin2, ldin3, ldin4 
+								  		: std_logic_vector(15 downto 0);
 	begin
 		wait until falling_edge(RESET); 
 			ECE <= '1'; 
@@ -358,9 +421,17 @@ BEGIN
 			waitclk(30); 
 				wevent(X"FFFFFFFFFFFF", X"0002", X"0000", X"0000", X"0001", X"0002", X"0003");
 
-			-- now, we wait
-		wait; 
+			-- now, we query for events!!
+			while (1 = 1) loop
+				revent(laddr, lcmd, ldin0, ldin1, ldin2, ldin3, ldin4); 
+				if lcmd = X"0004" then
+					report "Read event successfully!";
+				end if;
 
+				waitclk(30); 
+
+			end loop;
+			 
 
 	end process busclock; 
 

@@ -247,7 +247,7 @@ architecture Behavioral of DSPBoard is
 	           DIN : in std_logic_vector(15 downto 0);
 	           DOUT : out std_logic_vector(15 downto 0);
 	           ADDR : in std_logic_vector(3 downto 0);
-	           WR : in std_logic;
+	           WE : in std_logic;
 				  RD : in std_logic; 
 				  MODE : out std_logic;
 				  DSPRESET : out std_logic; 
@@ -408,7 +408,7 @@ begin
 		DIN => douta,
 		DOUT => eventdina,
 		ADDR => addroa(3 downto 0),
-		WR => ewea,
+		WE => ewea,
 		RD => deltarda,
 		MODE => modea, 
 		DSPRESET => dspreseta,
@@ -492,7 +492,7 @@ begin
 		DIN => doutb,
 		DOUT => eventdinb,
 		ADDR => addrob(3 downto 0),
-		WR => eweb,
+		WE => eweb,
 		RD => deltardb,
 		MODE => modeb, 
 		DSPRESET => dspresetb,

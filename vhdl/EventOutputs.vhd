@@ -13,6 +13,7 @@ entity EventOutputs is
            SYSCLK : in std_logic;
            ADDR : in std_logic_vector(3 downto 0);
            DIN : in std_logic_vector(15 downto 0);
+			  LOADDONE : in std_logic; 
            DONE : out std_logic;
            WE : in std_logic;
            EDATA : out std_logic_vector(15 downto 0);
@@ -33,9 +34,9 @@ architecture Behavioral of EventOutputs is
 	signal lloaded : std_logic := '0';
 	
 	-- sysclk domain signals
-	signal cnt : integer range 0 to 5 := 0; 
-	signal outsel : integer range 0 to 5 := 0; 
-	signal cel, loaded, eventl, ldrst, go, soe : std_logic := '0';
+	signal cnt : integer range 0 to 7 := 0; 
+	signal outsel : integer range 0 to 7 := 0; 
+	signal cel, loaded, eventl, ldrst,  soe : std_logic := '0';
 	 
 	 	
 begin
@@ -53,11 +54,11 @@ begin
 				d4 when outsel = 4 else
 				d5; 
 
-	go <= (not cel) and loaded; 
 
-	outsel <= 0 when eventl = '0' else cnt; 
 
-	EOE <= go or soe; 
+	outsel <=  cnt; 
+
+	EOE <= soe; 
 
 	
 
@@ -99,7 +100,7 @@ begin
 			if ldrst = '1' then
 				lloaded <= '0'; 
 			else	
-				if WE = '1' and ADDR = "1001" then
+				if LOADDONE = '1' then
 					lloaded <= '1';
 				end if;
 			end if; 
@@ -120,15 +121,15 @@ begin
 
 			loaded <= lloaded; 
 
-			if eventl = '0' then -- note inverse!
-				cnt <= 1;
+			if eventl = '1' then 
+				cnt <= 0;
 			else
 				if cnt < 6 then
 					cnt <= cnt + 1; 
 				end if;
 			end if; 
 			
-			if go = '1' then
+			if cel = '1' and loaded = '1'  then
 				soe <= '1';
 			else
 				if outsel = 5 then

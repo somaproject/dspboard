@@ -15,7 +15,7 @@ entity events is
            DIN : in std_logic_vector(15 downto 0);
            DOUT : out std_logic_vector(15 downto 0);
            ADDR : in std_logic_vector(3 downto 0);
-           WR : in std_logic;
+           WE : in std_logic;
 			  RD : in std_logic; 
 			  MODE : out std_logic;
 			  DSPRESET : out std_logic; 
@@ -54,7 +54,7 @@ architecture Behavioral of events is
 	signal edout, edin : std_logic_vector(15 downto 0) := (others => '0'); 
 	signal web, ewe, mine, event, addrsel , done : std_logic := '0';
 
-	signal addrb : std_logic_vector(7 downto 0) := (others => '0'); 
+	signal addrb, addrbl : std_logic_vector(7 downto 0) := (others => '0'); 
 	signal raincnt : std_logic_vector(9 downto 0) := (others => '0'); 
 
 
@@ -82,6 +82,7 @@ architecture Behavioral of events is
 	           SYSCLK : in std_logic;
 	           ADDR : in std_logic_vector(3 downto 0);
 	           DIN : in std_logic_vector(15 downto 0);
+				  LOADDONE : in std_logic; 
 	           DONE : out std_logic;
 	           WE : in std_logic;
 	           EDATA : out std_logic_vector(15 downto 0);
@@ -160,9 +161,10 @@ begin
 	eventout : EventOutputs  port map(
 		CLK => CLK,
 		SYSCLK => SYSCLK,
-		ADDR => addrb(3 downto 0),
+		ADDR => addrbl(3 downto 0),
 		DIN => edin,
-		DONE => done, 
+		DONE => done,
+		LOADDONE => addrbenr, 
 		WE => ewe,
 		EDATA => EDATAO,
 		EADDR => EADDRO,
@@ -176,9 +178,9 @@ begin
 	bdspa(7) <= '1' when BUFWR = '1' else '0';
 	bdspa(3 downto 0) <= addr(3 downto 0); 
 
-	wea <= '1' when ((WR = '1')  and  BUFWR = '1') else '0';
+	wea <= '1' when ((WE = '1')  and  BUFWR = '1') else '0';
 
-	addrb(6 downto 4) <= addrbw  when addrsel = '1' else addrbr; 
+	addrb(6 downto 4) <= addrbw  when addrsel = '0' else addrbr; 
 
 	addrb(7) <= addrsel; 
 
@@ -195,7 +197,7 @@ begin
 				if RD = '1' and ADDR = X"6" then
 					dspbpr <= dspbpr + 1; 
 				end if; 
-				if WR = '1' and ADDR = X"8" then
+				if WE = '1' and ADDR = X"9" then
 					dspbpw <= dspbpw + 1; 
 				end if;
 				
@@ -232,13 +234,13 @@ begin
 				RDIN <= edout; 
 				RWE <= rainen; 
 				  
-				if addrbw =  dspbpw then
+				if addrbr =  dspbpw then
 					NEWEVENTS <= '0';
 				else
 					NEWEVENTS <= '1';
 				end if; 
 
-
+				addrbl <= addrb; 
 
 				
 			end if; 
@@ -251,7 +253,7 @@ begin
 		case cs is
 			when none => 
 				addrb(3 downto 0) <= X"0";
-				addrsel <= '0';
+				addrsel <= '1';
 				addrbenr <= '0';
 				addrbenw <= '0';
 				web <= '0';
@@ -264,7 +266,7 @@ begin
 				end if; 
 			when einchk => 
 				addrb(3 downto 0) <= X"0";
-				addrsel <= '1';
+				addrsel <= '0';
 				addrbenr <= '0';
 				addrbenw <= '0';
 				web <= '1';
@@ -285,7 +287,7 @@ begin
 				end if; 
 			when modeen => 
 				addrb(3 downto 0) <= X"1";
-				addrsel <= '1';
+				addrsel <= '0';
 				addrbenr <= '0';
 				addrbenw <= '0';
 				web <= '0';
@@ -294,7 +296,7 @@ begin
 				ns <= eoutchk; 
 			when dspen => 
 				addrb(3 downto 0) <= X"1";
-				addrsel <= '1';
+				addrsel <= '0';
 				addrbenr <= '0';
 				addrbenw <= '0';
 				web <= '0';
@@ -303,7 +305,7 @@ begin
 				ns <= eoutchk; 
 			when bramwevt => 
 				addrb(3 downto 0) <= X"1";
-				addrsel <= '1';
+				addrsel <= '0';
 				addrbenr <= '0';
 				addrbenw <= '0';
 				web <= '0';
@@ -312,7 +314,7 @@ begin
 				ns <= bramw0; 
 			when bramw0 => 
 				addrb(3 downto 0) <= X"2";
-				addrsel <= '1';
+				addrsel <= '0';
 				addrbenr <= '0';
 				addrbenw <= '0';
 				web <= '0';
@@ -321,7 +323,7 @@ begin
 				ns <= bramw1; 
 			when bramw1 => 
 				addrb(3 downto 0) <= X"3";
-				addrsel <= '1';
+				addrsel <= '0';
 				addrbenr <= '0';
 				addrbenw <= '0';
 				web <= '0';
@@ -330,7 +332,7 @@ begin
 				ns <= bramw2; 
 			when bramw2 => 
 				addrb(3 downto 0) <= X"4";
-				addrsel <= '1';
+				addrsel <= '0';
 				addrbenr <= '0';
 				addrbenw <= '0';
 				web <= '0';
@@ -339,7 +341,7 @@ begin
 				ns <= bramw3; 
 			when bramw3 => 
 				addrb(3 downto 0) <= X"5";
-				addrsel <= '1';
+				addrsel <= '0';
 				addrbenr <= '0';
 				addrbenw <= '0';
 				web <= '0';
@@ -348,7 +350,7 @@ begin
 				ns <= eoutchk; 
 			when dspram1 =>
 				addrb(3 downto 0) <= X"1";
-				addrsel <= '1';
+				addrsel <= '0';
 				addrbenr <= '0';
 				addrbenw <= '0';
 				web <= '1';
@@ -357,7 +359,7 @@ begin
 				ns <= dspram2;
 			when dspram2 =>
 				addrb(3 downto 0) <= X"2";
-				addrsel <= '1';
+				addrsel <= '0';
 				addrbenr <= '0';
 				addrbenw <= '0';
 				web <= '1';
@@ -366,7 +368,7 @@ begin
 				ns <= dspram3;
 			when dspram3 =>
 				addrb(3 downto 0) <= X"3";
-				addrsel <= '1';
+				addrsel <= '0';
 				addrbenr <= '0';
 				addrbenw <= '0';
 				web <= '1';
@@ -375,7 +377,7 @@ begin
 				ns <= dspram4;
 			when dspram4 =>
 				addrb(3 downto 0) <= X"4";
-				addrsel <= '1';
+				addrsel <= '0';
 				addrbenr <= '0';
 				addrbenw <= '0';
 				web <= '1';
@@ -384,7 +386,7 @@ begin
 				ns <= dspram5;
 			when dspram5 =>
 				addrb(3 downto 0) <= X"5";
-				addrsel <= '1';
+				addrsel <= '0';
 				addrbenr <= '0';
 				addrbenw <= '1';
 				web <= '1';
@@ -393,7 +395,7 @@ begin
 				ns <= eoutchk;
 			when eoutchk =>
 				addrb(3 downto 0) <= X"0";
-				addrsel <= '0';
+				addrsel <= '1';
 				addrbenr <= '0';
 				addrbenw <= '0';
 				web <= '0';
@@ -405,74 +407,74 @@ begin
 					ns <= none; 
 				end if; 
 			when evbufw0 =>
-				addrb(3 downto 0) <= X"0";
-				addrsel <= '1';
-				addrbenr <= '0';
-				addrbenw <= '0';
-				web <= '1';
-				rainen <= '0';
-				ewe <= '1';
-				ns <= evbufw1;
-			when evbufw1 =>
 				addrb(3 downto 0) <= X"1";
 				addrsel <= '1';
 				addrbenr <= '0';
 				addrbenw <= '0';
-				web <= '1';
+				web <= '0';
 				rainen <= '0';
 				ewe <= '1';
-				ns <= evbufw2;
-			when evbufw2 =>
+				ns <= evbufw1;
+			when evbufw1 =>
 				addrb(3 downto 0) <= X"2";
 				addrsel <= '1';
 				addrbenr <= '0';
 				addrbenw <= '0';
-				web <= '1';
+				web <= '0';
 				rainen <= '0';
 				ewe <= '1';
-				ns <= evbufw3; 
-			when evbufw3 =>
+				ns <= evbufw2;
+			when evbufw2 =>
 				addrb(3 downto 0) <= X"3";
 				addrsel <= '1';
 				addrbenr <= '0';
 				addrbenw <= '0';
-				web <= '1';
+				web <= '0';
 				rainen <= '0';
 				ewe <= '1';
-				ns <= evbufw4; 
-			when evbufw4 =>
+				ns <= evbufw3; 
+			when evbufw3 =>
 				addrb(3 downto 0) <= X"4";
 				addrsel <= '1';
 				addrbenr <= '0';
 				addrbenw <= '0';
-				web <= '1';
+				web <= '0';
 				rainen <= '0';
 				ewe <= '1';
-				ns <= evbufw5; 
-			when evbufw5 =>
+				ns <= evbufw4; 
+			when evbufw4 =>
 				addrb(3 downto 0) <= X"5";
 				addrsel <= '1';
 				addrbenr <= '0';
 				addrbenw <= '0';
-				web <= '1';
+				web <= '0';
 				rainen <= '0';
 				ewe <= '1';
-				ns <= evbufw6; 
-			when evbufw6  =>
+				ns <= evbufw5; 
+			when evbufw5 =>
 				addrb(3 downto 0) <= X"6";
 				addrsel <= '1';
 				addrbenr <= '0';
 				addrbenw <= '0';
-				web <= '1';
+				web <= '0';
 				rainen <= '0';
 				ewe <= '1';
-				ns <= evbufw7; 
-			when evbufw7  =>
+				ns <= evbufw6; 
+			when evbufw6  =>
 				addrb(3 downto 0) <= X"7";
 				addrsel <= '1';
 				addrbenr <= '0';
 				addrbenw <= '0';
-				web <= '1';
+				web <= '0';
+				rainen <= '0';
+				ewe <= '1';
+				ns <= evbufw7; 
+			when evbufw7  =>
+				addrb(3 downto 0) <= X"8";
+				addrsel <= '1';
+				addrbenr <= '0';
+				addrbenw <= '0';
+				web <= '0';
 				rainen <= '0';
 				ewe <= '1';
 				ns <= evbufw8; 
@@ -481,7 +483,7 @@ begin
 				addrsel <= '1';
 				addrbenr <= '1';
 				addrbenw <= '0';
-				web <= '1';
+				web <= '0';
 				rainen <= '0';
 				ewe <= '1';
 				ns <= none;

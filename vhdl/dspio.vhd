@@ -60,7 +60,7 @@ architecture Behavioral of dspio is
 	signal mts : std_logic := '0'; 
 	signal dataoutl, dataout, dmux, smux : std_logic_vector(15 downto 0)
 			:= (others => '0');
-	signal addrl : std_logic_vector(15 downto 0) := (others => '0'); 
+	signal addrl, laddrout : std_logic_vector(15 downto 0) := (others => '0'); 
 
 
 begin
@@ -115,7 +115,8 @@ begin
 			dataoutl <= dataout; 
 			
 			addrl <= ADDR; 
-			ADDROUT <= addrl; 
+			laddrout <= addrl; 
+			ADDROUT <= laddrout; 
 
 			if addrl (15 downto 12) = X"4" then
 				EBUFSEL <= '1';

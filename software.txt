@@ -273,7 +273,7 @@ Region	Use:
 	0x2003L: 0x4005 : second word
 	0x2003H: 0x4006 : third word
 	0x2004 : 0x4007 : next 2 words
-	0x2005 : 0x4008 : a write here "commits" the event 
+	0x2005 : 0x4009 : a write here "commits" the event 
 			  to the event out buffer
 
 0x3	inbound events:
