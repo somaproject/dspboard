@@ -77,9 +77,10 @@ architecture Behavioral of DSPBoard is
 	signal dina : std_logic_vector(15 downto 0) := (others => '0');
 	signal nexta, acka : std_logic := '0';
 
-   signal ebufsela, neweventsa : std_logic := '0';
+   signal ebufsela, neweventsa , modersta: std_logic := '0';
 	
 	signal raouta : std_logic_vector(10 downto 0) := (others => '0'); 
+	signal maddra : std_logic_vector(7 downto 0) := (others => '0'); 
 		
 	
 	-- DSP B signals
@@ -103,10 +104,10 @@ architecture Behavioral of DSPBoard is
 	signal dinb : std_logic_vector(15 downto 0) := (others => '0');
 	signal nextb, ackb : std_logic := '0';
 
-   signal ebufselb, neweventsb : std_logic := '0';
+   signal ebufselb, neweventsb, moderstb : std_logic := '0';
 	signal raoutb : std_logic_vector(10 downto 0) := (others => '0'); 
 
-	signal maddra, maddrb : std_logic_vector(7 downto 0) := (others => '0'); 
+	signal maddrb : std_logic_vector(7 downto 0) := (others => '0'); 
 
 
 	-- component declarations
@@ -215,7 +216,8 @@ architecture Behavioral of DSPBoard is
 				  TINC : out std_logic;
 				  TIMECLR : in std_logic;
 				  TCLR : out std_logic;
-			      MADDR : in std_logic_vector(7 downto 0));
+			      MADDR : in std_logic_vector(7 downto 0);
+					MODERST : out std_logic);
 	end component;
 
 	component databuffer is
@@ -261,7 +263,8 @@ architecture Behavioral of DSPBoard is
 	           EADDRI : in std_logic_vector(7 downto 0);
 			  	  BUFWR : in std_logic;
 			  	  NEWEVENTS : out std_logic;
-				  MADDR : in std_logic_vector(7 downto 0));
+				  MADDR : in std_logic_vector(7 downto 0);
+				  MODERST : in std_logic);
 	end component;
 
 
@@ -375,7 +378,8 @@ begin
 		TINC => TINCA,
 		TIMECLR => timeclr,
 		TCLR => tclra,
-		MADDR => maddra); 
+		MADDR => maddra,
+		MODERST => modersta); 
 
 	databuffera : databuffer port map (
 		CLKA => clk,
@@ -420,7 +424,8 @@ begin
 		EADDRI => eaia,
 		BUFWR => ebufsela,
 		NEWEVENTS => neweventsa,
-		MADDR => maddra); 
+		MADDR => maddra,
+		MODERST => modersta); 
 
 
 	dspiob : dspio port map (
@@ -457,7 +462,8 @@ begin
 		TINC => TINCB,
 		TIMECLR => timeclr,
 		TCLR => TCLRB,
-		MADDR => maddrb); 
+		MADDR => maddrb,
+		MODERST => moderstb); 
 
 	databufferb : databuffer port map (
 		CLKA => clk,
@@ -502,7 +508,8 @@ begin
 		EADDRI => eaib,
 		BUFWR => ebufselb,
 		NEWEVENTS => neweventsb,
-		MADDR => maddrb); 
+		MADDR => maddrb,
+		MODERST => moderstb); 
 
 
 end Behavioral;

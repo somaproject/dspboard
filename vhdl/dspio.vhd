@@ -42,7 +42,8 @@ entity dspio is
 			  TINC : out std_logic;
 			  TIMECLR : in std_logic;
 			  TCLR : out std_logic;
-			  MADDR : in std_logic_vector(7 downto 0));
+			  MADDR : in std_logic_vector(7 downto 0);
+			  MODERST : out std_logic);
 end dspio;
 
 architecture Behavioral of dspio is
@@ -68,6 +69,8 @@ begin
 	DWE <= '1' when deltawe = '1'  and addr(15 downto 12) = X"2" else '0';
 	EWE <= '1' when deltawe = '1'  and addr(15 downto 12) = X"4" else '0';
 	CWE <= '1' when deltawe = '1'  and addr(15 downto 12) = X"8" else '0';
+	MODERST <= '1' when rdll = '1' and rdlll = '0' and addr(15 downto 12) = X"F" else '0';
+
 	 
 	DELTARD <= rdll and (not rdlll); 
 	

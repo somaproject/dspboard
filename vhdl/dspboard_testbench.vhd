@@ -179,17 +179,21 @@ BEGIN
 -- *** End Test Bench - User Defined Section ***
 
 	dspclockl: process is
-	function slv2hex (
-	  hex_in : std_logic_vector)
-	  return string is
-	  variable textline : line;
-	  variable tmp_string : string(1 to hex_in'length / 4);
-	    begin  -- function slv2hex
-	      hwrite(textline,hex_in);
-	      read(textline,tmp_string);
-	      return(tmp_string);
-	    end function slv2hex;
 
+		-- SLV2HEX
+		function slv2hex (
+		  hex_in : std_logic_vector)
+		  return string is
+		  variable textline : line;
+		  variable tmp_string : string(1 to hex_in'length / 4);
+		    begin  -- function slv2hex
+		      hwrite(textline,hex_in);
+		      read(textline,tmp_string);
+		      return(tmp_string);
+		    end function slv2hex;
+
+
+		-- WAITCLK
 		procedure waitclk(duration : in integer) is
 		begin
 			for i in 0 to duration loop
@@ -197,13 +201,28 @@ BEGIN
 			end loop; 
 		end procedure waitclk;
 
+		-- MEMR16
 		procedure memr16(addr : in std_logic_vector(15 downto 0);
 							  dataout : out std_logic_vector(15 downto 0)) is 
 		begin
+			DATAA <= (others => 'Z'); 
+			wait until rising_edge(dspclk); 
+			 
+			ADDRA <= addr; 
+			waitclk(3); 
+			RDA <= '0'; 
+			waitclk(5); 
+		   dataout := DATAA; 
+			wait until rising_edge(dspclk); 
+			RDA <= '1'; 
+			wait until rising_edge(dspclk); 
+			DATAA <= (others => 'Z'); 	
 
 
 		end memr16; 
 
+
+		-- MEMW16
 		procedure memw16(addr : in std_logic_vector(15 downto 0);
 							  data : in std_logic_vector(15 downto 0)) is
 		begin
@@ -211,6 +230,7 @@ BEGIN
 
 		end memw16; 
 
+		-- MEMR8
 		procedure memr8(addr : in std_logic_vector(15 downto 0);
 							 dataout: out std_logic_vector(7 downto 0)) is 
 			variable result : std_logic_vector(7 downto 0) := (others => '0'); 
@@ -224,7 +244,7 @@ BEGIN
 			waitclk(20); 
 		   dataout := DATAA(7 downto 0); 
 			wait until rising_edge(dspclk); 
-			RDA <= '0'; 
+			RDA <= '1'; 
 			wait until rising_edge(dspclk); 
 			DATAA <= (others => 'Z'); 	
 
@@ -232,14 +252,16 @@ BEGIN
 		
 		end memr8;  
 
-		variable loadbyte : std_logic_vector(7 downto 0); 
+		variable loadbyte : std_logic_vector(7 downto 0);
+		variable loadword : std_logic_vector(15 downto 0);
+		 
 	begin
 		ADDRA <= (others => '0');
 		RDA <= '1';
 		WEA <= '1'; 
 		DATAA <= (others => 'Z'); 
 
-		wait until rising_edge(dspclk) and RESETA = '1'; -- wait until we can boot
+		wait until rising_edge(RESETA); -- wait until we can boot
 
 		for i in 0 to 1023 loop  -- when we boot, we read 256 32-bit words
 											-- in 8-bit mode. 
@@ -251,7 +273,10 @@ BEGIN
 					severity note; 
 		end loop; 
 
-			
+		memr16(X"F000", loadword); 
+
+
+		wait;	
 
 
 
@@ -317,11 +342,23 @@ BEGIN
 			wevent(X"FFFFFFFFFFFF", X"0002", X"0001", X"0000", X"0000", X"0000", X"0000");
 			wevent(X"FFFFFFFFFFFF", X"0001", X"0001", X"0000", X"0000", X"0000", X"0000");
 			wevent(X"FFFFFFFFFFFF", X"0003", X"0000", X"0000", X"0001", X"0002", X"0003");
-			wevent(X"FFFFFFFFFFFF", X"0003", X"0004", X"0040", X"0050", X"0060", X"0070");
-			wevent(X"FFFFFFFFFFFF", X"0003", X"0008", X"0800", X"0900", X"a000", X"b000");
+			for i in 0 to 127 loop
+					
+				wevent(X"FFFFFFFFFFFF", X"0003", std_logic_vector(TO_UNSIGNED(i*4, 16)),
+															std_logic_vector(TO_UNSIGNED((i*8 + 1) mod 256, 8)) & 
+															std_logic_vector(TO_UNSIGNED((i*8 + 0) mod 256, 8)), 
+															std_logic_vector(TO_UNSIGNED((i*8 + 3) mod 256, 8)) & 
+															std_logic_vector(TO_UNSIGNED((i*8 + 2) mod 256, 8)), 
+															std_logic_vector(TO_UNSIGNED((i*8 + 5) mod 256, 8)) & 
+															std_logic_vector(TO_UNSIGNED((i*8 + 4) mod 256, 8)), 
+															std_logic_vector(TO_UNSIGNED((i*8 + 7) mod 256, 8)) & 
+															std_logic_vector(TO_UNSIGNED((i*8 + 6) mod 256, 8)));
+			end loop; 
+			
 			waitclk(30); 
-			wevent(X"FFFFFFFFFFFF", X"0002", X"0000", X"0000", X"0000", X"0000", X"0000");
+				wevent(X"FFFFFFFFFFFF", X"0002", X"0000", X"0000", X"0001", X"0002", X"0003");
 
+			-- now, we wait
 		wait; 
 
 

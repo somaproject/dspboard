@@ -31,7 +31,8 @@ entity events is
            EADDRI : in std_logic_vector(7 downto 0);
 			  BUFWR : in std_logic;
 			  NEWEVENTS : out std_logic;
-			  MADDR : in std_logic_vector(7 downto 0));
+			  MADDR : in std_logic_vector(7 downto 0);
+			  MODERST : in std_logic);
 end events;
 
 architecture Behavioral of events is
@@ -207,9 +208,13 @@ begin
 				end if; 
 				
 				-- output latches
-				if cs = modeen then
-					MODE <= edout(0);
-				end if; 
+				if MODERST = '1' then
+					MODE <= '0';
+				else
+					if cs = modeen then
+						MODE <= edout(0);
+					end if;
+				end if;  
 				
 				if cs = dspen then
 					DSPRESET <= not edout(0);

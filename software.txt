@@ -148,12 +148,19 @@ writing an event actually writes to a series of 9 registers,
 
 
 EVENT:
-   CMD = 0x01 SENDER = any dw0[0] == new boot state
+   CMD = 0x01 SENDER = any dw0[0] == set into boot mode0
    CMD = 0x02 SENDER = any dw0[0] == state of DSP RESET pin
    CMD = 0x03 SENDER = any dw0 = addr of first word
 			   dw1 = first word to write dw=4 last word of 4
    CMD = 0x04 sender = timer tells us the current time, and wehther or not
 		       to reset the timer. 
+
+So, for setting boot mode, we need to actually "set boot mode" and then wait for the DSP to clear it. We can't just have the DSP send an event, because the boot mode dictates that the FPGA still thinks the parallel port is in 8-bit mode.
+
+However, if the FPGA is in 8 bit mode (expecting DATA(15:8) to be driven) and the ADSP switches to 16-bit mode, there's no harm. Then, the ADSP can write to addr(0xF000) and switch out of boot mode!!!
+
+
+
 
 ------------------------------------------------------------------------------
 DEVICE ID ASSIGNMENT
