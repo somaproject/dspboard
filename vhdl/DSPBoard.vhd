@@ -106,6 +106,8 @@ architecture Behavioral of DSPBoard is
    signal ebufselb, neweventsb : std_logic := '0';
 	signal raoutb : std_logic_vector(10 downto 0) := (others => '0'); 
 
+	signal maddra, maddrb : std_logic_vector(7 downto 0) := (others => '0'); 
+
 
 	-- component declarations
 	component FiberRX is
@@ -173,7 +175,8 @@ architecture Behavioral of DSPBoard is
 	           EVENT : in std_logic;
 	           ECE : in std_logic;
 	           CEA : out std_logic;
-	           CEB : out std_logic);
+	           CEB : out std_logic;
+				  MADDR : out std_logic_vector(7 downto 0));
 	end component;
 
 
@@ -211,7 +214,8 @@ architecture Behavioral of DSPBoard is
 				  TIMEINC : in std_logic;
 				  TINC : out std_logic;
 				  TIMECLR : in std_logic;
-				  TCLR : out std_logic);
+				  TCLR : out std_logic;
+			      MADDR : in std_logic_vector(7 downto 0));
 	end component;
 
 	component databuffer is
@@ -256,7 +260,8 @@ architecture Behavioral of DSPBoard is
 	           EDATAI : in std_logic_vector(15 downto 0);
 	           EADDRI : in std_logic_vector(7 downto 0);
 			  	  BUFWR : in std_logic;
-			  	  NEWEVENTS : out std_logic);
+			  	  NEWEVENTS : out std_logic;
+				  MADDR : in std_logic_vector(7 downto 0));
 	end component;
 
 
@@ -268,6 +273,8 @@ begin
 	-- signal aggregation
 	raouta <= addroa(2 downto 0) & douta(15 downto 8);
 	raoutb <= addrob(2 downto 0) & doutb(15 downto 8);
+
+	maddrb <= maddra + 1; 
 
 	FiberRX_inst: FiberRX port map (
 		CLK => clk,
@@ -331,7 +338,8 @@ begin
 		EVENT => EVENT,
 		EDATA => EDATA,
 		EADDR => EADDR,
-		ECE => ECE); 
+		ECE => ECE,
+		MADDR => maddra); 
 
 	dspioa : dspio port map (
 		CLK => clk,
@@ -366,7 +374,8 @@ begin
 		TIMEINC => timeinc,
 		TINC => TINCA,
 		TIMECLR => timeclr,
-		TCLR => tclra); 
+		TCLR => tclra,
+		MADDR => maddra); 
 
 	databuffera : databuffer port map (
 		CLKA => clk,
@@ -410,7 +419,8 @@ begin
 		EDATAI => edia,
 		EADDRI => eaia,
 		BUFWR => ebufsela,
-		NEWEVENTS => neweventsa); 
+		NEWEVENTS => neweventsa,
+		MADDR => maddra); 
 
 
 	dspiob : dspio port map (
@@ -446,7 +456,8 @@ begin
 		TIMEINC => timeinc,
 		TINC => TINCB,
 		TIMECLR => timeclr,
-		TCLR => TCLRB); 
+		TCLR => TCLRB,
+		MADDR => maddrb); 
 
 	databufferb : databuffer port map (
 		CLKA => clk,
@@ -490,7 +501,8 @@ begin
 		EDATAI => edib,
 		EADDRI => eaib,
 		BUFWR => ebufselb,
-		NEWEVENTS => neweventsb); 
+		NEWEVENTS => neweventsb,
+		MADDR => maddrb); 
 
 
 end Behavioral;

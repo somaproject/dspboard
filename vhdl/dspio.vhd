@@ -41,7 +41,8 @@ entity dspio is
 			  TIMEINC : in std_logic;
 			  TINC : out std_logic;
 			  TIMECLR : in std_logic;
-			  TCLR : out std_logic);
+			  TCLR : out std_logic;
+			  MADDR : in std_logic_vector(7 downto 0));
 end dspio;
 
 architecture Behavioral of dspio is

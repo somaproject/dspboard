@@ -30,7 +30,8 @@ entity events is
            EDATAI : in std_logic_vector(15 downto 0);
            EADDRI : in std_logic_vector(7 downto 0);
 			  BUFWR : in std_logic;
-			  NEWEVENTS : out std_logic);
+			  NEWEVENTS : out std_logic;
+			  MADDR : in std_logic_vector(7 downto 0));
 end events;
 
 architecture Behavioral of events is
@@ -53,7 +54,6 @@ architecture Behavioral of events is
 	signal web, ewe, mine, event, addrsel , done : std_logic := '0';
 
 	signal addrb : std_logic_vector(7 downto 0) := (others => '0'); 
-	signal maddr : std_logic_vector(6 downto 0) := "0000001"; 
 	signal raincnt : std_logic_vector(9 downto 0) := (others => '0'); 
 
 
@@ -152,7 +152,7 @@ begin
 		EEVENT => EEVENT,
 		DOUT => edout,
 		ADDR => addrb(2 downto 0),
-		MADDR => maddr,
+		MADDR => MADDR(6 downto 0),
 		MINE => mine,
 		EVENT => event); 
 
@@ -185,7 +185,7 @@ begin
 	begin
 		if RESET = '1' then
 			cs <= none;
-			DSPRESET <= '1'; 
+			DSPRESET <= '0'; 
 		else
 			if rising_edge(CLK) then
 				cs <= ns; 
@@ -212,7 +212,7 @@ begin
 				end if; 
 				
 				if cs = dspen then
-					DSPRESET <= edout(0);
+					DSPRESET <= not edout(0);
 				end if; 
 				
 				if cs = bramwevt then

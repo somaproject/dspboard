@@ -123,7 +123,7 @@ begin
 			eventl5 <= eventl4;
 			eventl6 <= eventl5;
 			eventl7 <= eventl6; 
-			EVENT <= eventl7;
+			EVENT <= eventl8;
 			eventl8 <= eventl7;  
 			
 

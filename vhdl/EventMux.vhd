@@ -27,7 +27,8 @@ entity EventMux is
            EVENT : in std_logic;
            ECE : in std_logic;
            CEA : out std_logic;
-           CEB : out std_logic);
+           CEB : out std_logic;
+			  MADDR : out std_logic_vector(7 downto 0) := X"00");
 end EventMux;
 
 architecture Behavioral of EventMux is
@@ -35,7 +36,7 @@ architecture Behavioral of EventMux is
 	signal do : std_logic_vector(15 downto 0) := (others => '0');
 
 	signal ts, esel : std_logic := '0';
-
+	signal maddrset : std_logic := '0'; 
 
 begin
 	AIA <= EADDR; 
@@ -63,6 +64,12 @@ begin
 			if ECE = '0' then 
 				esel <= not esel;
 			end if; 
+
+			if ECE = '0' and  maddrset = '0' then
+				maddrset <= '1';
+				MADDR <= EDATA(7 downto 0);
+			end if; 
+				 
 		end if; 
 	end process; 
 

@@ -11,6 +11,10 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
+USE ieee.std_logic_signed.all; 
+ use IEEE.STD_LOGIC_ARITH.ALL; 
+use ieee.std_logic_textio.all;
+use std.textio.all;
 
 ENTITY testbench IS
 END testbench;
@@ -75,7 +79,7 @@ ARCHITECTURE behavior OF testbench IS
 	SIGNAL TINCB :  std_logic;
 	SIGNAL TCLRB :  std_logic;
 	SIGNAL EVENT :  std_logic := '1';
-	SIGNAL ECE :  std_logic;
+	SIGNAL ECE :  std_logic := '1';
 	SIGNAL EADDR :  std_logic_vector(7 downto 0);
 	SIGNAL EDATA :  std_logic_vector(15 downto 0);
 	SIGNAL SYSDATA :  std_logic_vector(15 downto 0);
@@ -114,35 +118,11 @@ ARCHITECTURE behavior OF testbench IS
 	signal eaddrin : std_logic_vector(47 downto 0) := (others => '0'); 
 	signal sendevent, queryevent, eventdone : std_logic := '0';
 
-	signal clk, sysclk : std_logic := '0'; 
+	signal clk, sysclk, dspclk : std_logic := '0'; 
 	  
 		
 
 BEGIN
-
-
-	eventcontroller: test_event port map (
-			CLK => SYSCLK,
-			CMDIN => ecmdin,
-			DIN0 => edin0,
-			DIN1 => edin1, 
-			DIN2 => edin2, 
-			DIN3 => edin3, 
-			DIN4 => edin4, 
-			ADDRIN => eaddrin,
-			SENDEVENT => sendevent,
-			QUERYEVENT => queryevent,
-			DONE => eventdone,
-			CMDOUT => ecmdout, 
-			DOUT0 => edout0,
-			DOUT1 => edout1,
-			DOUT2 => edout2,
-			DOUT3 => edout3, 
-			DOUT4 => edout4,
-			EADDR => EADDR,  
-			EDATA => EDATA,
-			ECE => ECE,
-			EEVENT => EVENT) ; 
 
 
 	uut: dspboard PORT MAP(
@@ -182,6 +162,7 @@ BEGIN
 
 	clk <= not clk after 7.8125 ns; -- 64 MHz
 	sysclk <= not sysclk after 25 ns; -- 20 MHz; 
+	dspclk <= not dspclk after 2.5 ns; -- 200 MHz (!!!!!)
 
 	CLKIN <= CLK;
 	SYSCLKIN <= sysclk; 
@@ -197,7 +178,87 @@ BEGIN
    END PROCESS;
 -- *** End Test Bench - User Defined Section ***
 
+	dspclockl: process is
+	function slv2hex (
+	  hex_in : std_logic_vector)
+	  return string is
+	  variable textline : line;
+	  variable tmp_string : string(1 to hex_in'length / 4);
+	    begin  -- function slv2hex
+	      hwrite(textline,hex_in);
+	      read(textline,tmp_string);
+	      return(tmp_string);
+	    end function slv2hex;
+
+		procedure waitclk(duration : in integer) is
+		begin
+			for i in 0 to duration loop
+				wait until rising_edge(dspclk);
+			end loop; 
+		end procedure waitclk;
+
+		procedure memr16(addr : in std_logic_vector(15 downto 0);
+							  dataout : out std_logic_vector(15 downto 0)) is 
+		begin
+
+
+		end memr16; 
+
+		procedure memw16(addr : in std_logic_vector(15 downto 0);
+							  data : in std_logic_vector(15 downto 0)) is
+		begin
+
+
+		end memw16; 
+
+		procedure memr8(addr : in std_logic_vector(15 downto 0);
+							 dataout: out std_logic_vector(7 downto 0)) is 
+			variable result : std_logic_vector(7 downto 0) := (others => '0'); 
+		begin
+			DATAA <= (others => 'Z'); 
+			wait until rising_edge(dspclk); 
+			DATAA(15 downto 8) <= addr(7 downto 0); 
+			ADDRA <= X"00" & addr(15 downto 8); 
+			waitclk(3); 
+			RDA <= '0'; 
+			waitclk(20); 
+		   dataout := DATAA(7 downto 0); 
+			wait until rising_edge(dspclk); 
+			RDA <= '0'; 
+			wait until rising_edge(dspclk); 
+			DATAA <= (others => 'Z'); 	
+
+			 
+		
+		end memr8;  
+
+		variable loadbyte : std_logic_vector(7 downto 0); 
+	begin
+		ADDRA <= (others => '0');
+		RDA <= '1';
+		WEA <= '1'; 
+		DATAA <= (others => 'Z'); 
+
+		wait until rising_edge(dspclk) and RESETA = '1'; -- wait until we can boot
+
+		for i in 0 to 1023 loop  -- when we boot, we read 256 32-bit words
+											-- in 8-bit mode. 
+										
+				
+				memr8(std_logic_vector(TO_UNSIGNED(i, 16)), loadbyte);
+				
+					report  slv2hex(loadbyte)
+					severity note; 
+		end loop; 
+
+			
+
+
+
+	end process dspclockl; 
+
 	busclock: process is
+
 			procedure waitclk(duration : in integer) is
 			begin
 				for i in 0 to duration loop
@@ -205,25 +266,59 @@ BEGIN
 				end loop; 
 			end procedure waitclk;
 
+
 			procedure wevent(addr : in std_logic_vector(47 downto 0);
 								  cmd : in std_logic_vector(15 downto 0); 
 								  din0, din1, din2, din3, din4 
 								  		: in std_logic_vector(15 downto 0)) is
-			begin
-				  ecmdin <= cmd;
-				  eaddrin <= addr; 
-				  edin0 <= din0; 
-				  edin1 <= din1; 
-				  edin2 <= din2; 
-				  edin3 <= din3; 
-				  edin4 <= din4;
-				  sendevent <= '1';
+			begin	
 				  wait until rising_edge(sysclk);
-				  sendevent <= '0';
+				  ECE <= '1';
+				  EVENT <= '0'; 
+				  wait until rising_edge(sysclk);
+				  EVENT <= '1'; 
+				  EDATA <= cmd; 
+				  EADDR <= addr(7 downto 0); 
+				  wait until rising_edge(sysclk);
+				  EDATA <= din0; 
+				  EADDR <= addr(7 downto 0); 
+				  wait until rising_edge(sysclk);
+				  EDATA <= din1; 
+				  EADDR <= addr(7 downto 0); 
+				  wait until rising_edge(sysclk);
+				  EDATA <= din2; 
+				  EADDR <= addr(7 downto 0); 
+				  wait until rising_edge(sysclk);
+				  EDATA <= din3; 
+				  EADDR <= addr(7 downto 0); 
+				  wait until rising_edge(sysclk);
+				  EDATA <= din4; 
+				  EADDR <= addr(7 downto 0);
+				  wait until rising_edge(sysclk);
+				  EDATA <= (others => 'Z'); 
+				  EADDR <= (others => 'Z');
+				  
+
+				   
 			end procedure wevent;  
 
 	begin
 		wait until falling_edge(RESET); 
+			ECE <= '1'; 
+			EDATA <= (others => 'Z'); 
+			waitclk(30); 
+			-- boot, i.e. give IDs
+			EDATA <= X"0010"; 
+			ECE <= '0';
+			wait until falling_edge(sysclk); 
+			ECE <= '1';
+			EDATA <= (others => '0'); 
+			waitclk(20); 
+			wevent(X"FFFFFFFFFFFF", X"0002", X"0001", X"0000", X"0000", X"0000", X"0000");
+			wevent(X"FFFFFFFFFFFF", X"0001", X"0001", X"0000", X"0000", X"0000", X"0000");
+			wevent(X"FFFFFFFFFFFF", X"0003", X"0000", X"0000", X"0001", X"0002", X"0003");
+			wevent(X"FFFFFFFFFFFF", X"0003", X"0004", X"0040", X"0050", X"0060", X"0070");
+			wevent(X"FFFFFFFFFFFF", X"0003", X"0008", X"0800", X"0900", X"a000", X"b000");
 			waitclk(30); 
 			wevent(X"FFFFFFFFFFFF", X"0002", X"0000", X"0000", X"0000", X"0000", X"0000");
 

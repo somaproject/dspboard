@@ -155,7 +155,13 @@ EVENT:
    CMD = 0x04 sender = timer tells us the current time, and wehther or not
 		       to reset the timer. 
 
+------------------------------------------------------------------------------
+DEVICE ID ASSIGNMENT
+------------------------------------------------------------------------------
+Upon bootup, each device on the bus will need to learn its event bus ID. This is done by putting the device's ID on the event bus and triggering both EVENT and ECE. DSP boards get two IDs, the one assigned and the one after them. For example:
 
+DSPboard is given ID 30
+then Tetrode A is 30, Tetrode B is 31
 
    
 
