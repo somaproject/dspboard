@@ -1,4 +1,4 @@
-Perhaps miss-named "software" file to design our general layout for what the hell the FPGA does:
+7Perhaps miss-named "software" file to design our general layout for what the hell the FPGA does:
 
 Memory addresses:
 one address to write a command
@@ -164,6 +164,11 @@ EVENT:
    CMD = 0x07 sender = any : boot process complete. 
    CMD = 0x10 sender = any : link change (for NIC, etc. )
 		       dw0[0] = 1 if link up, 0 if link down
+   CMD  = 0x11 sender = any : data record / acquisition change
+		       dw0[1] = 1 for acq upb
+   CMD  = 0x12 sender = any. generic system state change
+		      dw0 == what the relevant state change is
+		      		       
 
    
 
