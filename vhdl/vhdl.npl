@@ -35,6 +35,8 @@ SOURCE test_mem.vhd
 STIMULUS test_mem_test.tbw
 SOURCE test_event.vhd
 STIMULUS dspboard_testbench.vhd
+SOURCE test_acqboard.vhd
+STIMULUS test_acqboard_test.tbw
 DEPASSOC dspboard dspboard.ucf
 [STRATEGY-LIST]
 Normal=True

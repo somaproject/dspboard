@@ -245,6 +245,8 @@ When we get an EVENT with ID = 4 , we will reset the clock the next time we get 
 The output of the TINC signal is delayed by three ticks, allowing the RX of the appropriate event to arm the TCLR flag. 
 
 
+
+
  
 
 

@@ -20,7 +20,7 @@ vcom -93 -explicit dspboard.vhd
 -- simulation entities
 vcom -93 -explicit test_mem.vhd
 vcom -93 -explicit test_event.vhd
-
+vcom -93 -explicit test_acqboard.vhd
 vcom -93 -explicit dspboard_testbench.vhd
 
 

@@ -118,8 +118,13 @@ ARCHITECTURE behavior OF testbench IS
 	signal eaddrin : std_logic_vector(47 downto 0) := (others => '0'); 
 	signal sendevent, queryevent, eventdone : std_logic := '0';
 
-	signal clk, sysclk, dspclk : std_logic := '0'; 
+	signal clk, sysclk, dspclk, clk8mhz : std_logic := '0'; 
 	  
+	component test_acqboard is
+	    Port ( CLK : in std_logic;
+	           FIBEROUT : out std_logic;
+	           FIBERIN : in std_logic);
+	end component;
 		
 
 BEGIN
@@ -158,8 +163,12 @@ BEGIN
 		RESET => RESET
 	);
 
+	acqtest: test_acqboard port map (
+		clk => clk8Mhz,
+		FIBERIN => FIBEROUT,
+		FIBEROUT => FIBERIN); 
 
-
+	clk8mhz <= not clk8mhz after 62.5 ns; 
 	clk <= not clk after 7.8125 ns; -- 64 MHz
 	sysclk <= not sysclk after 25 ns; -- 20 MHz; 
 	dspclk <= not dspclk after 2.5 ns; -- 200 MHz (!!!!!)
