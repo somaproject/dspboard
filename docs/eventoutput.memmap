@@ -1,0 +1,7 @@
+0x4nnn : Event Output
+0x4000 : Event target addresses A15:A0
+0x4001 : Event target addresses A31:A16 
+0x4002 : Event target addresses A47:A32
+0x4003 : Event command word
+0x4004-0x4008 : Event data words, in increasing order
+0x4009 :Event complete. Write this address to signal the completion of an Event write

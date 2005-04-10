@@ -1,0 +1,4 @@
+0x2nnn: Output Data Buffer
+0x2000[7:0] : Data Source ID
+0x2001[9:0] : Total length of frame N, in words. 
+0x2002-0x2002+2N : Frame data for an N-word frame

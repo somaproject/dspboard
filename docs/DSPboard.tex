@@ -1,0 +1,141 @@
+\documentclass{article}
+\usepackage{fullpage}
+\usepackage[pdftex]{graphicx}
+\usepackage{latex/somahw}
+
+
+\begin{document}
+
+The Soma DSPboard is the computational and signal processing core of
+the Soma system. The DSPboard is responsible for decoding the optical
+Acquisiton Board data stream, performing application-specific
+filtering and processing on the incoming data, and passing the
+resulting data onto the Data bus. The DSP Board also maintains tetrode
+state, and provides an event bus interface for Acquisition board
+parameters.
+
+\section{Requirements}
+For multiunit tetrode recording, the DSP Board must perform
+user-programmable digital filtering on the raw 32 ksps 10-channel data
+from the Acquisition board. Our signal processing requirements were as
+follows:
+    
+\begin{itemize}
+\item \textbf{Processing speed:} To perform 200-tap FIR filtering on each
+  incoming sample would require 64 million multiply-accumulates per
+  second -- we judged 200 coefficients to be the maximum conceivable
+  length any user would need when filtering incoming data.
+  
+\item \textbf{Floating-point multiply-accumulate:} Fixed-point DSP requires
+  careful consideration, especially in the IIR case, to avoid
+  instability and overflow. This level of attention to filter
+  coefficient selection is undesirable in any system where end-users
+  are performing filter design, as it requires detailed understanding
+  of the various stages of processing quantization. Thus, all DSP
+  operations must use floatin-point arithmatic.
+  
+\item \textbf{Open/inexpensive development tools:} Any DSP we select needs to
+  have inexpensive development tools, ideally ones that are Free
+  Software. Since the bulk of DSP development will be performed in
+  assembly, at the very least it would be ideal if a Free assembler
+  existed.
+  
+\item \textbf{Ease of assembly:} Due to the limited anticipated volume
+  production, any DSP considered needs to be avialble in a
+  hand-solderable (non-BGA) package.
+\end{itemize}
+
+\section{DSP Board Hardware}
+      
+ The Analog Devices SHARC ADSP-21262 comes closest to meeting
+the DSP criteria. The 200 MHz 32-bit floating point DSP has an SIMD
+ALU allowing for up to 400 MMACS/second, and is available in a 144-pin
+LQFP package. The development tools (VisualDSP++) are expensive but
+available at a reduced price to academic institutions. To allow for
+processing overhead, we use two DSPs, one per tetrode.  
+      
+A Xilinx Spartan-3 XCS200 FPGA is used to decode the Acquisition Board
+optical data stream and pass it onto the DSPs, as well as providing
+the necessary buffering and interface to the Data Bus and Event Bus.
+      
+\subsection{Interfaces}
+
+\subsubsection{Data Bus}
+
+\subsubsection{Event Bus}
+
+\subsubsection{FPGA IO}
+The following single-wire signals allow the FPGA to
+signal the DSP about various sytem events. 
+
+
+\begin{SignalTable}{FPGA/DSP IO}
+  \signaldef{\signal{SAMPLE}}
+  {A rising edge on this line tells the DSP that a
+    new set of input samples is available from the
+    FPGA. Occurs  every 31.25 microseconds.
+  }
+  
+  \signaldef{\signal{EVENTS}}
+  {A high indicates there are events waiting to be
+    read in the FPGA's event bus queue. A successful
+    read-out of all pending events by the DSP causes this
+    line to go low. 
+  }
+        
+  \signaldef{ \signal{TINC}}
+  {Timer increment: a rising edge on this line
+    signals the beginning of a new timestamp, every 100
+    microseconds. 
+  }
+        
+  \signaldef{\signal{TCLR}}
+  {Clear timestamp counter. A high on this line
+    coupled with a rising edge on TINC causes the timestamp
+    counter to be reset to zero.
+  }
+\end{SignalTable}
+
+\subsubsection{FPGA/DSP Memory IO}
+
+<para> The ADSP supports several external serial interfaces, as well
+as an asychronous 16-bit memory bus (the Parallel Port), the latter
+being the only method with sufficient bandwidth for our application.
+The ADSP-21262 automatically performs 16-to-32bit packing and
+unpacking between the Parallel Port and its internal memory, and is
+only able to access the Parallel Port via Direct Memory Access (DMA).
+</para>
+
+<para> The external memory space is partitioned into five
+application-specific 12-bit regions. Several of the regions support a
+"transaction complete" address that, when written or read, signals the
+FPGA that the necessary writes or reads for that particular piece of
+data are complete.  </para>
+
+\subsubsubsection{0x0nnn: Status and  Data  Samples}
+This DSP-read-only region contains new sample data and status
+information.
+\include{statusanddata.memmap}
+
+
+\subsubsubsection{0x2nnn: Output data buffer} 
+<para> This region allows for the full write of a data frame destined
+for the Data Bus, with a maximum length of 2048 bytes (1024
+words).</para>
+\include{outputdata.memmap}
+
+\subsubsubsection{0x4nnn: Event Output} 
+
+A write of an Event Bus event to this region queues it in the FPGA for
+transmission on the event bus.
+\include{eventoutput.memmap}
+
+\subsubsubsection{0x6nnn : Event Input}
+The DSP can read new events from the Event Bus here. 
+\include{eventinput.memmap}
+
+\subsubsubsection{0x8nnn: Acqboard interface}
+This region allows us to send commands to the acquisition board. 
+\include{acqboardio.memmap}
+
+\end{document} 

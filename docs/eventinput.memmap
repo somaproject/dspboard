@@ -1,0 +1,4 @@
+0x6nnn : Event Input
+0x6000 : Event command word
+0x6001-0x6005 :  Event data words, in increasing order
+0x6006 : A write here signals the FPGA that the DSP has finished reading this event.
