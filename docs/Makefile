@@ -23,7 +23,7 @@ TEXFILES := $(wildcard *.tex)
 %.pdf : %.tex
 	$(LATEX) $< 
 
-all: buses.pdf
+all: DSPboard.pdf
 
 DSPboard.pdf: DSPboard.tex  $(TIMINGFILES) $(MEMMAPFILES)
 

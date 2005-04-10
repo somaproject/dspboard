@@ -98,44 +98,44 @@ signal the DSP about various sytem events.
 
 \subsubsection{FPGA/DSP Memory IO}
 
-<para> The ADSP supports several external serial interfaces, as well
+ The ADSP supports several external serial interfaces, as well
 as an asychronous 16-bit memory bus (the Parallel Port), the latter
 being the only method with sufficient bandwidth for our application.
 The ADSP-21262 automatically performs 16-to-32bit packing and
 unpacking between the Parallel Port and its internal memory, and is
 only able to access the Parallel Port via Direct Memory Access (DMA).
-</para>
 
-<para> The external memory space is partitioned into five
+
+ The external memory space is partitioned into five
 application-specific 12-bit regions. Several of the regions support a
 "transaction complete" address that, when written or read, signals the
 FPGA that the necessary writes or reads for that particular piece of
-data are complete.  </para>
+data are complete.  
 
-\subsubsubsection{0x0nnn: Status and  Data  Samples}
+\subsubsection{0x0nnn: Status and  Data  Samples}
 This DSP-read-only region contains new sample data and status
 information.
-\include{statusanddata.memmap}
+\input{statusanddata.memmap}
 
 
-\subsubsubsection{0x2nnn: Output data buffer} 
-<para> This region allows for the full write of a data frame destined
+\subsubsection{0x2nnn: Output data buffer} 
+ This region allows for the full write of a data frame destined
 for the Data Bus, with a maximum length of 2048 bytes (1024
-words).</para>
-\include{outputdata.memmap}
+words).
+\input{outputdata.memmap}
 
-\subsubsubsection{0x4nnn: Event Output} 
+\subsubsection{0x4nnn: Event Output} 
 
 A write of an Event Bus event to this region queues it in the FPGA for
 transmission on the event bus.
-\include{eventoutput.memmap}
+\input{eventoutput.memmap}
 
-\subsubsubsection{0x6nnn : Event Input}
+\subsubsection{0x6nnn : Event Input}
 The DSP can read new events from the Event Bus here. 
-\include{eventinput.memmap}
+\input{eventinput.memmap}
 
-\subsubsubsection{0x8nnn: Acqboard interface}
+\subsubsection{0x8nnn: Acqboard interface}
 This region allows us to send commands to the acquisition board. 
-\include{acqboardio.memmap}
+\input{acqboardio.memmap}
 
 \end{document} 
