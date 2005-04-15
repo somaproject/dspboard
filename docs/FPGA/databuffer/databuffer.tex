@@ -1,0 +1,91 @@
+
+The Data Bufferis responsible for triple-buffering data packets from
+the DSP to the Data Bus, and providing a temporary storage location
+for the DSP's 256-op loader kernel prior to boot.
+    
+Triple-buffering of data is accomplished using 3 blocks of
+BlockSelect+ RAM in the Spartan-3 FPGA, with a total of 2048 bytes per
+block. Thus the maximum size of a data packet is 2048 bytes, including
+header. Packets are guaranteed to be read out in full, and overwrites
+result in the overwriting packet being lost -- thus overwrites lead to
+lost, not corrupt, packets.
+
+\begin{figure}
+  \includegraphics[scale=0.8]{databuffer.pdf}
+  
+\end{figure}
+        
+\subsection{Data Buffer Input}
+        
+      
+The \signal{BUFWE}, \bus{BUFDIN}{15:0}, and \bus{BUFADDRIN}{9:0} write
+data bytes into the input buffers when \signal{MODE} is low, i.e. the
+system is not in boot mode. Register \bus{BUFLENIN}{9:0} is latched
+when the address corresponding to the Length field in the data packet
+is written, thus setting \bus{BUFLENIN}{9:0} to the total length of
+the data packet. The last write of the packet occurs when
+\bus{BUFADDRIN}{9:0} is equal to one less than \bus{BUFLENIN}{9:0},
+and results in \signal{BUFWDONE} being asserted.
+
+The input state machine \signal{incs} is responsible for selecting the
+currently written buffer. When \signal{incs} is in state A, B, or C,
+the corresponding \signal{BUFWEA}, \signal{BUFWEB}, or \signal{BUFWEC}
+is enabled, respectively. When \signal{ BUFWDONE} is asserted, the
+corresponding FULL{A,B,C} SR flip-flop is set, and the FSM moves into
+a WAIT{A,B,C} state.
+
+      
+\begin{figure}
+  \includegraphics[scale=0.8]{input.FSM.pdf}
+\end{figure}
+
+        The next packet can only be written when the next buffer is
+        empty, and the system has moved out of the corresponding WAIT
+        state. While \signal{incs} is in a wait state, the
+        \bus{BUFLENIN}{9:0} register is reset to the highest-possible
+        value to prevent accidental triggering.
+      
+    \subsection{Data Buffer Output}
+      
+       The outputs of the three buffers are multiplexed into the
+      \bus{BUFDOUT}{15:0} signal, which is optimized for interfacing
+      with the system Data Bus. Similar to the input stage, the output
+      reads the Length word in the data header to determine total
+      packet length.
+
+      \begin{figure}
+        \includegraphics[scale=0.8]{output.FSM.pdf}
+      \end{figure}
+       The output FSM (\signal{outcs}) consists of three similar
+      phases, one for each buffer. The system sits in a WAIT state
+      until the corresponding \signal{FULL{A,B,C}} is asserted
+      coincident with the \signal{NEXTOUT}, advancing to the
+      corresponding A, B, or C. The resulting high on
+      \signal{BUFCNTEN} causes the \bus{BUFCNT}{9:0} counter to
+      advance on each output word. \bus{BUFLENOUT}{9:0} latches the
+      appropriate length word. \signal{BUFCNTEN} is delayed by one
+      tick and output as \signal{BUFACKOUT} to the \signal{DACK} on
+      the Data Bus.
+
+      Upon \bus{BUFLENOUT}{9:0} equaling \signal{BUFCNT}{9:0}, the
+      writing of the packet is complete, and the transition to the
+      DONE state clears the corresponding \signal{FULL{A,B,C}}. The
+      FSM then waits for the deassertion of \signal{NEXTOUT} before
+      advancing to the wait state for the next buffer.
+   
+\subsection{Boot Buffer}
+
+BlockSelect+ RAM Buffer A is also used to store the loader kernel for
+the DSP. This allows us to buffer the loader kernel into the FPGA
+before booting the DSP, which expects to rapidly read the kernel from
+RAM. The EEPROM-based boot mode of the DSP uses the Parallel port in
+8-bit mode.
+
+When the DSP is in boot mode (\signal{MODE} is high) and the DSP is
+held in a reset state (\signal{DSPRESET}=1), \signal{RWE},
+\bus{RAIN}{9:0}, and \bus{RDIN}{15:0} can write to the FPGA. The
+deassertion of \signal{DSPRESET} switches the buffer address input to
+the 11-bit \bus{RAOUT}{10:0}, with the 10 MSBs selecting the data word
+from the buffer and the LSB controlling which byte drives
+\bus{RDOUT}{7:0}
+

@@ -1,7 +1,7 @@
 \documentclass{article}
 \usepackage{fullpage}
 \usepackage[pdftex]{graphicx}
-\usepackage{latex/somahw}
+\usepackage{somahw}
 
 
 \begin{document}
@@ -137,5 +137,7 @@ The DSP can read new events from the Event Bus here.
 \subsubsection{0x8nnn: Acqboard interface}
 This region allows us to send commands to the acquisition board. 
 \input{acqboardio.memmap}
+
+\subimport{FPGA/}{FPGA} 
 
 \end{document} 
