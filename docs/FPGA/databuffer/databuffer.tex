@@ -20,11 +20,6 @@ result in the overwriting packet being lost -- thus overwrites lead to
 lost, not corrupt, packets.
 
 
-
-\begin{figure}
-  \includegraphics[scale=0.8]{DataMux.pdf}
-\end{figure}
-        
 \subsubsection{Data Buffer Input}
         
       
@@ -37,12 +32,13 @@ the data packet. The last write of the packet occurs when
 \bus{BUFADDRIN}{9:0} is equal to one less than \bus{BUFLENIN}{9:0},
 and results in \signal{BUFWDONE} being asserted.
 
-The input state machine \signal{incs} (Figure \ref{InputFSM})is responsible for selecting the
-currently written buffer. When \signal{incs} is in state A, B, or C,
-the corresponding \signal{BUFWEA}, \signal{BUFWEB}, or \signal{BUFWEC}
-is enabled, respectively. When \signal{ BUFWDONE} is asserted, the
-corresponding FULL{A,B,C} SR flip-flop is set, and the FSM moves into
-a WAIT{A,B,C} state.
+The input state machine \signal{incs} (Figure \ref{InputFSM})is
+responsible for selecting the currently written buffer. When
+\signal{incs} is in state A, B, or C, the corresponding
+\signal{BUFWEA}, \signal{BUFWEB}, or \signal{BUFWEC} is enabled,
+respectively. When \signal{ BUFWDONE} is asserted, the corresponding
+FULL{A,B,C} SR flip-flop is set, and the FSM moves into a WAIT{A,B,C}
+state.
 
       
 \begin{figure}
