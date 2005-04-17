@@ -1,0 +1,9 @@
+C: CLK       :  | |  |  |  |  |  |  |  |  |  |  |  |  |  |  
+S: WE        :  L H  L  L  H  L  L  H  L  L  H  L  L  H  L
+S: WEL       :  L L  H  L  L  H  L  L  H  L  L  H  L  L  H
+S: WELL      :  H L  L  H  L  L  H  L  L  H  L  L  H  L  L
+B: ADDR      :  0 0  0  0  1  1  1  2  2  2  3  3  3  4  4
+B: ADDRL     :  0 0  0  0  0  1  1  1  2  2  2  3  3  3  4 
+S: AEN       :  H H  H  H  H  H  H  H  H  H  H  L  L  L  L 
+S: WEA       :  L L  H  H  L  H  H  L  H  H  L  H  H  L  H
+B: ADDRA     :  1 0  0  2  0  4  6  4  8  10 8  1  1  1  3

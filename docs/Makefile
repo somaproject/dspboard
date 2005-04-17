@@ -2,9 +2,14 @@
 TOOLSPATH = ../../docs/tools
 LATEXPATH = ./latex
 
+SUBPROJECTS = FPGA
 
-all: DSPboard.pdf
-include latex/include.mk
+.PHONY: all $(SUBPROJECTS)
 
 
-DSPboard.pdf: DSPboard.tex  $(TIMINGFILES) $(MEMMAPFILES)
+include $(LATEXPATH)/include.mk
+
+
+
+DSPboard.pdf: DSPboard.tex $(SUPPORT)
+
