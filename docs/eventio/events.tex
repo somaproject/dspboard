@@ -11,7 +11,6 @@ The following is a general overview of how the DSP board interacts with the rest
 \subsection{Acquisition Board Control}
 Any change of the analog acqboard state result in a tetrode state update event. This event is broadcast from the relevant tetrode to all devices. 
 
-\begin{figure}[h]
 \begin{event}{CHANSTATE}
 CMD: 0x45
 SRC: TETN
@@ -27,7 +26,7 @@ DW4[3:0]: GC
 DW4[7:4]: HWFC
 DW4[9:8]: CS
 \end{event}
-\end{figure}
+
 
 Where \textbf{Gn} is the gain of channel \textbf{n} and \textbf{HWFn} is the high pass filter selection of channel \textbf{n}. For the continuous acquisition channel, \textbf{CS} is the currently muxed channel. 
 /
@@ -35,12 +34,11 @@ Where \textbf{Gn} is the gain of channel \textbf{n} and \textbf{HWFn} is the hig
 
 To explicitly query these settings, send 
 
-\begin{figure}[h]
 \begin{event}{CHANQUERY}
 CMD: 0x46
 SRC: ANY
 \end{event}
-\end{figure}
+
 
 All tetrodes which receive such a query will broadcast a CHANSTATE. 
 
@@ -55,7 +53,6 @@ Most of the configuration parameters in the DSP board are set and queried via tw
 
 \subsubsection{Read Configuration Parameter}
 
-\begin{figure}[h]
 \begin{event}{READPARAM}
 CMD: 0x41
 SRC: ANY
@@ -66,10 +63,10 @@ DW2: DW0[15:0]
 DW3: DW1[31:16]
 DW4: DW1[15:0]
 \end{event}
-\end{figure}
+
 
 \subsubsection{Write Configuration Parameter}
-\begin{figure}[h]
+
 \begin{event}{WRITEPARAM}
 CMD: 0x42
 SRC: ANY
@@ -80,77 +77,67 @@ DW2: DW0[15:0]
 DW3: DW1[31:16]
 DW4: DW1[15:0]
 \end{event}
-\end{figure}
+
 
 \subsubsection{Configuration Parameters}
 
-\begin{figure}[h]
+\paragraph{Write Filter}
 \begin{dspcmd}{WRITEFILTER}
 TARGET: 0x1n
 ADDR: n
 DW0[31:0]: 32-bit h[n]
 DW1[31:0]: 32-bit h[n+1]
 \end{dspcmd}
-\caption{DSP Configuration Parameter: Set Filter}
-\end{figure}
+
 
 Writes the 32-bit filter coefficient. 
 
-\begin{figure}[h]
+\paragraph{Filter Length}
+
 \begin{dspcmd}{WRITEFILTERLENID}
 TARGET: 0x20
 ADDR: TGT
 DW0[7:0]: LENGTH
 DW1[15:0]: ID
 \end{dspcmd}
-\caption{DSP Configuration Parameter: Filter Length}
-\end{figure}
 Writes the filter length and the unique 16-bit filter ID. 
 
+\paragraph{Spike Window Length}
 
-\begin{figure}[h]
 \begin{dspcmd}{SPIKELEN}
 TARGET: 0x23
 DW0[7:0]: SPLEN
 \end{dspcmd}
-\caption{DSP Configuration Parameter: Spike Window Length}
-\end{figure}
 
-\begin{figure}[h]
+\paragraph{No Trigger Length Duration}
+
 \begin{dspcmd}{NOTRIGGERLEN}
 TARGET: 0x24
 DW0[7:0]: NTLEN
 \end{dspcmd}
-\caption{DSP Configuration Parameter: Length of non-trigger}
-\end{figure}
 
-\begin{figure}[h]
+\paragraph{Post-trigger duration}
+
+
 \begin{dspcmd}{POSTTRIGLEN}
 TARGET: 0x25
 DW0[7:0]: PTLEN
 \end{dspcmd}
-\caption{DSP Configuration Parameter: Post-trigger length}
-\end{figure}
 
 Change continuous parameters
 
-\begin{figure}[h]
 \begin{dspcmd}{DSRATIO}
 TARGET: 0x26
 DW0[3:0]: RATIO
 \end{dspcmd}
-\caption{DSP Configuration Parameter: Downsampling ratio}
-\end{figure}
 The input for continuous data is sampled at such and such a rate. 
 
 
-\begin{figure}[h]
 \begin{dspcmd}{CFSIZE}
 TARGET: 0x27
 DW0[15:0]: FSIZE
 \end{dspcmd}
-\caption{DSP Configuration Parameter: Cont. Frame size}
-\end{figure}
+
 Number of continuous samples per frame.
 
 

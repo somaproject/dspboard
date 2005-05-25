@@ -1,6 +1,6 @@
 
-TOOLSPATH = ../../docs/tools
-LATEXPATH = ./tools/latex
+TOOLSPATH = tools
+LATEXPATH = $(TOOLSPATH)/latex
 
 SUBPROJECTS = FPGA
 

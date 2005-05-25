@@ -34,15 +34,20 @@ Okay, new plan:
    c. general hardware overview
       - signal processing chain
       - what do things like trigger len, etc. mean
-      - downsampling
-2. Event interface for normal operation
+      - downsampling of continuous channel
+   d. states :
+      - acquiring samples
+      - booting
+      
+2. Event and data interface for normal operation
    Four segments: 
    1. acqboard control
    2. filter settings
    3. thresholding and spike windowing
    4. buffer/filter configuration
    5. Timing 
-   6. Boot 
+   6. Boot (or not)
+   7. data output formats
 
 3. FPGA/DSP memory mapped interface, specific pins, etc. 
    do any of the above parts depend on understanding TINC/TCLEAR? No
@@ -50,11 +55,26 @@ Okay, new plan:
    So, this shows how tinc/tclear works
    Boot details ? 
 4. FPGA Internals
-    CMDID altenration
+    CMDID alternation
     Software layout and configuration
     
 5. DSP code internals
-    Which registers are which 
+    Which registers are which
+    How is code organized
+    Buffers 
 6. Hardware, schematics, etc. 
-    Power and part selection 
+    Power and part selection
+    SI Concerns
+
+Appendix A: 
+    Schematics
+    Gerbers
+    BOM
+ 
+Appendix B: DSP code Organization
+    -- conventions
+    -- dancing robots. DAncing robots!
+
+Appendix C: FPGA code organization
+ 
     
