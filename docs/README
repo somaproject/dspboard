@@ -1,0 +1,60 @@
+Okay, this is getting nowhere; I really need to reevaluate how I'm organizing this documentation, with an eye towards "what audience?"
+
+
+Who would the audience be? 
+1. someone who wanted to fix a bug
+2. someone who wanted to know how the DSPboard worked
+3. someone who wanted to add a custom filter
+4. someone who was curious why I made decision foo
+5. me, in two years
+
+How to have documentation organized in a manner that won't be painful for everyone involved, and will also serve as a canonical reference for this sort of thing? 
+
+This is our first documentation, and it will be a model to follow for others. 
+
+What do we want? 
+
+1. an event reference of some kind
+2. a general overview of wtf the DSPboard does
+3. documentation of interfaces: 
+   a. fpga/DSP
+   b. FPGA/acqboard
+4. notes on how the code actually works
+5. how to boot the fucking thing
+6. how to talk to the DSPboard internals
+7. Hardware design decisions, schematic annotations, etc. 
+8. FPGA internals
+9. 
+
+
+Okay, new plan: 
+1. dsp board introduction: 
+   a. what does it do
+   b. how does it do it
+   c. general hardware overview
+      - signal processing chain
+      - what do things like trigger len, etc. mean
+      - downsampling
+2. Event interface for normal operation
+   Four segments: 
+   1. acqboard control
+   2. filter settings
+   3. thresholding and spike windowing
+   4. buffer/filter configuration
+   5. Timing 
+   6. Boot 
+
+3. FPGA/DSP memory mapped interface, specific pins, etc. 
+   do any of the above parts depend on understanding TINC/TCLEAR? No
+   or the specific interrupts? no
+   So, this shows how tinc/tclear works
+   Boot details ? 
+4. FPGA Internals
+    CMDID altenration
+    Software layout and configuration
+    
+5. DSP code internals
+    Which registers are which 
+6. Hardware, schematics, etc. 
+    Power and part selection 
+    

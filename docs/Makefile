@@ -1,6 +1,6 @@
 
 TOOLSPATH = ../../docs/tools
-LATEXPATH = ./latex
+LATEXPATH = ./tools/latex
 
 SUBPROJECTS = FPGA
 
@@ -8,7 +8,6 @@ SUBPROJECTS = FPGA
 
 
 include $(LATEXPATH)/include.mk
-
 
 
 DSPboard.pdf: DSPboard.tex $(SUPPORT)
