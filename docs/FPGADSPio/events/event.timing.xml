@@ -1,0 +1,67 @@
+<timingobject name="Events.input">
+<clock name="SYSCLK">  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+</clock>
+<signal name="EEVENT"> L  H  L  L  L  L  L  H  L  L  L  L  L  H  L  L  L  L  L
+</signal>
+<bus name="EADDR"> 
+  <data>              A4  A5 A0 A1 A2 A3 A4 A5 A0 A1 A2 A3 A4 A5 A0 A1 A2 A3 A4
+  </data>
+  <class>             0   0  1  1  1  1  1  1  2  2  2  2  2  2  3  3  3  3  3 
+ </class>
+</bus>
+<bus name="EDATA"> 
+  <data>              D4  D5 D0 D1 D2 D3 D4 D5 D0 D1 D2 D3 D4 D5 D0 D1 D2 D3 D4
+  </data>
+  <class>             0   0  1  1  1  1  1  1  2  2  2  2  2  2  3  3  3  3  3 
+ </class>
+</bus>
+<signal name="EEVENTL">L  L  H  L  L  L  L  L  H  L  L  L  L  L  H  L  L  L  L
+</signal>
+<bus name="CNT">
+  <data>               3  4  5  0  1  2  3  4  5  0  1  2  3  4  5  0  1  2  3
+  </data></bus>
+<bus name="DATAL"> 
+  <data>              Z  D4  D5 D0 D1 D2 D3 D4 D5 D0 D1 D2 D3 D4 D5 D0 D1 D2 D3
+  </data>
+  <class>             0  0   0  1  1  1  1  1  1  2  2  2  2  2  2  3  3  3  3
+  </class>
+</bus>
+<bus name="D0">
+  <data>              D0 D0 D0 D0  D0 D0 D0 D0 D0 D0 D0 D0 D0 D0 D0 D0 D0 D0 D0
+  </data>
+  <class>             0  0   0  0  1  1  1  1  1  1  2  2  2   2  2 2  3  3  3
+  </class> 
+</bus>
+
+<bus name="D5">
+  <data>              D5 D5 D5 D5  D5 D5 D5 D5 D5 D5 D5 D5 D5 D5 D5 D5 D5 D5 D5
+  </data>
+  <class>             0  0   0  0  0  0  0  0  0  1  1  1  1  1  1  2  2  2  2
+  </class> 
+</bus>
+<signal name="ADDRSEL">L L   L  L  L  H  L  L  L  L  L  L  L  L  L  L  L  L  L 
+</signal>
+<signal name="SMINE">  L L   L  L  L  L  H  H  H  H  L  L  L  L  L  L  L  L  L 
+</signal>
+<signal name="LMINE">  L L   L  L  L  L  L  L  L  H  L  L  L  L  L  L  L  L  L
+</signal>
+<bus name="D0L">
+  <data>              D0 D0 D0 D0  D0 D0 D0 D0 D0 D0 D0 D0 D0 D0 D0 D0 D0 D0 D0
+  </data>
+  <class>             0  0   0  0  0  0  0  0  0  0  1  1  1  1  1  1  2  2  2
+  </class> 
+</bus>
+<bus name="D5L">
+  <data>              D5 D5 D5 D5  D5 D5 D5 D5 D5 D5 D5 D5 D5 D5 D5 D5 D5 D5 D5
+  </data>
+  <class>             0  0   0  0  0  0  0  0  0  0  1  1  1  1  1  1  2  2  2
+  </class> 
+</bus>
+<signal name="EVENTL8">L  L  L  H  L  L  L  L  L  H  L  L  L  L  L  H  L  L  L
+</signal>
+<signal name="EVENT">  L  L  L  L  H  L  L  L  L  L  H  L  L  L  L  L  H L  L  
+</signal>
+<signal name="MINE">   L  L  L  L  L  L  L  L  L  L  H  H  H  H  H  H  L  L  L
+</signal>
+</timingobject> 
+

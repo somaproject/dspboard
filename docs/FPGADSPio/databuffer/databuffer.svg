@@ -1,0 +1,2399 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
+"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   id="svg1"
+   sodipodi:version="0.32"
+   inkscape:version="0.39cvs"
+   width="612.00000pt"
+   height="792.00000pt"
+   sodipodi:docbase="/home/jonas/soma/developer/DSPboard/docs/FPGA/data buffer"
+   sodipodi:docname="Data Buffer.svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xml="http://www.w3.org/XML/1998/namespace"
+   xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs
+     id="defs3">
+    <marker
+       style="overflow:visible;"
+       id="TriangleOutM"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM">
+      <path
+         transform="scale(0.4)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z "
+         id="path1698"
+         sodipodi:nodetypes="cccc" />
+    </marker>
+    <marker
+       style="overflow:visible;"
+       id="TriangleInM"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="TriangleInM">
+      <path
+         transform="scale(-0.4)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z "
+         id="path1545"
+         sodipodi:nodetypes="cccc" />
+    </marker>
+    <marker
+       style="overflow:visible;"
+       id="Arrow1M"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow1M">
+      <path
+         transform="scale(0.4)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path1591"
+         sodipodi:nodetypes="ccccc" />
+    </marker>
+    <marker
+       style="overflow:visible;"
+       id="Arrow2L"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow2L">
+      <path
+         transform="scale(1.1) translate(-5,0)"
+         d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
+         style="font-size:12.0;fill-rule:evenodd;stroke-width:0.62500000;stroke-linejoin:round;"
+         id="path1587"
+         sodipodi:nodetypes="cccc" />
+    </marker>
+    <marker
+       style="overflow:visible;"
+       id="Arrow1S"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow1S">
+      <path
+         transform="scale(0.2)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path983"
+         sodipodi:nodetypes="ccccc" />
+    </marker>
+    <marker
+       style="overflow:visible;"
+       id="Arrow2S"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow2S">
+      <path
+         transform="scale(0.3) translate(-5,0)"
+         d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
+         style="font-size:12.0;fill-rule:evenodd;stroke-width:0.62500000;stroke-linejoin:round;"
+         id="arrowMarkerPath2"
+         sodipodi:nodetypes="cccc" />
+    </marker>
+    <marker
+       style="overflow:visible;"
+       id="Arrow2M"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow2M">
+      <path
+         transform="scale(0.6) translate(-5,0)"
+         d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
+         style="font-size:12.0;fill-rule:evenodd;stroke-width:0.62500000;stroke-linejoin:round;"
+         id="path1585"
+         sodipodi:nodetypes="cccc" />
+    </marker>
+    <marker
+       style="overflow:visible;"
+       id="Torso"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Torso">
+      <g
+         transform="scale(0.7)"
+         id="g2045">
+        <path
+           style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.2500000;marker-start:none;marker-mid:none;marker-end:none;"
+           d="M -4.7792281,-3.2395420 C -2.4288541,-2.8736027 0.52103922,-1.3019943 0.25792722,0.38794346 C -0.0051877922,2.0778819 -2.2126741,2.6176539 -4.5630471,2.2517169 C -6.9134221,1.8857769 -8.5210350,0.75201414 -8.2579220,-0.93792336 C -7.9948090,-2.6278615 -7.1296041,-3.6054813 -4.7792281,-3.2395420 z "
+           id="path1128"
+           sodipodi:nodetypes="ccccc" />
+        <path
+           style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-end:none;"
+           d="M 4.4598789,0.088665736 C -2.5564571,-4.3783320 5.2248769,-3.9061806 -0.84829578,-8.7197331"
+           id="path1909"
+           sodipodi:nodetypes="cc" />
+        <path
+           style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:none;marker-end:none;"
+           d="M 4.9298719,0.057520736 C -1.3872731,1.7494689 1.8027579,5.4782079 -4.9448731,7.5462725"
+           id="path1910"
+           sodipodi:nodetypes="cc" />
+        <rect
+           style="fill-rule:evenodd;stroke-width:1.0000000pt;marker-end:none;"
+           id="rect2035"
+           width="2.6366582"
+           height="2.7608147"
+           x="-10.391706"
+           y="-1.7408575"
+           transform="matrix(0.527536,-0.849533,0.887668,0.460484,0.000000,0.000000)" />
+        <rect
+           style="fill-rule:evenodd;stroke-width:1.0000000pt;marker-end:none;"
+           id="rect2036"
+           width="2.7327356"
+           height="2.8614161"
+           x="4.9587269"
+           y="-7.9629307"
+           transform="matrix(0.671205,-0.741272,0.790802,0.612072,0.000000,0.000000)" />
+        <path
+           sodipodi:type="arc"
+           style="fill:#ff0000;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:none;marker-end:none;"
+           id="path2037"
+           sodipodi:cx="16.172634"
+           sodipodi:cy="-28.685045"
+           sodipodi:rx="0.60731727"
+           sodipodi:ry="0.60731727"
+           d="M 16.779951 -28.685045 A 0.60731727 0.60731727 0 1 0 15.565317,-28.685045 A 0.60731727 0.60731727 0 1 0 16.779951 -28.685045 z"
+           transform="matrix(6.793608e-17,-1.109517,1.109517,6.793608e-17,25.96648,19.71619)" />
+        <path
+           sodipodi:type="arc"
+           style="fill:#ff0000;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:none;marker-end:none;"
+           id="path2038"
+           sodipodi:cx="16.172634"
+           sodipodi:cy="-28.685045"
+           sodipodi:rx="0.60731727"
+           sodipodi:ry="0.60731727"
+           d="M 16.779951 -28.685045 A 0.60731727 0.60731727 0 1 0 15.565317,-28.685045 A 0.60731727 0.60731727 0 1 0 16.779951 -28.685045 z"
+           transform="matrix(6.793608e-17,-1.109517,1.109517,6.793608e-17,26.82450,16.99126)" />
+      </g>
+    </marker>
+    <marker
+       style="overflow:visible;"
+       id="Arrow1L"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow1L">
+      <path
+         transform="scale(0.8)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path1593"
+         sodipodi:nodetypes="ccccc" />
+    </marker>
+    <marker
+       style="overflow:visible;"
+       id="TriangleOutL"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="TriangleOutL">
+      <path
+         transform="scale(0.8)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z "
+         id="path1541"
+         sodipodi:nodetypes="cccc" />
+    </marker>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="5.7040351"
+     inkscape:cx="474.39390"
+     inkscape:cy="588.30188"
+     inkscape:window-width="1596"
+     inkscape:window-height="1159"
+     showgrid="true"
+     snaptogrid="true"
+     inkscape:grid-points="true"
+     gridspacingy="2.5000000pt"
+     gridspacingx="2.5000000pt"
+     gridoriginy="0.0000000pt"
+     gridoriginx="0.0000000pt"
+     gridtolerance="2.5000000pt"
+     showguides="true"
+     snaptoguides="true"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:grid-bbox="false"
+     guidetolerance="5.0000000pt" />
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 325.00000,749.37500 L 325.00000,727.50000"
+     id="path3901"
+     sodipodi:nodetypes="cc" />
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 220.50000,351.00000 L 220.50000,351.00000"
+     id="path2861" />
+  <path
+     style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.2499998;stroke-linecap:round;"
+     d="M 99.591560,592.74840 L 115.62500,592.74840 C 115.62500,592.74840 125.24508,592.74840 125.24508,602.31170 C 125.24508,611.87500 115.62500,611.87500 115.62500,611.87500 L 99.591560,611.87500 L 99.591560,592.74840 z "
+     id="AND"
+     sodipodi:nodetypes="cccccc" />
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 259.37500,186.87500 L 259.37500,196.25000"
+     id="path3064" />
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 259.37500,208.75000 L 259.37500,218.12500"
+     id="path3065" />
+  <g
+     id="g1718">
+    <rect
+       style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+       id="rect985"
+       width="171.87500"
+       height="121.80537"
+       x="328.12500"
+       y="193.19464" />
+    <text
+       xml:space="preserve"
+       style="font-size:12.000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+       x="332.52823"
+       y="211.46451"
+       id="text1664"><tspan
+         id="tspan1665">DIA[15:0]</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12.000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+       x="332.52823"
+       y="236.46451"
+       id="text1667"
+       sodipodi:linespacing="100%"><tspan
+         x="332.52823"
+         y="236.46451"
+         sodipodi:role="line"
+         id="tspan1680">ADDRA[9:0]</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12.000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+       x="332.52823"
+       y="267.71451"
+       id="text1670"
+       sodipodi:linespacing="100%"><tspan
+         x="332.52823"
+         y="267.71451"
+         sodipodi:role="line"
+         id="tspan1678">WEA</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12.000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+       x="332.52823"
+       y="292.71451"
+       id="text1673"
+       sodipodi:linespacing="100%"><tspan
+         x="332.52823"
+         y="292.71451"
+         sodipodi:role="line"
+         id="tspan1676">DOA[15:0]</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12.000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;text-anchor:end;"
+       x="495.02823"
+       y="211.46451"
+       id="text1682"
+       sodipodi:linespacing="100%"><tspan
+         x="495.02823"
+         y="211.46451"
+         sodipodi:role="line"
+         id="tspan1696">DIB[15:0]</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12.000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;text-anchor:end;"
+       x="495.02823"
+       y="236.46451"
+       id="text1685"
+       sodipodi:linespacing="100%"><tspan
+         x="495.02823"
+         y="236.46451"
+         sodipodi:role="line"
+         id="tspan1686">ADDRA[9:0]</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12.000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;text-anchor:end;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;writing-mode:lr;"
+       x="495.02823"
+       y="267.71451"
+       id="text1688"
+       sodipodi:linespacing="100%"><tspan
+         x="495.02823"
+         y="267.71451"
+         sodipodi:role="line"
+         id="tspan1694">WEB</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12.000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;text-anchor:end;"
+       x="495.02823"
+       y="292.71451"
+       id="text1691"
+       sodipodi:linespacing="100%"><tspan
+         x="495.02823"
+         y="292.71451"
+         sodipodi:role="line"
+         id="tspan1692">DOB[15:0]</tspan></text>
+    <path
+       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+       d="M 328.12500,302.50000 L 334.37500,308.75000 L 328.12500,315.00000 L 328.12500,315.00000 L 328.12500,315.00000 L 328.12500,315.00000 L 328.12500,315.00000 L 328.12500,315.00000"
+       id="path1699" />
+    <path
+       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+       d="M 500.00000,315.00000 L 493.75000,308.75000 L 493.75000,308.75000 L 500.00000,302.50000 L 500.00000,302.50000"
+       id="path1703" />
+    <text
+       xml:space="preserve"
+       style="font-size:14.000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+       x="315.19913"
+       y="181.91267"
+       id="text1708"
+       sodipodi:linespacing="100%"
+       transform="scale(1.036490,1.036490)"><tspan
+         id="tspan1709">Buffer A</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;text-anchor:end;"
+       x="497.91162"
+       y="190.00073"
+       id="text1747"
+       sodipodi:linespacing="100%"><tspan
+         id="tspan1712">BlockSelect+ RAM Block</tspan></text>
+  </g>
+  <g
+     id="g1752"
+     transform="translate(0.000000,175.0000)">
+    <rect
+       style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+       id="rect1753"
+       width="171.87500"
+       height="121.80537"
+       x="328.12500"
+       y="193.19464" />
+    <text
+       xml:space="preserve"
+       style="stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+       x="332.52823"
+       y="211.46451"
+       id="text1754"><tspan
+         id="tspan1755">DIA[15:0]</tspan></text>
+    <text
+       xml:space="preserve"
+       style="stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+       x="332.52823"
+       y="236.46451"
+       id="text1757"
+       sodipodi:linespacing="100%"><tspan
+         x="332.52823"
+         y="236.46451"
+         sodipodi:role="line"
+         id="tspan1758">ADDRA[9:0]</tspan></text>
+    <text
+       xml:space="preserve"
+       style="stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+       x="332.52823"
+       y="267.71451"
+       id="text1760"
+       sodipodi:linespacing="100%"><tspan
+         x="332.52823"
+         y="267.71451"
+         sodipodi:role="line"
+         id="tspan1761">WEA</tspan></text>
+    <text
+       xml:space="preserve"
+       style="stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+       x="332.52823"
+       y="292.71451"
+       id="text1763"
+       sodipodi:linespacing="100%"><tspan
+         x="332.52823"
+         y="292.71451"
+         sodipodi:role="line"
+         id="tspan1764">DOA[15:0]</tspan></text>
+    <text
+       xml:space="preserve"
+       style="stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;text-anchor:end;"
+       x="495.02823"
+       y="211.46451"
+       id="text1766"
+       sodipodi:linespacing="100%"><tspan
+         x="495.02823"
+         y="211.46451"
+         sodipodi:role="line"
+         id="tspan1767">DIB[15:0]</tspan></text>
+    <text
+       xml:space="preserve"
+       style="stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;text-anchor:end;"
+       x="495.02823"
+       y="236.46451"
+       id="text1770"
+       sodipodi:linespacing="100%"><tspan
+         x="495.02823"
+         y="236.46451"
+         sodipodi:role="line"
+         id="tspan1771">ADDRA[9:0]</tspan></text>
+    <text
+       xml:space="preserve"
+       style="stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;text-anchor:end;"
+       x="495.02823"
+       y="267.71451"
+       id="text1773"
+       sodipodi:linespacing="100%"><tspan
+         x="495.02823"
+         y="267.71451"
+         sodipodi:role="line"
+         id="tspan1774">WEB</tspan></text>
+    <text
+       xml:space="preserve"
+       style="stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;text-anchor:end;"
+       x="495.02823"
+       y="292.71451"
+       id="text1776"
+       sodipodi:linespacing="100%"><tspan
+         x="495.02823"
+         y="292.71451"
+         sodipodi:role="line"
+         id="tspan1777">DOB[15:0]</tspan></text>
+    <path
+       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+       d="M 328.12500,302.50000 L 334.37500,308.75000 L 328.12500,315.00000 L 328.12500,315.00000 L 328.12500,315.00000 L 328.12500,315.00000 L 328.12500,315.00000 L 328.12500,315.00000"
+       id="path1779" />
+    <path
+       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+       d="M 500.00000,315.00000 L 493.75000,308.75000 L 493.75000,308.75000 L 500.00000,302.50000 L 500.00000,302.50000"
+       id="path1780" />
+    <text
+       xml:space="preserve"
+       style="font-size:14.000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+       x="315.19913"
+       y="181.91267"
+       id="text1781"
+       sodipodi:linespacing="100%"
+       transform="scale(1.036490,1.036490)"><tspan
+         id="tspan1782">Buffer B</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;text-anchor:end;"
+       x="497.91162"
+       y="190.00073"
+       id="text1784"
+       sodipodi:linespacing="100%"><tspan
+         id="tspan1785">BlockSelect+ RAM Block</tspan></text>
+  </g>
+  <g
+     id="g1787"
+     transform="translate(0.000000,343.7500)">
+    <rect
+       style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+       id="rect1788"
+       width="171.87500"
+       height="121.80537"
+       x="328.12500"
+       y="193.19464" />
+    <text
+       xml:space="preserve"
+       style="stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+       x="332.52823"
+       y="211.46451"
+       id="text1789"><tspan
+         id="tspan1790">DIA[15:0]</tspan></text>
+    <text
+       xml:space="preserve"
+       style="stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+       x="332.52823"
+       y="236.46451"
+       id="text1792"
+       sodipodi:linespacing="100%"><tspan
+         x="332.52823"
+         y="236.46451"
+         sodipodi:role="line"
+         id="tspan1793">ADDRA[9:0]</tspan></text>
+    <text
+       xml:space="preserve"
+       style="stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+       x="332.52823"
+       y="267.71451"
+       id="text1795"
+       sodipodi:linespacing="100%"><tspan
+         x="332.52823"
+         y="267.71451"
+         sodipodi:role="line"
+         id="tspan1796">WEA</tspan></text>
+    <text
+       xml:space="preserve"
+       style="stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+       x="332.52823"
+       y="292.71451"
+       id="text1798"
+       sodipodi:linespacing="100%"><tspan
+         x="332.52823"
+         y="292.71451"
+         sodipodi:role="line"
+         id="tspan1799">DOA[15:0]</tspan></text>
+    <text
+       xml:space="preserve"
+       style="stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;text-anchor:end;"
+       x="495.02823"
+       y="211.46451"
+       id="text1801"
+       sodipodi:linespacing="100%"><tspan
+         x="495.02823"
+         y="211.46451"
+         sodipodi:role="line"
+         id="tspan1802">DIB[15:0]</tspan></text>
+    <text
+       xml:space="preserve"
+       style="stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;text-anchor:end;"
+       x="495.02823"
+       y="236.46451"
+       id="text1804"
+       sodipodi:linespacing="100%"><tspan
+         x="495.02823"
+         y="236.46451"
+         sodipodi:role="line"
+         id="tspan1805">ADDRA[9:0]</tspan></text>
+    <text
+       xml:space="preserve"
+       style="stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;text-anchor:end;"
+       x="495.02823"
+       y="267.71451"
+       id="text1807"
+       sodipodi:linespacing="100%"><tspan
+         x="495.02823"
+         y="267.71451"
+         sodipodi:role="line"
+         id="tspan1808">WEB</tspan></text>
+    <text
+       xml:space="preserve"
+       style="stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;text-anchor:end;"
+       x="495.02823"
+       y="292.71451"
+       id="text1810"
+       sodipodi:linespacing="100%"><tspan
+         x="495.02823"
+         y="292.71451"
+         sodipodi:role="line"
+         id="tspan1811">DOB[15:0]</tspan></text>
+    <path
+       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+       d="M 328.12500,302.50000 L 334.37500,308.75000 L 328.12500,315.00000 L 328.12500,315.00000 L 328.12500,315.00000 L 328.12500,315.00000 L 328.12500,315.00000 L 328.12500,315.00000"
+       id="path1813" />
+    <path
+       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+       d="M 500.00000,315.00000 L 493.75000,308.75000 L 493.75000,308.75000 L 500.00000,302.50000 L 500.00000,302.50000"
+       id="path1814" />
+    <text
+       xml:space="preserve"
+       style="font-size:14.000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+       x="315.19913"
+       y="181.91267"
+       id="text1815"
+       sodipodi:linespacing="100%"
+       transform="scale(1.036490,1.036490)"><tspan
+         id="tspan1816">Buffer C</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;text-anchor:end;"
+       x="497.91162"
+       y="190.00073"
+       id="text1818"
+       sodipodi:linespacing="100%"><tspan
+         id="tspan1819">BlockSelect+ RAM Block</tspan></text>
+  </g>
+  <g
+     id="g2853">
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+       d="M 593.75000,240.00000 L 593.75000,249.37500"
+       id="path2838" />
+    <path
+       style="fill:#ffffff;fill-opacity:1.0000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+       d="M 175.00000,455.62500 L 175.00000,499.37500 L 184.37500,496.25000 L 184.37500,458.75000 L 175.00000,455.62500 z "
+       id="path1839"
+       sodipodi:nodetypes="ccccc"
+       transform="translate(412.5000,-256.2500)" />
+    <text
+       xml:space="preserve"
+       style="font-size:9.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+       x="176.70674"
+       y="481.35648"
+       id="text1833"
+       sodipodi:linespacing="100%"
+       transform="translate(412.5000,-256.2500)"><tspan
+         id="tspan1834">1</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:9.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+       x="176.70674"
+       y="468.85648"
+       id="text1836"
+       sodipodi:linespacing="100%"
+       transform="translate(412.5000,-256.2500)"><tspan
+         x="176.70674"
+         y="468.85648"
+         sodipodi:role="line"
+         id="tspan1837">0</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:9.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+       x="248.58174"
+       y="490.73148"
+       id="text1855"
+       sodipodi:linespacing="100%"
+       transform="translate(340.6250,-253.1250)"><tspan
+         id="tspan1856">2</tspan></text>
+  </g>
+  <path
+     style="fill:black;fill-rule:nonzero;stroke:none;fill-opacity:0.75;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;"
+     id="path1869"
+     d="M 507.22439,176.64820 C 507.22661,176.64839 507.22882,176.64859 507.23103,176.64879 L 507.23103,179.36094 C 507.22882,179.36114 507.22661,179.36134 507.22439,179.36154 L 507.22439,176.64820 z " />
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 500.00000,208.75000 L 500.00000,208.75000 L 587.50000,208.75000"
+     id="path1870" />
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="521.17267"
+     y="206.18282"
+     id="text1871"
+     sodipodi:linespacing="100%"><tspan
+       id="tspan1872">DOBA[15:0]</tspan></text>
+  <rect
+     style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.1744328;"
+     id="rect1875"
+     width="28.350792"
+     height="50.096931"
+     x="637.27417"
+     y="296.25000" />
+  <text
+     xml:space="preserve"
+     style="font-size:10.000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;text-anchor:middle;"
+     x="96.335358"
+     y="390.89999"
+     id="text1876"
+     sodipodi:linespacing="100%"
+     transform="translate(559.3750,-46.87500)"><tspan
+       id="tspan1877">EN</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:4.0000000;stroke-width:0.36937839;font-family:Bitstream Vera Sans;"
+     x="23.410166"
+     y="106.56478"
+     id="text1879"
+     sodipodi:linespacing="100%"
+     transform="matrix(3.384064,0.000000,0.000000,3.384064,559.3750,-46.87500)"><tspan
+       id="tspan1880">D</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:4.0000000;stroke-width:0.36937839;font-family:Bitstream Vera Sans;text-anchor:end;"
+     x="30.771975"
+     y="106.58192"
+     id="text1882"
+     sodipodi:linespacing="100%"
+     transform="matrix(3.384064,0.000000,0.000000,3.384064,559.3750,-46.87500)"><tspan
+       id="tspan1883">Q</tspan></text>
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 78.125000,393.12500 L 84.375000,386.87500 L 78.125000,380.62500"
+     id="path1885"
+     transform="translate(559.3750,-46.87500)" />
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 596.87500,221.25000 L 612.50000,221.25000 L 612.50000,308.75000 L 637.50000,308.75000"
+     id="path1886" />
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="245.03827"
+     y="-614.79376"
+     id="text1887"
+     sodipodi:linespacing="100%"
+     transform="matrix(-5.741122e-16,1.000000,-1.000000,-5.741122e-16,0.000000,0.000000)"><tspan
+       id="tspan1888">DOB[15:0]</tspan></text>
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 612.04791,221.25000 L 637.50000,221.25000 L 637.50000,221.25000"
+     id="path1890" />
+  <g
+     id="g2571"
+     transform="matrix(0.500000,0.000000,0.000000,0.500000,301.5625,126.2500)">
+    <path
+       sodipodi:type="arc"
+       style="fill-rule:evenodd;stroke-width:1.0000000pt;"
+       id="path1891"
+       sodipodi:cx="621.87500"
+       sodipodi:cy="190.00000"
+       sodipodi:rx="3.1250000"
+       sodipodi:ry="3.1250000"
+       d="M 625.00000 190.00000 A 3.1250000 3.1250000 0 1 0 618.75000,190.00000 A 3.1250000 3.1250000 0 1 0 625.00000 190.00000 z" />
+    <rect
+       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke-width:1.0000000pt;"
+       id="rect2570"
+       width="12.500000"
+       height="12.500000"
+       x="615.62500"
+       y="183.75000" />
+  </g>
+  <text
+     xml:space="preserve"
+     style="font-size:10.000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="639.06262"
+     y="223.97391"
+     id="text2574"
+     sodipodi:linespacing="100%"><tspan
+       id="tspan2575">BUFDOUT[15:0]</tspan><tspan
+       sodipodi:role="line"
+       id="tspan2577"
+       x="639.06262"
+       y="233.97391"></tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="674.76202"
+     y="311.87592"
+     id="text2579"><tspan
+       id="tspan2580">BUFLENOUT[9:0]</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:7.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="670.25391"
+     y="337.90451"
+     id="text2582"
+     sodipodi:linespacing="100%"><tspan
+       id="tspan2583">RESETS to 0xFF</tspan><tspan
+       sodipodi:role="line"
+       id="tspan2585"
+       x="670.25391"
+       y="344.90451">when OUTCS = WAIT*</tspan></text>
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 665.62500,308.75000 L 675.00000,308.75000 L 675.00000,308.75000"
+     id="path2587" />
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 656.25000,346.25000 L 656.25000,358.75000"
+     id="path2588" />
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="626.07874"
+     y="367.97696"
+     id="text2589"><tspan
+       id="tspan2590">BUFCNT = 0x1+1</tspan></text>
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 500.00000,233.75000 L 528.12500,233.75000 L 528.12500,577.50000 L 500.00000,577.50000"
+     id="path2751" />
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 500.00000,408.75000 L 528.12500,408.75000 L 528.12500,408.75000 L 528.12500,408.75000"
+     id="path2752" />
+  <g
+     id="g2753"
+     transform="matrix(0.500000,0.000000,0.000000,0.500000,217.1875,313.7500)">
+    <path
+       sodipodi:type="arc"
+       style="fill-rule:evenodd;stroke-width:1.0000000pt;"
+       id="path2754"
+       sodipodi:cx="621.87500"
+       sodipodi:cy="190.00000"
+       sodipodi:rx="3.1250000"
+       sodipodi:ry="3.1250000"
+       d="M 625.00000 190.00000 A 3.1250000 3.1250000 0 1 0 618.75000,190.00000 A 3.1250000 3.1250000 0 1 0 625.00000 190.00000 z" />
+    <rect
+       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke-width:1.0000000pt;"
+       id="rect2755"
+       width="12.500000"
+       height="12.500000"
+       x="615.62500"
+       y="183.75000" />
+  </g>
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 500.00000,383.75000 L 525.00000,383.75000 L 525.00000,383.75000"
+     id="path2756" />
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 531.25000,383.75000 L 553.12500,383.75000"
+     id="path2757" />
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 553.12500,383.75000 L 553.12500,221.25000 L 587.50000,221.25000"
+     id="path2758" />
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 587.50000,233.75000 L 568.75000,233.75000 L 568.75000,549.37500 L 531.25000,549.37500"
+     id="path2759" />
+  <a
+     id="a2761"
+     transform="translate(0.000000,-3.125000)">
+    <path
+       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+       d="M 525.00000,552.50000 L 500.00000,552.50000"
+       id="path2760" />
+  </a>
+  <g
+     id="g2763"
+     transform="translate(553.1250,56.25000)">
+    <rect
+       style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+       id="rect2764"
+       width="50.068680"
+       height="50.036339"
+       x="68.681320"
+       y="430.62500" />
+    <text
+       xml:space="preserve"
+       style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;text-anchor:middle;"
+       x="93.872253"
+       y="427.43246"
+       id="text2765"
+       sodipodi:linespacing="100%"><tspan
+         id="tspan2766">8-bit counter</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:20.000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;text-anchor:middle;"
+       x="93.667191"
+       y="461.51956"
+       id="text2768"
+       sodipodi:linespacing="100%"><tspan
+         id="tspan2769">i++</tspan></text>
+    <path
+       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+       d="M 68.750000,468.12500 L 75.000000,474.37500 L 68.750000,480.62500"
+       id="path2771" />
+    <text
+       xml:space="preserve"
+       style="font-size:10.000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+       x="71.268555"
+       y="442.67761"
+       id="text2772"
+       sodipodi:linespacing="100%"><tspan
+         id="tspan2773">R</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:10.000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+       x="108.76855"
+       y="442.67761"
+       id="text2775"
+       sodipodi:linespacing="100%"><tspan
+         x="108.76855"
+         y="442.67761"
+         sodipodi:role="line"
+         id="tspan2776">D</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:10.000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+       x="99.393547"
+       y="477.05261"
+       id="text2778"
+       sodipodi:linespacing="100%"><tspan
+         x="99.393547"
+         y="477.05261"
+         sodipodi:role="line"
+         id="tspan2779">EN</tspan></text>
+  </g>
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="580.00153"
+     y="473.10233"
+     id="text2781"><tspan
+       id="tspan2782">BUFCNTRST</tspan></text>
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 621.87500,496.25000 L 600.00000,496.25000 L 600.00000,477.50000"
+     id="path2784" />
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 671.87500,496.25000 L 700.00000,496.25000 L 700.00000,577.50000 L 528.12500,577.50000"
+     id="path2785"
+     sodipodi:nodetypes="cccc" />
+  <g
+     id="g2786"
+     transform="matrix(0.500000,0.000000,0.000000,0.500000,217.1875,482.5000)">
+    <path
+       sodipodi:type="arc"
+       style="fill-rule:evenodd;stroke-width:1.0000000pt;"
+       id="path2787"
+       sodipodi:cx="621.87500"
+       sodipodi:cy="190.00000"
+       sodipodi:rx="3.1250000"
+       sodipodi:ry="3.1250000"
+       d="M 625.00000 190.00000 A 3.1250000 3.1250000 0 1 0 618.75000,190.00000 A 3.1250000 3.1250000 0 1 0 625.00000 190.00000 z" />
+    <rect
+       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke-width:1.0000000pt;"
+       id="rect2788"
+       width="12.500000"
+       height="12.500000"
+       x="615.62500"
+       y="183.75000" />
+  </g>
+  <g
+     id="g2799"
+     transform="translate(543.7500,253.1250)">
+    <rect
+       style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.1744328;"
+       id="rect2800"
+       width="28.350792"
+       height="50.096931"
+       x="124.77421"
+       y="343.12500" />
+    <text
+       xml:space="preserve"
+       style="font-size:4.0000000;stroke-width:0.36937839;font-family:Bitstream Vera Sans;"
+       x="37.261852"
+       y="106.56477"
+       id="text2801"
+       sodipodi:linespacing="100%"
+       transform="scale(3.384064,3.384064)"><tspan
+         id="tspan2802">D</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:4.0000000;stroke-width:0.36937839;font-family:Bitstream Vera Sans;text-anchor:end;"
+       x="44.623661"
+       y="106.58193"
+       id="text2804"
+       sodipodi:linespacing="100%"
+       transform="scale(3.384064,3.384064)"><tspan
+         id="tspan2805">Q</tspan></text>
+    <path
+       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+       d="M 125.00000,393.12500 L 131.25000,386.87500 L 125.00000,380.62500"
+       id="path2807" />
+  </g>
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 609.37500,608.75000 L 668.75000,608.75000"
+     id="path2810"
+     sodipodi:nodetypes="cc" />
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 659.37500,536.87500 L 659.37500,574.37500"
+     id="path2811" />
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 659.37500,580.62500 L 659.37500,608.75000"
+     id="path2812" />
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;text-anchor:end;"
+     x="606.34100"
+     y="610.92749"
+     id="text2813"
+     sodipodi:linespacing="100%"><tspan
+       id="tspan2814">BUFCNTEN</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="513.78827"
+     y="-702.29376"
+     id="text2816"
+     sodipodi:linespacing="100%"
+     transform="matrix(-5.741122e-16,1.000000,-1.000000,-5.741122e-16,0.000000,0.000000)"><tspan
+       id="tspan2817">BUFCNT[9:0]</tspan></text>
+  <g
+     id="g2819"
+     transform="matrix(0.500000,0.000000,0.000000,0.500000,348.4375,513.7500)">
+    <path
+       sodipodi:type="arc"
+       style="fill-rule:evenodd;stroke-width:1.0000000pt;"
+       id="path2820"
+       sodipodi:cx="621.87500"
+       sodipodi:cy="190.00000"
+       sodipodi:rx="3.1250000"
+       sodipodi:ry="3.1250000"
+       d="M 625.00000 190.00000 A 3.1250000 3.1250000 0 1 0 618.75000,190.00000 A 3.1250000 3.1250000 0 1 0 625.00000 190.00000 z" />
+    <rect
+       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke-width:1.0000000pt;"
+       id="rect2821"
+       width="12.500000"
+       height="12.500000"
+       x="615.62500"
+       y="183.75000" />
+  </g>
+  <text
+     xml:space="preserve"
+     style="font-size:10.000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="704.68762"
+     y="611.47388"
+     id="text2822"
+     sodipodi:linespacing="100%"><tspan
+       id="tspan2823">BUFACKOUT</tspan></text>
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 696.87500,608.75000 L 703.12500,608.75000"
+     id="path2827" />
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="366.91327"
+     y="-571.04376"
+     id="text2828"
+     sodipodi:linespacing="100%"
+     transform="matrix(-5.741122e-16,1.000000,-1.000000,-5.741122e-16,0.000000,0.000000)"><tspan
+       x="366.91327"
+       y="-571.04376"
+       sodipodi:role="line"
+       id="tspan2836">DOBC[15:0]</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="285.66327"
+     y="-555.41876"
+     id="text2831"
+     sodipodi:linespacing="100%"
+     transform="matrix(-5.741122e-16,1.000000,-1.000000,-5.741122e-16,0.000000,0.000000)"><tspan
+       x="285.66327"
+       y="-555.41876"
+       sodipodi:role="line"
+       id="tspan2834">DOBB[15:0]</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="249.71205"
+     y="-591.81769"
+     id="text2840"
+     transform="matrix(-1.215662e-17,1.000000,-1.000000,-1.215662e-17,0.000000,0.000000)"><tspan
+       id="tspan2841">OUTSEL</tspan></text>
+  <g
+     id="g2296">
+    <path
+       style="fill:#ffffff;fill-opacity:1.0000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+       d="M 175.00000,455.62500 L 175.00000,486.87500 L 184.37500,483.75000 L 184.37500,458.75000 L 175.00000,455.62500 z "
+       id="path2872"
+       transform="translate(78.12500,-296.8750)"
+       sodipodi:nodetypes="ccccc" />
+    <text
+       xml:space="preserve"
+       style="font-size:9.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+       x="176.70674"
+       y="481.35648"
+       id="text2866"
+       sodipodi:linespacing="100%"
+       transform="translate(78.12500,-296.8750)"><tspan
+         id="tspan2867">0</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:9.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+       x="176.70674"
+       y="468.85648"
+       id="text2869"
+       sodipodi:linespacing="100%"
+       transform="translate(78.12500,-296.8750)"><tspan
+         x="176.70674"
+         y="468.85648"
+         sodipodi:role="line"
+         id="tspan2870">1</tspan></text>
+  </g>
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 262.50000,230.62500 L 328.12500,230.62500"
+     id="path2873" />
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 262.50000,174.37500 L 290.62500,174.37500 L 306.25000,174.37500 L 306.25000,208.75000 L 328.12500,208.75000"
+     id="path2874" />
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 253.12500,224.37500 L 181.25000,224.37500"
+     id="path2891"
+     sodipodi:nodetypes="cc" />
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 175.00000,621.25000 L 175.00000,630.62500"
+     id="path3027" />
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="163.63605"
+     y="639.96790"
+     id="text3038"
+     sodipodi:linespacing="100%"><tspan
+       x="163.63605"
+       y="639.96790"
+       sodipodi:role="line"
+       id="tspan3052">MODE</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="47.252342"
+     y="599.26172"
+     id="text2915"><tspan
+       id="tspan2916">BUFWEIN</tspan></text>
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 100.00000,596.25000 L 87.500000,596.25000"
+     id="path2918" />
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 100.00000,608.75000 L 87.500000,608.75000"
+     id="path2919" />
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="153.50235"
+     y="618.01172"
+     id="text2920"><tspan
+       id="tspan2921">0</tspan></text>
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 125.45732,602.50000 L 168.75000,602.50000"
+     id="path2923" />
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="53.502342"
+     y="611.76172"
+     id="text2924"><tspan
+       id="tspan2925">INCS=C</tspan></text>
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 168.75000,615.00000 L 159.37500,615.00000"
+     id="path2927" />
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="127.42267"
+     y="599.93280"
+     id="text2931"
+     sodipodi:linespacing="100%"><tspan
+       id="tspan2932">BUFWEC</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="189.92267"
+     y="606.18280"
+     id="text2934"
+     sodipodi:linespacing="100%"><tspan
+       id="tspan2935">WEAC</tspan></text>
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 328.12500,608.75000 L 178.12500,608.75000"
+     id="path2937" />
+  <path
+     style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.2499998;stroke-linecap:round;"
+     d="M 99.591560,420.87340 L 115.62500,420.87340 C 115.62500,420.87340 125.24508,420.87340 125.24508,430.43670 C 125.24508,440.00000 115.62500,440.00000 115.62500,440.00000 L 99.591560,440.00000 L 99.591560,420.87340 z "
+     id="path2938"
+     sodipodi:nodetypes="cccccc" />
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 175.00000,449.37500 L 175.00000,458.75000"
+     id="path3054" />
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="47.252342"
+     y="427.38672"
+     id="text2947"><tspan
+       id="tspan2948">BUFWEIN</tspan></text>
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 100.00000,424.37500 L 87.500000,424.37500"
+     id="path2950" />
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 100.00000,436.87500 L 87.500000,436.87500"
+     id="path2951" />
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="153.50235"
+     y="446.13672"
+     id="text2952"><tspan
+       id="tspan2953">0</tspan></text>
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 125.45732,430.62500 L 168.75000,430.62500"
+     id="path2955" />
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="53.502342"
+     y="439.88672"
+     id="text2956"><tspan
+       id="tspan2957">INCS=B</tspan></text>
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 168.75000,443.12500 L 159.37500,443.12500"
+     id="path2959" />
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="127.42267"
+     y="428.05780"
+     id="text2960"
+     sodipodi:linespacing="100%"><tspan
+       id="tspan2961">BUFWEB</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="189.92267"
+     y="434.30780"
+     id="text2963"
+     sodipodi:linespacing="100%"><tspan
+       id="tspan2964">WEAB</tspan></text>
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 215.62500,436.87500 L 178.12500,436.87500"
+     id="path2966"
+     sodipodi:nodetypes="cc" />
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 328.12500,577.50000 L 234.37500,577.50000 L 234.37500,552.50000"
+     id="path2967"
+     sodipodi:nodetypes="ccc" />
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 328.12500,549.37500 L 221.87500,549.37500 L 221.87500,227.50000 L 221.87500,227.50000 C 221.87500,227.50000 221.87500,227.50000 221.87500,227.50000"
+     id="path2968" />
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 253.12500,180.62500 L 221.87500,180.62500 L 221.87500,221.25000"
+     id="path2969" />
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 234.37500,546.25000 L 234.37500,236.87500 L 253.12500,236.87500"
+     id="path2970" />
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 328.12500,380.62500 L 237.50000,380.62500"
+     id="path2971" />
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 221.87500,380.62500 L 231.25000,380.62500"
+     id="path2972" />
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 328.12500,408.75000 L 234.37500,408.75000"
+     id="path2973" />
+  <g
+     id="g2974"
+     transform="matrix(0.500000,0.000000,0.000000,0.500000,-89.06250,285.6250)">
+    <path
+       sodipodi:type="arc"
+       style="fill-rule:evenodd;stroke-width:1.0000000pt;"
+       id="path2975"
+       sodipodi:cx="621.87500"
+       sodipodi:cy="190.00000"
+       sodipodi:rx="3.1250000"
+       sodipodi:ry="3.1250000"
+       d="M 625.00000 190.00000 A 3.1250000 3.1250000 0 1 0 618.75000,190.00000 A 3.1250000 3.1250000 0 1 0 625.00000 190.00000 z" />
+    <rect
+       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke-width:1.0000000pt;"
+       id="rect2976"
+       width="12.500000"
+       height="12.500000"
+       x="615.62500"
+       y="183.75000" />
+  </g>
+  <g
+     id="g2977"
+     transform="matrix(0.500000,0.000000,0.000000,0.500000,-76.56250,313.7500)">
+    <path
+       sodipodi:type="arc"
+       style="fill-rule:evenodd;stroke-width:1.0000000pt;"
+       id="path2978"
+       sodipodi:cx="621.87500"
+       sodipodi:cy="190.00000"
+       sodipodi:rx="3.1250000"
+       sodipodi:ry="3.1250000"
+       d="M 625.00000 190.00000 A 3.1250000 3.1250000 0 1 0 618.75000,190.00000 A 3.1250000 3.1250000 0 1 0 625.00000 190.00000 z" />
+    <rect
+       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke-width:1.0000000pt;"
+       id="rect2979"
+       width="12.500000"
+       height="12.500000"
+       x="615.62500"
+       y="183.75000" />
+  </g>
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 215.62500,436.87500 L 218.75000,436.87500"
+     id="path2980" />
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 225.00000,436.87500 L 231.25000,436.87500"
+     id="path2981" />
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 237.50000,436.87500 L 328.12500,436.87500"
+     id="path2982" />
+  <text
+     xml:space="preserve"
+     style="font-size:10.000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;text-anchor:end;"
+     x="205.90985"
+     y="382.78214"
+     id="text2983"
+     sodipodi:linespacing="100%"><tspan
+       id="tspan2984">BUFDIN[15:0]</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:10.000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;text-anchor:end;"
+     x="205.90985"
+     y="351.53214"
+     id="text2986"
+     sodipodi:linespacing="100%"><tspan
+       x="205.90985"
+       y="351.53214"
+       sodipodi:role="line"
+       id="tspan2989">BUFADDRIN[9:0]</tspan></text>
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 209.37500,380.62500 L 221.87500,380.62500"
+     id="path2991" />
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 209.37500,349.37500 L 218.75000,349.37500"
+     id="path2992" />
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 225.00000,349.37500 L 234.37500,349.37500"
+     id="path2993" />
+  <g
+     id="g2994"
+     transform="matrix(0.500000,0.000000,0.000000,0.500000,-76.56250,254.3750)">
+    <path
+       sodipodi:type="arc"
+       style="fill-rule:evenodd;stroke-width:1.0000000pt;"
+       id="path2995"
+       sodipodi:cx="621.87500"
+       sodipodi:cy="190.00000"
+       sodipodi:rx="3.1250000"
+       sodipodi:ry="3.1250000"
+       d="M 625.00000 190.00000 A 3.1250000 3.1250000 0 1 0 618.75000,190.00000 A 3.1250000 3.1250000 0 1 0 625.00000 190.00000 z" />
+    <rect
+       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke-width:1.0000000pt;"
+       id="rect2996"
+       width="12.500000"
+       height="12.500000"
+       x="615.62500"
+       y="183.75000" />
+  </g>
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 328.12500,290.00000 L 296.87500,290.00000 L 296.87500,321.25000 L 237.50000,321.25000"
+     id="path3012"
+     sodipodi:nodetypes="cccc" />
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 231.25000,321.25000 L 225.00000,321.25000"
+     id="path3013" />
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 218.75000,321.25000 L 200.00000,321.25000 L 200.00000,308.75000 L 146.87500,308.75000"
+     id="path3014" />
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 146.87500,321.25000 L 200.00000,321.25000"
+     id="path3015" />
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="155.54767"
+     y="306.18280"
+     id="text3016"
+     sodipodi:linespacing="100%"><tspan
+       id="tspan3017">DOA[7:0]</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="155.54767"
+     y="318.68280"
+     id="text3019"
+     sodipodi:linespacing="100%"><tspan
+       id="tspan3020">DOA[15:8]</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:10.000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;text-anchor:end;"
+     x="118.40985"
+     y="317.15714"
+     id="text3022"
+     sodipodi:linespacing="100%"><tspan
+       x="118.40985"
+       y="317.15714"
+       sodipodi:role="line"
+       id="tspan3023">BUFADDRIN[9:0]</tspan></text>
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 121.87500,315.00000 L 137.50000,315.00000 L 137.50000,315.00000"
+     id="path3025" />
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="160.51105"
+     y="468.09290"
+     id="text3058"
+     sodipodi:linespacing="100%"><tspan
+       x="160.51105"
+       y="468.09290"
+       sodipodi:role="line"
+       id="tspan3059">MODE</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="244.88605"
+     y="205.59290"
+     id="text3061"
+     sodipodi:linespacing="100%"><tspan
+       x="244.88605"
+       y="205.59290"
+       sodipodi:role="line"
+       id="tspan3062">MODE</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="271.17267"
+     y="171.80780"
+     id="text3758"
+     sodipodi:linespacing="100%"><tspan
+       x="271.17267"
+       y="171.80780"
+       sodipodi:role="line"
+       id="tspan3761">DIA[15:0]</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="274.29767"
+     y="228.05780"
+     id="text3763"
+     sodipodi:linespacing="100%"><tspan
+       x="274.29767"
+       y="228.05780"
+       sodipodi:role="line"
+       id="tspan3766">ADDRA[9:0]</tspan></text>
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 178.12500,202.50000 L 178.12500,211.87500"
+     id="path3768" />
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="154.26105"
+     y="199.34290"
+     id="text3769"
+     sodipodi:linespacing="100%"><tspan
+       x="154.26105"
+       y="199.34290"
+       sodipodi:role="line"
+       id="tspan3772">DSPRESET</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="186.79767"
+     y="221.80780"
+     id="text3791"
+     sodipodi:linespacing="100%"><tspan
+       x="186.79767"
+       y="221.80780"
+       sodipodi:role="line"
+       id="tspan3794">RA[9:0]</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:10.000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;text-anchor:end;"
+     x="159.11938"
+     y="221.26341"
+     id="text3796"
+     sodipodi:linespacing="100%"><tspan
+       id="tspan3797">RAOUT[10:1]</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:10.000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;text-anchor:end;"
+     x="159.11938"
+     y="233.76341"
+     id="text3799"
+     sodipodi:linespacing="100%"><tspan
+       x="159.11938"
+       y="233.76341"
+       sodipodi:role="line"
+       id="tspan3802">RAIN[9:0]</tspan></text>
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 162.50000,218.12500 L 171.87500,218.12500"
+     id="path3805" />
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 162.50000,230.62500 L 171.87500,230.62500"
+     id="path3806" />
+  <text
+     xml:space="preserve"
+     style="font-size:10.000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;text-anchor:end;"
+     x="218.49438"
+     y="171.26341"
+     id="text3807"
+     sodipodi:linespacing="100%"><tspan
+       id="tspan3808">RDIN[15:0]</tspan></text>
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 253.12500,168.12500 L 221.87500,168.12500 L 221.87500,168.12500"
+     id="path3810" />
+  <path
+     style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.2499998;stroke-linecap:round;"
+     d="M 90.216560,245.87340 L 106.25000,245.87340 C 106.25000,245.87340 115.87008,245.87340 115.87008,255.43670 C 115.87008,265.00000 106.25000,265.00000 106.25000,265.00000 L 90.216560,265.00000 L 90.216560,245.87340 z "
+     id="path3811"
+     sodipodi:nodetypes="cccccc" />
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 165.62500,274.37500 L 165.62500,283.75000"
+     id="path3812" />
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="37.877342"
+     y="252.38672"
+     id="text3821"><tspan
+       id="tspan3822">BUFWEIN</tspan></text>
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 90.625000,249.37500 L 78.125000,249.37500"
+     id="path3824" />
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 90.625000,261.87500 L 78.125000,261.87500"
+     id="path3825" />
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 116.08232,255.62500 L 159.37500,255.62500"
+     id="path3829" />
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="44.127342"
+     y="264.88672"
+     id="text3830"><tspan
+       id="tspan3831">INCS=A</tspan></text>
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 159.37500,268.12500 L 150.00000,268.12500"
+     id="path3833" />
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="118.04767"
+     y="253.05780"
+     id="text3834"
+     sodipodi:linespacing="100%"><tspan
+       id="tspan3835">BUFWEA</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="180.54767"
+     y="259.30780"
+     id="text3837"
+     sodipodi:linespacing="100%"><tspan
+       id="tspan3838">WEAA</tspan></text>
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 206.25000,261.87500 L 168.75000,261.87500"
+     id="path3840"
+     sodipodi:nodetypes="cc" />
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 206.25000,261.87500 L 218.75000,261.87500"
+     id="path3841"
+     sodipodi:nodetypes="cc" />
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="151.13605"
+     y="293.09290"
+     id="text3842"
+     sodipodi:linespacing="100%"><tspan
+       x="151.13605"
+       y="293.09290"
+       sodipodi:role="line"
+       id="tspan3843">MODE</tspan></text>
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 231.25000,261.87500 L 225.00000,261.87500"
+     id="path3845" />
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 328.12500,261.87500 L 237.50000,261.87500"
+     id="path3846" />
+  <text
+     xml:space="preserve"
+     style="font-size:10.000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;text-anchor:end;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;writing-mode:lr;"
+     x="146.61938"
+     y="271.26343"
+     id="text3847"
+     sodipodi:linespacing="100%"><tspan
+       x="146.61938"
+       y="271.26343"
+       sodipodi:role="line"
+       id="tspan3850">RWE</tspan></text>
+  <rect
+     style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.1744328;"
+     id="rect3852"
+     width="28.350792"
+     height="50.096931"
+     x="234.14917"
+     y="690.00000" />
+  <text
+     xml:space="preserve"
+     style="font-size:10.000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;text-anchor:middle;"
+     x="252.58536"
+     y="737.77502"
+     id="text3853"
+     sodipodi:linespacing="100%"><tspan
+       id="tspan3854">EN</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:4.0000000;stroke-width:0.36937839;font-family:Bitstream Vera Sans;"
+     x="69.582458"
+     y="209.06728"
+     id="text3856"
+     sodipodi:linespacing="100%"
+     transform="scale(3.384064,3.384064)"><tspan
+       id="tspan3857">D</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:4.0000000;stroke-width:0.36937839;font-family:Bitstream Vera Sans;text-anchor:end;"
+     x="76.944275"
+     y="209.08441"
+     id="text3859"
+     sodipodi:linespacing="100%"
+     transform="scale(3.384064,3.384064)"><tspan
+       id="tspan3860">Q</tspan></text>
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 234.37500,740.00000 L 240.62500,733.75000 L 234.37500,727.50000"
+     id="path3862" />
+  <text
+     xml:space="preserve"
+     style="font-size:7.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="157.75391"
+     y="722.27954"
+     id="text3869"
+     sodipodi:linespacing="100%"><tspan
+       x="157.75391"
+       y="722.27954"
+       sodipodi:role="line"
+       id="tspan3886">RESETS to 0xFF</tspan><tspan
+       x="157.75391"
+       y="729.27954"
+       sodipodi:role="line"
+       id="tspan3888">when INCS = WAIT*</tspan></text>
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 262.50000,702.50000 L 271.87500,702.50000 L 271.87500,702.50000"
+     id="path3874" />
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 253.12500,740.00000 L 253.12500,746.25000"
+     id="path3875"
+     sodipodi:nodetypes="cc" />
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;text-anchor:end;"
+     x="244.82874"
+     y="749.22693"
+     id="text3876"
+     sodipodi:linespacing="100%"><tspan
+       x="244.82874"
+       y="749.22693"
+       sodipodi:role="line"
+       id="tspan3882">BUFADDRIN=0x0 &amp; </tspan><tspan
+       x="244.82874"
+       y="757.22693"
+       sodipodi:role="line"
+       id="tspan3884">BUFWE = 1</tspan></text>
+  <path
+     style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.2499998;stroke-linecap:round;"
+     d="M 371.46656,717.74840 L 387.50000,717.74840 C 387.50000,717.74840 397.12008,717.74840 397.12008,727.31170 C 397.12008,736.87500 387.50000,736.87500 387.50000,736.87500 L 371.46656,736.87500 L 371.46656,717.74840 z "
+     id="path3890"
+     sodipodi:nodetypes="cccccc" />
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="264.92267"
+     y="699.93280"
+     id="text3891"
+     sodipodi:linespacing="100%"><tspan
+       x="264.92267"
+       y="699.93280"
+       sodipodi:role="line"
+       id="tspan3894">BUFLENIN[9:0] - 1</tspan></text>
+  <rect
+     style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     id="rect3896"
+     width="15.625000"
+     height="12.620193"
+     x="315.62500"
+     y="715.00000" />
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="318.01065"
+     y="724.25092"
+     id="text3897"><tspan
+       id="tspan3898">=?</tspan></text>
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 271.87500,702.50000 L 325.00000,702.50000 L 325.00000,715.00000"
+     id="path3900" />
+  <text
+     xml:space="preserve"
+     style="font-size:10.000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;text-anchor:end;"
+     x="305.90985"
+     y="770.28210"
+     id="text3902"
+     sodipodi:linespacing="100%"><tspan
+       x="305.90985"
+       y="770.28210"
+       sodipodi:role="line"
+       id="tspan3903">BUFADDRIN[9:0]</tspan></text>
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 331.25000,721.25000 L 371.87500,721.25000"
+     id="path3905"
+     sodipodi:nodetypes="cc" />
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 371.87500,733.75000 L 356.25000,733.75000 L 356.25000,755.62500"
+     id="path3906" />
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="339.92267"
+     y="765.55780"
+     id="text3907"
+     sodipodi:linespacing="100%"><tspan
+       x="339.92267"
+       y="765.55780"
+       sodipodi:role="line"
+       id="tspan3910">BUFWEIN</tspan></text>
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 396.87500,727.50000 L 406.25000,727.50000"
+     id="path3912"
+     sodipodi:nodetypes="cc" />
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="410.10486"
+     y="730.51642"
+     id="text3913"><tspan
+       id="tspan3914">BUFWEDONE</tspan></text>
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 246.87500,749.37500 L 253.12500,749.37500 L 253.12500,746.25000"
+     id="path3916" />
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 309.37500,768.12500 L 325.00000,768.12500 L 325.00000,749.37500"
+     id="path3917" />
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 234.37500,702.50000 L 221.87500,702.50000 L 221.87500,611.87500"
+     id="path3918" />
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 221.87500,549.37500 L 221.87500,605.62500"
+     id="path3919" />
+  <g
+     id="g3920"
+     transform="matrix(0.500000,0.000000,0.000000,0.500000,-89.06250,454.3750)">
+    <path
+       sodipodi:type="arc"
+       style="fill-rule:evenodd;stroke-width:1.0000000pt;"
+       id="path3921"
+       sodipodi:cx="621.87500"
+       sodipodi:cy="190.00000"
+       sodipodi:rx="3.1250000"
+       sodipodi:ry="3.1250000"
+       d="M 625.00000 190.00000 A 3.1250000 3.1250000 0 1 0 618.75000,190.00000 A 3.1250000 3.1250000 0 1 0 625.00000 190.00000 z" />
+    <rect
+       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke-width:1.0000000pt;"
+       id="rect3922"
+       width="12.500000"
+       height="12.500000"
+       x="615.62500"
+       y="183.75000" />
+  </g>
+  <rect
+     style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.1744328;"
+     id="rect3923"
+     width="28.350792"
+     height="50.096931"
+     x="590.39917"
+     y="680.62500" />
+  <text
+     xml:space="preserve"
+     style="font-size:10.000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;text-anchor:middle;"
+     x="608.83533"
+     y="728.40002"
+     id="text3924"
+     sodipodi:linespacing="100%"><tspan
+       id="tspan3925">EN</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:4.0000000;stroke-width:0.36937839;font-family:Bitstream Vera Sans;"
+     x="174.85529"
+     y="206.29692"
+     id="text3927"
+     sodipodi:linespacing="100%"
+     transform="scale(3.384064,3.384064)"><tspan
+       x="174.85529"
+       y="206.29692"
+       sodipodi:role="line"
+       id="tspan3949">S</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:4.0000000;stroke-width:0.36937839;font-family:Bitstream Vera Sans;text-anchor:end;"
+     x="182.21710"
+     y="206.31406"
+     id="text3930"
+     sodipodi:linespacing="100%"
+     transform="scale(3.384064,3.384064)"><tspan
+       id="tspan3931">Q</tspan></text>
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 590.62500,730.62500 L 596.87500,724.37500 L 590.62500,718.12500"
+     id="path3933" />
+  <text
+     xml:space="preserve"
+     style="font-size:10.000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="631.01202"
+     y="696.25092"
+     id="text3934"
+     sodipodi:linespacing="100%"><tspan
+       x="631.01202"
+       y="696.25092"
+       sodipodi:role="line"
+       id="tspan3947">FULLA</tspan></text>
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 618.75000,693.12500 L 628.12500,693.12500 L 628.12500,693.12500"
+     id="path3942" />
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 609.37500,730.64400 L 609.37500,736.87500"
+     id="path3943" />
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="597.95374"
+     y="746.10193"
+     id="text3944"
+     sodipodi:linespacing="100%"><tspan
+       x="597.95374"
+       y="746.10193"
+       sodipodi:role="line"
+       id="tspan3951">CLRA</tspan></text>
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 550.00000,699.37500 L 540.62500,699.37500"
+     id="path3956" />
+  <path
+     style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.2499998;stroke-linecap:round;"
+     d="M 549.59156,683.37340 L 565.62500,683.37340 C 565.62500,683.37340 575.24508,683.37340 575.24508,692.93670 C 575.24508,702.50000 565.62500,702.50000 565.62500,702.50000 L 549.59156,702.50000 L 549.59156,683.37340 z "
+     id="path3953"
+     sodipodi:nodetypes="cccccc" />
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 590.62500,693.12500 L 575.00000,693.12500"
+     id="path3954" />
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 550.00000,686.87500 L 540.62500,686.87500"
+     id="path3955" />
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;text-anchor:end;"
+     x="537.58435"
+     y="691.02087"
+     id="text3957"
+     sodipodi:linespacing="100%"><tspan
+       id="tspan3958">BUFWEDONE</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;text-anchor:end;"
+     x="537.58435"
+     y="703.52087"
+     id="text3960"
+     sodipodi:linespacing="100%"><tspan
+       x="537.58435"
+       y="703.52087"
+       sodipodi:role="line"
+       id="tspan3963">INCS=A</tspan></text>
+  <rect
+     style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.1744328;"
+     id="rect3965"
+     width="28.350792"
+     height="50.096931"
+     x="590.39917"
+     y="752.50000" />
+  <text
+     xml:space="preserve"
+     style="font-size:10.000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;text-anchor:middle;"
+     x="608.83533"
+     y="800.27502"
+     id="text3966"
+     sodipodi:linespacing="100%"><tspan
+       id="tspan3967">EN</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:4.0000000;stroke-width:0.36937839;font-family:Bitstream Vera Sans;"
+     x="174.85529"
+     y="227.53618"
+     id="text3969"
+     sodipodi:linespacing="100%"
+     transform="scale(3.384064,3.384064)"><tspan
+       x="174.85529"
+       y="227.53618"
+       sodipodi:role="line"
+       id="tspan3970">S</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:4.0000000;stroke-width:0.36937839;font-family:Bitstream Vera Sans;text-anchor:end;"
+     x="182.21710"
+     y="227.55331"
+     id="text3972"
+     sodipodi:linespacing="100%"
+     transform="scale(3.384064,3.384064)"><tspan
+       id="tspan3973">Q</tspan></text>
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 590.62500,802.50000 L 596.87500,796.25000 L 590.62500,790.00000"
+     id="path3975" />
+  <text
+     xml:space="preserve"
+     style="font-size:10.000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="631.01202"
+     y="768.12592"
+     id="text3976"
+     sodipodi:linespacing="100%"><tspan
+       x="631.01202"
+       y="768.12592"
+       sodipodi:role="line"
+       id="tspan3977">FULLB</tspan></text>
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 618.75000,765.00000 L 628.12500,765.00000 L 628.12500,765.00000"
+     id="path3979" />
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 609.37500,802.51900 L 609.37500,808.75000"
+     id="path3980" />
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="597.95374"
+     y="817.97693"
+     id="text3981"
+     sodipodi:linespacing="100%"><tspan
+       x="597.95374"
+       y="817.97693"
+       sodipodi:role="line"
+       id="tspan3982">CLRB</tspan></text>
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 550.00000,771.25000 L 540.62500,771.25000"
+     id="path3984" />
+  <path
+     style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.2499998;stroke-linecap:round;"
+     d="M 549.59156,755.24840 L 565.62500,755.24840 C 565.62500,755.24840 575.24508,755.24840 575.24508,764.81170 C 575.24508,774.37500 565.62500,774.37500 565.62500,774.37500 L 549.59156,774.37500 L 549.59156,755.24840 z "
+     id="path3985"
+     sodipodi:nodetypes="cccccc" />
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 590.62500,765.00000 L 575.00000,765.00000"
+     id="path3986" />
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 550.00000,758.75000 L 540.62500,758.75000"
+     id="path3987" />
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;text-anchor:end;"
+     x="537.58435"
+     y="762.89587"
+     id="text3988"
+     sodipodi:linespacing="100%"><tspan
+       id="tspan3989">BUFWEDONE</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;text-anchor:end;"
+     x="537.58435"
+     y="775.39587"
+     id="text3991"
+     sodipodi:linespacing="100%"><tspan
+       x="537.58435"
+       y="775.39587"
+       sodipodi:role="line"
+       id="tspan3992">INCS=B</tspan></text>
+  <rect
+     style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.1744328;"
+     id="rect3994"
+     width="28.350792"
+     height="50.096931"
+     x="590.39917"
+     y="824.37500" />
+  <text
+     xml:space="preserve"
+     style="font-size:10.000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;text-anchor:middle;"
+     x="608.83533"
+     y="872.15002"
+     id="text3995"
+     sodipodi:linespacing="100%"><tspan
+       id="tspan3996">EN</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:4.0000000;stroke-width:0.36937839;font-family:Bitstream Vera Sans;"
+     x="174.85529"
+     y="248.77548"
+     id="text3998"
+     sodipodi:linespacing="100%"
+     transform="scale(3.384064,3.384064)"><tspan
+       x="174.85529"
+       y="248.77548"
+       sodipodi:role="line"
+       id="tspan3999">S</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:4.0000000;stroke-width:0.36937839;font-family:Bitstream Vera Sans;text-anchor:end;"
+     x="182.21710"
+     y="248.79263"
+     id="text4001"
+     sodipodi:linespacing="100%"
+     transform="scale(3.384064,3.384064)"><tspan
+       id="tspan4002">Q</tspan></text>
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 590.62500,874.37500 L 596.87500,868.12500 L 590.62500,861.87500"
+     id="path4004" />
+  <text
+     xml:space="preserve"
+     style="font-size:10.000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="631.01202"
+     y="840.00092"
+     id="text4005"
+     sodipodi:linespacing="100%"><tspan
+       x="631.01202"
+       y="840.00092"
+       sodipodi:role="line"
+       id="tspan4006">FULLC</tspan></text>
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 618.75000,836.87500 L 628.12500,836.87500 L 628.12500,836.87500"
+     id="path4008" />
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 609.37500,874.39400 L 609.37500,880.62500"
+     id="path4009" />
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="597.95374"
+     y="889.85193"
+     id="text4010"
+     sodipodi:linespacing="100%"><tspan
+       x="597.95374"
+       y="889.85193"
+       sodipodi:role="line"
+       id="tspan4011">CLRC</tspan></text>
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 550.00000,843.12500 L 540.62500,843.12500"
+     id="path4013" />
+  <path
+     style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.2499998;stroke-linecap:round;"
+     d="M 549.59156,827.12340 L 565.62500,827.12340 C 565.62500,827.12340 575.24508,827.12340 575.24508,836.68670 C 575.24508,846.25000 565.62500,846.25000 565.62500,846.25000 L 549.59156,846.25000 L 549.59156,827.12340 z "
+     id="path4014"
+     sodipodi:nodetypes="cccccc" />
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 590.62500,836.87500 L 575.00000,836.87500"
+     id="path4015" />
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 550.00000,830.62500 L 540.62500,830.62500"
+     id="path4016" />
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;text-anchor:end;"
+     x="537.58435"
+     y="834.77087"
+     id="text4017"
+     sodipodi:linespacing="100%"><tspan
+       id="tspan4018">BUFWEDONE</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;text-anchor:end;"
+     x="537.58435"
+     y="847.27087"
+     id="text4020"
+     sodipodi:linespacing="100%"><tspan
+       x="537.58435"
+       y="847.27087"
+       sodipodi:role="line"
+       id="tspan4021">INCS=C</tspan></text>
+  <path
+     style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.2499998;stroke-linecap:round;"
+     d="M 96.466560,495.87340 L 112.50000,495.87340 C 112.50000,495.87340 122.12008,495.87340 122.12008,505.43670 C 122.12008,515.00000 112.50000,515.00000 112.50000,515.00000 L 96.466560,515.00000 L 96.466560,495.87340 z "
+     id="path4023"
+     sodipodi:nodetypes="cccccc" />
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;text-anchor:end;"
+     x="81.627342"
+     y="502.38672"
+     id="text4024"
+     sodipodi:linespacing="100%"><tspan
+       x="81.627342"
+       y="502.38672"
+       sodipodi:role="line"
+       id="tspan4034">BUFWE</tspan></text>
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 96.875000,499.37500 L 84.375000,499.37500"
+     id="path4027" />
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+     d="M 93.750000,511.87500 L 84.349684,511.87500"
+     id="path4028" />
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;text-anchor:end;"
+     x="81.627342"
+     y="514.88672"
+     id="text4029"
+     sodipodi:linespacing="100%"><tspan
+       x="81.627342"
+       y="514.88672"
+       sodipodi:role="line"
+       id="tspan4032">MODE</tspan></text>
+  <g
+     id="g4043"
+     transform="translate(34.37500,34.37500)">
+    <path
+       sodipodi:type="arc"
+       style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.9090910pt;"
+       id="path4036"
+       sodipodi:cx="56.250000"
+       sodipodi:cy="480.62500"
+       sodipodi:rx="3.1250000"
+       sodipodi:ry="3.1250000"
+       d="M 59.375000 480.62500 A 3.1250000 3.1250000 0 1 0 53.125000,480.62500 A 3.1250000 3.1250000 0 1 0 59.375000 480.62500 z"
+       transform="matrix(0.523810,0.000000,0.000000,0.523810,30.94759,225.8929)" />
+    <rect
+       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke-width:1.0000000pt;"
+       id="rect4037"
+       width="12.500000"
+       height="12.500000"
+       x="50.000000"
+       y="474.37500"
+       transform="matrix(0.523810,0.000000,0.000000,0.523810,30.05952,225.8929)" />
+  </g>
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+     x="139.74033"
+     y="509.81934"
+     id="text4055"><tspan
+       id="tspan4056">BUFWEIN</tspan></text>
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 121.87500,505.62500 L 137.50000,505.62500"
+     id="path4058" />
+  <g
+     id="g2304"
+     transform="translate(0.000000,56.25000)">
+    <path
+       style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+       d="M 175.00000,455.62500 L 175.00000,486.87500 L 184.37500,483.75000 L 184.37500,458.75000 L 175.00000,455.62500 z "
+       id="path2305"
+       transform="translate(78.12500,-296.8750)"
+       sodipodi:nodetypes="ccccc" />
+    <text
+       xml:space="preserve"
+       style="font-size:9.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+       x="176.70674"
+       y="481.35648"
+       id="text2306"
+       sodipodi:linespacing="100%"
+       transform="translate(78.12500,-296.8750)"><tspan
+         id="tspan2307">0</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:9.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+       x="176.70674"
+       y="468.85648"
+       id="text2309"
+       sodipodi:linespacing="100%"
+       transform="translate(78.12500,-296.8750)"><tspan
+         x="176.70674"
+         y="468.85648"
+         sodipodi:role="line"
+         id="tspan2310">1</tspan></text>
+  </g>
+  <g
+     id="g2312"
+     transform="translate(-81.25000,50.00000)">
+    <path
+       style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+       d="M 175.00000,455.62500 L 175.00000,486.87500 L 184.37500,483.75000 L 184.37500,458.75000 L 175.00000,455.62500 z "
+       id="path2313"
+       transform="translate(78.12500,-296.8750)"
+       sodipodi:nodetypes="ccccc" />
+    <text
+       xml:space="preserve"
+       style="font-size:9.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+       x="176.70674"
+       y="481.35648"
+       id="text2314"
+       sodipodi:linespacing="100%"
+       transform="translate(78.12500,-296.8750)"><tspan
+         id="tspan2315">0</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:9.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+       x="176.70674"
+       y="468.85648"
+       id="text2317"
+       sodipodi:linespacing="100%"
+       transform="translate(78.12500,-296.8750)"><tspan
+         x="176.70674"
+         y="468.85648"
+         sodipodi:role="line"
+         id="tspan2318">1</tspan></text>
+  </g>
+  <g
+     id="g2320"
+     transform="translate(-93.75000,87.50000)">
+    <path
+       style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+       d="M 175.00000,455.62500 L 175.00000,486.87500 L 184.37500,483.75000 L 184.37500,458.75000 L 175.00000,455.62500 z "
+       id="path2321"
+       transform="translate(78.12500,-296.8750)"
+       sodipodi:nodetypes="ccccc" />
+    <text
+       xml:space="preserve"
+       style="font-size:9.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+       x="176.70674"
+       y="481.35648"
+       id="text2322"
+       sodipodi:linespacing="100%"
+       transform="translate(78.12500,-296.8750)"><tspan
+         id="tspan2323">1</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:9.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+       x="176.70674"
+       y="468.85648"
+       id="text2325"
+       sodipodi:linespacing="100%"
+       transform="translate(78.12500,-296.8750)"><tspan
+         x="176.70674"
+         y="468.85648"
+         sodipodi:role="line"
+         id="tspan2326">0</tspan></text>
+  </g>
+  <g
+     id="g2343">
+    <path
+       style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+       d="M 146.87500,299.37500 L 146.87500,330.62500 L 137.50000,327.50000 L 137.50000,302.50000 L 146.87500,299.37500 z "
+       id="path2329"
+       sodipodi:nodetypes="ccccc" />
+    <text
+       xml:space="preserve"
+       style="font-size:9.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+       x="176.70674"
+       y="481.35648"
+       id="text2330"
+       sodipodi:linespacing="100%"
+       transform="translate(-37.50000,-156.2500)"><tspan
+         id="tspan2331">1</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:9.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+       x="176.70674"
+       y="468.85648"
+       id="text2333"
+       sodipodi:linespacing="100%"
+       transform="translate(-37.50000,-156.2500)"><tspan
+         x="176.70674"
+         y="468.85648"
+         sodipodi:role="line"
+         id="tspan2334">0</tspan></text>
+  </g>
+  <g
+     id="g2351"
+     transform="translate(-84.37500,262.5000)">
+    <path
+       style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+       d="M 175.00000,455.62500 L 175.00000,486.87500 L 184.37500,483.75000 L 184.37500,458.75000 L 175.00000,455.62500 z "
+       id="path2352"
+       transform="translate(78.12500,-296.8750)"
+       sodipodi:nodetypes="ccccc" />
+    <text
+       xml:space="preserve"
+       style="font-size:9.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+       x="176.70674"
+       y="481.35648"
+       id="text2353"
+       sodipodi:linespacing="100%"
+       transform="translate(78.12500,-296.8750)"><tspan
+         id="tspan2354">1</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:9.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+       x="176.70674"
+       y="468.85648"
+       id="text2356"
+       sodipodi:linespacing="100%"
+       transform="translate(78.12500,-296.8750)"><tspan
+         x="176.70674"
+         y="468.85648"
+         sodipodi:role="line"
+         id="tspan2357">0</tspan></text>
+  </g>
+  <g
+     id="g2359"
+     transform="translate(-84.37500,434.3750)">
+    <path
+       style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+       d="M 175.00000,455.62500 L 175.00000,486.87500 L 184.37500,483.75000 L 184.37500,458.75000 L 175.00000,455.62500 z "
+       id="path2360"
+       transform="translate(78.12500,-296.8750)"
+       sodipodi:nodetypes="ccccc" />
+    <text
+       xml:space="preserve"
+       style="font-size:9.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+       x="176.70674"
+       y="481.35648"
+       id="text2361"
+       sodipodi:linespacing="100%"
+       transform="translate(78.12500,-296.8750)"><tspan
+         id="tspan2362">1</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:9.0000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+       x="176.70674"
+       y="468.85648"
+       id="text2364"
+       sodipodi:linespacing="100%"
+       transform="translate(78.12500,-296.8750)"><tspan
+         x="176.70674"
+         y="468.85648"
+         sodipodi:role="line"
+         id="tspan2365">0</tspan></text>
+  </g>
+</svg>

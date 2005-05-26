@@ -1,0 +1,308 @@
+<?xml version="1.0" ?>
+<article>
+  <articleinfo>
+    <title>The SOMA DSPboard : FPGA Events Interface</title>
+    <author>
+      <firstname>Eric</firstname>
+      <surname>Jonas</surname>
+    </author>
+  </articleinfo>
+  <section id="Events">
+    <title>DSP Events</title>
+    <para> The interface between the DSPs and the Event Bus provides
+    low-latency buffering of inbound and outbound events. Outbound
+    events are multiplexed between the two DSPs and are placed on the
+    bus during the appropriate stage in an Event Bus cycle. Only
+    events which target a given DSP are placed in its buffer. </para>
+
+    <para>Here is where we'd put an overview of the different
+    sub-components, and describe the input/output dichotomy
+
+    All parts of the event bus face challenges in switching from the CLK to the SYSCLK domain and vice-versa. </para>
+
+    <section  id="EventMux">
+      <title>Event Bus Multiplexor </title>
+      <para>
+      signals CEA and CEB for alternating DSPs A and B, alternating, via the ESEL signal
+      
+      Each DSP has a set of Address In (AI), Address Out (AO), Output Enable (OE), Data Out (DO), and Data In (DI) lines, as well as a signaling Clock Enable (CE). 
+
+      The setting of MADDR : need some way to set wake-up signal, something something. 
+
+      </para>
+
+    </section>
+    
+    <section id="Event Outputs">
+      <para> The event output subsystem uses the 16/32 bit dual-ported
+      interface of the BlockSelect+ RAM in the Spartan-3 to enable
+      simultaneous read out of the 16-bit data and 8 bit address
+      during the event cycle, while providing an easy 16-bit interface
+      to the Parallel Port for the DSP. </para>
+
+      <section>
+	<title>Writing an Event to the output buffer</title>
+	<para> The input to the Output Event Buffer is complex due to
+	the desire to preserve the 10-write-cycle length of an event
+	write. A ROM maps the latched <signal>ADDRL[3:0]</signal> into
+	the LSBs of <signal>ADDRA[9:0]</signal>, and the MSBs select the
+	appropriate buffer location through the Event Counter In
+	(<signal>ECNTIN[5:0]</signal>). </para>
+	
+	<para> The ROM mapping of addresses is necessary to have writes
+	to locations 0x0, 0x1, and 0x2 map to the appropriate
+	interleaved locations in the buffer for read-out.  Each
+	<signal>WE</signal> assertion actually triggers
+	<emphasis>two</emphasis> writes of the RAM buffer, with the ROM
+	determining the necessary addresses and whether
+	<signal>DINL[7:0]</signal> or <signal>DINL[15:8]</signal> maps
+	to the low byte of <signal>DIA[15:0]</signal>. An event write is
+	considered complete when the address 0x9 is written, thus
+	incrementing <signal>ECNTIN[5:0]</signal>.
+	</para>
+	
+	<figure>
+	  <title> Example write transaction to event output buffer</title>
+	  <mediaobject>
+	    <timingobject name="output.write">
+	      <clock name="CLK">  | |  |  |  |  |  |  |  |  |  |  |  |  |  |  
+	      </clock>
+	      <signal name="WE">  L H  L  L  H  L  L  H  L  L  H  L  L  H  L
+	      </signal>
+	      <signal name="WEL"> L L  H  L  L  H  L  L  H  L  L  H  L  L  H
+	      </signal>
+	      <signal name="WELL">H L  L  H  L  L  H  L  L  H  L  L  H  L  L
+	      </signal>
+	      <bus name="ADDR[3:0]">
+		<data>            0 0  0  0  1  1  1  2  2  2  3  3  3  4  4
+		</data></bus>
+	      <bus name="ADDRL[3:0]">
+		<data>            0 0  0  0  0  1  1  1  2  2  2  3  3  3  4
+		</data></bus>
+	      <signal name="AEN"> H H  H  H  H  H  H  H  H  H  H  L  L  L  L 
+		</signal>
+	      <signal name="WEA"> L L  H  H  L  H  H  L  H  H  L  H  H  L  H
+		</signal>
+	      <bus name="ADDRA[3:0]">
+		<data>            1 0  0  2  0  4  6  4  8  10 8  1  1  1  3
+		</data> </bus>
+	    </timingobject>
+	  </mediaobject>
+	</figure>
+		  
+		
+      </section>
+      <section >
+	<title> Reading an event from the output buffer</title>
+	<para> The output side of the buffer is in the
+	<signal>SYSCLK</signal> domain, and uses the 32-bit wide
+	interface of the BlockSelect+ RAM to simultaneously read out
+	the <signal>DATA</signal> and <signal>ADDR</signal> portions
+	of the event. The 3-bit <signal>WCNT[2:0]</signal> counter
+	sequences through the individual Event words, and the 6-bit
+	<signal>ECNTOUT[5:0]</signal> counter selects the event from
+	the buffer. These combine to form the address input
+	<signal>ADDRB[8:0]</signal> to the RAM.  </para>
+   
+	<para>A complicated interplay of signals is necessary to
+	guarantee that <signal>EADDR[7:0]</signal> and
+	<signal>EDATA[15:0]</signal> are valid as soon as possible
+	following the <signal>SYSCLK</signal> edge that registers
+	<signal>ECE</signal>. Thus, when not transmitting an Event,
+	the counters point to the first word of the next event in the
+	buffer. </para>
+
+	<figure id="event.output.output">
+	  <title>Event Output </title>
+	  <timingobject name="event.output.output">
+	    <clock name="SYSCLK"> |   |   |   |   |   |   |   |   |   |   |   | 
+	    </clock>
+	    <signal name="ECE"  > L   L   L   H   L   L   L   L   L   L   L   L
+	    </signal>
+	    <signal name="EEVENT">L   L   L   H   L   L   L   L   L   H   L   L
+	    </signal>
+	    <bus name="ECNTINL">
+	      <data>            n+1 n+1 n+1 n+1 n+1 n+1 n+1 n+1 n+1 n+1 n+1 n+1
+	    </data></bus>
+	    <bus name="ECNTOUT">
+	      <data>              n   n   n   n   n   n   n   n   n   n n+1 n+1
+	    </data></bus>
+	    <signal name="ENOUT"> L   L   L   L   H   H   H   H   H   H  L  L 
+	    </signal>
+	    <signal name="WEN">   L   L   L   H   H   H   H   H   H   H  L  L 
+	    </signal>
+	    <bus name="WCNT">
+	      <data>              0   0   0   0   1   2   3   4   5   6  0  0
+	    </data></bus>
+	    <signal name="EEND">  L   L   L   L   L   L   L   L   L   H  L  L
+	    </signal>    
+	    <bus name="EDATA">
+	      <data>              0   0   0   0   D0  D1  D2  D3  D4  D5 0  0 
+	      </data> 
+	      <class>             2   2   2   2   1    1  1   1   1   1  2  2
+	    </class></bus>
+	    <bus name="EADDR">
+	      <data>              0   0   0   0   A0  A1  A2  A3  A4  A5 0  0
+	      </data>
+	      <class>             2   2   2   2   1   1    1   1   1   1 2  2
+	      </class>
+	    </bus>
+	  </timingobject>
+	</figure>
+	
+	<para> An example event output can be seen in <xref
+	linkend="event.output.output"/>. <signal>ECNTINL[5:0]</signal>
+	is not equal to <signal>ECNTOUT</signal>, indicating the
+	presence of a pending event. Note that
+	<signal>ECNTINL[5:0]</signal> would only be incremented
+	following the complete write of an event, thus there are no
+	potential timing conflicts. The simultaneous assertion of
+	<signal>EEVENT</signal> and <signal>ECE</signal> with events
+	in the buffer leads to the setting of
+	<signal>ENOUT</signal>. This enables the output muxes to drive
+	the output data and address lines with the real values from
+	the event buffer. </para>
+
+	<para> <signal>WCNT[2:0]</signal> is incremented while
+	<signal>ENOUT</signal> is high <emphasis>and</emphasis> when
+	<signal>EEVENT</signal> and <signal>ECE</signal> are
+	simultaneously asserted. Since the BlockSelect+ RAM is
+	synchronous (and thus the data output will follow the input
+	address by a clock signal) <signal>WCNT[2:0]</signal> must
+	begin incrementing early.</para>
+
+	<para><signal>EEND</signal> goes high when
+	<signal>WCNT[2:0]</signal> equals six, indicating the
+	completion of an event write. This resets
+	<signal>ENOUT</signal> and thus resets
+	<signal>WCNT[2:0]</signal> while incrementing
+	<signal>ECNTOUT[5:0]</signal>. </para>
+      </section>
+    
+    </section>
+
+    <section>
+      <title>Event Reader Stage</title>
+      <para> Here's where we read the events off the Event Bus and
+      potentially store them if they are for us, that is, if the
+      relevant ADDR bit is set. </para> 
+      
+      <para>This is a challenge because we need to be able to read an
+      event and store it in our event buffer, <emphasis>even
+      if</emphasis> we get two events in a row. Thus, we use lots of
+      pipelining. </para>
+
+      <para> To determine if an event is for us, we latch in each
+      <signal>EADDR[7:0]</signal> byte, and use
+      <signal>MADDR[2:0]</signal> to select the correct bit onto
+      <signal>ADDRSEL</signal>. The counter <signal>CNT</signal> is
+      reset to zero in the cycle following <signal>EVENTL</signal>
+      going high. <signal>SMINE</signal> is set when
+      <signal>CNT</signal> is equal to
+      <signal>MADDR[5:3]</signal>. <emphasis><signal>SMINE</signal>'s
+      set overrides its reset, which is cleared on each cycle -- this
+      is necessary to allow setting when the relevant EADDR byte is at
+      CNT=0. </emphasis></para>
+
+      <para>Each of <signal>D0[15:0]</signal> through
+      <signal>D5[15:0]</signal> is latched during the appropriate
+      state in the Event, and the assertion of <signal>LMINE</signal>
+      latches the corresponding values to the registered
+      <signal>D0L[15:0]</signal> through <signal>D5L[15:0]</signal>,
+      respectively. These are read asynchronously via the outputs when
+      <signal>MINE</signal> is eventually set. </para>
+
+      <figure>
+	<title> Example timing</title>
+	
+	<mediaobject>
+
+	  <xi:include  href="event.timing.xml" 
+		       xmlns:xi="http://www.w3.org/2003/XInclude">
+	    <xi:fallback>
+	      <para><emphasis>FIXME:  MISSING XINCLUDE CONTENT
+	      </emphasis></para>
+	    </xi:fallback>
+	  </xi:include>
+	</mediaobject>
+      </figure>
+    </section> 
+
+    <section>
+      <title> Event Inputs</title>
+      <para> The transfer of the Events from the Event Bus to the DSP
+      is relatively simple compared to the other portions of the Event
+      Subsystem. As the Event Input system is in the
+      <signal>SYSCLK</signal> domain, we wait for the falling edge of
+      the <signal>EIN</signal> via <signal>EINDELTA</signal>. Note
+      that timing here is critical: A full event cycle in the
+      <signal>SYSCLK</signal> domain takes at most 19 ticks in the
+      <signal>CLK</signal> domain. </para>
+      
+      <para> The FSM waits for an assertion of
+      <signal>EINDELTA</signal> and then checks for
+      <signal>MINE</signal> to be high, indicating that the current
+      event is targeted for this DSP. Then,
+      <signal>EDOUT[7:0]</signal> is read to determine the CMD of the
+      event. A small subset of the potential events, related to
+      resetting and booting, are handled by the FPGA. All others are
+      placed in a buffer for the DSP. </para>
+
+      <section>
+	<title>Mode Set</title>
+	<para> When the Event's CMD is 0x01, we transition to
+	<state>MODEEN</state> and set the <signal>MODE</signal> bit
+	appropriately. Note that <signal>MODE</signal> can only be
+	reset by the external <signal>MODERST</signal> line. </para>
+      </section>
+      
+      <section>
+	<title>DSP Reset</title>
+	<para> The <signal>DSPRESET</signal> signal is determined in a
+	similar manner, as the complement to the first data word of
+	the Reset Event</para>
+      </section>
+      
+      <section>
+	<title> Boot RAM writes</title>
+	<para> <signal>RAINCNT[9:0]</signal> is first loaded with the
+	target address of the location in the boot RAM. The following
+	four words are written to that and the three subsequent
+	addresses via <signal>RDIN[15:0]</signal>by incrementing
+	<signal>RAINCNT[9:0]</signal> three times. </para>
+      </section>
+
+      <section>
+	<title>Events targeted for the DSP</title>
+	<para> All events not handled internally by the FPGA are
+	placed in a BlockSelect+ RAM circular buffer for later reading
+	by the DSP. The first word of each event is
+	<emphasis>always</emphasis> written to the current address
+	pointed to by <signal>AEIN[9:0]</signal>, regardless of
+	<signal>MINE</signal> status. This should never be a problem
+	as <signal>AEIN[9:0]</signal> should point to the next empty
+	buffer location at the start of each event read cycle. The
+	next five words are read and written sequentially into the
+	buffer, with the low bits of the address
+	(<signal>AEIN[2:0]</signal>) being controlled by the FSM. The
+	last stat ein the FSM incrmeents <signal>AEIN[9:3]</signal>,
+	positioning the system to write the next incoming
+	event. </para>
+
+	<para> Readout is similar to other places in the FPGA, with
+	<signal>NEWEVENTS</signal> signalling the presence of a
+	non-empty buffer. <signal>ADDR[2:0]</signal> synchronously
+	reads the relevant words from the buffer, with a read of
+	location 0x6 signalling the completion of a read and thus
+	incrementing <signal>ADSPIN[9:3]</signal>.  </para>
+      </section>
+    </section>
+  </section>
+  <section>
+    <title> Present concerns</title>
+    <para> 1. For the event input stage, what kind of latch is SMINE? how is it possible for things to work when the MYADDR[5:3]=111, i.e.  in the last byte of the address? </para>
+  </section>
+
+
+</article>
+	

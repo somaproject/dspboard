@@ -58,3 +58,27 @@ optical data stream and pass it onto the DSPs, as well as providing
 the necessary buffering and interface to the Data Bus and Event Bus.
       
 
+\section{DSP Board Signal Processing Overview}
+
+Samples are acquired via the optical interface and each tetrode's respective samples are passed to its DSP. The following takes place for each of the five input channels:
+\begin{enumerate}
+\item A received sample is placed into a fixed-length circular buffer. 
+\item FIR or IIR filtering is performed on the sample. Each channel has its own filter. 
+\item The sample is placed in a temporary output buffer
+\end{enumerate}
+
+Subsequently, the continuous and spike channel processing differ. 
+
+\subsection{Spike Detection and Packetization}
+
+Spike detection is achieved via simple thresholding; when the signal on a given challen crosses that channel's preset channel, four packets of length \textit{SPIKELEN} are formed (one per channel) with \textit{POSTTRIGLEN} samples after the trigger point (see figure \ref{threshold}). The 4-channel spike packet is then timestamped and sent to the event bus. 
+
+
+\begin{figure}
+\includegraphics[scale=2.0]{threshold.pdf}
+\caption{Overview of threshold and spike windowing}
+\label{threshold}
+\end{figure}
+
+\subsection{Continuous channel operation}
+The continuous channel is almost identical to the spike channels, except that no spike packetization is performed; rather the channel is optionally downsampled by a factor of DOWNSAMPLEFACTORSHOULDGOHERE. 

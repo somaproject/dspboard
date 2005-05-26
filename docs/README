@@ -28,7 +28,7 @@ What do we want?
 
 
 Okay, new plan: 
-1. dsp board introduction: 
+1. dsp board introduction: [overview] 
    a. what does it do
    b. how does it do it
    c. general hardware overview
@@ -38,8 +38,9 @@ Okay, new plan:
    d. states :
       - acquiring samples
       - booting
-      
-2. Event and data interface for normal operation
+   e. timing
+
+2. Event and data interface for normal operation [eventio]
    Four segments: 
    1. acqboard control
    2. filter settings
