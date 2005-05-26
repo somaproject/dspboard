@@ -1,0 +1,60 @@
+
+The Soma DSPboard is the computational and signal processing core of
+the Soma system. The DSPboard is responsible for decoding the optical
+Acquisiton Board data stream, performing application-specific
+filtering and processing on the incoming data, and passing the
+resulting data onto the Data bus. The DSP Board also maintains tetrode
+state, and provides an event bus interface for Acquisition board
+parameters.
+
+\section{Requirements}
+For multiunit tetrode recording, the DSP Board must perform
+user-programmable digital filtering on the raw 32 ksps 10-channel data
+from the Acquisition board. Our signal processing requirements were as
+follows:
+    
+\begin{itemize}
+\item \textbf{Processing speed:} To perform 200-tap FIR filtering on each
+  incoming sample would require 64 million multiply-accumulates per
+  second -- we judged 200 coefficients to be the maximum conceivable
+  length any user would need when filtering incoming data.
+  
+\item \textbf{Floating-point multiply-accumulate:} Fixed-point DSP requires
+  careful consideration, especially in the IIR case, to avoid
+  instability and overflow. This level of attention to filter
+  coefficient selection is undesirable in any system where end-users
+  are performing filter design, as it requires detailed understanding
+  of the various stages of processing quantization. Thus, all DSP
+  operations must use floatin-point arithmatic.
+  
+\item \textbf{Open/inexpensive development tools:} Any DSP we select needs to
+  have inexpensive development tools, ideally ones that are Free
+  Software. Since the bulk of DSP development will be performed in
+  assembly, at the very least it would be ideal if a Free assembler
+  existed.
+  
+\item \textbf{Ease of assembly:} Due to the limited anticipated volume
+  production, any DSP considered needs to be avialble in a
+  hand-solderable (non-BGA) package.
+\end{itemize}
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=1.0]{board-overview.pdf}
+\end{center}
+\caption{DSP Board Overview}
+\end{figure}
+
+
+ The Analog Devices SHARC ADSP-21262 comes closest to meeting
+the DSP criteria. The 200 MHz 32-bit floating point DSP has an SIMD
+ALU allowing for up to 400 MMACS/second, and is available in a 144-pin
+LQFP package. The development tools (VisualDSP++) are expensive but
+available at a reduced price to academic institutions. To allow for
+processing overhead, we use two DSPs, one per tetrode.  
+      
+A Xilinx Spartan-3 XCS200 FPGA is used to decode the Acquisition Board
+optical data stream and pass it onto the DSPs, as well as providing
+the necessary buffering and interface to the Data Bus and Event Bus.
+      
+
