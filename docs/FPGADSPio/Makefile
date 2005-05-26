@@ -1,6 +1,6 @@
 
-TOOLSPATH = ../../../docs/tools
-LATEXPATH = ../latex
+TOOLSPATH = ../tools
+LATEXPATH = $(TOOLSPATH)/latex
 
 SUBPROJECTS := databuffer events
 

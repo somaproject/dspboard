@@ -1,0 +1,81 @@
+
+ The ADSP supports several external serial interfaces, as well
+as an asychronous 16-bit memory bus (the Parallel Port), the latter
+being the only method with sufficient bandwidth for our application.
+The ADSP-21262 automatically performs 16-to-32bit packing and
+unpacking between the Parallel Port and its internal memory, and is
+only able to access the Parallel Port via Direct Memory Access (DMA).
+
+
+ The external memory space is partitioned into five
+application-specific 12-bit regions. Several of the regions support a
+"transaction complete" address that, when written or read, signals the
+FPGA that the necessary writes or reads for that particular piece of
+data are complete.  
+
+\section{0x0nnn: Status and  Data  Samples}
+This DSP-read-only region contains new sample data and status
+information.
+\begin{memmap}{TEST}
+0x0000: Acquisition Board Status
+0x0000[0] : STATUS, the status of the optical connection (1 = link up)
+0x0000[1] : TXERROR, fiber command transmit error
+0x0000[4:7] : CMDID, the most recent command ID
+0x0000[8:11] : CMDSTS, the most recent omcmand status
+0x0001 : Sample from channel 1
+0x0002 : Sample from channel 2
+0x0003 : Sample from channel 3
+0x0004 : Sample from channel 4
+0x0005 :  Continuous data sample
+0x0006 : Debug value for read-testing, always equals 0x1234
+0x0007 : The Event Bus ID Assigned to this DSP
+\end{memmap}
+
+
+\section{0x2nnn: Output data buffer} 
+ This region allows for the full write of a data frame destined
+for the Data Bus, with a maximum length of 2048 bytes (1024
+words).
+
+\begin{memmap}{Output Data Buffer}
+0x2nnn: Output Data Buffer
+0x2000[7:0] : Data Source ID
+0x2001[9:0] : Total length of frame N, in words. 
+0x2002-0x2002+2N : Frame data for an N-word frame
+\end{memmap}
+
+
+\section{0x4nnn: Event Output} 
+\begin{memmap}{Event Output}
+0x4nnn : Event Output
+0x4000 : Event target addresses A15:A0
+0x4001 : Event target addresses A31:A16 
+0x4002 : Event target addresses A47:A32
+0x4003 : Event command word
+0x4004-0x4008 : Event data words, in increasing order
+0x4009 :Event complete. Write this address to signal the completion of an Event write
+\end{memmap}
+A write of an Event Bus event to this region queues it in the FPGA for
+transmission on the event bus.
+
+\section{0x6nnn : Event Input}
+The DSP can read new events from the Event Bus here. 
+\begin{memmap}{Event Input}
+0x6nnn : Event Input
+0x6000 : Event command word
+0x6001-0x6005 :  Event data words, in increasing order
+0x6006 : A write here signals the FPGA that the DSP has finished reading this event.
+\end{memmap}
+
+\section{0x8nnn: Acqboard interface}
+This region allows us to send commands to the acquisition board. 
+\begin{memmap}{Acquisition Board Interface}
+0x8nnn: Acquisition Board Interface
+0x8000[3:0] : Acqboard Command 
+0x8001[2:0] : CMDID 
+0x8002[7:0] : Data Byte 0 
+0x8002[15:8] : Data byte 1 
+0x8003[7:0] : Data Byte 2 
+0x8003[15:8] : Data byte 3 
+0x8004 : A write here signals the FPGA that the buffer contains a new valid Acqboard command that is to be sent to the Acqboard.
+\end{memmap}
