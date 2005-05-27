@@ -50,20 +50,22 @@ Okay, new plan:
    6. Boot (or not)
    7. data output formats
 
-3. FPGA/DSP memory mapped interface, specific pins, etc. 
+3. FPGA/DSP memory mapped interface, specific pins, etc. [FPGADSPio]
    do any of the above parts depend on understanding TINC/TCLEAR? No
    or the specific interrupts? no
    So, this shows how tinc/tclear works
    Boot details ? 
-4. FPGA Internals
+
+4. FPGA Internals [FPGA]
     CMDID alternation
     Software layout and configuration
     
-5. DSP code internals
+5. DSP code internals [DSPasm]
     Which registers are which
     How is code organized
     Buffers 
-6. Hardware, schematics, etc. 
+
+6. Hardware, schematics, etc. [hw]
     Power and part selection
     SI Concerns
 

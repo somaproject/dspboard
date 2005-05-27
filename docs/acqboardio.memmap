@@ -1,8 +1,0 @@
-0x8nnn: Acquisition Board Interface
-0x8000[3:0] : Acqboard Command 
-0x8001[2:0] : CMDID 
-0x8002[7:0] : Data Byte 0 
-0x8002[15:8] : Data byte 1 
-0x8003[7:0] : Data Byte 2 
-0x8003[15:8] : Data byte 3 
-0x8004 : A write here signals the FPGA that the buffer contains a new valid Acqboard command that is to be sent to the Acqboard.

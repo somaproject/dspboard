@@ -1,4 +1,6 @@
 
+\section{Memory-Mapped Interface}
+
  The ADSP supports several external serial interfaces, as well
 as an asychronous 16-bit memory bus (the Parallel Port), the latter
 being the only method with sufficient bandwidth for our application.
@@ -13,7 +15,7 @@ application-specific 12-bit regions. Several of the regions support a
 FPGA that the necessary writes or reads for that particular piece of
 data are complete.  
 
-\section{0x0nnn: Status and  Data  Samples}
+\subsection{0x0nnn: Status and  Data  Samples}
 This DSP-read-only region contains new sample data and status
 information.
 \begin{memmap}{TEST}
@@ -32,7 +34,7 @@ information.
 \end{memmap}
 
 
-\section{0x2nnn: Output data buffer} 
+\subsection{0x2nnn: Output data buffer} 
  This region allows for the full write of a data frame destined
 for the Data Bus, with a maximum length of 2048 bytes (1024
 words).
@@ -45,7 +47,7 @@ words).
 \end{memmap}
 
 
-\section{0x4nnn: Event Output} 
+\subsection{0x4nnn: Event Output} 
 \begin{memmap}{Event Output}
 0x4nnn : Event Output
 0x4000 : Event target addresses A15:A0
@@ -58,7 +60,7 @@ words).
 A write of an Event Bus event to this region queues it in the FPGA for
 transmission on the event bus.
 
-\section{0x6nnn : Event Input}
+\subsection{0x6nnn : Event Input}
 The DSP can read new events from the Event Bus here. 
 \begin{memmap}{Event Input}
 0x6nnn : Event Input
@@ -67,7 +69,7 @@ The DSP can read new events from the Event Bus here.
 0x6006 : A write here signals the FPGA that the DSP has finished reading this event.
 \end{memmap}
 
-\section{0x8nnn: Acqboard interface}
+\subsection{0x8nnn: Acqboard interface}
 This region allows us to send commands to the acquisition board. 
 \begin{memmap}{Acquisition Board Interface}
 0x8nnn: Acquisition Board Interface
@@ -79,3 +81,11 @@ This region allows us to send commands to the acquisition board.
 0x8003[15:8] : Data byte 3 
 0x8004 : A write here signals the FPGA that the buffer contains a new valid Acqboard command that is to be sent to the Acqboard.
 \end{memmap}
+
+\section{General IO}
+
+The four GPIO pins on the ADSP are used to communicate:
+sampling time
+sampling reset
+event availability
+tiny robots

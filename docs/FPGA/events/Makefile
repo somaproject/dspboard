@@ -1,6 +1,6 @@
+TOOLSPATH = ../../tools
+LATEXPATH = $(TOOLSPATH)/latex
 
-TOOLSPATH = ../../../../docs/tools
-LATEXPATH = ../../latex
 
 .PHONY: all $(SUBPROJECTS)
 
