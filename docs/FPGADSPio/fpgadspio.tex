@@ -18,6 +18,7 @@ data are complete.
 \subsection{0x0nnn: Status and  Data  Samples}
 This DSP-read-only region contains new sample data and status
 information.
+
 \begin{memmap}{TEST}
 0x0000: Acquisition Board Status
 0x0000[0] : STATUS, the status of the optical connection (1 = link up)
@@ -48,6 +49,9 @@ words).
 
 
 \subsection{0x4nnn: Event Output} 
+A write of an Event Bus event to this region queues it in the FPGA for
+transmission on the event bus.
+
 \begin{memmap}{Event Output}
 0x4nnn : Event Output
 0x4000 : Event target addresses A15:A0
@@ -57,11 +61,10 @@ words).
 0x4004-0x4008 : Event data words, in increasing order
 0x4009 :Event complete. Write this address to signal the completion of an Event write
 \end{memmap}
-A write of an Event Bus event to this region queues it in the FPGA for
-transmission on the event bus.
 
 \subsection{0x6nnn : Event Input}
 The DSP can read new events from the Event Bus here. 
+
 \begin{memmap}{Event Input}
 0x6nnn : Event Input
 0x6000 : Event command word
@@ -71,6 +74,7 @@ The DSP can read new events from the Event Bus here.
 
 \subsection{0x8nnn: Acqboard interface}
 This region allows us to send commands to the acquisition board. 
+
 \begin{memmap}{Acquisition Board Interface}
 0x8nnn: Acquisition Board Interface
 0x8000[3:0] : Acqboard Command 

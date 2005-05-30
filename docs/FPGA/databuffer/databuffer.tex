@@ -1,7 +1,7 @@
 
-\subsection{Data Buffer}
+\section{Data Buffer}
 
-\begin{figure}[h]
+\begin{figure}[h!]
   \includegraphics[scale=0.8]{databuffer.pdf}
   \caption{Data and Boot Buffer.}
   \label{databuffer}
@@ -20,7 +20,7 @@ result in the overwriting packet being lost -- thus overwrites lead to
 lost, not corrupt, packets.
 
 
-\subsubsection{Data Buffer Input}
+\subsection{Data Buffer Input}
         
       
 The \signal{BUFWE}, \bus{BUFDIN}{15:0}, and \bus{BUFADDRIN}{9:0} write
@@ -41,7 +41,7 @@ FULL{A,B,C} SR flip-flop is set, and the FSM moves into a WAIT{A,B,C}
 state.
 
       
-\begin{figure}
+\begin{figure}[h!]
   \includegraphics[scale=0.8]{input.FSM.pdf}
   \caption{Data Buffer input FSM}
   \label{InputFSM}
@@ -52,14 +52,14 @@ the system has moved out of the corresponding WAIT state. While
 \signal{incs} is in a wait state, the \bus{BUFLENIN}{9:0} register is
 reset to the highest-possible value to prevent accidental triggering.
       
-\subsubsection{Data Buffer Output}
+\subsection{Data Buffer Output}
       
 The outputs of the three buffers are multiplexed into the
 \bus{BUFDOUT}{15:0} signal, which is optimized for interfacing with
 the system Data Bus. Similar to the input stage, the output reads the
 Length word in the data header to determine total packet length.
 
-\begin{figure}[h]
+\begin{figure}[h!]
   \includegraphics[scale=0.8]{output.FSM.pdf}
   \caption{Data Buffer output FSM.}
   \label{OutputFSM}
@@ -80,7 +80,7 @@ the corresponding \signal{FULL{A,B,C}}. The FSM then waits for the
 deassertion of \signal{NEXTOUT} before advancing to the wait state for
 the next buffer.
    
-\subsubsection{Boot Buffer}
+\subsection{Boot Buffer}
 
 BlockSelect+ RAM Buffer A is also used to store the loader kernel for
 the DSP. This allows us to buffer the loader kernel into the FPGA

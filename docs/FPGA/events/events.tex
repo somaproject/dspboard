@@ -28,7 +28,7 @@ The event output subsystem uses the 16/32 bit dual-ported interface of
 the BlockSelect+ RAM in the Spartan-3 to enable simultaneous read out
 of the 16-bit data and 8 bit address during the event cycle, while
 providing an easy 16-bit interface to the Parallel Port for the DSP.
-\begin{figure}
+\begin{figure}[h!]
 \includegraphics[scale=0.8]{output.pdf}
 \end{figure}
 
@@ -55,7 +55,7 @@ complete when the address 0x9 is written, thus incrementing
 \bus{ECNTIN}{5:0}.
         
 
-\begin{figure}
+\begin{figure}[h!]
 \includegraphics[scale=0.8]{write.timing.pdf}
 \end{figure}                  
                 
@@ -75,7 +75,7 @@ as soon as possible following the \signal{SYSCLK} edge that
 registers \signal{ECE}. Thus, when not transmitting an Event,
 the counters point to the first word of the next event in the buffer.
 
-\begin{figure}
+\begin{figure}[h!]
 \includegraphics[scale=0.8]{output.timing.pdf}
 \end{figure}                  
 
@@ -109,7 +109,7 @@ store them if they are for us, that is, if the relevant ADDR bit is
 set.
 
 
-\begin{figure}
+\begin{figure}[h!]
 \includegraphics[scale=0.8]{reader.pdf}
 \end{figure}
       
@@ -137,7 +137,7 @@ eventually set.
 
 \subsection{Event Inputs} 
 
-\begin{figure}
+\begin{figure}[h!]
 \includegraphics[scale=0.8]{input.pdf}
 \end{figure}
 
