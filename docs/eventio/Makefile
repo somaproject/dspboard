@@ -1,12 +1,6 @@
 
-TOOLSPATH = ../../../docs/tools
-LATEXPATH = ../tools/latex
-
-SUBPROJECTS := 
-
-.PHONY: all $(SUBPROJECTS)
-
-
+TOOLSPATH = ../tools
+LATEXPATH = $(TOOLSPATH)/latex
 
 
 include $(LATEXPATH)/include.mk
