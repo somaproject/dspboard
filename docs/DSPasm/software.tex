@@ -1,0 +1,25 @@
+
+\section{Overview}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=1.3]{overview.pdf}
+\end{center}
+\caption{Software Overview}
+\label{overview}
+\end{figure}
+
+The DSP Assembly is programmed in the ADSP-21262's very verbose assembly language. The software has five principle components.
+
+\begin{itemize}
+\item \textbf{Loader:} The boot loader handles the complexity of getting intial code onto the DSP; once a full program has been loaded it transfers execution to that new program. 
+
+\item \textbf{Init:} Post-boot initialization sets up various regions of memory and address register for normal operation, zeros existing buffers, and enables interrupts. 
+
+\item \textbf{Events:} Primary event-processing loop; handles all inbound and outbound events. Decodes them, and sets system state and configuration parameters accordingly. An infinite loop. 
+
+\item \textbf{Timer:} The system timer interrupt subroutine. Every TINC interval, increments the system timestamp counter. 
+
+\item \textbf{Samples:} The primary signal processing interrupt subroutine; the arrival of a new set of samples triggers this interrupt routine, which performs conversion, filtering, spike detection, downsampling, and packetization. 
+
+\end{itemize}
