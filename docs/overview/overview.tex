@@ -56,7 +56,6 @@ processing overhead, we use two DSPs, one per tetrode.
 A Xilinx Spartan-3 XCS200 FPGA is used to decode the Acquisition Board
 optical data stream and pass it onto the DSPs, as well as providing
 the necessary buffering and interface to the Data Bus and Event Bus.
-      
 
 \section{DSP Board Signal Processing Overview}
 
@@ -82,7 +81,6 @@ Samples are acquired via the optical interface and each tetrode's respective sam
 
 Spike detection is achieved via simple thresholding; when the signal on a given challen crosses that channel's preset channel, four packets of length \textit{SPIKELEN} are formed (one per channel) with \textit{POSTTRIGLEN} samples after the trigger point (see figure \ref{threshold}). The 4-channel spike packet is then timestamped and sent to the event bus. 
 
-
 \begin{figure}
 \includegraphics[scale=2.0]{threshold.pdf}
 \caption{Overview of threshold and spike windowing}
@@ -90,4 +88,12 @@ Spike detection is achieved via simple thresholding; when the signal on a given 
 \end{figure}
 
 \subsection{Continuous channel operation}
-The continuous channel is almost identical to the spike channels, except that no spike packetization is performed; rather the channel is optionally downsampled by a factor of DOWNSAMPLEFACTORSHOULDGOHERE. 
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=1.0]{contsignal.pdf}
+\end{center}
+\label{ConChain}
+\caption{DSP board continuous signal chain.}
+\end{figure}
+
+The continuous channel is almost identical to the spike channels, except that no spike detection is performed; rather the channel is optionally downsampled by a factor of DOWNSAMPLEFACTORSHOULDGOHERE. 
