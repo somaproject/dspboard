@@ -29,7 +29,7 @@ DW4[9:8]: CS
 
 
 Where \textbf{Gn} is the gain of channel \textbf{n} and \textbf{HWFn} is the high pass filter selection of channel \textbf{n}. For the continuous acquisition channel, \textbf{CS} is the currently muxed channel. 
-/
+
 [something about gain settings here] 
 
 To explicitly query these settings, send 
@@ -39,13 +39,46 @@ CMD: 0x46
 SRC: ANY
 \end{event}
 
-
 All tetrodes which receive such a query will broadcast a CHANSTATE. 
 
--- to set gain, use chan event 0x47
--- to set hpf, use chan event 0x48
--- to set input sel, use chan event 0x49
+There is a single command to set the acqboard parameters with a fairly complex bitfield. The downside of a setting like this is that it will require many round-trip interactions with the acqboard if all bit fields are set. The upside is that it makes it easy for a single command to set all parameters at once. Remember that the acqstate event will only be broadcast once all of the relevant settings have been made. 
 
+
+\begin{event}{SETACQ}
+CMD: 0x47
+SRC: TETN
+DW0[0]: S
+DW0[7:1]: G1
+DW0[8]: S
+DW0[12:9]: H1
+DW1[0]:S
+DW1[7:1]: G2
+DW1[8]: S
+DW1[12:9]: H2
+DW2[0]:S
+DW2[7:1]: G3
+DW2[8]: S
+DW2[12:9]: H3
+DW3[0]:S
+DW3[7:1]: G4
+DW3[8]: S
+DW3[12:9]: H4
+DW4[0]:S
+DW4[7:1]: GC
+DW4[8]: S
+DW4[12:9]: HC
+DW4[13]: S
+DW4[15:14]:C
+\end{event}
+
+
+The fields are:
+\begin{itemize}
+\item \textbf{Gn} Gain value to be set for channel \textbf{n} and whether or not this event is setting it (lsb \textbf{S})
+\item \textbf{H1} Value to set the high pass filter for this channel to. \textbf{n}. 
+\end{itemize}
+
+As well as \textbf{S} to set the continuous channel input, and \textbf{C} as the channel number. 
 
 
 \subsection{Configuration Events}
@@ -130,8 +163,7 @@ Change continuous parameters
 TARGET: 0x26
 DW0[3:0]: RATIO
 \end{dspcmd}
-The input for continuous data is sampled at such and such a rate. 
-
+The input for continuous data is downsampled by this ratio. A DSRATION of 2 means that every other input packet is discarded. 
 
 \begin{dspcmd}{CFSIZE}
 TARGET: 0x27
@@ -140,11 +172,49 @@ DW0[15:0]: FSIZE
 
 Number of continuous samples per frame.
 
+\begin{dspcmd}{THOLD}
+TARGET: 0x28
+DW0[31:0]: THRESHOLD
+\end{dspcmd}
 
-
+Number of continuous samples per frame.
 
 
 \section{Data Bus Packets}
+Packets on the data bus use a 16-bit word. All voltage data is transmitted in IEEE 32-bit single-precision float. 
 
-PUT THE FORMAT OF THE DATA BUS PACKETS HERE!!!!!
+
+\subsection{Spike Packets}
+Spike events:
+word 0: 0x01 to indicate spike event
+word 1: source (DSP number)
+word 2: ike length in 16-bit words, not including ID header
+word 3: channel count (n)
+word 4: LSBs of timestamp
+word 5: MSBs of timestamp
+
+Then n identical channels of the same length:
+word 0: channel number
+word 1: gain setting; actual gain
+word 2: DSP Filter ID
+word 3: hardware filter selection
+word 4: lsbs of threshold
+word 5: MSBs of threshold
+words 6: LSBs of first sample
+word 7 : MSBs of first sample
+
+\subsection{Continuous Packets}
+word 0: 0x02 to indicate a continuous event
+word 1: length of this packet in 16-bit words
+word 2: 
+   7:0 source
+  15:8 currently sampled channel
+words 3-4: timestamp
+5: gain setting
+6: DSP filter ID
+7: HW Filter
+8: downsampling ration
+14: data-forward, LSB first
+
+
 
