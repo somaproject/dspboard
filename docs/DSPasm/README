@@ -1,0 +1,34 @@
+DSPasm overview and organization
+
+1. introduction
+2. ADSP-21262 overview
+   SIMD core
+   Memory banks
+   zero overhead addressing via the DAGs
+   two register sets
+
+3. State Variables and modes; dma interactions and interrupt configuration
+   global state interactions
+   global interrupt manipulation
+   TIMESTAMP
+   SAMPLING
+   RLOCK
+>
+4. Memory organization, pins, SIMD configuration, DAG organization, etc. 
+   Bank allotment
+   SIMD configuration and concerns
+   DAGs : one set for h[n], one for x[n]
+
+4.5 Init
+4.7 Timer
+    Interrupts, etc. 
+5. Samples Overview
+   a. dma sequencing
+   etc. etc. filtering etc. 
+6. Events overview:
+   a. cmdid tomfoolery 
+   b. how we're handling state variables
+   c. the giant-ass FSM
+   d. error generation
+7. kernel loader
+

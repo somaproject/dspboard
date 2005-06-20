@@ -5,3 +5,4 @@ include $(LATEXPATH)/include.mk
 
 all: DSPboard.somatex support
 	$(LATEX) DSPboard.somatex
+	$(LATEX) DSPboard.somatex
