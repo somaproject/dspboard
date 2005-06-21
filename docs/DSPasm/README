@@ -10,10 +10,12 @@ DSPasm overview and organization
 3. State Variables and modes; dma interactions and interrupt configuration
    global state interactions
    global interrupt manipulation
+   DMA reads and configuration
+
    TIMESTAMP
    SAMPLING
    RLOCK
->
+ 
 4. Memory organization, pins, SIMD configuration, DAG organization, etc. 
    Bank allotment
    SIMD configuration and concerns
