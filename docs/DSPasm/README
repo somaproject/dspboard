@@ -6,28 +6,45 @@ DSPasm overview and organization
    Memory banks
    zero overhead addressing via the DAGs
    two register sets
+   PP DMA
 
 3. State Variables and modes; dma interactions and interrupt configuration
-   global state interactions
-   global interrupt manipulation
-   DMA reads and configuration
+   a. There are three primary loops, samples, events, and timer. Explain aalocation of alternative register sets. 
 
-   TIMESTAMP
-   SAMPLING
-   RLOCK
- 
+   b. events continually polls for new events, processes them, and dispatches the results or changes the relevant settings. 
+   c. timer maintains the interal timer and is inc'd by the relevant interrupt
+   d. an event can set the bits of the SAMPLING register; SAMPLING[0] enables the SAMPLE interrupt, and SAMPLING[1] locks out state-changes to the DSP and acqboard.
+
+INT0: Increment timestamp, clear if FLAG3 = 1
+INT1: New samples, process new chunk of data
+FLAG2: poll to see if there are new events!
+
 4. Memory organization, pins, SIMD configuration, DAG organization, etc. 
-   Bank allotment
-   SIMD configuration and concerns
-   DAGs : one set for h[n], one for x[n]
+   a. PM memory maintains the code and the filters and output buffers
+   b. dm memory maintains sample buffers and relevant variables
+   c. SIMD configuration and concerns
+   d. DAGs : one set for h[n], one for x[n]. 
+   e. DMA operation : all functions which access DMA will disable the SAMPLE interrupt, because there is only one set of DMA registers and DMA operations cannot be interrupted
 
-4.5 Init
+
+4.5 Init and related functions
+   
 4.7 Timer
     Interrupts, etc. 
 5. Samples Overview
    a. dma sequencing
    etc. etc. filtering etc. 
+
+
 6. Events overview:
+   read_status
+   read_event
+   write_event
+   write_acqboard
+   
+   all lock DMA
+
+
    a. cmdid tomfoolery 
    b. how we're handling state variables
    c. the giant-ass FSM

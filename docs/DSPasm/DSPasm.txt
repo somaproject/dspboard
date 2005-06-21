@@ -1,21 +1,3 @@
-Design concerns and considerations for the DSP assembly. 
-
-
-The loader is a whole 'nother bag of worms that we'll hopefully tackle when we're more familiar with the tools
-
-
-Memory accesses: Please note that all memory accesses, including the following:
-read_status
-read_event
-write_event
-write_acqboard
-
-and the entire
-process_sample interrupt handler
-
-all disable the SAMPLE (INT0) interrupt. This is to prevent an interrupt occuring during a DMA action and thus breaking the DMA (since there is only one set of PP DMA registers)
-
-
 naming convention: 
 to make a function global, also name it as
 filename.functionname
@@ -25,29 +7,6 @@ note that all function names use underscores, and jump points within
 them use .dots
 
 
-
-----------------------------------------------------------------------------
-ADSP EXECUTION CYCLE
-----------------------------------------------------------------------------
-
-The ADSP normally runs a cycle where it checks for new events, processses them, and then writes out events. 
-
-The interrupts either say "here's new data, process it" or 
-The timestamp has changed
-
-INT0: Increment timestamp, clear if FLAG3 = 1
-INT1: New samples, process new chunk of data
-
-
-FLAG2: poll to see if there are new events!
-
-
-
-Data processing cycle ------------------
-   For the tetrodes, to take advantage of SIMD, we have some interleaving-buffer issues, also which are present in the output data. 
-   Chan 1&2 are stored in a single word space, interleaved
-   Chan 3&4 are stored in a single word space, interleaved
-   Chan C&C' are stored in a single word space, interleaved
    
    how to store outputs?
    obvious output buffers, sure -- but then how to DMA? parallel port can't do chained DMA... well, what we really want are 
@@ -63,98 +22,6 @@ Upon getting a trigger, we want to say:
    don't re-trigger for n samples; this can be degremented and checked every sample
    wait another m samples to record. 
    
-
-
-1. DMA-in new samples, in 16-bit fixed-point twos-complement form. 
-2. convert new samples into 32-bit FP and save at appropriate point in circular input buffers
-2. Filter channels 1 - 4, 32-bit FP!
-    FIR, using SIMD (thus in pairs), where we filter the max len, and
-    we thus must make sure that the end of each filter is all 0s. 
-
-2.5 save output in output circular buffers
-3. Filter continuous channel
-4. perform necessary down-sampling of continuous, by factor n (n=1,2,3,4, 5)
-6. store in filter output
-
-3. check for threshold crossings:
-    decrement notrigger
-    if notrigger >= 0 then
-       notrigger--; 
-    else
-       for all channels: 
-           if outvals[n - lookback] >= threshold  
-              this is a spike! 
-              capture and send the past SPIKESIZE packets
-              // this creates latency issues, or something;
-	      write buffer ADDR to _PENDING_SPIKE_buffer
-	      notrigger := NOTRIGGER;  	      
-           end if
-    end if
-
-
-
-
-7. transfer filter samples if there are enough of them, something something
-8. done
-
-
-
-
-Variable notes:
-
-
-
-
-
-  
-
-
------------------------------------------------------------------------------
-EVENTS
------------------------------------------------------------------------------
-
-All events which modify signal processing parameters (Filter, gain, etc) cause a disable-flush-enable operation if you are in DATA mode, i.e. if interrupts are enabled. 
-
-
-Event processing loop:
-   read status byte
-   if link status != previous link status
-      send "the link is now up/down" event
-      set previous link status = current status
-      if link now down, disable SAMPLE interrupts
-      CMDIDPENDING = -1; 
-   end if
-   if CMDIDPENDING >= 0 then (we're waiting to hear back from the acqboard)
-      if CMDIDPENDING = new cmdid we just read from sample buffer then
-         CMDID = CMDIDPENDING; 
-         CMDIDPENDING = -1
-         broadcast new event revealing our new state!
-	 update relevant state variables
-      else
-         not done with the event yet! 
-      end if; 
-   end if; 
-
-   if EVENTS = '1' then 
-      read event, process it!
-   end if; 
-   
-
-what if we have a 1-us timer? 
-well, the problem there is that we could interrupt ourselves
-i.e. if an event takes too long we abort it? or watchdog-like? 
-but some events will be short, and some will be long
-
-polling introduces jitter, which is bad. 
-
-we need atomic reads of events, samples, etc. 
-
-not just read; write too? ugh. 
-
-all off-chip 
-
-
-
 
 
 Generic configuration read and write : ---------------------------------
