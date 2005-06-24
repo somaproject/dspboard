@@ -1,6 +1,6 @@
 #!/usr/local/bin/python
 
-from mx.TextTools import *
+from mx.TextTools import tag, AppendToTag, Table, AllIn, alphanumeric, alpha, a2z, A2Z, white, Is, AllIn, AllNotIn, IsIn, newline, Skip, Word, IsNotIn, CallTag, EOF, Here
 
 head_pos = 0
 def jump_count(taglist,txt,l,r,subtag):
@@ -75,7 +75,7 @@ def tokensFromBody(body_str):
 
     return (statements,comments,labels,includes)
 
-################# statement -> set, queried variables parser
+################# statement -> set, queried variables parser #################
 
 def varsFromStatement(st_str=''):
     """
@@ -92,22 +92,20 @@ def varsFromStatement(st_str=''):
               (
         (None,AllNotIn,'='),
         (None,Is,'='),
-        (None,Skip,-1)), +2, +1)
+        (None,Skip,-1)))
 
     eq_qur = (qur,AppendToTag+Table,
               (
-        (None,Is,'='),
         (None,AllNotIn,',;'+newline),
         (None,AllIn,',;'+newline),
-        (None,Skip,-1)),+1,-3)
+        (None,Skip,-1)))
 
-    statement_table = (
-                       (None,Table,((None,Word,'''if'''),
+    statement_table = ((None,Table,((None,Word,'''if'''),
                                     (None,AllIn,white),
                                     (None,AllIn,alpha+'_.'),
-                                    (None,AllIn,white)),+1,-1),
-                       eq_set,
-                       eq_qur,
+                                    (None,AllIn,white)),+1,0),
+                       eq_set+(+1,-1),
+                       eq_qur+(+1,-2),
                        (None,IsNotIn,'',-4),
                        (None,EOF,Here,-5),
                        )
@@ -115,8 +113,6 @@ def varsFromStatement(st_str=''):
     #use some dummy variables to get the
     #taglist and such
     st_res, st_tlist, st_nindex = tag(st_str,statement_table,0,len(text))
-
-#    print qur
 
     set = map(lambda t: st_str[t[1]:t[2]], set)
     qur = map(lambda t: st_str[t[1]:t[2]], qur)
