@@ -57,8 +57,9 @@ def tokensFromBody(body_str):
         #need to recurse to do paren matching :>
         (None,IsIn,a2z+A2Z),
         (None,AllNotIn,';,('),
-        (None,IsIn,';,',+1,+10),
-        (None,AllNotIn,')',-10,-2)))
+        (None,IsIn,';,',+1,+2),
+        (None,AllNotIn,')',-10,-2),
+        (None,Skip,-1))) #give back comma or ;
 
     tag_table = (
         include_parser+(+1,0),
@@ -97,26 +98,28 @@ def varsFromStatement(st_str=''):
               (
         (None,Is,'='),
         (None,AllNotIn,',;'+newline),
-        (None,AllIn,',;'+newline)),+1,-3)
+        (None,AllIn,',;'+newline),
+        (None,Skip,-1)),+1,-3)
 
-    statement_table = ((None,Word,'''rts''',+1,0),
+    statement_table = (
                        (None,Table,((None,Word,'''if'''),
                                     (None,AllIn,white),
                                     (None,AllIn,alpha+'_.'),
-                                    (None,AllIn,white))
-                        ,+1,-1),
+                                    (None,AllIn,white)),+1,-1),
                        eq_set,
                        eq_qur,
                        (None,IsNotIn,'',-4),
                        (None,EOF,Here,-5),
                        )
 
-    st_result, st_taglist, st_nextindex = tag(st_str,statement_table,0,len(text))
+    #use some dummy variables to get the
+    #taglist and such
+    st_res, st_tlist, st_nindex = tag(st_str,statement_table,0,len(text))
+
+#    print qur
 
     set = map(lambda t: st_str[t[1]:t[2]], set)
     qur = map(lambda t: st_str[t[1]:t[2]], qur)
-
-    print set
 
     return (set,qur)
 
@@ -148,40 +151,19 @@ if __name__ == '__main__':
 
     body_tokens = tokensFromBody(text)
 
-    statements = map(lambda x: text[x[1]:x[2]],body_tokens[0])
+    statements = map(lambda x: text[x[1]:x[2]]+';',body_tokens[0])
 
     s_q_vars = varsFromStatements(statements)
 
     set = s_q_vars[0]
     qur = s_q_vars[1]
 
-#    for i in taglist:
-#        print i,' ', text[i[1]:i[2]]
-
-#    print 'labels'
-#    for n,l,r,d in labels:
-#        print ' ',text[l:r]
-#    print
-#    print 'comments'
-#    for n,l,r,d in comments:
-#        print ' ',text[l:r]
-#    print
-#    print 'includes'
-#    for n,l,r,d in includes:
-#        print ' ',text[l:r]
-#    print
-#    print 'statements'
-#    for n,l,r,d in statements:
-#        print ' ',text[l:r]
-#    print
-
-#    print statement_body
-
     print 'set'
     for i in set:
         print ' ' ,i
     print
 
+    print 'qur'
     for i in qur:
         print ' ' ,i
     print
