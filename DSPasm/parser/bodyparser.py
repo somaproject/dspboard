@@ -101,6 +101,22 @@ def assertNoInputs(a):
               "\n\n%s\n\nCheck for a typo in outputs: or modifies:" % a
 
 
+def extractVars(bodyStr):
+    """Returns a list of the listed variables in the
+    body statement
+    
+    Inputs:
+    inputBodyStr - text betwixt foo: and bar:
+    Outputs:
+    a list of input variables listed
+    """
+    bodyTree = varsParser.parse(bodyStr)
+    vars = []
+    treeWalker('var_name',
+               lambda a: vars.append(bodyStr[a[1]:a[2]]),
+               bodyTree[1])
+    return vars    
+    
 parser = Parser( declaration, "file" )
 varsParser = Parser( varsDeclaration, "statements" )
 if __name__ =="__main__":
@@ -117,7 +133,6 @@ if __name__ =="__main__":
     #parse tree is of the form:
     # (start_index,[sub_tree,sub_tree,sub_tree,...],end_index)
     # sub_tree = (obj_name,start,end,[sub_tree,...])
-#    pprint.pprint( parseTree )
 
     # do some basic tests on the inputs/outputs/modifies strings
     # to make sure they don't have stupid values
@@ -128,24 +143,11 @@ if __name__ =="__main__":
     treeWalker('modifies_pair_b',lambda a: assertNoInputs(text[a[1]:a[2]]),
                parseTree[1])
 
-    treeWalker('input_pair_b',lambda a: pprint.pprint(text[a[1]:a[2]]),
-               parseTree[1])
-
-    def printAndInputParse(parseTuple):
-        inputVarsText = text[parseTuple[1]:parseTuple[2]]
-        inputVarsParseTree = varsParser.parse(inputVarsText)
-#        pprint.pprint(inputVarsParseTree)
-        print '\n\n\n',inputVarsText,'\n'
-        treeWalker('var_name',lambda a:pprint.pprint(inputVarsText[a[1]:a[2]]),
-                   inputVarsParseTree[1])
-
-    treeWalker('input_pair_b',printAndInputParse,parseTree[1])
-
-#    treeWalker('input_pair_b',lambda a: pprint.pprint(varsParser.parse(text[a[1]:a[2]])),
-#               parseTree[1])
-
     if parseTree[2] != len(text):
         next_chars = len(text) - parseTree[2]
         next_chars = min(100,next_chars)
         print "didn't parse beyond %s character: next few chars\n\n%s"%\
               (parseTree[2],text[parseTree[2]:parseTree[2]+next_chars])
+
+
+    
