@@ -62,22 +62,48 @@ newline        := '\n'/'\r'
 newlines       := newline+
 '''
 
-tmp = '''
-body           :=  statement*
-statement      :=  (ts,';',comment,'\n')/equality/nullline
-nullline       :=  ts,'\n'
-comment        :=  -'\n'*
-equality       :=  ts, identifier,ts,'=',ts,identified,ts,'\n'
-identifier     :=  [a-zA-Z], [a-zA-Z0-9_]*
-identified     :=  ('"',string,'"')/number/identifier
-ts             :=  [ \t]*
-char           :=  -[\134"]+
-number         :=  [0-9eE+.-]+
-string         :=  (char/escapedchar)*
-escapedchar    :=  '\134"' / '\134\134"'
+varsDeclaration = r'''
+statements     := statement*
+statement      := ( whitespace /
+                    comment    /
+                    (var_list, var_comment?) ),
+                    newline?
+
+
+var_list       := var_name,(whitespace?,',',whitespace?,var_name)*
+var_name       := -(white / '//' / '/*' )+
+var_comment    := tonewline
+
+comment        := ('//',tonewline,newline*) / ('/*',-'-'*,'*/')
+whitespace     := (newline / white)*
+white          := ' ' / '\t' / '\v'
+tonewline      := -(newline)*
+newline        := '\n'/'\r'
+newlines       := newline+
 '''
 
+def treeWalker(key,function,parse_lst):
+    """Walk a parse list until the tuple with tuple[0] == key,
+    recurse first, then call function(tuple)
+    """
+    for i in parse_lst:
+        treeWalker(key,function,i[3])
+        if i[0] == key:
+            function(i)
+
+def assertNoEndComment(a):
+    if '-*/' in a:
+        raise "Parse End Comment Error","No end comment should be in "+\
+              "\n\n%s\n\nCheck for a typo in outputs: or modifies:" % a
+
+def assertNoInputs(a):
+    if 'inputs' in a:
+        raise "Parse Inputs Error","No inputs: should be in "+\
+              "\n\n%s\n\nCheck for a typo in outputs: or modifies:" % a
+
+
 parser = Parser( declaration, "file" )
+varsParser = Parser( varsDeclaration, "statements" )
 if __name__ =="__main__":
 
 
@@ -91,12 +117,28 @@ if __name__ =="__main__":
     parseTree = parser.parse( text )
     #parse tree is of the form:
     # (start_index,[sub_tree,sub_tree,sub_tree,...],end_index)
-    # sub_tree = (obj_name,start,[sub_tree,...],end)
+    # sub_tree = (obj_name,start,end,[sub_tree,...])
     pprint.pprint( parseTree )
+
+    # do some basic tests on the inputs/outputs/modifies strings
+    # to make sure they don't have stupid values
+    treeWalker('input_pair_b',lambda a: assertNoEndComment(text[a[1]:a[2]]),
+               parseTree[1])
+    treeWalker('output_pair_b',lambda a: assertNoEndComment(text[a[1]:a[2]]),
+               parseTree[1])
+    treeWalker('modifies_pair_b',lambda a: assertNoInputs(text[a[1]:a[2]]),
+               parseTree[1])
+
+    treeWalker('input_pair_b',lambda a: pprint.pprint(text[a[1]:a[2]]),
+               parseTree[1])
+
+    pprint.pprint(varsParser.parse(' \r\n\r r10 r11 \n\n '))
+
+#    treeWalker('input_pair_b',lambda a: pprint.pprint(varsParser.parse(text[a[1]:a[2]])),
+#               parseTree[1])
 
     if parseTree[2] != len(text):
         next_chars = len(text) - parseTree[2]
         next_chars = min(100,next_chars)
-        print "didn't parse beyond %s character: next few chars\n\n%s"%(parseTree[2], text[parseTree[2]:parseTree[2]+next_chars])
-
-
+        print "didn't parse beyond %s character: next few chars\n\n%s"%\
+              (parseTree[2],text[parseTree[2]:parseTree[2]+next_chars])
