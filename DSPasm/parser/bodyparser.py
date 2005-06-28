@@ -64,17 +64,16 @@ newlines       := newline+
 
 varsDeclaration = r'''
 statements     := statement*
-statement      := ( whitespace /
-                    comment    /
-                    (var_list, var_comment?) ),
-                    newline?
-
+statement      := ( (var_list, var_comment?) /
+                     whitespace              /
+                     comment),
+                     newline?
 
 var_list       := var_name,(whitespace?,',',whitespace?,var_name)*
-var_name       := -(white / '//' / '/*' )+
+var_name       := [a-zA-Z], [a-zA-Z0-9_]*
 var_comment    := tonewline
 
-comment        := ('//',tonewline,newline*) / ('/*',-'-'*,'*/')
+comment        := ('//',tonewline,newline*) / ('/*',-'*/'*,'*/')
 whitespace     := (newline / white)*
 white          := ' ' / '\t' / '\v'
 tonewline      := -(newline)*
@@ -118,7 +117,7 @@ if __name__ =="__main__":
     #parse tree is of the form:
     # (start_index,[sub_tree,sub_tree,sub_tree,...],end_index)
     # sub_tree = (obj_name,start,end,[sub_tree,...])
-    pprint.pprint( parseTree )
+#    pprint.pprint( parseTree )
 
     # do some basic tests on the inputs/outputs/modifies strings
     # to make sure they don't have stupid values
@@ -132,7 +131,15 @@ if __name__ =="__main__":
     treeWalker('input_pair_b',lambda a: pprint.pprint(text[a[1]:a[2]]),
                parseTree[1])
 
-    pprint.pprint(varsParser.parse(' \r\n\r r10 r11 \n\n '))
+    def printAndInputParse(parseTuple):
+        inputVarsText = text[parseTuple[1]:parseTuple[2]]
+        inputVarsParseTree = varsParser.parse(inputVarsText)
+#        pprint.pprint(inputVarsParseTree)
+        print '\n\n\n',inputVarsText,'\n'
+        treeWalker('var_name',lambda a:pprint.pprint(inputVarsText[a[1]:a[2]]),
+                   inputVarsParseTree[1])
+
+    treeWalker('input_pair_b',printAndInputParse,parseTree[1])
 
 #    treeWalker('input_pair_b',lambda a: pprint.pprint(varsParser.parse(text[a[1]:a[2]])),
 #               parseTree[1])
