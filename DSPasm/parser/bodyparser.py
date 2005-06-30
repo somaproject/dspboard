@@ -52,8 +52,8 @@ comment        := ('//',tonewline,newline*) / ('/*',-'-'*,'*/')
 ######################### end header / start body stuff ###################
 
 
-
 ########################## end body stuff #################################
+
 whitespace     := (newline / white)*
 white          := ' ' / '\t' / '\v'
 var_name       := [a-zA-Z], [a-zA-Z0-9_]*
@@ -74,6 +74,88 @@ var_name       := [a-zA-Z], [a-zA-Z0-9_]*
 var_comment    := tonewline
 
 comment        := ('//',tonewline,newline*) / ('/*',-'*/'*,'*/')
+whitespace     := (newline / white)*
+white          := ' ' / '\t' / '\v'
+tonewline      := -(newline)*
+newline        := '\n'/'\r'
+newlines       := newline+
+'''
+
+bodyDeclartion = r'''
+f_body         := f_name_line,statements
+
+f_name_line    := w,label,(comment / (white*, newline*))
+f_name         := label
+statements     := statement*
+statement      := white*,(  comment                 /
+                            asm_statement,';'       /
+                            label                   /
+                            white+),
+                            w,comment?,(w,newline*)?
+
+label          := var_name,w,':'
+
+asm_statement  := (func_call    /
+                   if_statement / 
+                   branch_statement /
+                   dm_pm_statement  /
+                   alu_op)
+
+func_call      := 'CALL',white+,func_name
+
+func_name      := var_name
+
+alu_op         := (prefunccode    /
+                   preopcode      /
+                   avgcode        /
+                   inopcode       /
+                   constantcode)
+
+dm_pm_statement:= (dm_pm_func,w,'=',w,qreg)/(sreg,w,'=',w,dm_pm_func)
+
+dm_pm_func     := dmORpm,'(',w,constant/(qreg,w,',',w,qreg),w,')'
+dmORpm         := 'DM'/'PM'
+
+branch_statement := ('JUMP',w,var_name) / 'RTS'
+
+if_statement   := 'IF',w,if_clause,w,asm_statement
+#                 if foo assembly_statemenlento
+
+if_clause      := 'EQ' / 'NE' / 'GT' / 'LT' / 'GE' / 'LE' / 'AC' / ('NOT',w,'AC') / 'AV' / ('NOT',w,'AV') / 'MV' / ('NOT',w,'MV') / 'MS' / ('NOT',w,'MS') / 'SV' / ('NOT',w,'SV') / 'SZ' / ('NOT',w,'SZ') / 'TF' / ('NOT',w,'TF')
+
+constantcode   := sreg,w,'=',w,constant
+#                 r0 = CONSTANT
+
+prefunccode    := (sreg,w,'=',w)?,prefuncname,w,'(',w,(qreg,w,(',',w,qreg,w)?)/(constant,w),')'
+#                 [r0 =] PREFUNC( {r1[,r2]}|{CONSTANT} )
+
+preopcode      := sreg,w,'=',w,preopname,w,qreg,w,('BY',w,(qreg / (number,':',number)))?
+#                 r0 = PREOP r1 [BY r2|BY #:#]
+
+inopcode       := sreg,w,'=',w,qreg,w,inopname,w,qreg
+#                 r0 = r1 INOP r2
+
+avgcode        := sreg,w,'=',w,'(',w,qreg,w,'+',w,qreg,w,')',w,'/',w,'2'
+#                 r0 = (r1+r2)/2
+
+preopname      := '-' / 'ABS' / 'PASS' / 'NOT' / 'CLIP' / 'RND' / 'SCALB' / 'MANT' / 'LOGB' / 'FIX' / 'TRUNC' / 'FLOAT' / 'RECIPS' / 'RSQRTS' / 'FEXT'
+prefuncname    := 'COMP'/'COMPU'/'MIN'/'MAX'/'DM'
+inopname       := '+' / '-' / 'COPYSIGN'
+
+sreg           := reg
+qreg           := reg
+
+constant       := ('-')?,[a-zA-Z0-9_]+
+
+reg            := reg_type,reg_number
+reg_type       := 'r' / 'R' / 'f' / 'F' / 'sf' / 'SF' / 'sF' / 'Sf' / 'i' / 'I' / 'm' / 'M' / 'l' / 'L' / 'b' / 'B'
+reg_number      := number
+
+number         := [0-9]+
+
+var_name       := [a-zA-Z], [a-zA-Z0-9_.]*
+comment        := ('//',tonewline,newline*) / ('/*',-'*/'*,'*/')
+w              := whitespace
 whitespace     := (newline / white)*
 white          := ' ' / '\t' / '\v'
 tonewline      := -(newline)*
@@ -119,8 +201,10 @@ def extractVars(bodyStr):
     
 parser = Parser( declaration, "file" )
 varsParser = Parser( varsDeclaration, "statements" )
+bodyParser = Parser(  bodyDeclartion,  "f_body" )
 if __name__ =="__main__":
 
+    bodies = []
 
     if(len(sys.argv) < 2):
         raise 'Usage Error', '\n\nusage: %s file\n\n' % sys.argv[0]
@@ -142,6 +226,26 @@ if __name__ =="__main__":
                parseTree[1])
     treeWalker('modifies_pair_b',lambda a: assertNoInputs(text[a[1]:a[2]]),
                parseTree[1])
+
+    treeWalker('f_body',lambda a: bodies.append(text[a[1]:a[2]]),
+               parseTree[1])
+
+    test = map( lambda x: x.upper(), bodies)
+    
+    for i in test:
+        pprint.pprint(i)
+        bodyParseTree = bodyParser.parse(i)
+        print '\n'
+        pprint.pprint(bodyParseTree)
+        print '\n\n'
+        next_chars = len(i) - bodyParseTree[2]
+        next_chars = min(100,next_chars)
+        print "string length: %s" % len(i)
+        print "parsed to: %s"     % bodyParseTree[2]
+        print "next few chars\n\n %s" % i[bodyParseTree[2]:
+                                          bodyParseTree[2]+next_chars].strip()
+        print '-------------------------------------------------------------'
+
 
     if parseTree[2] != len(text):
         next_chars = len(text) - parseTree[2]
