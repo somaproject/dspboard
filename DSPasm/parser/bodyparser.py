@@ -24,27 +24,29 @@ flotsam        := -(func_h_start)*
 func_h_start   := '/*-'
 func_h_end     := '-'*,'*/'
 
+
 f_pairs        := f_pair*
 f_pair         := f_header,f_body
 f_header       := func_h_start!,'-'*,newline*,f_header_main!,func_h_end!
 f_body         := -(func_h_start)*
 
-f_header_main  := whitespace,func_name!,func_h_body!,func_variables!
+f_header_main  := whitespace,func_name_h!,func_h_body!,func_variables!
 
-func_name      := var_name,':'
+func_name_h    := func_name,(':' / ';')
+func_name      := var_name
 func_h_body    := -(input_pair_h)*
 func_variables := input_pair,output_pair,modifies_pair,whitespace
 
 input_pair     := input_pair_h,input_pair_b
-input_pair_h   := 'inputs:'
+input_pair_h   := 'inputs',(':'/';')
 input_pair_b   := -(output_pair_h)*
 
 output_pair    := output_pair_h,output_pair_b
-output_pair_h  := 'outputs:'
+output_pair_h  := 'outputs',(':' / ';')
 output_pair_b  := -(modifies_pair_h)*
 
 modifies_pair  := modifies_pair_h,modifies_pair_b
-modifies_pair_h:= 'modifies:'
+modifies_pair_h:= 'modifies',(':'/';')
 modifies_pair_b:= -(func_h_end)*
 
 comment        := ('//',tonewline,newline*) / ('/*',-'-'*,'*/')
@@ -62,18 +64,19 @@ newline        := '\n'/'\r'
 newlines       := newline+
 '''
 
+#takes an input/output/modifies pair body
 varsDeclaration = r'''
 statements     := statement*
 statement      := ( (var_list, var_comment?) /
-                     whitespace              /
-                     comment),
+                     comment                 /
+                     whitespace),
                      newline?
 
 var_list       := var_name,(whitespace?,',',whitespace?,var_name)*
 var_name       := [a-zA-Z], [a-zA-Z0-9_]*
 var_comment    := tonewline
 
-comment        := ('//',tonewline,newline*) / ('/*',-'*/'*,'*/')
+comment        := ('//',tonewline) / ('/*',-'*/'*,'*/')
 whitespace     := (newline / white)*
 white          := ' ' / '\t' / '\v'
 tonewline      := -(newline)*
@@ -120,7 +123,7 @@ bit_keyword    := 'SET' / 'CLR' / 'TGL' / 'TST' / 'XOR'
 
 dm_pm_statement:= (dm_pm_func,w,'=',w,qreg)/(sreg,w,'=',w,dm_pm_func)/(dm_pm_func,w,'=',w,constant)
 
-dm_pm_func     := dmORpm,'(',w,(constant,((w,',',w,qreg)/(w,'+',w,integer))?)/(qreg,w,',',w,qreg),w,')'
+dm_pm_func     := dmORpm,'(',w,(qreg,w,',',w,qreg)/(constant,((w,',',w,qreg)/(w,'+',w,integer))?),w,')'
 dmORpm         := 'DM'/'PM'
 
 branch_statement := ('JUMP',w,var_name) / 'RTS'
@@ -192,6 +195,23 @@ def treeWalker(key,function,parse_lst):
         if i[0] == key:
             function(i)
 
+def treeWalkerReturn(key,parse_lst):
+    """Return the two indices associated with a key in a tree
+    in the list [start,end]
+
+    False is returned if the key isn't in the parse list
+    """
+    for i in parse_lst:
+        if i[0] == key:
+            return [i[1],i[2]]
+        else:
+            start_end = treeWalkerReturn(key,i[3])
+            if start_end:
+                return start_end
+            else:
+                continue
+    return False
+
 def assertNoEndComment(a):
     if '-*/' in a:
         raise "Parse End Comment Error","No end comment should be in "+\
@@ -218,13 +238,24 @@ def extractVars(bodyStr):
                lambda a: vars.append(bodyStr[a[1]:a[2]]),
                bodyTree[1])
     return vars    
+
+def varCheck(str):
+    """Check that str is a valid register name
+
+    True if a valid name, else false
+    """
+    j = str.upper()
+    prefix = ['R','F','SF','I','M','L','B','USTAT']
+    flag = True
+    flag = flag and reduce( lambda a,b: a or j.startswith(b),
+                            prefix,
+                            False)
+    return flag
     
 parser = Parser( declaration, "file" )
-varsParser = Parser( varsDeclaration, "statements" )
+headerVarsParser = Parser( varsDeclaration, "statements" )
 bodyParser = Parser(  bodyDeclaration,  "f_body" )
 if __name__ =="__main__":
-
-    bodies = []
 
     if(len(sys.argv) < 2):
         raise 'Usage Error', '\n\nusage: %s file\n\n' % sys.argv[0]
@@ -247,30 +278,165 @@ if __name__ =="__main__":
     treeWalker('modifies_pair_b',lambda a: assertNoInputs(text[a[1]:a[2]]),
                parseTree[1])
 
-    treeWalker('f_body',lambda a: bodies.append(text[a[1]:a[2]]),
+
+    #f_pairs contains the sub_trees for all the function pairs
+    f_pairs = []
+    treeWalker('f_pair',
+               lambda a: f_pairs.append(a),
                parseTree[1])
 
-    test = map( lambda x: x.upper().strip(), bodies)
+#    def print_foo(x):
+#        print x
+
+#    def print_qreg(x,i):
+#        if i.strip() != '':
+#            print 'statement:\n',i[x[1]:x[2]]
+#            treeWalker('sreg',
+#                       lambda a: print_foo('\nsreg:\n'+i[a[1]:a[2]]),
+#                       x[3])
+#            treeWalker('qreg',
+#                       lambda a: print_foo('\nqreg:\n'+i[a[1]:a[2]]),
+#                       x[3])
+#            print '\n\n'
+
+    fd_lst = []
     
-    for i in test:
-        bodyParseTree = bodyParser.parse(i)
-        next_chars = len(i) - bodyParseTree[2]
+    for i in f_pairs:
+        fd = dict({})
+
+        # extract out the various important parts
+        # of the function information
+        # start_end contains the start and end indices of said parts
+        #print i[3]
+
+        start_end = treeWalkerReturn('f_body',i[3])
+        f_body = text[start_end[0]:start_end[1]].upper().strip()
+        
+        start_end = treeWalkerReturn('func_name',i[3])
+        f_name = text[start_end[0]:start_end[1]]
+
+        start_end = treeWalkerReturn('input_pair_b',i[3])
+        ipb = text[start_end[0]:start_end[1]]
+
+        start_end = treeWalkerReturn('output_pair_b',i[3])
+        opb = text[start_end[0]:start_end[1]]
+
+        start_end = treeWalkerReturn('modifies_pair_b',i[3])
+        mpb = text[start_end[0]:start_end[1]]
+
+        fd['name'] = f_name
+        fd['body_txt'] = f_body
+        fd['input_txt'] = ipb
+        fd['output_txt'] = opb
+        fd['modifies_txt'] = mpb
+
+        fd_lst.append(dict(fd))
+
+    # fd_lst should now be a list of all the different
+    # function dictionaries
+
+    for i in fd_lst:
+
+        #query, set, input, output, modifies register lists
+        qreg = []
+        sreg = []
+        ireg = []
+        oreg = []
+        mreg = []
+
+        #setup body, header trees
+        #walk them to find appropriate register lists
+        bodyParseTree = bodyParser.parse(i['body_txt'])
+        iParseTree = headerVarsParser.parse(i['input_txt'])
+        oParseTree = headerVarsParser.parse(i['output_txt'])
+        mParseTree = headerVarsParser.parse(i['modifies_txt'])
+
+        #check that the body was totally parsed
+        #else spit out some information
+        next_chars = len(i['body_txt']) - bodyParseTree[2]
         next_chars = min(100,next_chars)
-#        if True:
+        #        if True:
         if next_chars > 0:
-#            pprint.pprint(i)
-            print '\n'
-#            pprint.pprint(bodyParseTree)
-            print '\n\n'
-            print "string length: %s" % len(i)
-            print "parsed to: %s"     % bodyParseTree[2]
+            print 'Problem parsing body:\n'
+            print "body string length: %s" % len(i['body_txt'])
+            print "body parsed to: %s"     % bodyParseTree[2]
             print "next few chars:\n"
+            pprint.pprint(i['body_txt'][bodyParseTree[2]:
+                                         bodyParseTree[2]+next_chars])
+            print '-----------------------------------------------------------'
 
-            pprint.pprint(i[bodyParseTree[2]:
-                            bodyParseTree[2]+next_chars])
-            print '-------------------------------------------------------------'
+
+        print
+        print
+        print 'f_name',i['name']
+
+        #keep going, attempting to find q/s/i/o/mreg
+        treeWalker('qreg',
+                   lambda a: qreg.append(i['body_txt'][a[1]:a[2]]),
+                   bodyParseTree[1])
+
+        print 'qreg',qreg
+
+        treeWalker('sreg',
+                   lambda a: sreg.append(i['body_txt'][a[1]:a[2]]),
+                   bodyParseTree[1])
+
+        print 'sreg',sreg
+
+        treeWalker('var_name',
+                   lambda a: ireg.append(i['input_txt'][a[1]:a[2]]),
+                   iParseTree[1])
+
+        treeWalker('var_name',
+                   lambda a: oreg.append(i['output_txt'][a[1]:a[2]]),
+                   oParseTree[1])
+
+        treeWalker('var_name',
+                   lambda a: mreg.append(i['modifies_txt'][a[1]:a[2]]),
+                   mParseTree[1])
+
+        #check all the variables in ireg, oreg, mreg to make sure
+        #they're all registers
+        for j in ireg:
+            if not varCheck(j):
+                print ('In func %s, input register list has ' % i['name'])+\
+                      'a non-standard register name: %s' % j
+
+        for j in oreg:
+            if not varCheck(j):
+                print ('In func %s, output register list has ' % i['name'])+\
+                      'a non-standard register name: %s' % j
+
+        for j in mreg:
+            if not varCheck(j):
+                print ('In func %s, modifies register list has ' % i['name'])+\
+                      'a non-standard register name: %s' % j
+
+        print 'ireg',ireg
+        print 'oreg',oreg
+        print 'mreg',mreg
+        print
+        print
 
 
+        for j in ireg:
+            j = j.upper()
+            prefix = ['R','F','SF','I','M','L','B','USTAT']
+            noflag = True
+            noflag = noflag and reduce( lambda a,b: a or j.startswith(b),
+                                        prefix,
+                                        False)
+            if not noflag:
+                print ('In func %s, input register list has ' % i['name'])+\
+                      'a non-standard register name: %s' % j
+
+
+        i['qreg'] = qreg
+        i['sreg'] = sreg
+        i['ireg'] = ireg
+        i['oreg'] = oreg
+        i['mreg'] = mreg
+            
     if parseTree[2] != len(text):
         next_chars = len(text) - parseTree[2]
         next_chars = min(100,next_chars)
