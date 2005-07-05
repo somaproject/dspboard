@@ -239,31 +239,31 @@ def extractVars(bodyStr):
                bodyTree[1])
     return vars    
 
-def varCheck(str):
-    """Check that str is a valid register name
+def varCheck(strg):
+    """Check that strg is a valid register name
 
     True if a valid name, else false
     """
-    j = str.upper()
+    j = strg.upper()
     prefix = ['R','F','SF','I','M','L','B','USTAT']
+    postfix = []
+    for i in range(32):
+        postfix.append(str(i))
     flag = True
     flag = flag and reduce( lambda a,b: a or j.startswith(b),
                             prefix,
                             False)
+    flag = flag and reduce( lambda a,b: a or j.endswith(b),
+                            postfix,
+                            False )
     return flag
     
 parser = Parser( declaration, "file" )
 headerVarsParser = Parser( varsDeclaration, "statements" )
 bodyParser = Parser(  bodyDeclaration,  "f_body" )
-if __name__ =="__main__":
 
-    if(len(sys.argv) < 2):
-        raise 'Usage Error', '\n\nusage: %s file\n\n' % sys.argv[0]
-
-    f = open(sys.argv[1])
-    text = f.read()
-    f.close()
-
+def completeParse(text):
+    """Completely parses text, printing out results"""
     parseTree = parser.parse( text )
     #parse tree is of the form:
     # (start_index,[sub_tree,sub_tree,sub_tree,...],end_index)
@@ -271,6 +271,7 @@ if __name__ =="__main__":
 
     # do some basic tests on the inputs/outputs/modifies strings
     # to make sure they don't have stupid values
+    # will stop if tests fail
     treeWalker('input_pair_b',lambda a: assertNoEndComment(text[a[1]:a[2]]),
                parseTree[1])
     treeWalker('output_pair_b',lambda a: assertNoEndComment(text[a[1]:a[2]]),
@@ -299,15 +300,16 @@ if __name__ =="__main__":
 #                       x[3])
 #            print '\n\n'
 
+    # the list of function dictionaries
     fd_lst = []
     
     for i in f_pairs:
         fd = dict({})
 
+        # for every function:
         # extract out the various important parts
-        # of the function information
+        # of the function information and add to fd_lst in a new fd
         # start_end contains the start and end indices of said parts
-        #print i[3]
 
         start_end = treeWalkerReturn('f_body',i[3])
         f_body = text[start_end[0]:start_end[1]].upper().strip()
@@ -326,14 +328,16 @@ if __name__ =="__main__":
 
         fd['name'] = f_name
         fd['body_txt'] = f_body
-        fd['input_txt'] = ipb
-        fd['output_txt'] = opb
-        fd['modifies_txt'] = mpb
+        fd['input_txt'] = ipb.upper()
+        fd['output_txt'] = opb.upper()
+        fd['modifies_txt'] = mpb.upper()
 
         fd_lst.append(dict(fd))
 
     # fd_lst should now be a list of all the different
     # function dictionaries
+    # note that we haven't really parsed any of this data, just
+    # added the text to the fd
 
     for i in fd_lst:
 
@@ -344,7 +348,7 @@ if __name__ =="__main__":
         oreg = []
         mreg = []
 
-        #setup body, header trees
+        #setup body, header (input, output, modifies) trees
         #walk them to find appropriate register lists
         bodyParseTree = bodyParser.parse(i['body_txt'])
         iParseTree = headerVarsParser.parse(i['input_txt'])
@@ -366,22 +370,14 @@ if __name__ =="__main__":
             print '-----------------------------------------------------------'
 
 
-        print
-        print
-        print 'f_name',i['name']
-
-        #keep going, attempting to find q/s/i/o/mreg
+        #keep going, find q/s/i/o/mreg
         treeWalker('qreg',
                    lambda a: qreg.append(i['body_txt'][a[1]:a[2]]),
                    bodyParseTree[1])
 
-        print 'qreg',qreg
-
         treeWalker('sreg',
                    lambda a: sreg.append(i['body_txt'][a[1]:a[2]]),
                    bodyParseTree[1])
-
-        print 'sreg',sreg
 
         treeWalker('var_name',
                    lambda a: ireg.append(i['input_txt'][a[1]:a[2]]),
@@ -395,52 +391,129 @@ if __name__ =="__main__":
                    lambda a: mreg.append(i['modifies_txt'][a[1]:a[2]]),
                    mParseTree[1])
 
-        #check all the variables in ireg, oreg, mreg to make sure
-        #they're all registers
-        for j in ireg:
-            if not varCheck(j):
-                print ('In func %s, input register list has ' % i['name'])+\
-                      'a non-standard register name: %s' % j
-
-        for j in oreg:
-            if not varCheck(j):
-                print ('In func %s, output register list has ' % i['name'])+\
-                      'a non-standard register name: %s' % j
-
-        for j in mreg:
-            if not varCheck(j):
-                print ('In func %s, modifies register list has ' % i['name'])+\
-                      'a non-standard register name: %s' % j
-
-        print 'ireg',ireg
-        print 'oreg',oreg
-        print 'mreg',mreg
-        print
-        print
-
-
-        for j in ireg:
-            j = j.upper()
-            prefix = ['R','F','SF','I','M','L','B','USTAT']
-            noflag = True
-            noflag = noflag and reduce( lambda a,b: a or j.startswith(b),
-                                        prefix,
-                                        False)
-            if not noflag:
-                print ('In func %s, input register list has ' % i['name'])+\
-                      'a non-standard register name: %s' % j
-
-
         i['qreg'] = qreg
         i['sreg'] = sreg
         i['ireg'] = ireg
         i['oreg'] = oreg
         i['mreg'] = mreg
+
+    # at this point the function dictionaries should have all
+    # q/s/i/o/mreg listed with them
+    # walk through these values checking for descrepancy next
+
+    for i in fd_lst:
+        #pprint.pprint(i)
+
+        # function [error] message to print out
+        fmsg     = ''
+        ferrmsg  = ''
+
+        # missing in/mod vars with appropriate printouts
+        minvars  = []
+        mmodvars = []
+        minstr = ''
+        mmodstr = ''
+
+        # unusedin/out/mod vars
+        unusedin  = []
+        unusedout = []
+        unusedmod = []
+
+        unusedstr = ''
+        
+        #check all the variables in ireg, oreg, mreg to make sure
+        #they're all registers
+        for j in i['ireg']:
+            if not varCheck(j):
+                ferrmsg += 'input register list has '+\
+                       ('a non-standard register name: %s\n' % j)
+            else:
+                #check that input is really used
+                if not (j in i['qreg']):
+                    unusedin.append(j)
+
+        for j in i['oreg']:
+            if not varCheck(j):
+                ferrmsg += 'output register list has '+\
+                       ('a non-standard register name: %s\n' % j)
+            else:
+                if not (j in i['sreg']):
+                    unusedout.append(j)
+
+        for j in i['mreg']:
+            if not varCheck(j):
+                ferrmsg += 'modifies register list has '+\
+                       ('a non-standard register name: %s\n' % j)
+            else:
+                if not (j in i['sreg']):
+                    unusedmod.append(j)
+
+        for j in i['qreg']:
+            #check that the register is either in outputs, inputs or modifies
+            if not ((j in i['ireg']) or (j in i['oreg']) or (j in i['mreg'])
+                    or (j in mmodvars) or (j in minvars)):
+                #check if the register is ever set
+                if j in i['sreg']:
+                    mmodvars.append(j)
+                else:
+                    minvars.append(j)
+
+        if mmodvars != []:
+            mmodstr = "Need to add to modifies:\n"+\
+                      reduce(lambda a,b: a+', '+b,
+                             mmodvars[1:],
+                             mmodvars[0])+'\n'
             
+        if minvars != []:
+            minstr = "Need to add to inputs:\n"+\
+                     reduce(lambda a,b: a+', '+b,
+                            minvars[1:],
+                            minvars[0])+'\n'
+
+        if unusedmod != []:
+            unusedstr += 'Some modified variables are unused:\n' +\
+                         reduce(lambda a,b: a+', '+b,
+                                unusedmod[1:],
+                                unusedmod[0])+'\n'
+
+        if unusedin != []:
+            unusedstr += 'Some input variables are unused:\n' +\
+                         reduce(lambda a,b: a+', '+b,
+                                unusedin[1:],
+                                unusedin[0])+'\n'
+
+        if unusedout != []:
+            unusedstr += 'Some output variables are unused:\n' +\
+                         reduce(lambda a,b: a+', '+b,
+                                unusedout[1:],
+                                unusedout[0])+'\n'
+            
+        fmsg = ferrmsg + mmodstr + minstr + unusedstr
+                    
+        if fmsg == '':
+            fmsg = 'PASSED'
+        else:
+            print '#######Information for function %s#######' % i['name']
+            print fmsg
+           
     if parseTree[2] != len(text):
+        print '--------- Parser Error ---------------'
         next_chars = len(text) - parseTree[2]
         next_chars = min(100,next_chars)
         print "didn't parse beyond %s character: next few chars\n\n%s"%\
               (parseTree[2],text[parseTree[2]:parseTree[2]+next_chars])
+    
+
+if __name__ =="__main__":
+
+    if(len(sys.argv) < 2):
+        raise 'Usage Error', '\n\nusage: %s file [file]...\n\n' % sys.argv[0]
+
+    for i in sys.argv[1:]:
+        f = open(i)
+        text = f.read()
+        completeParse( text )
+        f.close()
+
 
     
