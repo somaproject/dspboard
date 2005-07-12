@@ -1,8 +1,8 @@
-<?xml version="1.0"?>
-<visualdsp-project schema="16" name="DSPboard" file="C:\desktop\DSPboard\DSPasm\DSPboard.dpj" generated="Sun Jun 13 14:43:50 2004" expanded="yes">
+<?xml version="1.0" encoding='ISO-8859-1'?>
+<visualdsp-project schema="16" name="DSPboard" file="DSPboard.dpj" generated="Wed Jun 22 21:22:31 2005" expanded="yes">
 	<!-- Project build target -->
 	<target>
-		<processor>ADSP-21262</processor>
+		<processor revision="Automatic">ADSP-21262</processor>
 		<extension>.dxe</extension>
 		<type>DSP executable file</type>
 	</target>
@@ -11,10 +11,8 @@
 		<configuration name="Debug">
 			<intermediate-dir>.\Debug</intermediate-dir>
 			<output-dir>.\Debug</output-dir>
+			<changed-property-page-flags>0</changed-property-page-flags>
 			<tools>
-				<tool type="VCSE">
-					<option><![CDATA[|-Version>3.5|-asm>1]]></option>
-				</tool>
 				<tool type="Compiler">
 					<option><![CDATA[|-Version>3.5|-O1>0|-Ov>100|-g>1|-double-size-32>1]]></option>
 				</tool>
@@ -41,10 +39,8 @@
 		<configuration name="Release">
 			<intermediate-dir>.\Release</intermediate-dir>
 			<output-dir>.\Release</output-dir>
+			<changed-property-page-flags>0</changed-property-page-flags>
 			<tools>
-				<tool type="VCSE">
-					<option><![CDATA[]]></option>
-				</tool>
 				<tool type="Compiler">
 					<option><![CDATA[|-Version>1.0|1032>STR_CHECKED|1023>STR_CHECKED]]></option>
 				</tool>

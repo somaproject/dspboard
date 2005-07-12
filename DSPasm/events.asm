@@ -1,4 +1,4 @@
-
+sta
 
 #include <def21262.h>
 #include "memory.h"
