@@ -1,13 +1,9 @@
-C: SYSCLK    : |   |   |   |   |   |   |   |   |   |   |   | 
-S: ECE       : L   L   L   H   L   L   L   L   L   L   L   L
-S: EEVENT    : L   L   L   H   L   L   L   L   L   H   L   L
-B: ECNTINL   : n+1 n+1 n+1 n+1 n+1 n+1 n+1 n+1 n+1 n+1 n+1 n+1
-B: ECNTOUT   : n   n   n   n   n   n   n   n   n   n   n+1 n+1
-S: ENOUT     : L   L   L   L   H   H   H   H   H   H   L  L 
-S: WEN       : L   L   L   H   H   H   H   H   H   H   L  L 
-B: WCNT      : 0   0   0   0   1   2   3   4   5   6   0  0
-S: EEND      : L   L   L   L   L   L   L   L   L   H   L  L
-B: EDATA     : 0   0   0   0   D0  D1  D2  D3  D4  D5  0  0 
-BC:          : 2   2   2   2   1    1  1   1   1   1   2  2
-B: EADDR     : 0   0   0   0   A0  A1  A2  A3  A4  A5  0  0
-BC:          : 2   2   2   2   1   1    1   1   1   1  2  2
+C: CLK       :  | |  |  |  |  |  |  |  |  |  |  |  |  |  |  
+S: WE        :  L H  L  L  H  L  L  H  L  L  H  L  L  H  L
+S: WEL       :  L L  H  L  L  H  L  L  H  L  L  H  L  L  H
+S: WELL      :  H L  L  H  L  L  H  L  L  H  L  L  H  L  L
+B: ADDR      :  0 0  0  0  1  1  1  2  2  2  3  3  3  4  4
+B: ADDRL     :  0 0  0  0  0  1  1  1  2  2  2  3  3  3  4 
+S: AEN       :  H H  H  H  H  H  H  H  H  H  H  L  L  L  L 
+S: WEA       :  L L  H  H  L  H  H  L  H  H  L  H  H  L  H
+B: ADDRA     :  1 0  0  2  0  4  6  4  8  10 8  1  1  1  3

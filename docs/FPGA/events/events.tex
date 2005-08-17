@@ -54,15 +54,37 @@ low byte of \bus{DIA}{15:0}. An event write is considered
 complete when the address 0x9 is written, thus incrementing
 \bus{ECNTIN}{5:0}.
         
-
-\begin{figure}[h!]
-\includegraphics[scale=0.8]{write.timing.pdf}
-\end{figure}                  
+\begin{timing}{event}
+C: SYSCLK :  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+S: EEVENT :  L  H  L  L  L  L  L  H  L  L  L  L  L  H  L  L  L  L  L
+B: EADDR  :  A4 A5 A0 A1 A2 A3 A4 A5 A0 A1 A2 A3 A4 A5 A0 A1 A2 A3 A4
+BC:       :  0  0  1  1  1  1  1  1  2  2  2  2  2  2  3  3  3  3  3 
+B: EDATA  :  D4 D5 D0 D1 D2 D3 D4 D5 D0 D1 D2 D3 D4 D5 D0 D1 D2 D3 D4
+BC:       :  0  0  1  1  1  1  1  1  2  2  2  2  2  2  3  3  3  3  3 
+S: EEVENTL:  L  L  H  L  L  L  L  L  H  L  L  L  L  L  H  L  L  L  L
+B: CNT    :  3  4  5  0  1  2  3  4  5  0  1  2  3  4  5  0  1  2  3
+B: DATAL  :  Z  D4 D5 D0 D1 D2 D3 D4 D5 D0 D1 D2 D3 D4 D5 D0 D1 D2 D3
+BC:       :  0  0  0  1  1  1  1  1  1  2  2  2  2  2  2  3  3  3  3
+B: D0     :  D0 D0 D0 D0 D0 D0 D0 D0 D0 D0 D0 D0 D0 D0 D0 D0 D0 D0 D0
+BC:       :  0  0  0  0  1  1  1  1  1  1  2  2  2  2  2  2  3  3  3
+B: D5     :  D5 D5 D5 D5 D5 D5 D5 D5 D5 D5 D5 D5 D5 D5 D5 D5 D5 D5 D5
+BC:       :  0  0  0  0  0  0  0  0  0  1  1  1  1  1  1  2  2  2  2
+S:ADDRSEL :  L  L  L  L  L  H  L  L  L  L  L  L  L  L  L  L  L  L  L 
+S: SMINE  :  L  L  L  L  L  L  H  H  H  H  L  L  L  L  L  L  L  L  L 
+S: LMINE  :  L  L  L  L  L  L  L  L  L  H  L  L  L  L  L  L  L  L  L
+B:   D0L  :  D0 D0 D0 D0 D0 D0 D0 D0 D0 D0 D0 D0 D0 D0 D0 D0 D0 D0 D0
+BC:       :  0  0  0  0  0  0  0  0  0  0  1  1  1  1  1  1  2  2  2
+B: D5L    :  D5 D5 D5 D5 D5 D5 D5 D5 D5 D5 D5 D5 D5 D5 D5 D5 D5 D5 D5
+BC:       :  0  0  0  0  0  0  0  0  0  0  1  1  1  1  1  1  2  2  2
+S: EVENTL8:  L  L  L  H  L  L  L  L  L  H  L  L  L  L  L  H  L  L  L
+S: EVENT  :  L  L  L  L  H  L  L  L  L  L  H  L  L  L  L  L  H  L  L  
+S: MINE   :  L  L  L  L  L  L  L  L  L  L  H  H  H  H  H  H  L  L  L
+\end{timing}
                 
 \subsubsection{Reading an event from the output buffer}
 The output side of the buffer is in the \signal{SYSCLK}
 domain, and uses the 32-bit wide interface of the BlockSelect+ RAM to
-simultaneously read out the \signal{DATA} and
+simultaneously read out the \signal{DATA and
 \signal{ADDR} portions of the event. The 3-bit
 \bus{WCNT}{2:0} counter sequences through the individual
 Event words, and the 6-bit \bus{ECNTOUT}{5:0} counter
@@ -75,9 +97,19 @@ as soon as possible following the \signal{SYSCLK} edge that
 registers \signal{ECE}. Thus, when not transmitting an Event,
 the counters point to the first word of the next event in the buffer.
 
-\begin{figure}[h!]
-\includegraphics[scale=0.8]{output.timing.pdf}
-\end{figure}                  
+
+
+\begin{timing}{output}
+C: CLK       :  | |  |  |  |  |  |  |  |  |  |  |  |  |  |  
+S: WE        :  L H  L  L  H  L  L  H  L  L  H  L  L  H  L
+S: WEL       :  L L  H  L  L  H  L  L  H  L  L  H  L  L  H
+S: WELL      :  H L  L  H  L  L  H  L  L  H  L  L  H  L  L
+B: ADDR      :  0 0  0  0  1  1  1  2  2  2  3  3  3  4  4
+B: ADDRL     :  0 0  0  0  0  1  1  1  2  2  2  3  3  3  4 
+S: AEN       :  H H  H  H  H  H  H  H  H  H  H  L  L  L  L 
+S: WEA       :  L L  H  H  L  H  H  L  H  H  L  H  H  L  H
+B: ADDRA     :  1 0  0  2  0  4  6  4  8  10 8  1  1  1  3
+\end{timing}
 
 An example event output can be seen in . \bus{ECNTINL}{5:0}
 is not equal to \signal{ECNTOUT}, indicating the presence of a
@@ -205,3 +237,15 @@ completion of a read and thus incrementing
 \subsection{Present concerns}
      1. For the event input stage, what kind of latch is SMINE? how is it possible for things to work when the MYADDR[5:3]=111, i.e.  in the last byte of the address?
 
+
+\begin{timing}{write}
+C: CLK       :  | |  |  |  |  |  |  |  |  |  |  |  |  |  |  
+S: WE        :  L H  L  L  H  L  L  H  L  L  H  L  L  H  L
+S: WEL       :  L L  H  L  L  H  L  L  H  L  L  H  L  L  H
+S: WELL      :  H L  L  H  L  L  H  L  L  H  L  L  H  L  L
+B: ADDR      :  0 0  0  0  1  1  1  2  2  2  3  3  3  4  4
+B: ADDRL     :  0 0  0  0  0  1  1  1  2  2  2  3  3  3  4 
+S: AEN       :  H H  H  H  H  H  H  H  H  H  H  L  L  L  L 
+S: WEA       :  L L  H  H  L  H  H  L  H  H  L  H  H  L  H
+B: ADDRA     :  1 0  0  2  0  4  6  4  8  10 8  1  1  1  3
+\end{timing}
