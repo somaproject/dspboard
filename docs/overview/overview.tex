@@ -40,7 +40,7 @@ follows:
 
 \begin{figure}
 \begin{center}
-\includegraphics[scale=1.0]{board-overview.pdf}
+\includegraphics[scale=1.0]{board-overview.svg}
 \end{center}
 \caption{DSP Board Overview}
 \end{figure}
@@ -62,7 +62,7 @@ the necessary buffering and interface to the Data Bus and Event Bus.
 \subsection{Spike channel Singal Chain}
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[scale=1.0]{spikesignal.pdf}
+\includegraphics[scale=1.0]{spikesignal.svg}
 \end{center}
 \label{SpikeChain}
 \caption{DSP board spike signal chain.}
@@ -82,7 +82,7 @@ Samples are acquired via the optical interface and each tetrode's respective sam
 Spike detection is achieved via simple thresholding; when the signal on a given challen crosses that channel's preset channel, four packets of length \textit{SPIKELEN} are formed (one per channel) with \textit{POSTTRIGLEN} samples after the trigger point (see figure \ref{threshold}). The 4-channel spike packet is then timestamped and sent to the event bus. 
 
 \begin{figure}
-\includegraphics[scale=2.0]{threshold.pdf}
+\includegraphics[scale=2.0]{threshold.svg}
 \caption{Overview of threshold and spike windowing}
 \label{threshold}
 \end{figure}
@@ -90,7 +90,7 @@ Spike detection is achieved via simple thresholding; when the signal on a given 
 \subsection{Continuous channel operation}
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[scale=1.0]{contsignal.pdf}
+\includegraphics[scale=1.0]{contsignal.svg}
 \end{center}
 \label{ConChain}
 \caption{DSP board continuous signal chain.}

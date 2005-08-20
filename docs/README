@@ -40,7 +40,7 @@ Okay, new plan:
       - booting
    e. timing
 
-2. Event and data interface for normal operation [eventio]
+2. Event and data interface for normal operation [generalIO]
    Four segments: 
    1. acqboard control
    2. filter settings

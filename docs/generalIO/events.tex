@@ -181,10 +181,12 @@ Number of continuous samples per frame.
 
 
 \section{Data Bus Packets}
-Packets on the data bus use a 16-bit word. All voltage data is transmitted in IEEE 32-bit single-precision float. 
+Packets on the data bus use a 16-bit word. All voltage data is transmitted in IEEE 32-bit single-precision floating point. 
 
 
 \subsection{Spike Packets}
+\includegraphics[width=2in]{spike.svg}
+
 Spike events:
 word 0: 0x01 to indicate spike event
 word 1: source (DSP number)
@@ -204,6 +206,7 @@ words 6: LSBs of first sample
 word 7 : MSBs of first sample
 
 \subsection{Continuous Packets}
+\includegraphics[width=1in]{cont.svg}
 word 0: 0x02 to indicate a continuous event
 word 1: length of this packet in 16-bit words
 word 2: 

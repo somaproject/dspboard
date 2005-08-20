@@ -29,7 +29,7 @@ the BlockSelect+ RAM in the Spartan-3 to enable simultaneous read out
 of the 16-bit data and 8 bit address during the event cycle, while
 providing an easy 16-bit interface to the Parallel Port for the DSP.
 \begin{figure}[h!]
-\includegraphics[scale=0.8]{output.pdf}
+\includegraphics[scale=0.8]{output.svg}
 \end{figure}
 
 
@@ -84,7 +84,7 @@ S: MINE   :  L  L  L  L  L  L  L  L  L  L  H  H  H  H  H  H  L  L  L
 \subsubsection{Reading an event from the output buffer}
 The output side of the buffer is in the \signal{SYSCLK}
 domain, and uses the 32-bit wide interface of the BlockSelect+ RAM to
-simultaneously read out the \signal{DATA and
+simultaneously read out the \signal{DATA} and
 \signal{ADDR} portions of the event. The 3-bit
 \bus{WCNT}{2:0} counter sequences through the individual
 Event words, and the 6-bit \bus{ECNTOUT}{5:0} counter
@@ -142,7 +142,7 @@ set.
 
 
 \begin{figure}[h!]
-\includegraphics[scale=0.8]{reader.pdf}
+\includegraphics[scale=0.8]{reader.svg}
 \end{figure}
       
 This is a challenge because we need to be able to read an event and
@@ -170,7 +170,7 @@ eventually set.
 \subsection{Event Inputs} 
 
 \begin{figure}[h!]
-\includegraphics[scale=0.8]{input.pdf}
+\includegraphics[scale=0.8]{input.svg}
 \end{figure}
 
 The transfer of the Events from the Event Bus to the DSP is relatively
