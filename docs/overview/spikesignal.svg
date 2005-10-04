@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 <svg
-   xmlns:xml="http://www.w3.org/XML/1998/namespace"
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://web.resource.org/cc/"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -13,7 +12,7 @@
    height="792.00000pt"
    id="svg2"
    sodipodi:version="0.32"
-   inkscape:version="0.41+cvs"
+   inkscape:version="0.42.2"
    sodipodi:docbase="/home/jonas/soma/DSPboard/docs/overview"
    sodipodi:docname="spikesignal.svg">
   <defs
@@ -40,9 +39,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.1154466"
-     inkscape:cx="498.82343"
-     inkscape:cy="646.01586"
+     inkscape:zoom="4.4617864"
+     inkscape:cx="206.74028"
+     inkscape:cy="746.88107"
      inkscape:document-units="pt"
      inkscape:current-layer="layer1"
      gridspacingy="2.5000000pt"
@@ -62,41 +61,29 @@
      inkscape:grid-bbox="false" />
   <metadata
      id="metadata4">
-    <rdf:RDF
-       id="RDF5">
+    <rdf:RDF>
       <cc:Work
-         rdf:about=""
-         id="Work6">
-        <dc:format
-           id="format7">image/svg+xml</dc:format>
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
         <dc:type
-           id="type9"
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
         <cc:license
-           id="license1288"
            rdf:resource="http://creativecommons.org/licenses/GPL/2.0/" />
       </cc:Work>
       <cc:License
-         rdf:about="http://creativecommons.org/licenses/GPL/2.0/"
-         id="License1290">
+         rdf:about="http://creativecommons.org/licenses/GPL/2.0/">
         <cc:permits
-           rdf:resource="http://web.resource.org/cc/Reproduction"
-           id="permits1292" />
+           rdf:resource="http://web.resource.org/cc/Reproduction" />
         <cc:permits
-           rdf:resource="http://web.resource.org/cc/Distribution"
-           id="permits1294" />
+           rdf:resource="http://web.resource.org/cc/Distribution" />
         <cc:requires
-           rdf:resource="http://web.resource.org/cc/Notice"
-           id="requires1296" />
+           rdf:resource="http://web.resource.org/cc/Notice" />
         <cc:permits
-           rdf:resource="http://web.resource.org/cc/DerivativeWorks"
-           id="permits1298" />
+           rdf:resource="http://web.resource.org/cc/DerivativeWorks" />
         <cc:requires
-           rdf:resource="http://web.resource.org/cc/ShareAlike"
-           id="requires1300" />
+           rdf:resource="http://web.resource.org/cc/ShareAlike" />
         <cc:requires
-           rdf:resource="http://web.resource.org/cc/SourceCode"
-           id="requires1302" />
+           rdf:resource="http://web.resource.org/cc/SourceCode" />
       </cc:License>
     </rdf:RDF>
   </metadata>
@@ -139,13 +126,12 @@
        d="M 34.375009,246.25000 L 65.625000,246.25000"
        style="opacity:1.0000000;color:#000000;fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#00ff00;stroke-width:1.2499998;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:url(#TriangleOutM);stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000;visibility:visible" />
     <rect
-       y="221.25000"
-       x="78.124985"
+       y="221.24997"
+       x="78.125000"
        height="50.000034"
-       width="243.74989"
+       width="268.68964"
        id="rect4330"
-       style="opacity:0.99000001;fill:#e6ffe6;fill-opacity:1.0000000;stroke:#000000;stroke-width:1.1768358;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000"
-       transform="matrix(1.128206,0.000000,0.000000,1.000000,-10.01607,0.000000)" />
+       style="opacity:0.99000001;fill:#e6ffe6;fill-opacity:1.0000000;stroke:#000000;stroke-width:1.2500000;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000" />
     <g
        id="g4334"
        transform="matrix(0.625000,0.000000,0.000000,0.625000,112.5000,127.5000)">
@@ -348,12 +334,11 @@
        style="opacity:1.0000000;color:#000000;fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#0000ff;stroke-width:1.2500000;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:url(#TriangleOutM);stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000;visibility:visible" />
     <rect
        y="211.87497"
-       x="68.749985"
+       x="68.825264"
        height="50.000034"
-       width="243.74989"
+       width="274.92477"
        id="rect4242"
-       style="opacity:0.99000001;fill:#ffe6e6;fill-opacity:1.0000000;stroke:#000000;stroke-width:1.1768358;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000"
-       transform="matrix(1.128206,0.000000,0.000000,1.000000,-8.814139,0.000000)" />
+       style="opacity:0.99000001;fill:#ffe6e6;fill-opacity:1.0000000;stroke:#000000;stroke-width:1.2500000;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000" />
     <g
        id="g4246"
        transform="matrix(0.625000,0.000000,0.000000,0.625000,103.1250,118.1250)">
@@ -555,13 +540,12 @@
        d="M 53.125000,236.87498 L 75.000000,236.87498"
        style="opacity:1.0000000;color:#000000;fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#0000ff;stroke-width:1.2500000;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:url(#TriangleOutM);stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000;visibility:visible" />
     <rect
-       y="202.49997"
-       x="59.374981"
+       y="202.50000"
+       x="59.375000"
        height="50.000034"
-       width="243.74989"
+       width="274.92477"
        id="rect4154"
-       style="opacity:0.99000001;fill:#ffffe6;fill-opacity:1.0000000;stroke:#000000;stroke-width:1.1768358;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000"
-       transform="matrix(1.128206,0.000000,0.000000,1.000000,-7.612211,0.000000)" />
+       style="opacity:0.99000001;fill:#ffffe6;fill-opacity:1.0000000;stroke:#000000;stroke-width:1.2500000;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000" />
     <g
        id="g4158"
        transform="matrix(0.625000,0.000000,0.000000,0.625000,93.75000,108.7500)">
@@ -767,21 +751,19 @@
        d="M 34.374981,227.49998 L 65.624972,227.49998"
        style="visibility:visible;stroke-opacity:1.0000000;stroke-dashoffset:0.0000000;stroke-dasharray:none;stroke-miterlimit:4.0000000;marker-end:url(#TriangleOutM);marker-mid:none;marker-start:none;marker:none;stroke-linejoin:miter;stroke-linecap:butt;stroke-width:1.2499998;stroke:#ffff00;fill-rule:evenodd;fill-opacity:0.75000000;fill:none;color:#000000;opacity:1.0000000" />
     <rect
-       y="193.12498"
-       x="49.999981"
+       y="193.12497"
+       x="50.075340"
        height="50.000034"
-       width="243.74989"
+       width="274.92453"
        id="rect3175"
-       style="opacity:0.99000001;fill:#e6e6ff;fill-opacity:1.0000000;stroke:#000000;stroke-width:1.1768358;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000"
-       transform="matrix(1.128206,0.000000,0.000000,1.000000,-6.410283,0.000000)" />
+       style="opacity:0.99000001;fill:#e6e6ff;fill-opacity:1.0000000;stroke:#000000;stroke-width:1.2500000;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000" />
     <rect
-       y="196.24992"
-       x="125.00000"
-       height="43.749985"
-       width="75.000000"
+       y="199.32698"
+       x="118.59502"
+       height="37.548042"
+       width="56.404949"
        id="rect3155"
-       style="opacity:0.99000001;fill:#ffffff;fill-opacity:1.0000000;stroke:#000000;stroke-width:1.5590208;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000"
-       transform="matrix(0.750001,0.000000,0.000000,0.857145,24.99980,31.16036)" />
+       style="opacity:0.99000001;fill:#ffffff;fill-opacity:1.0000000;stroke:#000000;stroke-width:1.2499998;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000" />
     <g
        id="g2412"
        transform="matrix(0.437500,0.000000,0.000000,0.437500,92.18742,135.6251)">
@@ -998,6 +980,13 @@
          x="23.078125"
          id="tspan2385"
          sodipodi:role="line">x1[n]</tspan></text>
+    <rect
+       y="199.32697"
+       x="259.22006"
+       height="37.548042"
+       width="56.404949"
+       id="rect2285"
+       style="opacity:0.99000001;fill:#ffffff;fill-opacity:1.0000000;stroke:#000000;stroke-width:1.2499998;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000" />
     <path
        sodipodi:nodetypes="cc"
        id="path3189"
@@ -1016,7 +1005,7 @@
        style="font-size:10.043859;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans"
        xml:space="preserve"><tspan
          y="186.87500"
-         x="140.79688"
+         x="140.79687"
          id="tspan3569"
          sodipodi:role="line">Per-Spike Channel Signal Processing</tspan></text>
     <rect
@@ -1299,14 +1288,6 @@
        d="M 371.87500,211.87500 L 371.87500,199.37500"
        style="opacity:1.0000000;color:#000000;fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.2500000;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:url(#TriangleOutM);stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000;visibility:visible"
        transform="translate(34.37500,-1.983643e-4)" />
-    <rect
-       y="196.24992"
-       x="125.00000"
-       height="43.749985"
-       width="75.000000"
-       id="rect1609"
-       style="opacity:0.99000001;fill:#ffffff;fill-opacity:1.0000000;stroke:#000000;stroke-width:1.5590208;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000"
-       transform="matrix(0.750001,0.000000,0.000000,0.857145,165.6249,31.16028)" />
     <g
        id="g1611"
        transform="matrix(0.437500,0.000000,0.000000,0.437500,232.8125,135.6250)">

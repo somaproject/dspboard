@@ -10,7 +10,7 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    sodipodi:docname="spike.svg"
    sodipodi:docbase="/home/jonas/soma/DSPboard/docs/generalIO"
-   inkscape:version="0.42+devel"
+   inkscape:version="0.42.2"
    sodipodi:version="0.32"
    id="svg1996"
    height="792.00000pt"
@@ -19,36 +19,7 @@
    inkscape:export-xdpi="228.09589"
    inkscape:export-ydpi="228.09589">
   <defs
-     id="defs3">
-    <marker
-       inkscape:stockid="TriangleInM"
-       orient="auto"
-       refY="0.0"
-       refX="0.0"
-       id="TriangleInM"
-       style="overflow:visible;">
-      <path
-         sodipodi:nodetypes="cccc"
-         id="path1545"
-         d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z "
-         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
-         transform="scale(-0.4)" />
-    </marker>
-    <marker
-       inkscape:stockid="TriangleOutM"
-       orient="auto"
-       refY="0.0"
-       refX="0.0"
-       id="TriangleOutM"
-       style="overflow:visible;">
-      <path
-         sodipodi:nodetypes="cccc"
-         id="path1698"
-         d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z "
-         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
-         transform="scale(0.4)" />
-    </marker>
-  </defs>
+     id="defs3" />
   <sodipodi:namedview
      inkscape:window-y="0"
      inkscape:window-x="0"
@@ -65,9 +36,9 @@
      showgrid="true"
      inkscape:current-layer="layer1"
      inkscape:document-units="pt"
-     inkscape:cy="732.48857"
-     inkscape:cx="502.93933"
-     inkscape:zoom="1.979899"
+     inkscape:cy="701.88907"
+     inkscape:cx="345.68962"
+     inkscape:zoom="3.9597980"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
      borderopacity="1.0"
@@ -96,6 +67,13 @@
        d="M 406.25,224.375 L 468.75,136.875"
        id="path3070"
        sodipodi:nodetypes="cc" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1.0000000;stroke:#000000;stroke-width:1.2500000;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-opacity:1.0000000"
+       id="rect2135"
+       width="93.750000"
+       height="31.250000"
+       x="312.50000"
+       y="290.00000" />
     <path
        style="opacity:1;color:#000000;fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#737172;stroke-width:1.25;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:2.5 2.5 ;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:block"
        d="M 406.25,224.375 L 468.75,321.25"
@@ -221,13 +199,19 @@
          x="352.32144"
          y="131.96428">TIME[15:0]</tspan></text>
     <rect
-       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1.25;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="fill:#ffffff;fill-opacity:1.0000000;stroke:#000000;stroke-width:1.2500000;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-opacity:1.0000000"
+       id="rect2114"
+       width="93.750000"
+       height="31.250000"
+       x="312.50000"
+       y="224.37500" />
+    <rect
+       style="opacity:1.0000000;fill:#ffffff;fill-opacity:1.0000000;stroke:#000000;stroke-width:1.2500000;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000"
        id="rect2193"
-       width="93.75"
-       height="15.625"
-       x="312.5"
-       y="99.375"
-       transform="translate(0.000000,109.3750)" />
+       width="93.750000"
+       height="15.625000"
+       x="312.50000"
+       y="208.75000" />
     <text
        xml:space="preserve"
        style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
@@ -240,14 +224,6 @@
          id="tspan2197"
          x="352.32144"
          y="131.96428">TIME[31:16]</tspan></text>
-    <rect
-       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.88388348;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect2199"
-       width="93.75"
-       height="15.625"
-       x="312.5"
-       y="99.375"
-       transform="matrix(1.000000,0.000000,0.000000,2.000000,0.000000,25.62500)" />
     <text
        xml:space="preserve"
        style="font-size:6px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
@@ -546,14 +522,6 @@
          id="tspan3045"
          x="354.28571"
          y="208.92857">CHAN 1</tspan></text>
-    <rect
-       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.88388348;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect3050"
-       width="93.75"
-       height="15.625"
-       x="312.5"
-       y="99.375"
-       transform="matrix(1.000000,0.000000,0.000000,2.000000,0.000000,91.25000)" />
     <text
        xml:space="preserve"
        style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
@@ -600,10 +568,10 @@
          sodipodi:role="line"
          id="tspan3064"
          x="320.71429"
-         y="46.42857">Spike Data </tspan><tspan
+         y="46.428570">Spike Data </tspan><tspan
          sodipodi:role="line"
          x="320.71429"
-         y="60.42857"
+         y="60.428570"
          id="tspan3342">Packet</tspan></text>
     <text
        xml:space="preserve"
