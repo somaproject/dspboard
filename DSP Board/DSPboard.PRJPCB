@@ -61,20 +61,6 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 
 [Document4]
-DocumentPath=DSPB.SCHDOC
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=1
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
-ClassGenNCAutoScope=None
-
-[Document5]
 DocumentPath=DSPA.SCHDOC
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -88,7 +74,7 @@ ClassGenCCAutoEnabled=1
 ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 
-[Document6]
+[Document5]
 DocumentPath=main.SCHDOC
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -102,7 +88,7 @@ ClassGenCCAutoEnabled=1
 ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 
-[Document7]
+[Document6]
 DocumentPath=outputs.OUTJOB
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -116,7 +102,7 @@ ClassGenCCAutoEnabled=1
 ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 
-[Document8]
+[Document7]
 DocumentPath=DSPboard.PCBDOC
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -130,7 +116,7 @@ ClassGenCCAutoEnabled=1
 ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 
-[Document9]
+[Document8]
 DocumentPath=parts.SCHLIB
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -144,7 +130,7 @@ ClassGenCCAutoEnabled=1
 ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 
-[Document10]
+[Document9]
 DocumentPath=parts.PCBLIB
 AnnotationEnabled=1
 AnnotateStartValue=1
