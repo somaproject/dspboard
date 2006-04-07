@@ -1,10 +1,10 @@
 [Design]
 Version=1.0
-HierarchyMode=3
+HierarchyMode=0
 ChannelRoomNamingStyle=0
-OutputPath=Outputs
-ChannelDesignatorFormatString=$Component_$RoomName
-ChannelRoomLevelSeperator=_
+OutputPath=
+ChannelDesignatorFormatString=$Component.$RoomName
+ChannelRoomLevelSeperator=.
 OpenOutputs=1
 ArchiveProject=0
 TimestampOutput=0
@@ -19,13 +19,13 @@ DefaultPcbPcad=0
 ReorderDocumentsOnCompile=1
 
 [Document1]
-DocumentPath=FPGA.SCHDOC
+DocumentPath=fiber.SCHDOC
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
 AnnotateSuffix=
 AnnotateScope=All
-AnnotateOrder=3
+AnnotateOrder=1
 DoLibraryUpdate=1
 DoDatabaseUpdate=1
 ClassGenCCAutoEnabled=1
@@ -47,13 +47,13 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 
 [Document3]
-DocumentPath=fiber.SCHDOC
+DocumentPath=FPGAIO.SCHDOC
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
 AnnotateSuffix=
 AnnotateScope=All
-AnnotateOrder=2
+AnnotateOrder=3
 DoLibraryUpdate=1
 DoDatabaseUpdate=1
 ClassGenCCAutoEnabled=1
@@ -61,20 +61,6 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 
 [Document4]
-DocumentPath=DSPA.SCHDOC
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=0
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
-ClassGenNCAutoScope=None
-
-[Document5]
 DocumentPath=main.SCHDOC
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -88,49 +74,21 @@ ClassGenCCAutoEnabled=1
 ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 
+[Document5]
+DocumentPath=pcb.PCBDOC
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+
 [Document6]
-DocumentPath=outputs.OUTJOB
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=-1
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
-ClassGenNCAutoScope=None
-
-[Document7]
-DocumentPath=DSPboard.PCBDOC
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=-1
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
-ClassGenNCAutoScope=None
-
-[Document8]
-DocumentPath=parts.SCHLIB
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=-1
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
-ClassGenNCAutoScope=None
-
-[Document9]
 DocumentPath=parts.PCBLIB
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -144,152 +102,47 @@ ClassGenCCAutoEnabled=1
 ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 
-[GeneratedDocument1]
-DocumentPath=Outputs\DSPboard.GBL
+[Document7]
+DocumentPath=parts.SCHLIB
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
 
-[GeneratedDocument2]
-DocumentPath=Outputs\DSPboard.GBS
+[Document8]
+DocumentPath=DSP.SCHDOC
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=0
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
 
-[GeneratedDocument3]
-DocumentPath=Outputs\DSPboard.GM6
-
-[GeneratedDocument4]
-DocumentPath=Outputs\DSPboard.GP1
-
-[GeneratedDocument5]
-DocumentPath=Outputs\DSPboard.GP2
-
-[GeneratedDocument6]
-DocumentPath=Outputs\DSPboard.GTL
-
-[GeneratedDocument7]
-DocumentPath=Outputs\DSPboard.GTO
-
-[GeneratedDocument8]
-DocumentPath=Outputs\DSPboard.GTS
-
-[GeneratedDocument9]
-DocumentPath=Outputs\DSPboard.TXT
-
-[Generic_SignalIntegritySimulation]
-SignalIntegrityInitialised=-1
-TrackImpedance=100
-TrackLength=20000000
-UseManhattan=-1
-UseSupplyNetsRules=-1
-SupplyNetsCount=0
-UseStimulusRules=-1
-StimKind=1
-StimLevel=0
-StimStartTime=1E-8
-StimStopTime=6E-8
-StimPeriodTime=1E-7
-
-[Generic_SignalIntegrityPanelSetup]
-TerminationName0=No Termination
-TerminationEnabled0=True
-TerminationSweeps0=1
-TerminationName1=Serial Res
-TerminationEnabled1=False
-TerminationSweeps1=10
-TerminationName2=Parallel Res to VCC
-TerminationEnabled2=False
-TerminationSweeps2=10
-TerminationName3=Parallel Res to GND
-TerminationEnabled3=False
-TerminationSweeps3=10
-TerminationName4=Parallel Res to VCC & GND
-TerminationEnabled4=False
-TerminationSweeps4=10
-TerminationName5=Parallel Cap to GND
-TerminationEnabled5=False
-TerminationSweeps5=10
-TerminationName6=Res and Cap to GND
-TerminationEnabled6=False
-TerminationSweeps6=10
-TerminationName7=Parallel Schottky Diodes
-TerminationEnabled7=False
-TerminationSweeps7=10
-TerminationMinR10=0
-TerminationMaxR10=0
-TerminationPrefR10=0
-TerminationMinR20=0
-TerminationMaxR20=0
-TerminationPrefR20=0
-TerminationMinC0=0
-TerminationMaxC0=0
-TerminationPrefC0=0
-TerminationVCC0=0
-TerminationMinR11=25
-TerminationMaxR11=150
-TerminationPrefR11=47
-TerminationMinR21=0
-TerminationMaxR21=0
-TerminationPrefR21=0
-TerminationMinC1=0
-TerminationMaxC1=0
-TerminationPrefC1=0
-TerminationVCC1=0
-TerminationMinR12=50
-TerminationMaxR12=200
-TerminationPrefR12=100
-TerminationMinR22=0
-TerminationMaxR22=0
-TerminationPrefR22=0
-TerminationMinC2=0
-TerminationMaxC2=0
-TerminationPrefC2=0
-TerminationVCC2=5
-TerminationMinR13=0
-TerminationMaxR13=0
-TerminationPrefR13=0
-TerminationMinR23=50
-TerminationMaxR23=200
-TerminationPrefR23=100
-TerminationMinC3=0
-TerminationMaxC3=0
-TerminationPrefC3=0
-TerminationVCC3=0
-TerminationMinR14=50
-TerminationMaxR14=200
-TerminationPrefR14=100
-TerminationMinR24=50
-TerminationMaxR24=200
-TerminationPrefR24=100
-TerminationMinC4=0
-TerminationMaxC4=0
-TerminationPrefC4=0
-TerminationVCC4=5
-TerminationMinR15=0
-TerminationMaxR15=0
-TerminationPrefR15=0
-TerminationMinR25=0
-TerminationMaxR25=0
-TerminationPrefR25=0
-TerminationMinC5=2.35E-11
-TerminationMaxC5=9.4E-11
-TerminationPrefC5=4.7E-11
-TerminationVCC5=0
-TerminationMinR16=0
-TerminationMaxR16=0
-TerminationPrefR16=0
-TerminationMinR26=34
-TerminationMaxR26=136
-TerminationPrefR26=68
-TerminationMinC6=5E-11
-TerminationMaxC6=2E-10
-TerminationPrefC6=1E-10
-TerminationVCC6=0
-TerminationMinR17=0
-TerminationMaxR17=0
-TerminationPrefR17=0
-TerminationMinR27=0
-TerminationMaxR27=0
-TerminationPrefR27=0
-TerminationMinC7=0
-TerminationMaxC7=0
-TerminationPrefC7=0
-TerminationVCC7=5
+[Document9]
+DocumentPath=FPGA.SCHDOC
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=2
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
 
 [OutputGroup1]
 Name=Netlist Outputs
@@ -305,28 +158,28 @@ OutputName2=MultiWire
 OutputDocumentPath2=
 OutputEnabled2=1
 OutputDefault2=0
-OutputType3=PLDNetList
-OutputName3=CUPL PLD
+OutputType3=Pcad
+OutputName3=Pcad for PCB
 OutputDocumentPath3=
 OutputEnabled3=1
 OutputDefault3=0
-OutputType4=ProtelNetlist
-OutputName4=Protel
+OutputType4=PLDNetList
+OutputName4=CUPL Netlist
 OutputDocumentPath4=
 OutputEnabled4=1
 OutputDefault4=0
-OutputType5=VHDL
-OutputName5=VHDL File
+OutputType5=ProtelNetlist
+OutputName5=Protel
 OutputDocumentPath5=
 OutputEnabled5=1
 OutputDefault5=0
-OutputType6=XSpiceNetlist
-OutputName6=XSpice Netlist
+OutputType6=VHDL
+OutputName6=VHDL File
 OutputDocumentPath6=
 OutputEnabled6=1
 OutputDefault6=0
-OutputType7=Pcad
-OutputName7=Pcad for PCB
+OutputType7=XSpiceNetlist
+OutputName7=XSpice Netlist
 OutputDocumentPath7=
 OutputEnabled7=1
 OutputDefault7=0
@@ -344,77 +197,39 @@ OutputDefault1=0
 [OutputGroup3]
 Name=Documentation Outputs
 Description=
-PrinterOptions=Record=PrinterOptions|Copies=1|Duplex=1|TrueTypeOptions=0|Collate=1|PrintWhat=1
+PrinterOptions=Record=PrinterOptions|Copies=1|Duplex=1|TrueTypeOptions=3|Collate=1|PrintWhat=1
 OutputType1=Composite
 OutputName1=Composite Drawing
-OutputDocumentPath1=C:\desktop\DSPboard\DSP Board\DSPboard.PCBDOC
+OutputDocumentPath1=
 OutputEnabled1=1
 OutputDefault1=0
-PageOptions1=Record=PageOptions|CenterHorizontal=True|CenterVertical=True|PrintScale=0.76|XCorrection=1.00|YCorrection=1.00|PrintKind=1|BorderSize=5000000|LeftOffset=0|BottomOffset=0|Orientation=2|PaperLength=1000|PaperWidth=1000|Scale=100|PaperSource=7|PrintQuality=-4|MediaType=1|DitherType=10|PaperKind=Letter|PrintScaleMode=1
-Configuration1_Name1=OutputConfigurationParameter2
-Configuration1_Item1=IncludeBottomLayerComponents=True|IncludeMultiLayerComponents=True|IncludeTopLayerComponents=True|Index=0|Mirror=False|Name=Multilayer Composite Print|Record=PcbPrintOut|ShowHoles=False|SubstituteFonts=False
-Configuration1_Name2=OutputConfigurationParameter3
-Configuration1_Item2=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CText=Full|CTrack=Full|CVia=Full|DDSymbolKind=0|DDSymbolSize=500000|DDSymbolSortKind=0|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|FArc=Full|FFill=Full|FPad=Full|FText=Full|FTrack=Full|FVia=Full|Layer=TopLayer|Polygon=Full|PrintOutIndex=0|Record=PcbPrintLayer
-Configuration1_Name3=OutputConfigurationParameter4
-Configuration1_Item3=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CText=Full|CTrack=Full|CVia=Full|DDSymbolKind=0|DDSymbolSize=500000|DDSymbolSortKind=0|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|FArc=Full|FFill=Full|FPad=Full|FText=Full|FTrack=Full|FVia=Full|Layer=MidLayer1|Polygon=Full|PrintOutIndex=0|Record=PcbPrintLayer
-Configuration1_Name4=OutputConfigurationParameter5
-Configuration1_Item4=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CText=Full|CTrack=Full|CVia=Full|DDSymbolKind=0|DDSymbolSize=500000|DDSymbolSortKind=0|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|FArc=Full|FFill=Full|FPad=Full|FText=Full|FTrack=Full|FVia=Full|Layer=BottomLayer|Polygon=Full|PrintOutIndex=0|Record=PcbPrintLayer
-Configuration1_Name5=OutputConfigurationParameter6
-Configuration1_Item5=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CText=Full|CTrack=Full|CVia=Full|DDSymbolKind=0|DDSymbolSize=500000|DDSymbolSortKind=0|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|FArc=Full|FFill=Full|FPad=Full|FText=Full|FTrack=Full|FVia=Full|Layer=TopOverlay|Polygon=Full|PrintOutIndex=0|Record=PcbPrintLayer
-Configuration1_Name6=OutputConfigurationParameter7
-Configuration1_Item6=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CText=Full|CTrack=Full|CVia=Full|DDSymbolKind=0|DDSymbolSize=500000|DDSymbolSortKind=0|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|FArc=Full|FFill=Full|FPad=Full|FText=Full|FTrack=Full|FVia=Full|Layer=BottomOverlay|Polygon=Full|PrintOutIndex=0|Record=PcbPrintLayer
-Configuration1_Name7=OutputConfigurationParameter8
-Configuration1_Item7=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CText=Full|CTrack=Full|CVia=Full|DDSymbolKind=0|DDSymbolSize=500000|DDSymbolSortKind=0|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|FArc=Full|FFill=Full|FPad=Full|FText=Full|FTrack=Full|FVia=Full|Layer=Mechanical1|Polygon=Full|PrintOutIndex=0|Record=PcbPrintLayer
-Configuration1_Name8=OutputConfigurationParameter9
-Configuration1_Item8=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CText=Full|CTrack=Full|CVia=Full|DDSymbolKind=0|DDSymbolSize=500000|DDSymbolSortKind=0|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|FArc=Full|FFill=Full|FPad=Full|FText=Full|FTrack=Full|FVia=Full|Layer=KeepOutLayer|Polygon=Full|PrintOutIndex=0|Record=PcbPrintLayer
-Configuration1_Name9=OutputConfigurationParameter10
-Configuration1_Item9=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CText=Full|CTrack=Full|CVia=Full|DDSymbolKind=0|DDSymbolSize=500000|DDSymbolSortKind=0|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|FArc=Full|FFill=Full|FPad=Full|FText=Full|FTrack=Full|FVia=Full|Layer=MultiLayer|Polygon=Full|PrintOutIndex=0|Record=PcbPrintLayer
-OutputType2=PCB Print
-OutputName2=PCB Prints
+PageOptions1=Record=PageOptions|CenterHorizontal=True|CenterVertical=True|PrintScale=1.00|XCorrection=1.00|YCorrection=1.00|PrintKind=1|BorderSize=5000000|LeftOffset=0|BottomOffset=0|Orientation=2|PaperLength=1000|PaperWidth=1000|Scale=100|PaperSource=7|PrintQuality=-4|MediaType=1|DitherType=10|PaperKind=A4|PrintScaleMode=1
+OutputType2=Logic Analyser Print
+OutputName2=Logic Analyser Prints
 OutputDocumentPath2=
 OutputEnabled2=1
-OutputDefault2=1
-PageOptions2=Record=PageOptions|CenterHorizontal=True|CenterVertical=True|PrintScale=1.55|XCorrection=1.00|YCorrection=1.00|PrintKind=0|BorderSize=5000000|LeftOffset=0|BottomOffset=0|Orientation=2|PaperLength=1000|PaperWidth=1000|Scale=100|PaperSource=7|PrintQuality=-4|MediaType=1|DitherType=10|PaperKind=A4|PrintScaleMode=1
-Configuration2_Name1=OutputConfigurationParameter2
-Configuration2_Item1=IncludeBottomLayerComponents=True|IncludeMultiLayerComponents=True|IncludeTopLayerComponents=True|Index=0|Mirror=False|Name=Multilayer Composite Print|Record=PcbPrintOut|ShowHoles=True|SubstituteFonts=False
-Configuration2_Name2=OutputConfigurationParameter3
-Configuration2_Item2=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CText=Full|CTrack=Full|CVia=Full|DDSymbolKind=0|DDSymbolSize=500000|DDSymbolSortKind=0|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|FArc=Full|FFill=Full|FPad=Full|FText=Full|FTrack=Full|FVia=Full|Layer=TopLayer|Polygon=Full|PrintOutIndex=0|Record=PcbPrintLayer
-Configuration2_Name3=OutputConfigurationParameter4
-Configuration2_Item3=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CText=Full|CTrack=Full|CVia=Full|DDSymbolKind=0|DDSymbolSize=500000|DDSymbolSortKind=0|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|FArc=Full|FFill=Full|FPad=Full|FText=Full|FTrack=Full|FVia=Full|Layer=MidLayer1|Polygon=Full|PrintOutIndex=0|Record=PcbPrintLayer
-Configuration2_Name4=OutputConfigurationParameter5
-Configuration2_Item4=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CText=Full|CTrack=Full|CVia=Full|DDSymbolKind=0|DDSymbolSize=500000|DDSymbolSortKind=0|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|FArc=Full|FFill=Full|FPad=Full|FText=Full|FTrack=Full|FVia=Full|Layer=BottomLayer|Polygon=Full|PrintOutIndex=0|Record=PcbPrintLayer
-Configuration2_Name5=OutputConfigurationParameter6
-Configuration2_Item5=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CText=Full|CTrack=Full|CVia=Full|DDSymbolKind=0|DDSymbolSize=500000|DDSymbolSortKind=0|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|FArc=Full|FFill=Full|FPad=Full|FText=Full|FTrack=Full|FVia=Full|Layer=TopOverlay|Polygon=Full|PrintOutIndex=0|Record=PcbPrintLayer
-Configuration2_Name6=OutputConfigurationParameter7
-Configuration2_Item6=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CText=Full|CTrack=Full|CVia=Full|DDSymbolKind=0|DDSymbolSize=500000|DDSymbolSortKind=0|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|FArc=Full|FFill=Full|FPad=Full|FText=Full|FTrack=Full|FVia=Full|Layer=BottomOverlay|Polygon=Full|PrintOutIndex=0|Record=PcbPrintLayer
-Configuration2_Name7=OutputConfigurationParameter8
-Configuration2_Item7=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CText=Full|CTrack=Full|CVia=Full|DDSymbolKind=0|DDSymbolSize=500000|DDSymbolSortKind=0|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|FArc=Full|FFill=Full|FPad=Full|FText=Full|FTrack=Full|FVia=Full|Layer=Mechanical1|Polygon=Full|PrintOutIndex=0|Record=PcbPrintLayer
-Configuration2_Name8=OutputConfigurationParameter9
-Configuration2_Item8=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CText=Full|CTrack=Full|CVia=Full|DDSymbolKind=0|DDSymbolSize=500000|DDSymbolSortKind=0|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|FArc=Full|FFill=Full|FPad=Full|FText=Full|FTrack=Full|FVia=Full|Layer=KeepOutLayer|Polygon=Full|PrintOutIndex=0|Record=PcbPrintLayer
-Configuration2_Name9=OutputConfigurationParameter10
-Configuration2_Item9=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CText=Full|CTrack=Full|CVia=Full|DDSymbolKind=0|DDSymbolSize=500000|DDSymbolSortKind=0|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|FArc=Full|FFill=Full|FPad=Full|FText=Full|FTrack=Full|FVia=Full|Layer=MultiLayer|Polygon=Full|PrintOutIndex=0|Record=PcbPrintLayer
-OutputType3=Schematic Print
-OutputName3=Schematic Prints
+OutputDefault2=0
+PageOptions2=Record=PageOptions|CenterHorizontal=True|CenterVertical=True|PrintScale=1.00|XCorrection=1.00|YCorrection=1.00|PrintKind=1|BorderSize=5000000|LeftOffset=0|BottomOffset=0|Orientation=2|PaperLength=1000|PaperWidth=1000|Scale=100|PaperSource=7|PrintQuality=-4|MediaType=1|DitherType=10|PaperKind=A4|PrintScaleMode=1
+OutputType3=PCB Print
+OutputName3=PCB Prints
 OutputDocumentPath3=
 OutputEnabled3=1
 OutputDefault3=0
-PageOptions3=Record=PageOptions|CenterHorizontal=True|CenterVertical=True|PrintScale=0.73|XCorrection=1.00|YCorrection=1.00|PrintKind=1|BorderSize=5000000|LeftOffset=0|BottomOffset=0|Orientation=2|PaperLength=2794|PaperWidth=2159|Scale=100|PaperSource=1|PrintQuality=600|MediaType=0|DitherType=0|PaperKind=A4|PrintScaleMode=1
-Configuration3_Name1=OutputConfigurationParameter1
-Configuration3_Item1=Record=SchPrintView|BooleanThing=False
-OutputType4=Logic Analyser Print
-OutputName4=Logic Analyser Prints
+PageOptions3=Record=PageOptions|CenterHorizontal=True|CenterVertical=True|PrintScale=1.00|XCorrection=1.00|YCorrection=1.00|PrintKind=1|BorderSize=5000000|LeftOffset=0|BottomOffset=0|Orientation=2|PaperLength=1000|PaperWidth=1000|Scale=100|PaperSource=7|PrintQuality=-4|MediaType=1|DitherType=10|PaperKind=A4|PrintScaleMode=1
+OutputType4=Schematic Print
+OutputName4=Schematic Prints
 OutputDocumentPath4=
 OutputEnabled4=1
 OutputDefault4=0
 PageOptions4=Record=PageOptions|CenterHorizontal=True|CenterVertical=True|PrintScale=1.00|XCorrection=1.00|YCorrection=1.00|PrintKind=1|BorderSize=5000000|LeftOffset=0|BottomOffset=0|Orientation=2|PaperLength=1000|PaperWidth=1000|Scale=100|PaperSource=7|PrintQuality=-4|MediaType=1|DitherType=10|PaperKind=A4|PrintScaleMode=1
-OutputType5=Wave Print
-OutputName5=Wave Prints
+OutputType5=SimView Print
+OutputName5=SimView Prints
 OutputDocumentPath5=
 OutputEnabled5=1
 OutputDefault5=0
 PageOptions5=Record=PageOptions|CenterHorizontal=True|CenterVertical=True|PrintScale=1.00|XCorrection=1.00|YCorrection=1.00|PrintKind=1|BorderSize=5000000|LeftOffset=0|BottomOffset=0|Orientation=2|PaperLength=1000|PaperWidth=1000|Scale=100|PaperSource=7|PrintQuality=-4|MediaType=1|DitherType=10|PaperKind=A4|PrintScaleMode=1
-OutputType6=SimView Print
-OutputName6=SimView Prints
+OutputType6=Wave Print
+OutputName6=Wave Prints
 OutputDocumentPath6=
 OutputEnabled6=1
 OutputDefault6=0
@@ -501,25 +316,23 @@ OutputDefault9=0
 Name=Report Outputs
 Description=
 PrinterOptions=Record=PrinterOptions|Copies=1|Duplex=1|TrueTypeOptions=3|Collate=1|PrintWhat=1
-OutputType1=ReportHierarchy
-OutputName1=Report Project Hierarchy
+OutputType1=BOM_PartType
+OutputName1=Bill of Materials
 OutputDocumentPath1=
 OutputEnabled1=1
 OutputDefault1=0
-OutputType2=SimpleBOM
-OutputName2=Simple BOM
+OutputType2=ComponentCrossReference
+OutputName2=Component Cross Reference Report
 OutputDocumentPath2=
 OutputEnabled2=1
 OutputDefault2=0
-Configuration2_Name1=OutputConfigurationParameter1
-Configuration2_Item1=Record=SimpleBOMView|SimpleBOMMode=0
-OutputType3=BOM_PartType
-OutputName3=Bill of Materials
+OutputType3=ReportHierarchy
+OutputName3=Report Project Hierarchy
 OutputDocumentPath3=
 OutputEnabled3=1
 OutputDefault3=0
-OutputType4=ComponentCrossReference
-OutputName4=Component Cross Reference Report
+OutputType4=SimpleBOM
+OutputName4=Simple BOM
 OutputDocumentPath4=
 OutputEnabled4=1
 OutputDefault4=0
@@ -877,9 +690,11 @@ L16=WWWWNWWNWWWNWWWNW
 L17=WNNNNNNNWNNNWWWWN
 
 [Annotate]
-SortOrder=0
+SortOrder=3
 MatchParameter1=Comment
 MatchStrictly1=1
+MatchParameter2=Library Reference
+MatchStrictly2=1
 
 [PrjClassGen]
 CompClassManualEnabled=0
