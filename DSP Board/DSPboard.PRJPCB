@@ -2,7 +2,7 @@
 Version=1.0
 HierarchyMode=0
 ChannelRoomNamingStyle=0
-OutputPath=
+OutputPath=Outputs
 ChannelDesignatorFormatString=$Component.$RoomName
 ChannelRoomLevelSeperator=.
 OpenOutputs=1
@@ -143,6 +143,149 @@ DoDatabaseUpdate=1
 ClassGenCCAutoEnabled=1
 ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
+
+[Document10]
+DocumentPath=outputs.OUTJOB
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+
+[GeneratedDocument1]
+DocumentPath=Outputs\pcb.DRL
+
+[GeneratedDocument2]
+DocumentPath=Project Outputs for DSPboard\pcb.DRL
+
+[GeneratedDocument3]
+DocumentPath=Outputs\pcb.DRR
+
+[GeneratedDocument4]
+DocumentPath=Project Outputs for DSPboard\pcb.DRR
+
+[GeneratedDocument5]
+DocumentPath=Outputs\pcb.EXTREP
+
+[GeneratedDocument6]
+DocumentPath=Project Outputs for DSPboard\pcb.EXTREP
+
+[GeneratedDocument7]
+DocumentPath=Outputs\pcb.G1
+
+[GeneratedDocument8]
+DocumentPath=Project Outputs for DSPboard\pcb.G1
+
+[GeneratedDocument9]
+DocumentPath=Outputs\pcb.G2
+
+[GeneratedDocument10]
+DocumentPath=Project Outputs for DSPboard\pcb.G2
+
+[GeneratedDocument11]
+DocumentPath=Outputs\pcb.GBL
+
+[GeneratedDocument12]
+DocumentPath=Project Outputs for DSPboard\pcb.GBL
+
+[GeneratedDocument13]
+DocumentPath=Outputs\pcb.GBO
+
+[GeneratedDocument14]
+DocumentPath=Project Outputs for DSPboard\pcb.GBO
+
+[GeneratedDocument15]
+DocumentPath=Outputs\pcb.GBP
+
+[GeneratedDocument16]
+DocumentPath=Project Outputs for DSPboard\pcb.GBP
+
+[GeneratedDocument17]
+DocumentPath=Outputs\pcb.GBS
+
+[GeneratedDocument18]
+DocumentPath=Project Outputs for DSPboard\pcb.GBS
+
+[GeneratedDocument19]
+DocumentPath=Outputs\pcb.GM5
+
+[GeneratedDocument20]
+DocumentPath=Project Outputs for DSPboard\pcb.GM5
+
+[GeneratedDocument21]
+DocumentPath=Outputs\pcb.GM6
+
+[GeneratedDocument22]
+DocumentPath=Project Outputs for DSPboard\pcb.GM6
+
+[GeneratedDocument23]
+DocumentPath=Outputs\pcb.GP1
+
+[GeneratedDocument24]
+DocumentPath=Project Outputs for DSPboard\pcb.GP1
+
+[GeneratedDocument25]
+DocumentPath=Outputs\pcb.GP2
+
+[GeneratedDocument26]
+DocumentPath=Project Outputs for DSPboard\pcb.GP2
+
+[GeneratedDocument27]
+DocumentPath=Outputs\pcb.GTL
+
+[GeneratedDocument28]
+DocumentPath=Project Outputs for DSPboard\pcb.GTL
+
+[GeneratedDocument29]
+DocumentPath=Outputs\pcb.GTO
+
+[GeneratedDocument30]
+DocumentPath=Project Outputs for DSPboard\pcb.GTO
+
+[GeneratedDocument31]
+DocumentPath=Outputs\pcb.GTP
+
+[GeneratedDocument32]
+DocumentPath=Project Outputs for DSPboard\pcb.GTP
+
+[GeneratedDocument33]
+DocumentPath=Outputs\pcb.GTS
+
+[GeneratedDocument34]
+DocumentPath=Project Outputs for DSPboard\pcb.GTS
+
+[GeneratedDocument35]
+DocumentPath=Outputs\pcb.LDP
+
+[GeneratedDocument36]
+DocumentPath=Project Outputs for DSPboard\pcb.LDP
+
+[GeneratedDocument37]
+DocumentPath=Outputs\pcb.REP
+
+[GeneratedDocument38]
+DocumentPath=Project Outputs for DSPboard\pcb.REP
+
+[GeneratedDocument39]
+DocumentPath=Outputs\pcb.RUL
+
+[GeneratedDocument40]
+DocumentPath=Project Outputs for DSPboard\pcb.RUL
+
+[GeneratedDocument41]
+DocumentPath=Outputs\pcb.TXT
+
+[GeneratedDocument42]
+DocumentPath=Project Outputs for DSPboard\pcb.TXT
+
+[GeneratedDocument43]
+DocumentPath=Outputs\Pick Place for pcb.txt
 
 [OutputGroup1]
 Name=Netlist Outputs
