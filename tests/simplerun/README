@@ -1,0 +1,7 @@
+Simplerun:
+  * Provides a 50 MHz clock to the DSP 
+  * Brings the DSP out of reset after 1 second
+  * Flashes the power LED. 
+
+
+

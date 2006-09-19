@@ -1,0 +1,27 @@
+The following are synthesizable and runnable tests on the
+DSPboard. They are meant to be -run- on the hardware, although they
+may have a simulation component. They are either for evaluation,
+debugging, or assembly verification purpoess.
+
+Suggested organization: 
+
+Simple tests may simply have all included files in the
+directory. However we recommend that complex tests have a structure as
+follows:
+
+vhdl: synthesizable vhdl code that runs on the FPGA
+code: dsp-running code, and similar files
+sim: any simulation files for testing the VHDL module. 
+
+--------------------------------------------------------------------
+Tests:
+--------------------------------------------------------------------
+
+deviceloopback: simple loopback instantiation of the DeviceIO serial
+module to test proper functioning of the LVDS DeviceLink, SERDES,and
+associated pins
+
+simplerun: simple FPGA basic code to bring the DSP out of reset and
+give it a clock so that we may develop via the JTAG pod. Does not make
+any attempt to boot the FPGA.
+
