@@ -1,0 +1,70 @@
+
+\section{Requirements}
+This is an enumeration of the requirements for the DSPboard software. 
+
+Each DSP receives data and control information from the acquisition
+board at a constant rate. This data must be acquired, packetized,
+compressed, and transmitted out the Data Bus. Similarly, the
+acquisition board must be controlled by the DSP.
+
+Similarly, each DSP represents a Device on the Event Bus, and must be
+able to receive events from the event bus and respond to them.
+
+
+\subsection{Bandwidths} 
+
+The DSP runs at 500 MHz, which means we get 10k ticks per ECYCLE and
+15.6k ticks per SAMPLE.
+
+Each Acqboard generates 5 32ksps 16-bit data streams from the 4+1
+acquired data channels. This data needs to be filtered, converted,
+thresholded, packetized, downsampled, and transmitted out the Data Bus
+in data packets up to 600 bytes in length. The Data Bus dictates that
+each device can only send one of these packets per 50 ECYCLEs (one
+millisecond).
+
+The event bus can source up to 80 events per ECYCLE, although this
+represents a worst-case scenario -- in general, DSPs are net
+producers, not consumers, of events. Each DSP can generate one event
+per ECYCLE.
+
+\section{DSP IO}
+
+Event Input: We will use the BFin PPI to read in events at a
+sufficient rate, approaching 50 MB/sec (80 events per ECYCLE).
+
+New Samples Input: New samples arrive by way of the SPI
+interface. Acqboard output control travels similarly via the SPI
+interface. Arrival of the necessary data takes ~4 us.
+
+Event Output: Events are output via the SPORT 0. each output event can
+take up to 200 us to transmit.
+
+\section{Design}
+
+Our goal here is software simplicity and correctness over
+performance. We also want the resulting code to be "easy to extend,
+hard to break." Whereever possible, FIFO overruns and the like will
+generate error packets, and the FIFO overrun itself will invalidate
+the involved data.
+
+Even though system timestamps occur with a granularity of
+an ECYCLE (20 us) this is a tolerable level of jitter for most of our
+acquired data manipulation tasks.
+
+Tasks brainstorming: 
+
+data related: 
+
+FIR filtering of incoming spike data (400 tap)
+IIR filtering of incoming spike data (12th order)
+Thresholding of spike data
+Spike packetization
+FIR filtering of incoming continuous data (400 tap)
+IIR filtering of incoming continuous data (12th order)
+continuous data downsampling
+
+Acq control related: 
+change gain / filter / etc. 
+keep track of settings
+

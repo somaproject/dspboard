@@ -1,0 +1,19 @@
+This is our sample buffer, a simple ringbuffer. 
+
+SampleBuffer<type, len>
+
+.zero() -- zeros buffer, resets .head() pointer
+.append() -- add new element and increment. 
+.head() -- a pointer to the most recently-inserted sample
+.size() -- total size of the buffer
+[0] -- most recently inserted sample
+[1] -- second-most-recently-inserted-sample. 
+[2] .. etc. 
+
+a filter object takes, well, anything accepting [] semantics and works backwards. 
+
+FIRFilter.h[0]... etc. 
+a = chan1FIR.sampfilter(x) 
+
+returns the output value of the sample of filtering x with the filter in A. 
+
