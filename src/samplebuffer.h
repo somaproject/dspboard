@@ -13,7 +13,9 @@ class SampleBuffer
   virtual void append(T x) = 0; 
   virtual T operator[] (unsigned i) = 0; 
   virtual T * head() = 0; 
-  
+  virtual int length(); 
+  virtual T * start(); 
+
 } ; 
 
 
