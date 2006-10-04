@@ -1,188 +1,188 @@
 Designator Footprint          Mid X         Mid Y         Ref X         Ref Y         Pad X         Pad Y TB      Rotation Comment   
 
-U8         SOT223-5/Simple   2602.362mil   3228.347mil   2700.787mil   3228.347mil   2700.787mil   3128.347mil  T         90.00 TPS79525  
-U7         SOT223-5/Simple   6330.709mil    3303.15mil   6232.283mil    3303.15mil   6232.283mil    3403.15mil  T        270.00 TPS79518  
-C8         6032         5976.378mil   3200.787mil   5976.378mil   3200.787mil   6066.929mil   3200.787mil  T        180.00 POLCAP2   
-C63        1206         3255.905mil   3232.284mil   3255.905mil   3232.284mil   3311.024mil   3232.284mil  T        180.00 Cap       
-C29        6032         2937.008mil   3141.732mil   2937.008mil   3141.732mil   2846.457mil   3141.732mil  T        360.00 POLCAP2   
-R33        0603         5374.016mil   3572.835mil   5374.016mil   3572.835mil   5340.551mil   3572.835mil  T        360.00 RESISTOR  
-DS6        SMD__LED     5590.552mil   3562.992mil   5590.551mil   3562.992mil    5553.15mil   3562.992mil  T        180.00 LED3      
-R32        0603         4281.496mil    3553.15mil   4281.496mil    3553.15mil   4314.961mil    3553.15mil  T        180.00 current-limiting series res
-R31        0603         4281.496mil   3454.724mil   4281.496mil   3454.724mil   4314.961mil   3454.724mil  T        180.00 current-limiting series res
-R30        0603         4094.488mil   3454.724mil   4094.488mil   3454.724mil   4127.953mil   3454.724mil  T        180.00 current-limiting series res
-U10        SO-G8/E2.5   7322.835mil   3917.323mil   7322.835mil   3917.323mil    7217.52mil   3992.323mil  T        270.00 SN75451BD 
-R29        0603         7608.268mil   3690.945mil   7608.268mil   3690.945mil   7608.268mil    3657.48mil  T         90.00 RESISTOR  
-R28        0603         7608.268mil   3897.638mil   7608.268mil   3897.638mil   7608.268mil   3864.173mil  T         90.00 RESISTOR  
-R27        0603         7608.268mil   4153.543mil   7608.268mil   4153.543mil   7608.268mil   4120.079mil  T         90.00 RESISTOR  
-R26        0603         7608.268mil   4311.024mil   7608.268mil   4311.024mil   7608.268mil   4344.488mil  T        270.00 RESISTOR  
-R25        0603          7618.11mil   4714.567mil    7618.11mil   4714.567mil    7618.11mil   4681.102mil  T         90.00 RESISTOR  
-R24        0603          7618.11mil   4911.417mil    7618.11mil   4911.417mil    7618.11mil   4877.953mil  T         90.00 RESISTOR  
-R23        0603         7608.268mil   5167.323mil   7608.268mil   5167.323mil   7608.268mil   5133.858mil  T         90.00 RESISTOR  
-R22        0603         7608.268mil   5314.961mil   7608.268mil   5314.961mil   7608.268mil   5348.425mil  T        270.00 RESISTOR  
-O5         HPVL             8000mil       3800mil       7850mil       3800mil       7850mil       3950mil  T         90.00 HFBR-2528 
-O4         HPVL             8000mil       4200mil       7850mil       4200mil       7850mil       4350mil  T         90.00 HFBR-1528 
-O3         HPVL             8000mil       4800mil       7850mil       4800mil       7850mil       4950mil  T         90.00 HFBR-2528 
-O2         HPVL             8000mil       5200mil       7850mil       5200mil       7850mil       5350mil  T         90.00 HFBR-1528 
-C56        TC3528-1411   7066.929mil    3907.48mil   7066.929mil    3907.48mil   7066.929mil   3966.535mil  T        270.00           
-U2.B       SO-G54/X.5   4472.599mil       5560mil   4472.599mil       5560mil   4882.047mil   5778.504mil  T        180.00 16Mx16 SDRAM
-U1.B       AD_PBGA-169   4480.314mil   4724.409mil   4480.315mil   4724.409mil   4795.275mil   4409.448mil  T        180.00 Blackfin BF533-PGBA169
-R7.B       0603         5011.811mil   4645.669mil   5011.811mil   4645.669mil   5011.811mil   4679.134mil  T        270.00 4.7k      
-R6.B       0603         3968.504mil   4429.134mil   3968.504mil   4429.134mil   3968.504mil   4395.669mil  T         90.00 RESISTOR  
-R5.B       0603         4982.283mil   5836.614mil   4982.283mil   5836.614mil   4982.283mil    5803.15mil  T         90.00 RESISTOR  
-R4.B       0603         4982.283mil   5531.496mil   4982.283mil   5531.496mil   4982.283mil   5498.032mil  T         90.00 RESISTOR  
-R3.B       0603         4982.283mil   5679.134mil   4982.283mil   5679.134mil   4982.283mil   5645.669mil  T         90.00 RESISTOR  
-R2.B       0603         4982.283mil   5383.858mil   4982.283mil   5383.858mil   4982.283mil   5350.394mil  T         90.00 RESISTOR  
-R1.B       0603         4952.756mil   4645.669mil   4952.756mil   4645.669mil   4952.756mil   4612.205mil  T         90.00 4.7k      
-P1.B       HDR1X3       4972.599mil       5120mil   4972.599mil       5020mil   4972.599mil       5020mil  T         90.00 Header 3  
-DS1.B      SMD__LED     3958.662mil     4606.3mil   3958.662mil   4606.299mil   3958.662mil   4568.898mil  T        270.00 LED?      
-C15        6032         5976.378mil   3409.449mil   5976.378mil   3409.449mil   6066.929mil   3409.449mil  T        180.00 POLCAP2   
-C16        1206         5755.905mil   3267.716mil   5755.905mil   3267.716mil   5755.905mil   3322.835mil  T        270.00 Cap       
-C17        3528         3055.118mil   4192.913mil   3055.118mil   4192.913mil   3055.118mil   4133.858mil  T         90.00 Bypass Cap
-C18        3528         3811.024mil   4838.583mil   3811.024mil   4838.583mil   3870.079mil   4838.583mil  T        180.00 Bypass Cap
-C19        3528         6279.528mil   4826.772mil   6279.528mil   4826.772mil   6220.472mil   4826.772mil  T        360.00 Bypass Cap
-C20        3528         7413.386mil   4401.575mil   7413.386mil   4401.575mil   7413.386mil    4342.52mil  T         90.00 Bypass Cap
-C26        7343         7685.039mil   3311.024mil   7685.039mil   3311.024mil   7685.039mil   3437.008mil  T        270.00 A700D107M006AT
-C27        6032         2933.071mil    3342.52mil   2933.071mil    3342.52mil    2842.52mil    3342.52mil  T        360.00 POLCAP2   
-DS1.A      SMD__LED     2746.063mil     4606.3mil   2746.063mil   4606.299mil   2746.063mil   4568.898mil  T        270.00 LED?      
-DS1.C      SMD__LED      5171.26mil     4606.3mil    5171.26mil   4606.299mil    5171.26mil   4568.898mil  T        270.00 LED?      
-DS1.D      SMD__LED     6383.859mil     4606.3mil   6383.859mil   4606.299mil   6383.859mil   4568.898mil  T        270.00 LED?      
-DS2        SMD__LED     4035.432mil   4261.811mil   4035.433mil   4261.811mil   4072.834mil   4261.811mil  T          0.00 LED3      
-DS3        SMD__LED     5246.062mil   4261.811mil   5246.063mil   4261.811mil   5283.464mil   4261.811mil  T        360.00 LED3      
-DS4        SMD__LED     6466.535mil   4261.811mil   6466.535mil   4261.811mil   6503.937mil   4261.811mil  T        360.00 LED3      
-DS5        SMD__LED     2824.802mil   4261.811mil   2824.803mil   4261.811mil   2862.204mil   4261.811mil  T        360.00 LED3      
-IO1        MOLEX_87703-0001   2202.752mil       4500mil    2297.24mil       4500mil    2297.24mil       3875mil  T        270.00 SATA 23-pin header
-JP1        SMT_2x7_2mm_HDR   5362.205mil   3244.095mil   5362.205mil   3244.095mil   5125.984mil   3160.433mil  T        180.00 Header 7X2
-O1         ECS-3953M     4086.22mil   3202.756mil    3986.22mil   3120.079mil    3986.22mil   3120.079mil  T          0.00 OSC2      
-P1.A       HDR1X3           3760mil       5120mil       3760mil       5020mil       3760mil       5020mil  T         90.00 Header 3  
-P1.C       HDR1X3       6185.197mil       5120mil   6185.197mil       5020mil   6185.197mil       5020mil  T         90.00 Header 3  
-P1.D       HDR1X3       7397.796mil       5120mil   7397.796mil       5020mil   7397.796mil       5020mil  T         90.00 Header 3  
-P2         HDR2X7       2579.528mil   5546.457mil   2529.528mil   5846.457mil   2529.528mil   5846.457mil  T        270.00 Header 7X2
-R1.A       0603         3740.157mil   4645.669mil   3740.157mil   4645.669mil   3740.157mil   4612.205mil  T         90.00 4.7k      
-R1.C       0603         6165.355mil   4645.669mil   6165.355mil   4645.669mil   6165.355mil   4612.205mil  T         90.00 4.7k      
-R1.D       0603         7377.953mil   4645.669mil   7377.953mil   4645.669mil   7377.953mil   4612.205mil  T         90.00 4.7k      
-R2.A       0603         3769.685mil   5383.858mil   3769.685mil   5383.858mil   3769.685mil   5350.394mil  T         90.00 RESISTOR  
-R2.C       0603         6194.882mil   5383.858mil   6194.882mil   5383.858mil   6194.882mil   5350.394mil  T         90.00 RESISTOR  
-R2.D       0603          7407.48mil   5383.858mil    7407.48mil   5383.858mil    7407.48mil   5350.394mil  T         90.00 RESISTOR  
-R3.A       0603         3769.685mil   5679.134mil   3769.685mil   5679.134mil   3769.685mil   5645.669mil  T         90.00 RESISTOR  
-R3.C       0603         6194.882mil   5679.134mil   6194.882mil   5679.134mil   6194.882mil   5645.669mil  T         90.00 RESISTOR  
-R3.D       0603          7407.48mil   5679.134mil    7407.48mil   5679.134mil    7407.48mil   5645.669mil  T         90.00 RESISTOR  
-R4.A       0603         3769.685mil   5531.496mil   3769.685mil   5531.496mil   3769.685mil   5498.032mil  T         90.00 RESISTOR  
-R4.C       0603         6194.882mil   5531.496mil   6194.882mil   5531.496mil   6194.882mil   5498.032mil  T         90.00 RESISTOR  
-R4.D       0603          7407.48mil   5531.496mil    7407.48mil   5531.496mil    7407.48mil   5498.032mil  T         90.00 RESISTOR  
-R5.A       0603         3769.685mil   5836.614mil   3769.685mil   5836.614mil   3769.685mil    5803.15mil  T         90.00 RESISTOR  
-R5.C       0603         6194.882mil   5836.614mil   6194.882mil   5836.614mil   6194.882mil    5803.15mil  T         90.00 RESISTOR  
-R5.D       0603          7407.48mil   5836.614mil    7407.48mil   5836.614mil    7407.48mil    5803.15mil  T         90.00 RESISTOR  
-R6.A       0603         2755.905mil   4429.134mil   2755.905mil   4429.134mil   2755.905mil   4395.669mil  T         90.00 RESISTOR  
-R6.C       0603         5181.102mil   4429.134mil   5181.102mil   4429.134mil   5181.102mil   4395.669mil  T         90.00 RESISTOR  
-R6.D       0603         6393.701mil   4429.134mil   6393.701mil   4429.134mil   6393.701mil   4395.669mil  T         90.00 RESISTOR  
-R7.A       0603         3799.213mil   4645.669mil   3799.213mil   4645.669mil   3799.213mil   4679.134mil  T        270.00 4.7k      
-R7.C       0603          6224.41mil   4645.669mil    6224.41mil   4645.669mil    6224.41mil   4679.134mil  T        270.00 4.7k      
-R7.D       0603         7437.008mil   4645.669mil   7437.008mil   4645.669mil   7437.008mil   4679.134mil  T        270.00 4.7k      
-R7         0603         2429.134mil   5582.677mil   2429.134mil   5582.677mil   2429.134mil   5616.142mil  T        270.00 4.7k      
-R8         0603         2549.213mil   3651.575mil   2549.213mil   3651.575mil   2549.213mil    3618.11mil  T         90.00 100       
-R9         0603         2549.213mil   3769.685mil   2549.213mil   3769.685mil   2549.213mil   3803.149mil  T        270.00 100       
-R10        0603         2549.213mil   3887.795mil   2549.213mil   3887.795mil   2549.213mil    3921.26mil  T        270.00 100       
-R11        0603         3759.843mil   3198.819mil   3759.843mil   3198.819mil   3759.843mil   3232.283mil  T        270.00 RESISTOR  
-R12        0603          3631.89mil   3198.819mil    3631.89mil   3198.819mil    3631.89mil   3232.283mil  T        270.00 RESISTOR  
-R13        0603          3553.15mil   3198.819mil    3553.15mil   3198.819mil    3553.15mil   3232.283mil  T        270.00 RESISTOR  
-R14        0603         3474.409mil   3198.819mil   3474.409mil   3198.819mil   3474.409mil   3232.283mil  T        270.00 RESISTOR  
-R15        1206         6937.008mil   3814.961mil   6937.008mil   3814.961mil   6937.008mil   3759.843mil  T         90.00 RESISTOR  
-R16        0603         5358.268mil   3476.378mil   5358.268mil   3476.378mil   5324.803mil   3476.378mil  T        360.00 current-limiting series res
-R19        0603         5204.724mil   3476.378mil   5204.724mil   3476.378mil    5171.26mil   3476.378mil  T        360.00 current-limiting series res
-R20        0603         5043.307mil   3476.378mil   5043.307mil   3476.378mil   5076.772mil   3476.378mil  T        180.00 current-limiting series res
-U1.A       AD_PBGA-169   3267.716mil   4724.409mil   3267.716mil   4724.409mil   3582.677mil   4409.448mil  T        180.00 Blackfin BF533-PGBA169
-U1.C       AD_PBGA-169   5692.913mil   4724.409mil   5692.913mil   4724.409mil   6007.874mil   4409.448mil  T        180.00 Blackfin BF533-PGBA169
-U1.D       AD_PBGA-169   6905.511mil   4724.409mil   6905.511mil   4724.409mil   7220.472mil   4409.448mil  T        180.00 Blackfin BF533-PGBA169
-U2.A       SO-G54/X.5       3260mil       5560mil       3260mil       5560mil   3669.449mil   5778.504mil  T        180.00 16Mx16 SDRAM
-U2.C       SO-G54/X.5   5685.197mil       5560mil   5685.197mil       5560mil   6094.646mil   5778.504mil  T        180.00 16Mx16 SDRAM
-U2.D       SO-G54/X.5   6897.796mil       5560mil   6897.796mil       5560mil   7307.244mil   5778.504mil  T        180.00 16Mx16 SDRAM
-U3         XILINX_FT256_BGA    3631.89mil   3779.528mil    3631.89mil   3779.528mil   3336.614mil   4074.804mil  T          0.00 Xilinx XC3S200-FT256
-U4         RGY          2624.016mil    4868.11mil   2624.016mil    4868.11mil   2594.488mil   4962.598mil  T        270.00 SN54LVTH244A
-U5         SSO-G28/E4.3   2814.961mil    3710.63mil   2814.961mil    3710.63mil   2681.103mil   3876.968mil  T        270.00 DS92LV1224
-U6         TI_EUS        7069.39mil   3376.476mil    7381.89mil   3188.976mil    7381.89mil   3188.976mil  T        180.00 PTH03000WAH
-U9         QFP10x10-G44/G10N   4685.039mil   3346.457mil   4685.039mil   3346.457mil   4450.787mil   3503.937mil  T          0.00 Xilinx CoolRunner-II XC2C64A
-R34.A      0603         3145.669mil   4003.937mil   3145.669mil   4003.937mil   3145.669mil   4037.401mil  T        270.00 RESISTOR  
-R34.B      0603         4354.331mil   4185.039mil   4354.331mil   4185.039mil   4320.866mil   4185.039mil  T        360.00 RESISTOR  
-R34.C      0603         5555.118mil   4125.984mil   5555.118mil   4125.984mil   5521.654mil   4125.984mil  T        360.00 RESISTOR  
-R34.D      0603         6779.528mil   4133.858mil   6779.528mil   4133.858mil   6746.063mil   4133.858mil  T        360.00 RESISTOR  
-R35        0603         7614.173mil   5704.724mil   7614.173mil   5704.724mil   7614.173mil   5738.189mil  T        270.00 4.7k      
-FID1       FIDUCIAL     2437.008mil   3484.252mil   2437.008mil   3484.252mil   2437.008mil   3484.252mil  T         90.00 *         
-FID2       FIDUCIAL     7759.842mil   5767.717mil   7759.842mil   5767.717mil   7759.842mil   5767.717mil  T         90.00 *         
 FID3       FIDUCIAL     7940.945mil   3440.945mil   7940.945mil   3440.945mil   7940.945mil   3440.945mil  T         90.00 *         
-C64        0402         2637.732mil   3326.772mil   2637.732mil   3326.772mil   2612.142mil   3326.772mil  B        360.00 CAPACITOR 
-C11        0603         6236.221mil   3425.197mil   6236.221mil   3425.197mil   6236.221mil   3458.661mil  B        270.00 CAPACITOR 
-C13        0402          2696.85mil    3631.89mil    2696.85mil    3631.89mil   2722.441mil    3631.89mil  B        180.00 CAPACITOR 
-C14        0402         2942.913mil   3700.787mil   2942.913mil   3700.787mil   2942.913mil   3675.197mil  B         90.00 CAPACITOR 
-C12.B      0402          4539.37mil   4616.142mil    4539.37mil   4616.142mil    4513.78mil   4616.142mil  B        360.00 CAPACITOR 
-C10.B      0402          4578.74mil       4746mil    4578.74mil       4746mil    4578.74mil    4720.41mil  B         90.00 CAPACITOR 
-C9.B       0402         4637.795mil   4870.142mil   4637.795mil   4870.142mil   4637.795mil   4895.732mil  B        270.00 CAPACITOR 
-C6.B       0603          4460.63mil   4527.559mil    4460.63mil   4527.559mil   4427.166mil   4527.559mil  B        360.00 CAPACITOR 
-C5.B       0603         4639.701mil    4960.63mil   4639.701mil    4960.63mil   4606.236mil    4960.63mil  B        360.00 CAPACITOR 
-C4.B       0402         4265.685mil   4714.567mil   4265.685mil   4714.567mil   4240.095mil   4714.567mil  B        360.00 CAPACITOR 
-C3.B       0402         4370.142mil   4822.835mil   4370.142mil   4822.835mil   4395.732mil   4822.835mil  B        180.00 CAPACITOR 
-C2.B       0603         4295.213mil   4566.929mil   4295.213mil   4566.929mil   4261.748mil   4566.929mil  B        360.00 CAPACITOR 
-C1.B       0603         4450.787mil    4921.26mil   4450.788mil    4921.26mil   4484.252mil    4921.26mil  B        180.00 CAPACITOR 
-C1.A       0603         3238.189mil    4921.26mil   3238.189mil    4921.26mil   3271.653mil    4921.26mil  B        180.00 CAPACITOR 
-C2.A       0603         3082.614mil   4566.929mil   3082.614mil   4566.929mil    3049.15mil   4566.929mil  B        360.00 CAPACITOR 
-C3.A       0402         3157.543mil   4822.835mil   3157.543mil   4822.835mil   3183.134mil   4822.835mil  B        180.00 CAPACITOR 
-C4.A       0402         3053.087mil   4714.567mil   3053.087mil   4714.567mil   3027.496mil   4714.567mil  B        360.00 CAPACITOR 
-C5.A       0603         3427.102mil    4960.63mil   3427.102mil    4960.63mil   3393.638mil    4960.63mil  B        360.00 CAPACITOR 
-C6.A       0603         3248.032mil   4527.559mil   3248.032mil   4527.559mil   3214.567mil   4527.559mil  B        360.00 CAPACITOR 
-C9.A       0402         3425.197mil   4870.142mil   3425.197mil   4870.142mil   3425.197mil   4895.732mil  B        270.00 CAPACITOR 
-C10.A      0402         3366.142mil       4746mil   3366.142mil       4746mil   3366.142mil    4720.41mil  B         90.00 CAPACITOR 
-C12.A      0402         3326.772mil   4616.142mil   3326.772mil   4616.142mil   3301.181mil   4616.142mil  B        360.00 CAPACITOR 
-C59.A      0402         3551.748mil       5780mil   3551.748mil       5780mil   3526.158mil       5780mil  B        360.00 CAPACITOR 
-C60.A      0402             3280mil       5780mil       3280mil       5780mil    3305.59mil       5780mil  B        180.00 CAPACITOR 
-C61.A      0402             3300mil       5340mil       3300mil       5340mil    3274.41mil       5340mil  B        360.00 CAPACITOR 
-C62.A      0402         3548.252mil       5340mil   3548.252mil       5340mil   3573.842mil       5340mil  B        180.00 CAPACITOR 
-C1.C       0603         5663.386mil    4921.26mil   5663.386mil    4921.26mil    5696.85mil    4921.26mil  B        180.00 CAPACITOR 
-C1.D       0603         6875.984mil    4921.26mil   6875.984mil    4921.26mil   6909.449mil    4921.26mil  B        180.00 CAPACITOR 
-C2.C       0603         5507.811mil   4566.929mil   5507.811mil   4566.929mil   5474.347mil   4566.929mil  B        360.00 CAPACITOR 
-C2.D       0603          6720.41mil   4566.929mil    6720.41mil   4566.929mil   6686.945mil   4566.929mil  B        360.00 CAPACITOR 
-C3.C       0402          5582.74mil   4822.835mil    5582.74mil   4822.835mil   5608.331mil   4822.835mil  B        180.00 CAPACITOR 
-C3.D       0402         6795.339mil   4822.835mil   6795.339mil   4822.835mil   6820.929mil   4822.835mil  B        180.00 CAPACITOR 
-C4.C       0402         5478.284mil   4714.567mil   5478.284mil   4714.567mil   5452.693mil   4714.567mil  B        360.00 CAPACITOR 
-C4.D       0402         6690.882mil   4714.567mil   6690.882mil   4714.567mil   6665.292mil   4714.567mil  B        360.00 CAPACITOR 
-C5.C       0603         5852.299mil    4960.63mil   5852.299mil    4960.63mil   5818.835mil    4960.63mil  B        360.00 CAPACITOR 
-C5.D       0603         7064.898mil    4960.63mil   7064.898mil    4960.63mil   7031.433mil    4960.63mil  B        360.00 CAPACITOR 
-C6.C       0603         5673.229mil   4527.559mil   5673.229mil   4527.559mil   5639.764mil   4527.559mil  B        360.00 CAPACITOR 
-C6.D       0603         6885.827mil   4527.559mil   6885.827mil   4527.559mil   6852.363mil   4527.559mil  B        360.00 CAPACITOR 
-C9.C       0402         5850.394mil   4870.142mil   5850.394mil   4870.142mil   5850.394mil   4895.732mil  B        270.00 CAPACITOR 
-C9.D       0402         7062.992mil   4870.142mil   7062.992mil   4870.142mil   7062.992mil   4895.732mil  B        270.00 CAPACITOR 
-C10.C      0402         5791.339mil       4746mil   5791.339mil       4746mil   5791.339mil    4720.41mil  B         90.00 CAPACITOR 
-C12.C      0402         5751.969mil   4616.142mil   5751.969mil   4616.142mil   5726.378mil   4616.142mil  B        360.00 CAPACITOR 
-C12.D      0402         6964.567mil   4616.142mil   6964.567mil   4616.142mil   6938.977mil   4616.142mil  B        360.00 CAPACITOR 
-C59.B      0402         4764.347mil       5780mil   4764.347mil       5780mil   4738.756mil       5780mil  B        360.00 CAPACITOR 
-C59.C      0402         5976.945mil       5780mil   5976.945mil       5780mil   5951.355mil       5780mil  B        360.00 CAPACITOR 
-C59.D      0402         7189.544mil       5780mil   7189.544mil       5780mil   7163.953mil       5780mil  B        360.00 CAPACITOR 
-C60.B      0402         4492.598mil       5780mil   4492.599mil       5780mil   4518.189mil       5780mil  B        180.00 CAPACITOR 
-C60.C      0402         5705.197mil       5780mil   5705.197mil       5780mil   5730.788mil       5780mil  B        180.00 CAPACITOR 
-C60.D      0402         6917.795mil       5780mil   6917.796mil       5780mil   6943.386mil       5780mil  B        180.00 CAPACITOR 
-C61.B      0402         4512.599mil       5340mil   4512.599mil       5340mil   4487.008mil       5340mil  B        360.00 CAPACITOR 
-C61.C      0402         5725.197mil       5340mil   5725.197mil       5340mil   5699.606mil       5340mil  B        360.00 CAPACITOR 
-C61.D      0402         6937.796mil       5340mil   6937.796mil       5340mil   6912.205mil       5340mil  B        360.00 CAPACITOR 
-C62.B      0402          4760.85mil       5340mil    4760.85mil       5340mil   4786.441mil       5340mil  B        180.00 CAPACITOR 
-C62.C      0402         5973.449mil       5340mil   5973.449mil       5340mil   5999.039mil       5340mil  B        180.00 CAPACITOR 
-C62.D      0402         7186.047mil       5340mil   7186.047mil       5340mil   7211.638mil       5340mil  B        180.00 CAPACITOR 
-C58        0402         7933.071mil   4795.213mil   7933.071mil   4795.213mil   7933.071mil   4769.622mil  B         90.00 CAPACITOR 
-C57        0402         7379.984mil   3858.268mil   7379.984mil   3858.268mil   7405.575mil   3858.268mil  B        180.00 CAPACITOR 
-C7         0402         7942.913mil   3801.118mil   7942.913mil   3801.118mil   7942.913mil   3775.528mil  B         90.00 CAPACITOR 
-C21        0402         6318.898mil   3161.417mil   6318.898mil   3161.417mil   6344.488mil   3161.417mil  B        180.00 CAPACITOR 
-C33        0402             3620mil       3615mil       3620mil       3615mil    3594.41mil       3615mil  B        360.00 CAPACITOR 
-C34        0402             3750mil       3725mil       3750mil       3725mil       3750mil    3699.41mil  B         90.00 CAPACITOR 
-C35        0402         3688.976mil   3661.417mil   3688.976mil   3661.417mil   3714.567mil   3661.417mil  B        180.00 CAPACITOR 
-C36        0402         3551.181mil   3838.583mil   3551.181mil   3838.583mil   3551.181mil   3864.173mil  B        270.00 CAPACITOR 
-C42        0402         3444.882mil   3641.732mil   3444.882mil   3641.732mil   3444.882mil   3667.323mil  B        270.00 CAPACITOR 
-C43        0402         3531.496mil   3937.008mil   3531.496mil   3937.008mil   3557.087mil   3937.008mil  B        180.00 CAPACITOR 
-C44        0402         3692.913mil   3897.638mil   3692.913mil   3897.638mil   3667.323mil   3897.638mil  B        360.00 CAPACITOR 
-C45        0402          3789.37mil   3543.307mil    3789.37mil   3543.307mil    3789.37mil   3517.717mil  B         90.00 CAPACITOR 
-C46        0402         3602.362mil    3474.41mil   3602.363mil    3474.41mil   3627.953mil    3474.41mil  B        180.00 CAPACITOR 
-C47        0402         3395.669mil    3710.63mil   3395.669mil    3710.63mil    3421.26mil    3710.63mil  B        180.00 CAPACITOR 
-C48        0402         3425.197mil   3779.528mil   3425.197mil   3779.528mil   3399.606mil   3779.528mil  B        360.00 CAPACITOR 
-C50        0402             3920mil       3815mil       3920mil       3815mil       3920mil    3789.41mil  B         90.00 CAPACITOR 
-C51        0402             3945mil       3665mil       3945mil       3665mil       3945mil    3639.41mil  B         90.00 CAPACITOR 
-C52        0402         3759.842mil   3452.756mil   3759.843mil   3452.756mil   3785.433mil   3452.756mil  B        180.00 CAPACITOR 
-C53        0402             3545mil       3665mil       3545mil       3665mil       3545mil    3639.41mil  B         90.00 CAPACITOR 
-C10.D      0402         7011.811mil   4751.968mil   7011.811mil   4751.968mil   7011.811mil   4777.559mil  B        270.00 CAPACITOR 
+FID2       FIDUCIAL     7759.842mil   5767.717mil   7759.842mil   5767.717mil   7759.842mil   5767.717mil  T         90.00 *         
+FID1       FIDUCIAL     2437.008mil   3484.252mil   2437.008mil   3484.252mil   2437.008mil   3484.252mil  T         90.00 *         
+R35        0603         7614.173mil   5704.724mil   7614.173mil   5704.724mil   7614.173mil   5738.189mil  T        270.00 4.7k      
+R34.D      0603         6779.528mil   4133.858mil   6779.528mil   4133.858mil   6746.063mil   4133.858mil  T        360.00 RESISTOR  
+R34.C      0603         5555.118mil   4125.984mil   5555.118mil   4125.984mil   5521.654mil   4125.984mil  T        360.00 RESISTOR  
+R34.B      0603         4354.331mil   4185.039mil   4354.331mil   4185.039mil   4320.866mil   4185.039mil  T        360.00 RESISTOR  
+R34.A      0603         3145.669mil   4003.937mil   3145.669mil   4003.937mil   3145.669mil   4037.401mil  T        270.00 RESISTOR  
+U9         QFP10x10-G44/G10N   4685.039mil   3346.457mil   4685.039mil   3346.457mil   4450.787mil   3503.937mil  T          0.00 Xilinx CoolRunner-II XC2C64A
+U6         TI_EUS        7069.39mil   3376.476mil    7381.89mil   3188.976mil    7381.89mil   3188.976mil  T        180.00 PTH03000WAH
+U5         SSO-G28/E4.3   2814.961mil    3710.63mil   2814.961mil    3710.63mil   2681.103mil   3876.968mil  T        270.00 DS92LV1224
+U4         RGY          2624.016mil    4868.11mil   2624.016mil    4868.11mil   2594.488mil   4962.598mil  T        270.00 SN54LVTH244A
+U3         XILINX_FT256_BGA    3631.89mil   3779.528mil    3631.89mil   3779.528mil   3336.614mil   4074.804mil  T          0.00 Xilinx XC3S200-FT256
+U2.D       SO-G54/X.5   6897.796mil       5560mil   6897.796mil       5560mil   7307.244mil   5778.504mil  T        180.00 16Mx16 SDRAM
+U2.C       SO-G54/X.5   5685.197mil       5560mil   5685.197mil       5560mil   6094.646mil   5778.504mil  T        180.00 16Mx16 SDRAM
+U2.A       SO-G54/X.5       3260mil       5560mil       3260mil       5560mil   3669.449mil   5778.504mil  T        180.00 16Mx16 SDRAM
+U1.D       AD_PBGA-169   6905.511mil   4724.409mil   6905.511mil   4724.409mil   7220.472mil   4409.448mil  T        180.00 Blackfin BF533-PGBA169
+U1.C       AD_PBGA-169   5692.913mil   4724.409mil   5692.913mil   4724.409mil   6007.874mil   4409.448mil  T        180.00 Blackfin BF533-PGBA169
+U1.A       AD_PBGA-169   3267.716mil   4724.409mil   3267.716mil   4724.409mil   3582.677mil   4409.448mil  T        180.00 Blackfin BF533-PGBA169
+R20        0603         5043.307mil   3476.378mil   5043.307mil   3476.378mil   5076.772mil   3476.378mil  T        180.00 current-limiting series res
+R19        0603         5204.724mil   3476.378mil   5204.724mil   3476.378mil    5171.26mil   3476.378mil  T        360.00 current-limiting series res
+R16        0603         5358.268mil   3476.378mil   5358.268mil   3476.378mil   5324.803mil   3476.378mil  T        360.00 current-limiting series res
+R15        1206         6937.008mil   3814.961mil   6937.008mil   3814.961mil   6937.008mil   3759.843mil  T         90.00 RESISTOR  
+R14        0603         3474.409mil   3198.819mil   3474.409mil   3198.819mil   3474.409mil   3232.283mil  T        270.00 RESISTOR  
+R13        0603          3553.15mil   3198.819mil    3553.15mil   3198.819mil    3553.15mil   3232.283mil  T        270.00 RESISTOR  
+R12        0603          3631.89mil   3198.819mil    3631.89mil   3198.819mil    3631.89mil   3232.283mil  T        270.00 RESISTOR  
+R11        0603         3759.843mil   3198.819mil   3759.843mil   3198.819mil   3759.843mil   3232.283mil  T        270.00 RESISTOR  
+R10        0603         2549.213mil   3887.795mil   2549.213mil   3887.795mil   2549.213mil    3921.26mil  T        270.00 100       
+R9         0603         2549.213mil   3769.685mil   2549.213mil   3769.685mil   2549.213mil   3803.149mil  T        270.00 100       
+R8         0603         2549.213mil   3651.575mil   2549.213mil   3651.575mil   2549.213mil    3618.11mil  T         90.00 100       
+R7         0603         2429.134mil   5582.677mil   2429.134mil   5582.677mil   2429.134mil   5616.142mil  T        270.00 4.7k      
+R7.D       0603         7437.008mil   4645.669mil   7437.008mil   4645.669mil   7437.008mil   4679.134mil  T        270.00 4.7k      
+R7.C       0603          6224.41mil   4645.669mil    6224.41mil   4645.669mil    6224.41mil   4679.134mil  T        270.00 4.7k      
+R7.A       0603         3799.213mil   4645.669mil   3799.213mil   4645.669mil   3799.213mil   4679.134mil  T        270.00 4.7k      
+R6.D       0603         6393.701mil   4429.134mil   6393.701mil   4429.134mil   6393.701mil   4395.669mil  T         90.00 RESISTOR  
+R6.C       0603         5181.102mil   4429.134mil   5181.102mil   4429.134mil   5181.102mil   4395.669mil  T         90.00 RESISTOR  
+R6.A       0603         2755.905mil   4429.134mil   2755.905mil   4429.134mil   2755.905mil   4395.669mil  T         90.00 RESISTOR  
+R5.D       0603          7407.48mil   5836.614mil    7407.48mil   5836.614mil    7407.48mil    5803.15mil  T         90.00 RESISTOR  
+R5.C       0603         6194.882mil   5836.614mil   6194.882mil   5836.614mil   6194.882mil    5803.15mil  T         90.00 RESISTOR  
+R5.A       0603         3769.685mil   5836.614mil   3769.685mil   5836.614mil   3769.685mil    5803.15mil  T         90.00 RESISTOR  
+R4.D       0603          7407.48mil   5531.496mil    7407.48mil   5531.496mil    7407.48mil   5498.032mil  T         90.00 RESISTOR  
+R4.C       0603         6194.882mil   5531.496mil   6194.882mil   5531.496mil   6194.882mil   5498.032mil  T         90.00 RESISTOR  
+R4.A       0603         3769.685mil   5531.496mil   3769.685mil   5531.496mil   3769.685mil   5498.032mil  T         90.00 RESISTOR  
+R3.D       0603          7407.48mil   5679.134mil    7407.48mil   5679.134mil    7407.48mil   5645.669mil  T         90.00 RESISTOR  
+R3.C       0603         6194.882mil   5679.134mil   6194.882mil   5679.134mil   6194.882mil   5645.669mil  T         90.00 RESISTOR  
+R3.A       0603         3769.685mil   5679.134mil   3769.685mil   5679.134mil   3769.685mil   5645.669mil  T         90.00 RESISTOR  
+R2.D       0603          7407.48mil   5383.858mil    7407.48mil   5383.858mil    7407.48mil   5350.394mil  T         90.00 RESISTOR  
+R2.C       0603         6194.882mil   5383.858mil   6194.882mil   5383.858mil   6194.882mil   5350.394mil  T         90.00 RESISTOR  
+R2.A       0603         3769.685mil   5383.858mil   3769.685mil   5383.858mil   3769.685mil   5350.394mil  T         90.00 RESISTOR  
+R1.D       0603         7377.953mil   4645.669mil   7377.953mil   4645.669mil   7377.953mil   4612.205mil  T         90.00 4.7k      
+R1.C       0603         6165.355mil   4645.669mil   6165.355mil   4645.669mil   6165.355mil   4612.205mil  T         90.00 4.7k      
+R1.A       0603         3740.157mil   4645.669mil   3740.157mil   4645.669mil   3740.157mil   4612.205mil  T         90.00 4.7k      
+P2         HDR2X7       2579.528mil   5546.457mil   2529.528mil   5846.457mil   2529.528mil   5846.457mil  T        270.00 Header 7X2
+P1.D       HDR1X3       7397.796mil       5120mil   7397.796mil       5020mil   7397.796mil       5020mil  T         90.00 Header 3  
+P1.C       HDR1X3       6185.197mil       5120mil   6185.197mil       5020mil   6185.197mil       5020mil  T         90.00 Header 3  
+P1.A       HDR1X3           3760mil       5120mil       3760mil       5020mil       3760mil       5020mil  T         90.00 Header 3  
+O1         ECS-3953M     4086.22mil   3202.756mil    3986.22mil   3120.079mil    3986.22mil   3120.079mil  T          0.00 OSC2      
+JP1        SMT_2x7_2mm_HDR   5362.205mil   3244.095mil   5362.205mil   3244.095mil   5125.984mil   3160.433mil  T        180.00 Header 7X2
+IO1        MOLEX_87703-0001   2202.752mil       4500mil    2297.24mil       4500mil    2297.24mil       3875mil  T        270.00 SATA 23-pin header
+DS5        SMD__LED     2824.802mil   4261.811mil   2824.803mil   4261.811mil   2862.204mil   4261.811mil  T        360.00 LED3      
+DS4        SMD__LED     6466.535mil   4261.811mil   6466.535mil   4261.811mil   6503.937mil   4261.811mil  T        360.00 LED3      
+DS3        SMD__LED     5246.062mil   4261.811mil   5246.063mil   4261.811mil   5283.464mil   4261.811mil  T        360.00 LED3      
+DS2        SMD__LED     4035.432mil   4261.811mil   4035.433mil   4261.811mil   4072.834mil   4261.811mil  T          0.00 LED3      
+DS1.D      SMD__LED     6383.859mil     4606.3mil   6383.859mil   4606.299mil   6383.859mil   4568.898mil  T        270.00 LED?      
+DS1.C      SMD__LED      5171.26mil     4606.3mil    5171.26mil   4606.299mil    5171.26mil   4568.898mil  T        270.00 LED?      
+DS1.A      SMD__LED     2746.063mil     4606.3mil   2746.063mil   4606.299mil   2746.063mil   4568.898mil  T        270.00 LED?      
+C27        6032         2933.071mil    3342.52mil   2933.071mil    3342.52mil    2842.52mil    3342.52mil  T        360.00 POLCAP2   
+C26        7343         7685.039mil   3311.024mil   7685.039mil   3311.024mil   7685.039mil   3437.008mil  T        270.00 A700D107M006AT
+C20        3528         7413.386mil   4401.575mil   7413.386mil   4401.575mil   7413.386mil    4342.52mil  T         90.00 Bypass Cap
+C19        3528         6279.528mil   4826.772mil   6279.528mil   4826.772mil   6220.472mil   4826.772mil  T        360.00 Bypass Cap
+C18        3528         3811.024mil   4838.583mil   3811.024mil   4838.583mil   3870.079mil   4838.583mil  T        180.00 Bypass Cap
+C17        3528         3055.118mil   4192.913mil   3055.118mil   4192.913mil   3055.118mil   4133.858mil  T         90.00 Bypass Cap
+C16        1206         5755.905mil   3267.716mil   5755.905mil   3267.716mil   5755.905mil   3322.835mil  T        270.00 Cap       
+C15        6032         5976.378mil   3409.449mil   5976.378mil   3409.449mil   6066.929mil   3409.449mil  T        180.00 POLCAP2   
+DS1.B      SMD__LED     3958.662mil     4606.3mil   3958.662mil   4606.299mil   3958.662mil   4568.898mil  T        270.00 LED?      
+P1.B       HDR1X3       4972.599mil       5120mil   4972.599mil       5020mil   4972.599mil       5020mil  T         90.00 Header 3  
+R1.B       0603         4952.756mil   4645.669mil   4952.756mil   4645.669mil   4952.756mil   4612.205mil  T         90.00 4.7k      
+R2.B       0603         4982.283mil   5383.858mil   4982.283mil   5383.858mil   4982.283mil   5350.394mil  T         90.00 RESISTOR  
+R3.B       0603         4982.283mil   5679.134mil   4982.283mil   5679.134mil   4982.283mil   5645.669mil  T         90.00 RESISTOR  
+R4.B       0603         4982.283mil   5531.496mil   4982.283mil   5531.496mil   4982.283mil   5498.032mil  T         90.00 RESISTOR  
+R5.B       0603         4982.283mil   5836.614mil   4982.283mil   5836.614mil   4982.283mil    5803.15mil  T         90.00 RESISTOR  
+R6.B       0603         3968.504mil   4429.134mil   3968.504mil   4429.134mil   3968.504mil   4395.669mil  T         90.00 RESISTOR  
+R7.B       0603         5011.811mil   4645.669mil   5011.811mil   4645.669mil   5011.811mil   4679.134mil  T        270.00 4.7k      
+U1.B       AD_PBGA-169   4480.314mil   4724.409mil   4480.315mil   4724.409mil   4795.275mil   4409.448mil  T        180.00 Blackfin BF533-PGBA169
+U2.B       SO-G54/X.5   4472.599mil       5560mil   4472.599mil       5560mil   4882.047mil   5778.504mil  T        180.00 16Mx16 SDRAM
+C56        TC3528-1411   7066.929mil    3907.48mil   7066.929mil    3907.48mil   7066.929mil   3966.535mil  T        270.00           
+O2         HPVL             8000mil       5200mil       7850mil       5200mil       7850mil       5350mil  T         90.00 HFBR-1528 
+O3         HPVL             8000mil       4800mil       7850mil       4800mil       7850mil       4950mil  T         90.00 HFBR-2528 
+O4         HPVL             8000mil       4200mil       7850mil       4200mil       7850mil       4350mil  T         90.00 HFBR-1528 
+O5         HPVL             8000mil       3800mil       7850mil       3800mil       7850mil       3950mil  T         90.00 HFBR-2528 
+R22        0603         7608.268mil   5314.961mil   7608.268mil   5314.961mil   7608.268mil   5348.425mil  T        270.00 RESISTOR  
+R23        0603         7608.268mil   5167.323mil   7608.268mil   5167.323mil   7608.268mil   5133.858mil  T         90.00 RESISTOR  
+R24        0603          7618.11mil   4911.417mil    7618.11mil   4911.417mil    7618.11mil   4877.953mil  T         90.00 RESISTOR  
+R25        0603          7618.11mil   4714.567mil    7618.11mil   4714.567mil    7618.11mil   4681.102mil  T         90.00 RESISTOR  
+R26        0603         7608.268mil   4311.024mil   7608.268mil   4311.024mil   7608.268mil   4344.488mil  T        270.00 RESISTOR  
+R27        0603         7608.268mil   4153.543mil   7608.268mil   4153.543mil   7608.268mil   4120.079mil  T         90.00 RESISTOR  
+R28        0603         7608.268mil   3897.638mil   7608.268mil   3897.638mil   7608.268mil   3864.173mil  T         90.00 RESISTOR  
+R29        0603         7608.268mil   3690.945mil   7608.268mil   3690.945mil   7608.268mil    3657.48mil  T         90.00 RESISTOR  
+U10        SO-G8/E2.5   7322.835mil   3917.323mil   7322.835mil   3917.323mil    7217.52mil   3992.323mil  T        270.00 SN75451BD 
+R30        0603         4094.488mil   3454.724mil   4094.488mil   3454.724mil   4127.953mil   3454.724mil  T        180.00 current-limiting series res
+R31        0603         4281.496mil   3454.724mil   4281.496mil   3454.724mil   4314.961mil   3454.724mil  T        180.00 current-limiting series res
+R32        0603         4281.496mil    3553.15mil   4281.496mil    3553.15mil   4314.961mil    3553.15mil  T        180.00 current-limiting series res
+DS6        SMD__LED     5590.552mil   3562.992mil   5590.551mil   3562.992mil    5553.15mil   3562.992mil  T        180.00 LED3      
+R33        0603         5374.016mil   3572.835mil   5374.016mil   3572.835mil   5340.551mil   3572.835mil  T        360.00 RESISTOR  
+C29        6032         2937.008mil   3141.732mil   2937.008mil   3141.732mil   2846.457mil   3141.732mil  T        360.00 POLCAP2   
+C63        1206         3255.905mil   3232.284mil   3255.905mil   3232.284mil   3311.024mil   3232.284mil  T        180.00 Cap       
+C8         6032         5976.378mil   3200.787mil   5976.378mil   3200.787mil   6066.929mil   3200.787mil  T        180.00 POLCAP2   
+U7         SOT223-5/Simple   6330.709mil    3303.15mil   6232.283mil    3303.15mil   6232.283mil    3403.15mil  T        270.00 TPS79518  
+U8         SOT223-5/Simple   2602.362mil   3228.347mil   2700.787mil   3228.347mil   2700.787mil   3128.347mil  T         90.00 TPS79525  
 C28        0603         2708.661mil   3165.354mil   2708.661mil   3165.354mil   2708.661mil   3198.819mil  B        270.00 CAPACITOR 
+C10.D      0402         7011.811mil   4751.968mil   7011.811mil   4751.968mil   7011.811mil   4777.559mil  B        270.00 CAPACITOR 
+C53        0402             3545mil       3665mil       3545mil       3665mil       3545mil    3639.41mil  B         90.00 CAPACITOR 
+C52        0402         3759.842mil   3452.756mil   3759.843mil   3452.756mil   3785.433mil   3452.756mil  B        180.00 CAPACITOR 
+C51        0402             3945mil       3665mil       3945mil       3665mil       3945mil    3639.41mil  B         90.00 CAPACITOR 
+C50        0402             3920mil       3815mil       3920mil       3815mil       3920mil    3789.41mil  B         90.00 CAPACITOR 
+C48        0402         3425.197mil   3779.528mil   3425.197mil   3779.528mil   3399.606mil   3779.528mil  B        360.00 CAPACITOR 
+C47        0402         3395.669mil    3710.63mil   3395.669mil    3710.63mil    3421.26mil    3710.63mil  B        180.00 CAPACITOR 
+C46        0402         3602.362mil    3474.41mil   3602.363mil    3474.41mil   3627.953mil    3474.41mil  B        180.00 CAPACITOR 
+C45        0402          3789.37mil   3543.307mil    3789.37mil   3543.307mil    3789.37mil   3517.717mil  B         90.00 CAPACITOR 
+C44        0402         3692.913mil   3897.638mil   3692.913mil   3897.638mil   3667.323mil   3897.638mil  B        360.00 CAPACITOR 
+C43        0402         3531.496mil   3937.008mil   3531.496mil   3937.008mil   3557.087mil   3937.008mil  B        180.00 CAPACITOR 
+C42        0402         3444.882mil   3641.732mil   3444.882mil   3641.732mil   3444.882mil   3667.323mil  B        270.00 CAPACITOR 
+C36        0402         3551.181mil   3838.583mil   3551.181mil   3838.583mil   3551.181mil   3864.173mil  B        270.00 CAPACITOR 
+C35        0402         3688.976mil   3661.417mil   3688.976mil   3661.417mil   3714.567mil   3661.417mil  B        180.00 CAPACITOR 
+C34        0402             3750mil       3725mil       3750mil       3725mil       3750mil    3699.41mil  B         90.00 CAPACITOR 
+C33        0402             3620mil       3615mil       3620mil       3615mil    3594.41mil       3615mil  B        360.00 CAPACITOR 
+C21        0402         6318.898mil   3161.417mil   6318.898mil   3161.417mil   6344.488mil   3161.417mil  B        180.00 CAPACITOR 
+C7         0402         7942.913mil   3801.118mil   7942.913mil   3801.118mil   7942.913mil   3775.528mil  B         90.00 CAPACITOR 
+C57        0402         7379.984mil   3858.268mil   7379.984mil   3858.268mil   7405.575mil   3858.268mil  B        180.00 CAPACITOR 
+C58        0402         7933.071mil   4795.213mil   7933.071mil   4795.213mil   7933.071mil   4769.622mil  B         90.00 CAPACITOR 
+C62.D      0402         7186.047mil       5340mil   7186.047mil       5340mil   7211.638mil       5340mil  B        180.00 CAPACITOR 
+C62.C      0402         5973.449mil       5340mil   5973.449mil       5340mil   5999.039mil       5340mil  B        180.00 CAPACITOR 
+C62.B      0402          4760.85mil       5340mil    4760.85mil       5340mil   4786.441mil       5340mil  B        180.00 CAPACITOR 
+C61.D      0402         6937.796mil       5340mil   6937.796mil       5340mil   6912.205mil       5340mil  B        360.00 CAPACITOR 
+C61.C      0402         5725.197mil       5340mil   5725.197mil       5340mil   5699.606mil       5340mil  B        360.00 CAPACITOR 
+C61.B      0402         4512.599mil       5340mil   4512.599mil       5340mil   4487.008mil       5340mil  B        360.00 CAPACITOR 
+C60.D      0402         6917.795mil       5780mil   6917.796mil       5780mil   6943.386mil       5780mil  B        180.00 CAPACITOR 
+C60.C      0402         5705.197mil       5780mil   5705.197mil       5780mil   5730.788mil       5780mil  B        180.00 CAPACITOR 
+C60.B      0402         4492.598mil       5780mil   4492.599mil       5780mil   4518.189mil       5780mil  B        180.00 CAPACITOR 
+C59.D      0402         7189.544mil       5780mil   7189.544mil       5780mil   7163.953mil       5780mil  B        360.00 CAPACITOR 
+C59.C      0402         5976.945mil       5780mil   5976.945mil       5780mil   5951.355mil       5780mil  B        360.00 CAPACITOR 
+C59.B      0402         4764.347mil       5780mil   4764.347mil       5780mil   4738.756mil       5780mil  B        360.00 CAPACITOR 
+C12.D      0402         6964.567mil   4616.142mil   6964.567mil   4616.142mil   6938.977mil   4616.142mil  B        360.00 CAPACITOR 
+C12.C      0402         5751.969mil   4616.142mil   5751.969mil   4616.142mil   5726.378mil   4616.142mil  B        360.00 CAPACITOR 
+C10.C      0402         5791.339mil       4746mil   5791.339mil       4746mil   5791.339mil    4720.41mil  B         90.00 CAPACITOR 
+C9.D       0402         7062.992mil   4870.142mil   7062.992mil   4870.142mil   7062.992mil   4895.732mil  B        270.00 CAPACITOR 
+C9.C       0402         5850.394mil   4870.142mil   5850.394mil   4870.142mil   5850.394mil   4895.732mil  B        270.00 CAPACITOR 
+C6.D       0603         6885.827mil   4527.559mil   6885.827mil   4527.559mil   6852.363mil   4527.559mil  B        360.00 CAPACITOR 
+C6.C       0603         5673.229mil   4527.559mil   5673.229mil   4527.559mil   5639.764mil   4527.559mil  B        360.00 CAPACITOR 
+C5.D       0603         7064.898mil    4960.63mil   7064.898mil    4960.63mil   7031.433mil    4960.63mil  B        360.00 CAPACITOR 
+C5.C       0603         5852.299mil    4960.63mil   5852.299mil    4960.63mil   5818.835mil    4960.63mil  B        360.00 CAPACITOR 
+C4.D       0402         6690.882mil   4714.567mil   6690.882mil   4714.567mil   6665.292mil   4714.567mil  B        360.00 CAPACITOR 
+C4.C       0402         5478.284mil   4714.567mil   5478.284mil   4714.567mil   5452.693mil   4714.567mil  B        360.00 CAPACITOR 
+C3.D       0402         6795.339mil   4822.835mil   6795.339mil   4822.835mil   6820.929mil   4822.835mil  B        180.00 CAPACITOR 
+C3.C       0402          5582.74mil   4822.835mil    5582.74mil   4822.835mil   5608.331mil   4822.835mil  B        180.00 CAPACITOR 
+C2.D       0603          6720.41mil   4566.929mil    6720.41mil   4566.929mil   6686.945mil   4566.929mil  B        360.00 CAPACITOR 
+C2.C       0603         5507.811mil   4566.929mil   5507.811mil   4566.929mil   5474.347mil   4566.929mil  B        360.00 CAPACITOR 
+C1.D       0603         6875.984mil    4921.26mil   6875.984mil    4921.26mil   6909.449mil    4921.26mil  B        180.00 CAPACITOR 
+C1.C       0603         5663.386mil    4921.26mil   5663.386mil    4921.26mil    5696.85mil    4921.26mil  B        180.00 CAPACITOR 
+C62.A      0402         3548.252mil       5340mil   3548.252mil       5340mil   3573.842mil       5340mil  B        180.00 CAPACITOR 
+C61.A      0402             3300mil       5340mil       3300mil       5340mil    3274.41mil       5340mil  B        360.00 CAPACITOR 
+C60.A      0402             3280mil       5780mil       3280mil       5780mil    3305.59mil       5780mil  B        180.00 CAPACITOR 
+C59.A      0402         3551.748mil       5780mil   3551.748mil       5780mil   3526.158mil       5780mil  B        360.00 CAPACITOR 
+C12.A      0402         3326.772mil   4616.142mil   3326.772mil   4616.142mil   3301.181mil   4616.142mil  B        360.00 CAPACITOR 
+C10.A      0402         3366.142mil       4746mil   3366.142mil       4746mil   3366.142mil    4720.41mil  B         90.00 CAPACITOR 
+C9.A       0402         3425.197mil   4870.142mil   3425.197mil   4870.142mil   3425.197mil   4895.732mil  B        270.00 CAPACITOR 
+C6.A       0603         3248.032mil   4527.559mil   3248.032mil   4527.559mil   3214.567mil   4527.559mil  B        360.00 CAPACITOR 
+C5.A       0603         3427.102mil    4960.63mil   3427.102mil    4960.63mil   3393.638mil    4960.63mil  B        360.00 CAPACITOR 
+C4.A       0402         3053.087mil   4714.567mil   3053.087mil   4714.567mil   3027.496mil   4714.567mil  B        360.00 CAPACITOR 
+C3.A       0402         3157.543mil   4822.835mil   3157.543mil   4822.835mil   3183.134mil   4822.835mil  B        180.00 CAPACITOR 
+C2.A       0603         3082.614mil   4566.929mil   3082.614mil   4566.929mil    3049.15mil   4566.929mil  B        360.00 CAPACITOR 
+C1.A       0603         3238.189mil    4921.26mil   3238.189mil    4921.26mil   3271.653mil    4921.26mil  B        180.00 CAPACITOR 
+C1.B       0603         4450.787mil    4921.26mil   4450.788mil    4921.26mil   4484.252mil    4921.26mil  B        180.00 CAPACITOR 
+C2.B       0603         4295.213mil   4566.929mil   4295.213mil   4566.929mil   4261.748mil   4566.929mil  B        360.00 CAPACITOR 
+C3.B       0402         4370.142mil   4822.835mil   4370.142mil   4822.835mil   4395.732mil   4822.835mil  B        180.00 CAPACITOR 
+C4.B       0402         4265.685mil   4714.567mil   4265.685mil   4714.567mil   4240.095mil   4714.567mil  B        360.00 CAPACITOR 
+C5.B       0603         4639.701mil    4960.63mil   4639.701mil    4960.63mil   4606.236mil    4960.63mil  B        360.00 CAPACITOR 
+C6.B       0603          4460.63mil   4527.559mil    4460.63mil   4527.559mil   4427.166mil   4527.559mil  B        360.00 CAPACITOR 
+C9.B       0402         4637.795mil   4870.142mil   4637.795mil   4870.142mil   4637.795mil   4895.732mil  B        270.00 CAPACITOR 
+C10.B      0402          4578.74mil       4746mil    4578.74mil       4746mil    4578.74mil    4720.41mil  B         90.00 CAPACITOR 
+C12.B      0402          4539.37mil   4616.142mil    4539.37mil   4616.142mil    4513.78mil   4616.142mil  B        360.00 CAPACITOR 
+C14        0402         2942.913mil   3700.787mil   2942.913mil   3700.787mil   2942.913mil   3675.197mil  B         90.00 CAPACITOR 
+C13        0402          2696.85mil    3631.89mil    2696.85mil    3631.89mil   2722.441mil    3631.89mil  B        180.00 CAPACITOR 
+C11        0603         6236.221mil   3425.197mil   6236.221mil   3425.197mil   6236.221mil   3458.661mil  B        270.00 CAPACITOR 
+C64        0402         2637.732mil   3326.772mil   2637.732mil   3326.772mil   2612.142mil   3326.772mil  B        360.00 CAPACITOR 
 
