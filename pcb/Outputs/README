@@ -1,0 +1,17 @@
+DSPboard
+jonas@mwl.mit.edu
+
+pcb.GTO : top silkscreen
+pcb.GTS : top solder mask
+pcb.GTL : Copper layer 1
+pcb.GP1 : Copper layer 2 (ground plane)
+pcb.G1  : Copper Layer 3 
+pcb.G2  : Copper Layer 4
+pcb.GP2 : Copper Layer 5 (vcc plane)
+pcb.GBL : Copper Layer 6
+pcb.GBS : bottom solder mask
+pcb.GBO : bottom silkscreen
+
+pcb.TXT : Drill file
+Pick Place for pcb.txt : Pick and place file
+
