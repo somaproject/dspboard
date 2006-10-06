@@ -1,0 +1,12 @@
+The DSPs read samples from the acqboard via SPORT0. We transfer in 11
+16-bit samples, the 10 acquired from the acqboard as well as the
+CMDSTS and CMDID bytes.
+
+The acqboard's 8 MHz 8b/10b signal is deserialized and decoded by the
+decoder module, and the frame disassembly module selects out the
+individual 16-bit samples.
+
+The arrival of a complete, error-free frame causes the assertion of
+NEWSAMPLE, which updates FrameSerialize's internal registers.
+
+
