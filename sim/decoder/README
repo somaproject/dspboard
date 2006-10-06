@@ -1,0 +1,5 @@
+Here we generate an 8b/10b source stream at 8 MHz and try and obtain
+recovery via the decode module running at a core of 50 MHz.
+
+We send in a 25-byte frame with a leading k28.5 and increasing sample
+values.
