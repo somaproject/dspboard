@@ -6,11 +6,11 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="svg1"
    sodipodi:version="0.32"
-   inkscape:version="0.42.2"
+   inkscape:version="0.44"
    width="612.00000pt"
    height="792.00000pt"
    sodipodi:docname="FiberRX.svg"
@@ -205,7 +205,7 @@
        id="tspan997">INCNT = 1</tspan><tspan
        sodipodi:role="line"
        id="tspan999"
-       x="262.32870"
+       x="262.3287"
        y="116.84457">&amp; INWE</tspan></text>
   <g
      id="g1001"
@@ -264,7 +264,7 @@
        id="tspan1015">INCNT = 2</tspan><tspan
        sodipodi:role="line"
        id="tspan1017"
-       x="262.32870"
+       x="262.3287"
        y="116.84457">&amp; INWE</tspan></text>
   <g
      id="g1019"
@@ -509,7 +509,7 @@
        id="tspan1704">INCNT = 3</tspan><tspan
        sodipodi:role="line"
        id="tspan1706"
-       x="262.32870"
+       x="262.3287"
        y="116.84457">&amp; INWE</tspan></text>
   <g
      id="g1708"
@@ -568,7 +568,7 @@
        id="tspan1723">INCNT = 4</tspan><tspan
        sodipodi:role="line"
        id="tspan1725"
-       x="262.32870"
+       x="262.3287"
        y="116.84457">&amp; INWE</tspan></text>
   <g
      id="g1728"
@@ -813,7 +813,7 @@
        id="tspan1789">INCNT = 5</tspan><tspan
        sodipodi:role="line"
        id="tspan1791"
-       x="262.32870"
+       x="262.3287"
        y="116.84457">&amp; INWE</tspan></text>
   <g
      id="g1793"
@@ -872,7 +872,7 @@
        id="tspan1807">INCNT = 6</tspan><tspan
        sodipodi:role="line"
        id="tspan1809"
-       x="262.32870"
+       x="262.3287"
        y="116.84457">&amp; INWE</tspan></text>
   <g
      id="g1811"
@@ -1117,7 +1117,7 @@
        id="tspan1871">INCNT = 7</tspan><tspan
        sodipodi:role="line"
        id="tspan1873"
-       x="262.32870"
+       x="262.3287"
        y="116.84457">&amp; INWE</tspan></text>
   <g
      id="g1875"
@@ -1176,7 +1176,7 @@
        id="tspan1889">INCNT = 8</tspan><tspan
        sodipodi:role="line"
        id="tspan1891"
-       x="262.32870"
+       x="262.3287"
        y="116.84457">&amp; INWE</tspan></text>
   <g
      id="g1893"
@@ -1421,7 +1421,7 @@
        id="tspan1955">INCNT = 9</tspan><tspan
        sodipodi:role="line"
        id="tspan1957"
-       x="262.32870"
+       x="262.3287"
        y="116.84457">&amp; INWE</tspan></text>
   <g
      id="g1959"
@@ -1480,7 +1480,7 @@
        id="tspan1973">INCNT = 10</tspan><tspan
        sodipodi:role="line"
        id="tspan1975"
-       x="262.32870"
+       x="262.3287"
        y="116.84457">&amp; INWE</tspan></text>
   <g
      id="g1977"
@@ -1725,7 +1725,7 @@
        id="tspan2119">INCNT = 11</tspan><tspan
        sodipodi:role="line"
        id="tspan2121"
-       x="262.32870"
+       x="262.3287"
        y="116.84457">&amp; INWE</tspan></text>
   <g
      id="g2123"
@@ -1784,7 +1784,7 @@
        id="tspan2137">INCNT = 12</tspan><tspan
        sodipodi:role="line"
        id="tspan2139"
-       x="262.32870"
+       x="262.3287"
        y="116.84457">&amp; INWE</tspan></text>
   <g
      id="g2141"
@@ -2029,7 +2029,7 @@
        id="tspan2201">INCNT = 13</tspan><tspan
        sodipodi:role="line"
        id="tspan2203"
-       x="262.32870"
+       x="262.3287"
        y="116.84457">&amp; INWE</tspan></text>
   <g
      id="g2205"
@@ -2088,7 +2088,7 @@
        id="tspan2219">INCNT = 14</tspan><tspan
        sodipodi:role="line"
        id="tspan2221"
-       x="262.32870"
+       x="262.3287"
        y="116.84457">&amp; INWE</tspan></text>
   <g
      id="g2223"
@@ -2333,7 +2333,7 @@
        id="tspan2283">INCNT =15</tspan><tspan
        sodipodi:role="line"
        id="tspan2285"
-       x="262.32870"
+       x="262.3287"
        y="116.84457">&amp; INWE</tspan></text>
   <g
      id="g2287"
@@ -2392,7 +2392,7 @@
        id="tspan2301">INCNT = 16</tspan><tspan
        sodipodi:role="line"
        id="tspan2303"
-       x="262.32870"
+       x="262.3287"
        y="116.84457">&amp; INWE</tspan></text>
   <g
      id="g2305"
@@ -2637,7 +2637,7 @@
        id="tspan2365">INCNT = 17</tspan><tspan
        sodipodi:role="line"
        id="tspan2367"
-       x="262.32870"
+       x="262.3287"
        y="116.84457">&amp; INWE</tspan></text>
   <g
      id="g2369"
@@ -2696,7 +2696,7 @@
        id="tspan2383">INCNT = 18</tspan><tspan
        sodipodi:role="line"
        id="tspan2385"
-       x="262.32870"
+       x="262.3287"
        y="116.84457">&amp; INWE</tspan></text>
   <g
      id="g2387"
@@ -2941,7 +2941,7 @@
        id="tspan2447">INCNT = 9</tspan><tspan
        sodipodi:role="line"
        id="tspan2449"
-       x="262.32870"
+       x="262.3287"
        y="116.84457">&amp; INWE</tspan></text>
   <g
      id="g2451"
@@ -3000,7 +3000,7 @@
        id="tspan2465">INCNT = 20</tspan><tspan
        sodipodi:role="line"
        id="tspan2467"
-       x="262.32870"
+       x="262.3287"
        y="116.84457">&amp; INWE</tspan></text>
   <g
      id="g2469"
@@ -3251,7 +3251,7 @@
        id="tspan2531">INCNT = 9</tspan><tspan
        sodipodi:role="line"
        id="tspan2533"
-       x="262.32870"
+       x="262.3287"
        y="116.84457">&amp; INWE</tspan></text>
   <text
      xml:space="preserve"
@@ -3343,7 +3343,7 @@
        id="tspan2560">INCNT = 0</tspan><tspan
        sodipodi:role="line"
        id="tspan2562"
-       x="262.32870"
+       x="262.3287"
        y="116.84457">&amp; INWE</tspan></text>
   <text
      xml:space="preserve"
@@ -3498,7 +3498,7 @@
        id="tspan2614">DONEF </tspan><tspan
        sodipodi:role="line"
        id="tspan2624"
-       x="262.32870"
+       x="262.3287"
        y="116.84457">&amp; LCMDID[3]=0</tspan></text>
   <text
      xml:space="preserve"
@@ -3571,7 +3571,7 @@
        id="tspan2640">DONEF </tspan><tspan
        sodipodi:role="line"
        id="tspan2642"
-       x="262.32870"
+       x="262.3287"
        y="116.84457">&amp; LCMDID[3]=1</tspan></text>
   <text
      xml:space="preserve"
@@ -3855,10 +3855,6 @@
      id="text2109"
      transform="translate(162.5000,-62.50000)"><tspan
        id="tspan2110">=24</tspan></text>
-  <path
-     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
-     d="M 6.2500000,361.87500 L 6.2500000,361.87500 C 6.1236851e+09,989.99908 6.2500000,361.87500 6.2500000,361.87500 z "
-     id="path2790" />
   <path
      style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
      d="M 62.500000,368.12500 L 100.00000,368.12500"

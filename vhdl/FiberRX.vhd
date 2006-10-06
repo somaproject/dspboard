@@ -8,7 +8,7 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 library UNISIM;
 use UNISIM.VComponents.all;
 
-entity FiberRX is
+entity framedis is
     Port ( CLK : in std_logic;
            RESET : in std_logic;
            STATUS : out std_logic;
@@ -27,7 +27,7 @@ entity FiberRX is
            CMDIDB : out std_logic_vector(2 downto 0);
            CMDST : out std_logic_vector(3 downto 0);
            FIBERIN : in std_logic);
-end FiberRX;
+end framedis
 
 architecture Behavioral of FiberRX is
 -- FIBERRX.VHD -- receives and decodes 8b10b encoded acq board samples. Generates
