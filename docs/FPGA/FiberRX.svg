@@ -35,9 +35,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.62735974"
-     inkscape:cx="339.89760"
-     inkscape:cy="475.18481"
+     inkscape:zoom="0.88722065"
+     inkscape:cx="268.1857"
+     inkscape:cy="749.43506"
      inkscape:window-width="1020"
      inkscape:window-height="727"
      showgrid="true"
@@ -47,13 +47,15 @@
      gridspacingx="2.5000000pt"
      gridoriginy="0.0000000pt"
      gridoriginx="0.0000000pt"
-     gridtolerance="2.5000000pt"
+     gridtolerance="10000"
      showguides="true"
      snaptoguides="true"
-     inkscape:window-x="-2"
-     inkscape:window-y="-18"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
      inkscape:grid-bbox="false"
-     guidetolerance="5.0000000pt" />
+     guidetolerance="5.0000000pt"
+     inkscape:object-paths="false"
+     inkscape:current-layer="svg1" />
   <g
      id="g2719"
      transform="translate(50.00000,-303.1250)">
@@ -3490,7 +3492,7 @@
   <text
      xml:space="preserve"
      style="font-size:8.0000000;stroke-width:1.2500000;font-family:Bitstream Vera Sans;text-anchor:end;"
-     x="262.32870"
+     x="262.3287"
      y="108.84457"
      id="text2613"
      sodipodi:linespacing="100%"
@@ -3499,105 +3501,27 @@
        sodipodi:role="line"
        id="tspan2624"
        x="262.3287"
-       y="116.84457">&amp; LCMDID[3]=0</tspan></text>
+       y="116.84457" /></text>
   <text
      xml:space="preserve"
-     style="font-size:12.000000;stroke-width:1.2500000;font-family:Bitstream Vera Sans;"
+     style="font-size:12px;line-height:100%;stroke-width:1.25;font-family:Bitstream Vera Sans"
      x="379.60165"
      y="59.712769"
      id="text2616"
      sodipodi:linespacing="100%"
-     transform="translate(231.2500,775.0000)"><tspan
-       id="tspan2617">CMDIDA[2:0]</tspan></text>
+     transform="translate(231.25,775)"><tspan
+       id="tspan2617">CMDID[3:0]</tspan></text>
   <path
      style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.2500000;"
      d="M 403.12500,99.375000 L 412.50000,99.375000"
      id="path2620"
      transform="translate(196.8750,731.2500)" />
-  <g
-     id="g2626"
-     transform="translate(493.7500,553.1250)">
-    <rect
-       style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.1744328;"
-       id="rect2627"
-       width="28.350792"
-       height="50.096931"
-       x="77.899200"
-       y="343.12500" />
-    <text
-       xml:space="preserve"
-       style="font-size:10.000000;stroke-width:1.2500000;font-family:Bitstream Vera Sans;text-anchor:middle;"
-       x="96.335358"
-       y="390.89999"
-       id="text2628"
-       sodipodi:linespacing="100%"><tspan
-         id="tspan2629">EN</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-size:4.0000000;stroke-width:0.36937839;font-family:Bitstream Vera Sans;"
-       x="23.410166"
-       y="106.56478"
-       id="text2631"
-       sodipodi:linespacing="100%"
-       transform="scale(3.384064,3.384064)"><tspan
-         id="tspan2632">D</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-size:4.0000000;stroke-width:0.36937839;font-family:Bitstream Vera Sans;text-anchor:end;"
-       x="30.771975"
-       y="106.58192"
-       id="text2634"
-       sodipodi:linespacing="100%"
-       transform="scale(3.384064,3.384064)"><tspan
-         id="tspan2635">Q</tspan></text>
-    <path
-       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.2500000;"
-       d="M 78.125000,393.12500 L 84.375000,386.87500 L 78.125000,380.62500"
-       id="path2637" />
-  </g>
   <path
      style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.2500000;"
-     d="M 300.00000,86.875000 L 300.00000,99.375000 L 287.50000,99.375000 L 287.50000,99.375000 L 287.50000,99.375000"
-     id="path2638"
-     transform="translate(290.6250,859.3750)" />
-  <text
-     xml:space="preserve"
-     style="font-size:8.0000000;stroke-width:1.2500000;font-family:Bitstream Vera Sans;text-anchor:end;"
-     x="262.32870"
-     y="108.84457"
-     id="text2639"
-     sodipodi:linespacing="100%"
-     transform="translate(312.5000,853.1250)"><tspan
-       id="tspan2640">DONEF </tspan><tspan
-       sodipodi:role="line"
-       id="tspan2642"
-       x="262.3287"
-       y="116.84457">&amp; LCMDID[3]=1</tspan></text>
-  <text
-     xml:space="preserve"
-     style="font-size:12.000000;stroke-width:1.2500000;font-family:Bitstream Vera Sans;"
-     x="379.60165"
-     y="59.712769"
-     id="text2644"
-     sodipodi:linespacing="100%"
-     transform="translate(231.2500,853.1250)"><tspan
-       id="tspan2645">CMDIDB[2:0]</tspan></text>
-  <path
-     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.2500000;"
-     d="M 403.12500,99.375000 L 412.50000,99.375000"
-     id="path2647"
-     transform="translate(196.8750,809.3750)" />
-  <path
-     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.2500000;"
-     d="M 215.62500,824.37500 L 400.00000,824.37500 L 400.00000,908.75000 L 462.50000,908.75000"
-     id="path2648"
-     sodipodi:nodetypes="cccc"
-     transform="translate(109.3750,0.000000)" />
-  <path
-     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.2500000;"
-     d="M 437.50000,830.62500 L 500.00000,830.62500"
+     d="M 253.125,830.625 L 500,830.625"
      id="path2649"
-     transform="translate(71.87500,0.000000)" />
+     transform="translate(71.87500,0.000000)"
+     sodipodi:nodetypes="cc" />
   <path
      style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.2500000;"
      d="M 318.75000,96.250000 L 328.12500,96.250000 L 328.12500,68.125000"
@@ -3653,67 +3577,6 @@
      d="M 318.75000,96.250000 L 328.12500,96.250000 L 328.12500,68.125000"
      id="path2660"
      transform="translate(384.3750,0.000000)" />
-  <rect
-     style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.4187639"
-     id="rect1911"
-     width="112.64893"
-     height="137.31879"
-     x="28.124990"
-     y="8.9312382" />
-  <text
-     xml:space="preserve"
-     style="font-size:10.000000;stroke-width:1.2500000;font-family:Bitstream Vera Sans;text-anchor:end;"
-     x="58.878670"
-     y="228.25722"
-     id="text2592"
-     sodipodi:linespacing="100%"
-     transform="translate(78.12500,-203.1250)"><tspan
-       id="tspan2593">DATAOUT</tspan></text>
-  <text
-     xml:space="preserve"
-     style="font-size:10.000000;stroke-width:1.2500000;font-family:Bitstream Vera Sans;text-anchor:end;"
-     x="58.878670"
-     y="228.25722"
-     id="text2595"
-     sodipodi:linespacing="100%"
-     transform="translate(78.12500,-171.8750)"><tspan
-       id="tspan2596">DATALOCK</tspan></text>
-  <text
-     xml:space="preserve"
-     style="font-size:10.000000;stroke-width:1.2500000;font-family:Bitstream Vera Sans;text-anchor:end;"
-     x="58.878670"
-     y="228.25722"
-     id="text2598"
-     sodipodi:linespacing="100%"
-     transform="translate(75.00000,-156.2500)"><tspan
-       id="tspan2599">KOUT</tspan></text>
-  <text
-     xml:space="preserve"
-     style="font-size:10.000000;stroke-width:1.2500000;font-family:Bitstream Vera Sans;text-anchor:end;"
-     x="58.878670"
-     y="228.25722"
-     id="text2601"
-     sodipodi:linespacing="100%"
-     transform="translate(78.12500,-140.6250)"><tspan
-       id="tspan2602">CODE_ERR</tspan></text>
-  <text
-     xml:space="preserve"
-     style="font-size:10.000000;stroke-width:1.2500000;font-family:Bitstream Vera Sans;text-anchor:end;"
-     x="58.878670"
-     y="228.25722"
-     id="text2604"
-     sodipodi:linespacing="100%"
-     transform="translate(78.12500,-128.1250)"><tspan
-       id="tspan2605">DISP_ERR</tspan></text>
-  <text
-     xml:space="preserve"
-     style="font-size:10.000000;stroke-width:1.2500000;font-family:Bitstream Vera Sans;"
-     x="58.878670"
-     y="228.25722"
-     id="text2607"
-     sodipodi:linespacing="100%"
-     transform="translate(-28.12500,-159.3750)"><tspan
-       id="tspan2608">FIBERIN</tspan></text>
   <path
      style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
      d="M 234.37500,21.250000 L 140.62500,21.250000"
@@ -3780,18 +3643,6 @@
      style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
      d="M 96.875000,177.50000 L 84.375000,177.50000 L 84.375000,146.25000"
      id="path2632" />
-  <text
-     xml:space="preserve"
-     style="font-size:8.0000000;stroke-width:1.2500000;font-family:Bitstream Vera Sans;text-anchor:middle;"
-     x="58.030899"
-     y="128.00455"
-     id="text2633"
-     transform="translate(31.25000,6.250000)"><tspan
-       id="tspan2634">KOUT &amp; DATAOUT = comma</tspan><tspan
-       sodipodi:role="line"
-       id="tspan2636"
-       x="58.030899"
-       y="138.00455">or CODE_ERR or DISP_ERR</tspan></text>
   <path
      style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.2500000;"
      d="M 220.50000,351.00000 L 220.50000,351.00000"

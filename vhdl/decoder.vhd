@@ -42,7 +42,7 @@ architecture Behavioral of decoder is
       code_err : out std_logic;
       disp_err : out std_logic);
   end component;
-
+  
 begin
 
   clocks : process(CLK)
@@ -54,9 +54,14 @@ begin
       lastbit <= curbit;
 
       if lastbit = not curbit then
-        ticcnt <= "000";
+        ticcnt   <= "000";
       else
-        ticcnt <= ticcnt + 1;
+        if ticcnt = "101" then
+          ticcnt <= "000";
+        else
+          ticcnt <= ticcnt + 1;
+        end if;
+
       end if;
 
       -- shift register, et. al.
@@ -98,7 +103,7 @@ begin
   lldatalock <= '1' when doutrdyl = '0' and doutrdy = '1' else '0';
 
 
-  dout_en <= '1' when ticcnt = "100"  else '0';
+  dout_en <= '1' when ticcnt = "011"  else '0';
   doutrdy <= '1' when bitcnt = "0011" else '0';
 
   -- instantiate decoder

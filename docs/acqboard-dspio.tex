@@ -1,12 +1,27 @@
 The DSPs read samples from the acqboard via SPORT0. We transfer in 11
 16-bit samples, the 10 acquired from the acqboard as well as the
-CMDSTS and CMDID bytes.
+CMDSTS and CMDID bytes. Each DSP receives the same serial signal. Thus
+each dsp receives ALL samples from the acqboard, and must know whether
+to process the A set or the B set.
 
 The acqboard's 8 MHz 8b/10b signal is deserialized and decoded by the
 decoder module, and the frame disassembly module selects out the
-individual 16-bit samples.
+individual 16-bit samples. The arrival of a complete, error-free frame
+causes the assertion of NEWSAMPLE, which updates FrameSerialize's
+internal registers.
 
-The arrival of a complete, error-free frame causes the assertion of
-NEWSAMPLE, which updates FrameSerialize's internal registers.
+FrameSerialize generates a single serial stream, which each associated
+DSP receives.
 
+\subsection{DSP Outbound commands}
+A DSP creates a near-wirelevel packet to send to the acqboard. this is
+to reduce the amount of hardware design necessary should the acqboard
+change.
 
+However, this means that each DSP can control all of the channels. a DSP must only send commands for its set of channels, A or B. 
+
+To prevent commands from clobbering one another, the DSPio module services pending outbound requests in a round-robin fashion, and reads the cmdid from the pending request. The other DSP's request is not serviced until we receive the corresonding CMDID from the ACqboard. 
+
+There is no mechanism to prevent, for example, one DSP trying to
+switch the mode to 2 and another to 3, or DSPs simultaneously trying
+to write the filter parameters.
