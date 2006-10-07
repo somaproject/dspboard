@@ -1,0 +1,16 @@
+The Blackfin receives analog samples from an acquisition board as an
+SPI slave device. The FPGA sends a burst of N samples to the board.
+
+
+We're not worried about burst-DMA alignment issues (if the DMA started
+in the middle of a N-word burst) because the main FPGA won't begin
+signalling until the DSP has asserted the READY pin.
+
+
+For our demo the FPGA simply sends, every 100 us, an SPI word of
+increasing value, 0 -> (2*16-1).
+
+
+
+
+
