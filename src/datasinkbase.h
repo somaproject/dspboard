@@ -4,8 +4,8 @@
 
 class DataSinkBase
 {
-  void sampleProcess(void) = 0; 
-  void onEvent(const Event&) = 0; 
+  virtual void sampleProcess(void) = 0; 
+  virtual void onEvent(const Event&) = 0; 
 
 };
 

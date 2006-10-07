@@ -13,8 +13,8 @@ class SampleBuffer
   virtual void append(T x) = 0; 
   virtual T operator[] (unsigned i) = 0; 
   virtual T * head() = 0; 
-  virtual int length(); 
-  virtual T * start(); 
+  virtual int length() = 0; 
+  virtual T * start() = 0; 
   
 } ; 
 
@@ -39,6 +39,8 @@ public:
     tpos_ = 0; 
     
   }
+  
+
   
   void append(T x) {
     tpos_ = (tpos_ -  1);

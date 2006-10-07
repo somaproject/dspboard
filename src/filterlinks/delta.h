@@ -13,7 +13,7 @@ class Delta : public  FilterLink
   sample_t nextSample(void); 
   
  private: 
-
+  
 }; 
 
 #endif // FILTERLINK_DELTA_H
