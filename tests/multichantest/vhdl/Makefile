@@ -13,7 +13,8 @@
 #   make parsim: post-place-and-route simulation 
 #   make multipar : multiple attemt place and route
 ######################################################################
-PROJECT = simplerun
+PROJECT = multichanneltest
+
 
 bitfile: $(PROJECT).bit
 
