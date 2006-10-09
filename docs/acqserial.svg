@@ -10,7 +10,7 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    sodipodi:docname="acqserial.svg"
    sodipodi:docbase="/home/jonas/soma/DSPboard/docs"
-   inkscape:version="0.44"
+   inkscape:version="0.43+0.44pre2"
    sodipodi:version="0.32"
    id="svg1996"
    height="792.00000pt"
@@ -49,8 +49,8 @@
   <sodipodi:namedview
      inkscape:window-y="25"
      inkscape:window-x="0"
-     inkscape:window-height="977"
-     inkscape:window-width="1277"
+     inkscape:window-height="693"
+     inkscape:window-width="1014"
      guidetolerance="2.5000000pt"
      inkscape:grid-bbox="false"
      gridtolerance="10000"
@@ -62,9 +62,9 @@
      showgrid="true"
      inkscape:current-layer="layer1"
      inkscape:document-units="pt"
-     inkscape:cy="521.95464"
-     inkscape:cx="463.69556"
-     inkscape:zoom="2.8284271"
+     inkscape:cy="611.08823"
+     inkscape:cx="441.39976"
+     inkscape:zoom="1.4142136"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
      borderopacity="1.0"
@@ -1376,5 +1376,13 @@
        style="fill:none;fill-opacity:1;stroke:black;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="M 140.625,511.875 L 168.75,511.875"
        id="path2319" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:black;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 390.625,202.5 L 390.625,202.5 L 390.625,390"
+       id="path2134" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:black;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 390.625,221.25 L 437.5,221.25"
+       id="path2136" />
   </g>
 </svg>
