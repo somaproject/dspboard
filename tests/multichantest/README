@@ -1,11 +1,17 @@
-This is an attempted test at using the SPORT Multichannel mode with 12 channels of data, close to what the acqboard uses. We'll want to see if we can extract out indivdual channels and how well DMA works. 
+This is an attempted test at using the SPORT Multichannel mode with 12
+channels of data, close to what the acqboard uses. We'll want to see
+if we can extract out indivdual channels and how well DMA works.
 
-To do this we drive the SPORT clock with a 25 MHz tick that has its rising edge in the middle of the data output. 
+To do this we drive the SPORT clock with a 25 MHz tick that has its
+rising edge in the middle of the data output.
 
 A channel's upper 12 bits will be a frame number and lower 4 bits will
 be the channel number. The words will be transmitted MSB first. 
 
-The output serialization is a quick hack job.
+RFS is asserted on the first bit of the first word, i.e. with no latency. 
+
+
+The output serialization is a quick hack job. 
 
 Questions we care about: 
   How does DMA work? If we manually set-up each DMA transaction do we lose any words? 
