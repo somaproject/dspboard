@@ -1,0 +1,5 @@
+We generate and send some fake commands and then try and decode them with the fiberrx interface just to check correct timing and the like. 
+
+It's unforunate we have to use a different non-sim module like fiberrx
+for this test but reimplementing the comma-lock mechanism would take
+too much time right now.

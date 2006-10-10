@@ -3,19 +3,19 @@ VHDLS=vhdle
 WORKDIR=work.sym
 all: hw comp sim
 
-$(WORKDIR)/decoder/_behavioral.var: ../../vhdl/decoder.vhd
-	$(VHDLC) ../../vhdl/decoder.vhd
+$(WORKDIR)/fiberrx/_behavioral.var: ../../vhdl/fiberrx.vhd
+	$(VHDLC) ../../vhdl/fiberrx.vhd
 
-hw: $(WORKDIR)/decoder/_behavioral.var 
+hw: $(WORKDIR)/fiberrx/_behavioral.var 
 
 comp: 
 
-$(WORKDIR)/decodertest/_behavioral.var: decodertest.vhd
-	$(VHDLC) decodertest.vhd
+$(WORKDIR)/fiberrxtest/_behavioral.var: fiberrxtest.vhd
+	$(VHDLC) fiberrxtest.vhd
 
-sim: $(WORKDIR)/decodertest/_behavioral.var 
+sim: $(WORKDIR)/fiberrxtest/_behavioral.var 
 runsim: all
-	$(VHDLS) decodertest.vhd
+	$(VHDLS) fiberrxtest.vhd
 
 
 clean:

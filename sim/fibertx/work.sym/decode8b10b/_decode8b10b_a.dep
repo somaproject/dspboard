@@ -1,0 +1,13 @@
+xilinxcorelibvardecode_8b10b_v5_0_pkgxilinxcorelib.sym/decode_8b10b_v5_0_pkg/prim.var
+xilinxcorelibsrcdecode_8b10b_v5_0_pkg/home/jonas/xilinx/vhdl/src/XilinxCoreLib/decode_8b10b_v5_0.vhd
+xilinxcorelibvariputils_convxilinxcorelib.sym/iputils_conv/prim.var
+xilinxcorelibsrciputils_conv/home/jonas/xilinx/vhdl/src/XilinxCoreLib/iputils_conv.vhd
+xilinxcorelibvardecode_8b10b_v5_0_basexilinxcorelib.sym/decode_8b10b_v5_0_base/prim.var
+xilinxcorelibsrcdecode_8b10b_v5_0_base/home/jonas/xilinx/vhdl/src/XilinxCoreLib/decode_8b10b_v5_0.vhd
+xilinxcorelibvardecode_8b10b_v5_0xilinxcorelib.sym/decode_8b10b_v5_0/prim.var
+xilinxcorelibsrcdecode_8b10b_v5_0/home/jonas/xilinx/vhdl/src/XilinxCoreLib/decode_8b10b_v5_0.vhd
+ieeevarstd_logic_1164ieee.sym/std_logic_1164/prim.var
+ieeesrcstd_logic_1164stdlogic.vhd
+.vardecode8b10b(decode8b10b_a)work.sym/decode8b10b/_decode8b10b_a.var
+.srcdecode8b10b(decode8b10b_a)decode8b10b.vhd
+.vardecode8b10bwork.sym/decode8b10b/prim.var
