@@ -10,10 +10,10 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="svg1"
    sodipodi:version="0.32"
-   inkscape:version="0.44"
+   inkscape:version="0.44+devel"
    width="612.00000pt"
    height="792.00000pt"
-   sodipodi:docname="FiberRX.svg"
+   sodipodi:docname="framedis.svg"
    sodipodi:docbase="/home/jonas/soma/DSPboard/docs/FPGA">
   <metadata
      id="metadata1642">
@@ -35,9 +35,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.88722065"
-     inkscape:cx="268.1857"
-     inkscape:cy="749.43506"
+     inkscape:zoom="0.81995817"
+     inkscape:cx="358.98074"
+     inkscape:cy="234.90161"
      inkscape:window-width="1020"
      inkscape:window-height="727"
      showgrid="true"
@@ -3151,26 +3151,6 @@
        y="183.75000" />
   </g>
   <g
-     id="g2509"
-     transform="matrix(0.500000,0.000000,0.000000,0.500000,198.4375,735.6250)">
-    <path
-       sodipodi:type="arc"
-       style="fill-rule:evenodd;stroke-width:1.2500000;"
-       id="path2510"
-       sodipodi:cx="621.87500"
-       sodipodi:cy="190.00000"
-       sodipodi:rx="3.1250000"
-       sodipodi:ry="3.1250000"
-       d="M 625.00000 190.00000 A 3.1250000 3.1250000 0 1 0 618.75000,190.00000 A 3.1250000 3.1250000 0 1 0 625.00000 190.00000 z" />
-    <rect
-       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke-width:1.2500000;"
-       id="rect2511"
-       width="12.500000"
-       height="12.500000"
-       x="615.62500"
-       y="183.75000" />
-  </g>
-  <g
      id="g2512"
      transform="matrix(0.500000,0.000000,0.000000,0.500000,326.5625,626.2500)">
     <path
@@ -3517,10 +3497,9 @@
      id="path2620"
      transform="translate(196.8750,731.2500)" />
   <path
-     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.2500000;"
-     d="M 253.125,830.625 L 500,830.625"
+     style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:black;stroke-width:1.25"
+     d="M 325,824.375 L 571.875,824.375"
      id="path2649"
-     transform="translate(71.87500,0.000000)"
      sodipodi:nodetypes="cc" />
   <path
      style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.2500000;"
@@ -3755,4 +3734,48 @@
      style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
      d="M 128.12500,368.12500 L 137.50000,368.12500"
      id="path2806" />
+  <text
+     xml:space="preserve"
+     style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:end;line-height:125%;writing-mode:lr-tb;text-anchor:end;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+     x="140.00586"
+     y="24.375"
+     id="text12015"
+     sodipodi:linespacing="125%"><tspan
+       sodipodi:role="line"
+       id="tspan12017"
+       x="140.00586"
+       y="24.375">DIN[7:0]</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:end;line-height:125%;writing-mode:lr-tb;text-anchor:end;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+     x="138.67969"
+     y="52.5"
+     id="text12019"
+     sodipodi:linespacing="125%"><tspan
+       sodipodi:role="line"
+       id="tspan12021"
+       x="138.67969"
+       y="52.5">INWE</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:end;line-height:125%;writing-mode:lr-tb;text-anchor:end;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+     x="93.691406"
+     y="140"
+     id="text12023"
+     sodipodi:linespacing="125%"><tspan
+       sodipodi:role="line"
+       id="tspan12025"
+       x="93.691406"
+       y="140">KIN</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:end;line-height:125%;writing-mode:lr-tb;text-anchor:end;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+     x="139.98047"
+     y="140"
+     id="text12027"
+     sodipodi:linespacing="125%"><tspan
+       sodipodi:role="line"
+       id="tspan12029"
+       x="139.98047"
+       y="140">ERRIN</tspan></text>
 </svg>

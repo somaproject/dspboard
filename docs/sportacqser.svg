@@ -50,8 +50,8 @@
   <sodipodi:namedview
      inkscape:window-y="15"
      inkscape:window-x="8"
-     inkscape:window-height="1078"
-     inkscape:window-width="1022"
+     inkscape:window-height="1142"
+     inkscape:window-width="1030"
      guidetolerance="2.5000000pt"
      inkscape:grid-bbox="false"
      gridtolerance="10000"
@@ -63,9 +63,9 @@
      showgrid="true"
      inkscape:current-layer="layer1"
      inkscape:document-units="pt"
-     inkscape:cy="933.08706"
-     inkscape:cx="513.34799"
-     inkscape:zoom="4.449212"
+     inkscape:cy="864.6044"
+     inkscape:cx="309.42082"
+     inkscape:zoom="3.146068"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
      borderopacity="1.0"
@@ -94,10 +94,6 @@
      inkscape:groupmode="layer"
      inkscape:label="Layer 1">
     <path
-       id="path2861"
-       d="M 226.75,260.375 L 226.75,260.375"
-       style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:black;stroke-width:1pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
-    <path
        sodipodi:nodetypes="cccccc"
        id="AND"
        d="M 250,80.625 L 265.625,80.625 C 265.625,80.625 275,80.4367 275,90 C 275,99.5633 265.625,99.375 265.625,99.375 L 250,99.375 L 250,80.625 z "
@@ -123,11 +119,6 @@
        style="font-size:7px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:100%;writing-mode:lr-tb;text-anchor:middle;stroke-width:1.25;font-family:Bitstream Vera Sans"
        xml:space="preserve"><tspan
          id="tspan3559">else</tspan></text>
-    <path
-       sodipodi:nodetypes="cccc"
-       d="M 212.5,343.125 C 212.5,343.125 238.21885,343.20299 246.875,330.6212 C 238.21885,318.03942 212.5,318.125 212.5,318.125 C 212.5,318.125 221.15616,330.5432 212.5,343.125 z "
-       style="fill:white;fill-rule:evenodd;stroke:black;stroke-width:1.25000012"
-       id="OR" />
     <g
        transform="translate(259.6008,-162.5)"
        id="g2719">
@@ -227,75 +218,6 @@
            x="99.393547">EN</tspan></text>
     </g>
     <g
-       transform="translate(9.375,-159.375)"
-       id="g1663">
-      <path
-         sodipodi:nodetypes="ccccc"
-         id="path1742"
-         d="M 175,455.625 L 175,486.875 L 184.375,483.75 L 184.375,458.75 L 175,455.625 z "
-         style="fill:white;fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1pt" />
-      <text
-         sodipodi:linespacing="100%"
-         id="text1731"
-         y="481.35648"
-         x="176.70674"
-         style="font-size:9px;line-height:100%;stroke-width:1pt;font-family:Bitstream Vera Sans"
-         xml:space="preserve"><tspan
-           id="tspan1732">1</tspan></text>
-      <text
-         sodipodi:linespacing="100%"
-         id="text1737"
-         y="468.85648"
-         x="176.70674"
-         style="font-size:9px;line-height:100%;stroke-width:1pt;font-family:Bitstream Vera Sans"
-         xml:space="preserve"><tspan
-           id="tspan1740"
-           sodipodi:role="line"
-           y="468.85648"
-           x="176.70674">0</tspan></text>
-    </g>
-    <g
-       transform="translate(6.25,-90.625)"
-       id="g2728">
-      <rect
-         y="343.125"
-         x="77.8992"
-         height="50.096931"
-         width="28.350792"
-         id="rect1767"
-         style="fill:white;fill-rule:evenodd;stroke:black;stroke-width:1.17443275" />
-      <text
-         sodipodi:linespacing="100%"
-         id="text1651"
-         y="390.89999"
-         x="96.335358"
-         style="font-size:10px;line-height:100%;text-anchor:middle;stroke-width:1pt;font-family:Bitstream Vera Sans"
-         xml:space="preserve"><tspan
-           id="tspan1652">EN</tspan></text>
-      <text
-         transform="scale(3.384064,3.384064)"
-         sodipodi:linespacing="100%"
-         id="text1768"
-         y="106.56478"
-         x="23.410166"
-         style="font-size:4px;line-height:100%;stroke-width:0.36937839;font-family:Bitstream Vera Sans"
-         xml:space="preserve"><tspan
-           id="tspan1769">D</tspan></text>
-      <text
-         transform="scale(3.384064,3.384064)"
-         sodipodi:linespacing="100%"
-         id="text1771"
-         y="106.58192"
-         x="30.771975"
-         style="font-size:4px;line-height:100%;text-anchor:end;stroke-width:0.36937839;font-family:Bitstream Vera Sans"
-         xml:space="preserve"><tspan
-           id="tspan1772">Q</tspan></text>
-      <path
-         id="path1774"
-         d="M 78.125,393.125 L 84.375,386.875 L 78.125,380.625"
-         style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:black;stroke-width:1pt" />
-    </g>
-    <g
        id="g2858"
        transform="translate(125,-106.25)">
       <g
@@ -329,26 +251,6 @@
            x="127.87411"
            id="tspan1972"
            sodipodi:role="line">NONE</tspan></text>
-    </g>
-    <g
-       id="g2869"
-       transform="matrix(-0.5,0,0,0.5,212.5,51.25)">
-      <path
-         d="M 146.875 108.75 A 3.125 3.125 0 1 1  140.625,108.75 A 3.125 3.125 0 1 1  146.875 108.75 z"
-         sodipodi:ry="3.125"
-         sodipodi:rx="3.125"
-         sodipodi:cy="108.75"
-         sodipodi:cx="143.75"
-         id="path2865"
-         style="fill:black;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.25;stroke-miterlimit:3.9000001;stroke-dasharray:none;stroke-opacity:1"
-         sodipodi:type="arc" />
-      <rect
-         y="102.5"
-         x="137.5"
-         height="12.5"
-         width="12.5"
-         id="rect2867"
-         style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.25;stroke-miterlimit:3.9000001;stroke-dasharray:none;stroke-opacity:1" />
     </g>
     <rect
        style="fill:#ccc;fill-opacity:1;stroke:black;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -422,7 +324,7 @@
          sodipodi:role="line"
          id="tspan3735"
          x="331.25"
-         y="190">DINSREG</tspan></text>
+         y="190">DINSREG[255]</tspan></text>
     <g
        transform="translate(259.6008,-96.875)"
        id="g3737">
@@ -1127,7 +1029,7 @@
          sodipodi:role="line"
          id="tspan2116"
          x="405.625"
-         y="-228.125">INENL</tspan></text>
+         y="-228.125">INENLL</tspan></text>
     <path
        style="fill:none;fill-opacity:1;stroke:black;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        d="M 212.5,390 L 225,390 L 225,446.25"
@@ -1151,5 +1053,16 @@
          id="tspan2126"
          x="534.375"
          y="74.375">BITPOS</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="353.125"
+       y="158.75"
+       id="text2069"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan2071"
+         x="353.125"
+         y="158.75">[msb first]</tspan></text>
   </g>
 </svg>

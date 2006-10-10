@@ -6,11 +6,11 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="svg1"
    sodipodi:version="0.32"
-   inkscape:version="0.42.2"
+   inkscape:version="0.44+devel"
    width="612.00000pt"
    height="792.00000pt"
    sodipodi:docname="FiberRX.FSM.svg"
@@ -64,9 +64,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="6.0446564"
-     inkscape:cx="141.69282"
-     inkscape:cy="691.62092"
+     inkscape:zoom="4.1422324"
+     inkscape:cx="217.80152"
+     inkscape:cy="848.13968"
      inkscape:window-width="1020"
      inkscape:window-height="727"
      showgrid="true"
@@ -82,7 +82,8 @@
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:grid-bbox="false"
-     guidetolerance="5.0000000pt" />
+     guidetolerance="5.0000000pt"
+     inkscape:current-layer="svg1" />
   <path
      style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;marker-end:none;"
      d="M 162.50000,133.75000 L 162.50000,133.75000 C nan,nan 175.00000,133.75000 175.00000,133.75000"
@@ -156,17 +157,16 @@
        id="tspan1672">DONEF = 1</tspan></text>
   <text
      xml:space="preserve"
-     style="font-size:7.0000000;stroke-width:1.2500000;font-family:Bitstream Vera Sans;text-anchor:middle;"
+     style="font-size:7px;line-height:100%;text-anchor:middle;stroke-width:1.25;font-family:Bitstream Vera Sans"
      x="178.72278"
      y="107.17072"
      id="text1674"
      sodipodi:linespacing="100%"
-     transform="translate(31.25000,21.87500)"><tspan
-       id="tspan1675">CODE_ERR = 1</tspan><tspan
+     transform="translate(31.25,21.875)"><tspan
        sodipodi:role="line"
        id="tspan1677"
        x="178.72278"
-       y="114.17072">or DSP_ERR = 1</tspan></text>
+       y="107.17072">ERR</tspan></text>
   <text
      xml:space="preserve"
      style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:normal;font-size:9.0000000;font-stretch:normal;font-variant:normal;text-anchor:middle;writing-mode:lr;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;"
@@ -203,7 +203,7 @@
        x="140.37411"
        style="font-size:10.200000px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125.00000%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans"
        xml:space="preserve"><tspan
-         y="105.62500"
+         y="105.625"
          x="140.37411"
          id="tspan2097"
          sodipodi:role="line">UP</tspan></text>
@@ -227,7 +227,7 @@
        x="140.37411"
        style="font-size:10.200000px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125.00000%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans"
        xml:space="preserve"><tspan
-         y="105.62500"
+         y="105.625"
          x="140.37411"
          id="tspan1401"
          sodipodi:role="line">DOWN</tspan></text>
