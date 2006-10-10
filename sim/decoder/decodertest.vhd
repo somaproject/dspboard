@@ -4,14 +4,14 @@ use IEEE.STD_LOGIC_ARITH.all;
 use IEEE.STD_LOGIC_UNSIGNED.all;
 use IEEE.numeric_std.all;
 
-entity decodertest is
+entity fiberrxtest is
 
-end decodertest;
+end fiberrxtest;
 
-architecture Behavioral of decodertest is
+architecture Behavioral of fiberrxtest is
 
 
-  component decoder
+  component fiberrx
     port ( CLK      : in  std_logic;
            DIN      : in  std_logic;
            DATAOUT  : out std_logic_vector(7 downto 0);
@@ -57,7 +57,7 @@ begin  -- Behavioral
 
   CLK <= not CLK after 10 ns;
 
-  decoder_uut : decoder
+  fiberrx_uut : fiberrx
     port map (
       CLK      => CLK,
       DIN      => DIN,
