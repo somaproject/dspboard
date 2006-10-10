@@ -3,7 +3,7 @@ use IEEE.STD_LOGIC_1164.all;
 use IEEE.STD_LOGIC_ARITH.all;
 use IEEE.STD_LOGIC_UNSIGNED.all;
 
-entity decoder is
+entity fiberrx is
   port ( CLK      : in  std_logic;
          DIN      : in  std_logic;
          DATAOUT  : out std_logic_vector(7 downto 0);
@@ -12,11 +12,10 @@ entity decoder is
          DISP_ERR : out std_logic;
          DATALOCK : out std_logic;
          RESET    : in  std_logic);
-end decoder;
+end fiberrx;
 
-architecture Behavioral of decoder is
--- DECODER.VHD : 8B/10B deserializer and decoder
--- Very similar to the one used for the DSP board
+architecture Behavioral of fiberrx is
+
 
   signal curbit, lastbit       : std_logic := '0';
   signal dout, dout_en         : std_logic := '0';
