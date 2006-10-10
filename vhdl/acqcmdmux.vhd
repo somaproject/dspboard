@@ -9,11 +9,12 @@ entity acqcmdmux is
   
   port (
     CLK : in std_logic;
+    CMDID : in std_logic_vector(3 downto 0); 
     CMDINA : in std_logic_vector(47 downto 0);
     CMDINB : in std_logic_vector(47 downto 0);
     NEWCMDS : in std_logic;
     LINKUP : in std_logic; 
-    CMDOUT : out std_logic(47 downto 0);
+    CMDOUT : out std_logic_vector(47 downto 0);
     SENDCMD : out std_logic
   ); 
     
@@ -25,17 +26,21 @@ architecture Behavioral of acqcmdmux is
 
   signal newcmda, newcmdb : std_logic := '0';
 
-  signal newcmdal, newcmdbl : std_logic := '0;
+  signal newcmdal, newcmdbl : std_logic := '0';
 
-  type states is (none, checka, senda, waita, donea, checkb, sendb, waitb, doneb);
+  type states is (none, linkwait, sendsync,
+                  checka, senda, waita, donea,
+                checkb, sendb, waitb, doneb);
 
-  signal osel : std_logic := '0';
+  signal osel : integer range 0 to 2 := 0;
   
   signal cs, ns : states := none;
   
 begin  -- Behavioral
 
-  CMDOUT <= cmdinall when osel = '0' else cmdinbll ;
+  CMDOUT <= cmdinall when osel = 0 else
+            cmdinbll when osel = 1 else
+            (others => '0'); 
   
   main: process(CLK, LINKUP)
     begin
@@ -47,10 +52,10 @@ begin  -- Behavioral
         cmdinbll <= (others => '0');
         newcmdal <= '0';
         newcmdbl <= '0';
-        cs <= none; 
+        cs <= linkwait; 
       else
         if rising_edge(CLK) then
-          ns <= cs;
+          cs <= ns;
 
           if NEWCMDS = '1' then
             cmdinal <= CMDINA;
@@ -82,16 +87,34 @@ begin  -- Behavioral
 
     end process main; 
   
-    fsm: process(cs, newcmdal, cmdid, cmdinall, cmdinbll, newcmdbl)
+    fsm: process(cs, newcmdal, LINKUP,
+                 cmdid, cmdinall, cmdinbll, newcmdbl)
       begin
         case cs is
           when none =>
-            osel <= '0';
+            osel <= 0;
             SENDCMD <= '0';
-            ns <= checka;
+            if LINKUP = '0' then
+              ns <= linkwait;
+            else
+              ns <= checka; 
+            end if;
+          when linkwait =>
+            osel <= 2;
+            SENDCMD <= '0';
+            if LINKUP = '1' then
+              ns <= sendsync;
+            else
+              ns <= linkwait;
+            end if;
+            
+          when sendsync =>
+            osel <= 2;
+            SENDCMD <= '1';
+            ns <= none;
             
           when checka =>
-            osel <= '0';
+            osel <= 0;
             SENDCMD <= '0';
             if newcmdal = '1' then
               ns <= senda;
@@ -100,12 +123,12 @@ begin  -- Behavioral
             end if;
 
           when senda =>
-            osel <= '0';
+            osel <= 0;
             sendcmd <= '1';
             ns <= waita;
 
           when waita =>
-            osel <= '0';
+            osel <= 0;
             sendcmd <= '0';
             if cmdid = cmdinall(7 downto 4)  then
               ns <= donea;
@@ -114,12 +137,12 @@ begin  -- Behavioral
             end if;
 
           when donea =>
-            osel <= '0';
+            osel <= 0;
             sendcmd <= '0';
             ns <= checkb; 
             
           when checkb =>
-            osel <= '1';
+            osel <= 1;
             SENDCMD <= '0';
             if newcmdbl = '1' then
               ns <= sendb;
@@ -128,12 +151,12 @@ begin  -- Behavioral
             end if;
 
           when sendb =>
-            osel <= '1';
+            osel <= 1;
             sendcmd <= '1';
             ns <= waitb;
 
           when waitb =>
-            osel <= '1';
+            osel <= 1;
             sendcmd <= '0';
             if cmdid = cmdinbll(7 downto 4)  then
               ns <= doneb;
@@ -142,12 +165,12 @@ begin  -- Behavioral
             end if;
 
           when doneb =>
-            osel <= '1';
+            osel <= 1;
             sendcmd <= '0';
             ns <= none; 
             
           when others =>
-            osel <= '0';
+            osel <= 0;
             sendcmd <= '0';
             ns <= none; 
             

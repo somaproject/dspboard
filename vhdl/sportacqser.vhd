@@ -8,6 +8,7 @@ entity sportacqser is
   port (
     CLK      : in  std_logic;
     SERCLK   : out std_logic;
+    SERFS: out std_logic; 
     SERDT    : out std_logic;
     SERDRA   : in  std_logic;
     SERDRB   : in  std_logic;
@@ -33,11 +34,17 @@ architecture Behavioral of sportacqser is
   type states is (none, tfs1, tfs2, clkl, clkh, dones);
   signal cs, ns : states := none;
 
+  signal dataoutaint, dataoutbint : std_logic_vector(255 downto 0) :=
+    (others => '0');
 
+  
+  signal ldone : std_logic := '0';
+  
 begin  -- Behavioral
 
   DATAOUTA <= dataoutaint;
   DATAOUTB <= dataoutbint;
+
 
   main : process(CLK)
   begin
@@ -53,8 +60,8 @@ begin  -- Behavioral
       serdrbl <= SERDRB;
 
       if inenll = '1' then
-        dataoutaint <= dataoutaint(254 downto 0) & serdral;
-        dataoutbint <= dataoutbint(254 downto 0) & serdrbl;
+        dataoutaint <= serdral &  dataoutaint(255 downto 1); 
+        dataoutbint <= serdrbl &  dataoutbint(255 downto 1); 
       end if;
 
       if cs = none and START = '1' then
@@ -65,8 +72,14 @@ begin  -- Behavioral
         end if;
       end if;
 
-
-      ifs cs = clkh then
+      if cs = dones then                -- add latency to compensate
+        ldone <= '1';                   -- for serial input pipeline
+      else
+        ldone<= '0';
+      end if;
+      DONE <= ldone;
+      
+      if cs = clkh then
         bitpos <= bitpos + 1;
       end if;
 

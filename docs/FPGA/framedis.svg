@@ -10,7 +10,7 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="svg1"
    sodipodi:version="0.32"
-   inkscape:version="0.44+devel"
+   inkscape:version="0.44"
    width="612.00000pt"
    height="792.00000pt"
    sodipodi:docname="framedis.svg"
@@ -35,9 +35,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.81995817"
-     inkscape:cx="358.98074"
-     inkscape:cy="234.90161"
+     inkscape:zoom="1.6399163"
+     inkscape:cx="423.726"
+     inkscape:cy="157.82901"
      inkscape:window-width="1020"
      inkscape:window-height="727"
      showgrid="true"
@@ -3224,13 +3224,13 @@
      transform="translate(15.62500,775.0000)" />
   <text
      xml:space="preserve"
-     style="font-size:8.0000000;stroke-width:1.2500000;font-family:Bitstream Vera Sans;text-anchor:end;"
-     x="262.32870"
+     style="font-size:8px;line-height:100%;text-anchor:end;stroke-width:1.25;font-family:Bitstream Vera Sans"
+     x="262.3287"
      y="108.84457"
      id="text2530"
      sodipodi:linespacing="100%"
-     transform="translate(37.50000,765.6250)"><tspan
-       id="tspan2531">INCNT = 9</tspan><tspan
+     transform="translate(37.5,765.625)"><tspan
+       id="tspan2531">INCNT = 21</tspan><tspan
        sodipodi:role="line"
        id="tspan2533"
        x="262.3287"
@@ -3778,4 +3778,11 @@
        id="tspan12029"
        x="139.98047"
        y="140">ERRIN</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:8px;text-anchor:middle;stroke-width:1.25;font-family:Bitstream Vera Sans"
+     x="275.19531"
+     y="821.25"
+     id="text3834"><tspan
+       id="tspan3836">[4:1]</tspan></text>
 </svg>

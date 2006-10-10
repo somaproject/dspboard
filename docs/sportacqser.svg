@@ -10,7 +10,7 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    sodipodi:docname="sportacqser.svg"
    sodipodi:docbase="/home/jonas/soma/DSPboard/docs"
-   inkscape:version="0.44+devel"
+   inkscape:version="0.44"
    sodipodi:version="0.32"
    id="svg1996"
    height="990"
@@ -324,7 +324,7 @@
          sodipodi:role="line"
          id="tspan3735"
          x="331.25"
-         y="190">DINSREG[255]</tspan></text>
+         y="190">DINSREG[0]</tspan></text>
     <g
        transform="translate(259.6008,-96.875)"
        id="g3737">
@@ -1063,6 +1063,16 @@
          sodipodi:role="line"
          id="tspan2071"
          x="353.125"
-         y="158.75">[msb first]</tspan></text>
+         y="158.75">[lsb first]</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="287.24188"
+       y="421.35999"
+       id="text2569"><tspan
+         sodipodi:role="line"
+         id="tspan2571"
+         x="287.24188"
+         y="421.35999">LSB first</tspan></text>
   </g>
 </svg>
