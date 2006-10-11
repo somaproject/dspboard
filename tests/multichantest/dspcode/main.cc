@@ -34,20 +34,19 @@ int main()
   *pSPORT0_TCR2 = 0x000F; // 16-bit word length
 
   // multichannel
-  *pSPORT0_MCMC1 = 0x5000; // window size of 48 words -- we do this
-                           // so we can capture N * 12-word frames
-  *pSPORT0_MRCS0 = 0xFFFFFFFF; // 
-  *pSPORT0_MRCS1 = 0x0000FFFF; //
-  *pSPORT0_MCMC2 = 0x0010; // enable mode
+  *pSPORT0_MCMC1 = 0x1000; // window size of 16 words
+  *pSPORT0_MRCS0 = 0x0000FFFF; // 
+  *pSPORT0_MRCS1 = 0x00000000; //
+  *pSPORT0_MCMC2 = 0x1010; // enable mode
 
   // configure SPI DMA
    *pDMA1_PERIPHERAL_MAP = 0x1000; 
 
    *pDMA1_START_ADDR = &inarray[0]; 
-   *pDMA1_X_COUNT = 12; 
+   *pDMA1_X_COUNT = 16; 
    *pDMA1_X_MODIFY = 0x02; // two byte stride 
    *pDMA1_Y_COUNT = 16; // 
-   *pDMA1_Y_MODIFY = 10; // 
+   *pDMA1_Y_MODIFY = 2; // 
    *pDMA1_CURR_DESC_PTR = 0x00; 
 
    *pDMA1_CONFIG = 0x0037;  // start dma, 2D

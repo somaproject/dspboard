@@ -97,7 +97,7 @@ begin  -- Behavioral
       end if;
 
       if cs = nextword then
-        if wordcnt = "1011" then
+        if wordcnt = "1111" then
           wordcnt <= (others => '0');
         else
           wordcnt <= wordcnt + 1;
@@ -117,8 +117,8 @@ begin  -- Behavioral
     end if;
   end process main;
 
-  lrfs <= '1' when bitcnt = 0 and wordcnt = 0
-        and (cs = clkl or cs = clkh) else '0';
+  lrfs <= '1' when (cs = start1 or cs = start2 or cs = start3) else '0';
+  
 
   fsm : process(cs, bitcnt, wordcnt, cnt)
   begin
@@ -140,7 +140,7 @@ begin  -- Behavioral
         lrsclk <= '0';
         ns     <= start2;
       when start2 =>
-        lrsclk <= '0';
+        lrsclk <= '1';
         ns     <= start3;
 
       when start3 =>
@@ -162,7 +162,7 @@ begin  -- Behavioral
 
       when nextword =>
         lrsclk <= '0';
-        if wordcnt = "1011" then
+        if wordcnt = "1111" then
           ns   <= donef;
         else
           ns   <= clkl;
