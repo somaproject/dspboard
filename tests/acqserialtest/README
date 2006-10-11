@@ -1,0 +1,13 @@
+This is the culminating test for SPRINT #1 to test
+
+Acqserial operation
+read-in
+input fifo module
+Output module. 
+
+Basic infrastructure provided by the top-level VHDL module includes: 
+
+1. create clocks: 
+
+clkhi: 80 MHz serial tx clock
+clkacq: 36 MHz input-like clock
