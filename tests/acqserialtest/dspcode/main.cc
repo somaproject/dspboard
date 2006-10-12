@@ -3,64 +3,76 @@
  *
  */
 
-#include <cdefBF533.h>
 
-unsigned short inarray[16][16]; 
+#include <cdefBF533.h>
+#include <bf533/acqserial.h> 
+
+AcqSerial as;  // global so we can get function wrappers
+
+extern "C" {
+
+  void __attribute__((interrupt_handler)) rxisr() 
+  {
+    //as.RXDMAdoneISR(); 
+    int a; 
+    int x = *pIPEND; 
+    int y = *pILAT; 
+    int q = *pSIC_ISR; 
+    // try and clear our bit? 
+    q &= 0xFFFFFDFF;
+    *pSIC_ISR = q; 
+    a = 0; 
+    a = 1; 
+    q = *pSIC_ISR; 
+
+    short z = *pDMA1_IRQ_STATUS; 
+    z &= 0x01; // clear dma done bit; 
+    *pDMA1_IRQ_STATUS = z; 
+    z = *pDMA1_IRQ_STATUS; 
+
+    a = *pDMA1_X_COUNT;
+    a = *pDMA1_X_MODIFY; // two byte stride
+    a = *pDMA1_Y_COUNT;
+    a = *pDMA1_Y_MODIFY;
+    a = *pDMA1_CURR_Y_COUNT; 
+    a = *pDMA1_CONFIG; 
+    a = *pDMA1_PERIPHERAL_MAP; 
+
+    
+    //*pDMA1_CONFIG = 0x0000;  // start input dma, 2D
+    //a = *pDMA1_CONFIG; 
+    
+  }
+  
+
+  void  __attribute__((interrupt_handler))  txisr()
+  {
+    int x = 0; 
+    //as.TXDMAdoneISR();
+  }
+  
+} 
 
 int main()
 {
   int i = 0; 
   int k = 0; 
-  int a, b, c, d, e, f, g, h; 
+  
+  
+  as.setupSPORT(); 
+  as.setupDMA(); 
+  // configure interrupts
+  *pSIC_IAR0 = 0x00000000; 
+  *pSIC_IAR1 = 0x00000210; 
+  *pSIC_IAR2 = 0x00000000; 
+  *pSIC_IMASK = 0x00000200; 
+  as.start(); 
 
-  // zero memory
 
-  for (int y = 0 ; y < 16; y++) {
-    for (int x = 0; x < 16; x++) {
-      inarray[y][x] = 0; 
-    }
+  while(1) {
+  i = *pSIC_ISR; 
   }
-  // first, make sure we can modify the registers
-  *pSPORT0_TCR1 = 0x0000; 
-  *pSPORT0_RCR1 = 0x0000; 
 
-// enable settings
-
-  // require RFS for every word
-  // active high RFS
-  // rising-edge of RSCLK to sample
-
-  *pSPORT0_RCR2 = 0x000F; // 16-bit word length
-  *pSPORT0_TCR2 = 0x000F; // 16-bit word length
-
-  // multichannel
-  *pSPORT0_MCMC1 = 0x1000; // window size of 16 words
-  *pSPORT0_MRCS0 = 0x0000FFFF; // 
-  *pSPORT0_MRCS1 = 0x00000000; //
-  *pSPORT0_MCMC2 = 0x1010; // enable mode
-
-  // configure SPI DMA
-   *pDMA1_PERIPHERAL_MAP = 0x1000; 
-
-   *pDMA1_START_ADDR = &inarray[0]; 
-   *pDMA1_X_COUNT = 16; 
-   *pDMA1_X_MODIFY = 0x02; // two byte stride 
-   *pDMA1_Y_COUNT = 16; // 
-   *pDMA1_Y_MODIFY = 2; // 
-   *pDMA1_CURR_DESC_PTR = 0x00; 
-
-   *pDMA1_CONFIG = 0x0037;  // start dma, 2D
-
-   *pSPORT0_RCR1 = 0x4011; // enable sport RX
-   *pSPORT0_TCR1 = 0x4011; // enable sport TX
-
-
-  for (int p = 0; p < 100000; p++)
-    {
-      i++; 
-    }
-   
-  while(1); 
 
   
 }

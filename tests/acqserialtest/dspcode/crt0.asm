@@ -116,11 +116,11 @@ setupPLL:
 	r0.h = _RTCHANDLER; // IVG7 Handler
 	[p0++] = r0;
 	
-    r0.l = _I8HANDLER;
-	r0.h = _I8HANDLER; 	// IVG8 Handler
+    r0.l = _rxisr;
+	r0.h = _rxisr;  	// IVG8 Handler
   	[p0++] = r0;
   	
-  	r0.l = _I9HANDLER;
+     r0.l = _I9HANDLER;
 	r0.h = _I9HANDLER; 	// IVG9 Handler
  	[p0++] = r0;
  	
@@ -262,14 +262,16 @@ _THANDLER:            // Timer Handler 6
 _RTCHANDLER:          // IVG 7 Handler  
 	r0.l = 7;
 	jump display_fail;
-
+	rti			;
+	
 _I8HANDLER:           // IVG 8 Handler
-	r0.l = 8;
-	jump display_fail;
+	nop
+	rti;  
 
 _I9HANDLER:           // IVG 9 Handler
-	r0.l = 9;
-	jump display_fail;
+	nop;
+	rti;  
+
 
 _I10HANDLER:          // IVG 10 Handler
 	r0.l = 10;
