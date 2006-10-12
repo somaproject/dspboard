@@ -5,3 +5,32 @@ Acquisition board data source:
 2. send commands
 3. handle link status
 
+Constructor takes in a reference to an AcqSerial, either an A or B constant, and an EventSink. 
+
+
+Completely hardware-agnostic, but can/does parse acqserial streams
+
+maintains acq state
+
+setGain(chan, val)
+setInputHw(chan, val)
+keeps track of max-range, min range
+has internal channels, which we work with
+
+
+To change an acqboard setting we: 
+send the event
+set "pending event" 
+wait for update
+upon update send state info
+
+Input events for AcqboardDataSource 
+
+setGain
+setInputFilter
+
+for acqboard-changing commands, we :
+  1. send out the command
+  2. wait
+  3. when we receive the update, make the necessary changes
+

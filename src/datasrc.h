@@ -1,7 +1,7 @@
 #ifndef DATASRC_H
 #define DATASRC_H
 
-class DataSourcBase
+class DataSourceBase
 {
   void sampleProcess() = 0; 
   int getChanNum(void) = 0; 
