@@ -1,0 +1,8 @@
+AcqSerial -- an interface to the SPORT-based interface
+which is connected to the FPGA AcqSerial module. 
+
+There are really only three methods here: 
+
+checkRxEmpty() -- check if empty
+getNextFrame(AcqFrame* ) -- copy the next acqframe into the 
+if it is not empty

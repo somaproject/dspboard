@@ -60,14 +60,10 @@ architecture Behavioral of acqclocks is
   end component;
 begin
 
-  clkpad : IBUFG
-    port map (
-      I => CLKIN,
-      O => clkin_w);
 
   dll2x  : CLKDLL
     port map (
-      CLKIN => clkin_w,
+      CLKIN => clkin,
       CLKFB => clk_g,
       RST => RESET,
       CLK0  => open,
