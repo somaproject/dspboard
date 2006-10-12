@@ -1,0 +1,27 @@
+This is the very low-level interface to the acquisition board serial stream.
+
+we have two structs: 
+
+
+AcqFrame:
+  uint8_t cmdsts; 
+  uint8_t cmdid; 
+  uint16_t samples[10]
+
+AcqCommand:
+  uint8_t cmd; 
+  uint8_t cmdid; 
+  uint32_t data; 
+
+
+We have a class AcqSerial() which:
+1. sets up the SPORT DMA
+2. installs the necessary interrupt handlers
+3. creates the various DMA memory spaces
+
+.checkRxEmpty() -- are there any current samples? 
+.getNextFrame(*AcqFrame) -- copies the data into an AcqFrame
+.sendCommand(const & acqCMD)
+
+should the "link go down...."
+

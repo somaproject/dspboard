@@ -1,0 +1,15 @@
+We build our own malloc() and free() here. 
+
+We do this by taking a starting address, a chunk size, and
+a chunk  count. 
+
+Then we create an array of chunks on the heap starting at the address
+and an array of size_t integers
+
+Potentially, non-stack allocation is slow, because we have to walk the
+chunk array. This is why, in general, we should only create things
+once, and hopefully never delete them.
+
+256-byte chunks. This means we get 128 of them. 
+
+man

@@ -1,0 +1,7 @@
+Acquisition board data source: 
+
+
+1. keep track of acqboard state
+2. send commands
+3. handle link status
+
