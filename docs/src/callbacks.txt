@@ -1,0 +1,7 @@
+Callbacks is the generic callback framework that lets us have
+type-safe callbacks to member functions.
+
+This is derived from both the DevX "Designing a generic Callback
+Dispatcher" [ http://www.devx.com/tips/Tip/14294] and the follow-up
+GotW "Style Case Study #2" http://www.gotw.ca/gotw/083.htm
+
