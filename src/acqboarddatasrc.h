@@ -1,35 +1,57 @@
 #ifndef ACQBOARDDATASRC_H
 #define ACQBOARDDATASRC_H
 
-#include <bf533/acqserial.h>
+#include <datasourcebase.h>
+
+#include <acqboardif.h>
 
 enum ChanSets {CHANSET_A, CHANSET_B}; 
+enum PendingOps {SETGAIN, SETHPF}; 
 
-class AcqboardDataSrc :  DataSourceBase
+class AcqboardDataSrc : public DataSourceBase
 {
-  const int BUFLEN = 256; 
-  const int CHANNUM = 5; 
+  static const int BUFLEN = 256; 
+  static const int CHANNUM = 5; 
+  static const float ACQV_RANGE= 4.096; 
+
   
-  const unsigned short ACQGAINS[] = {0, 100, 200, 500, 
-				     1000, 2000, 5000, 10000}; 
+  static const unsigned short ACQGAINS[]; 
   
 
  public: 
   // constructor:
-  AcqboardDataSrc(AcqSerial *, ChanSet);
+  AcqboardDataSrc(AcqSerialBase *, ChanSets);
 
   // overridden functions
   void sampleProcess();
   int getChanNum(void); 
-  sampleBuffer* getChannelBuffer(int i); 
-  void onEvent(const Event &); 
+  SampleBuffer<sample_t> * getChannelBuffer(int i); 
+  //void onEvent(const Event &); 
+  
+  void setGain(int chan, int value); 
+  int getGain(int chan); 
+  
+  void setHPFFilter(int chan, bool state); 
+  int getHPFFilter(int chan); 
+  
   
  private: 
-  AcqSerial * pAcqSerial_; 
+  AcqSerialBase * pAcqSerial_; 
   SampleRingBuffer<sample_t> * channels_[CHANNUM]; 
-  ChanSet cs_; 
+  ChanSets cs_; 
+  int gains_[CHANNUM]; 
+  bool hpfs_[CHANNUM]; 
+ 
+  bool pendingCommand_; 
+  char currentCMDID_; 
+  PendingOps pendingOp_;
+  int pendingChannel_; 
+  int pendingValue_; 
+  // sendSetGainCMD(int chan, int gainsetting); 
+  
+  void sendCmd(char cmd, uint32_t data); 
 
-}
+}; 
  
 
 #endif //ACQBOARDDATASRC_H

@@ -1,13 +1,16 @@
 #ifndef DATASRC_H
 #define DATASRC_H
 
-class DataSourcBase
+#include <samplebuffer.hpp>
+
+class DataSourceBase
 {
-  void sampleProcess() = 0; 
-  int getChanNum(void) = 0; 
-  sampleBuffer* getchannelBuffer(int i) = 0; 
-  void onEvent(const Event &); 
+  virtual void sampleProcess() = 0; 
+  virtual int getChanNum(void) = 0; 
+  virtual SampleBuffer<sample_t> * getChannelBuffer(int i) = 0; 
+  //virtual void onEvent(const Event &) = 0; 
 
 }; 
 
 #endif // DATASRC_H
+

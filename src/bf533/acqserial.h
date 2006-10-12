@@ -4,7 +4,8 @@
 #include <acqboardif.h>
 #include <boost/array.hpp> 
 
-class AcqSerial
+
+class AcqSerial: public AcqSerialBase
 {
 public: 
   AcqSerial(); 
