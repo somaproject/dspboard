@@ -16,7 +16,7 @@ CFLAGS += $(CPUDEFINES) -fno-rtti -fno-builtin
 
 BOARD=STAMP_BF533
 
-LDFLAGS =  -g -T bftiny.x  -L/opt/uClinux/bfin-elf/lib/ -L/opt/uClinux/bfin-elf/lib/gcc/bfin-elf/4.1.0/  -lsupc++  -lc  -lgcc
+LDFLAGS =  -g -T bftiny.x  -L/opt/uClinux/bfin-elf/lib/ -L/opt/uClinux/bfin-elf/lib/gcc/bfin-elf/4.1.0/  -lsupc++  -lc  -lgcc 
 
 OBJS = $(ASMSRCS:%.asm=%.o) acqserial.o  $(CCSRCS:%.cc=%.o) 
 

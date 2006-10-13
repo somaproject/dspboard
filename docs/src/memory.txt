@@ -12,4 +12,30 @@ once, and hopefully never delete them.
 
 256-byte chunks. This means we get 128 of them. 
 
-man
+------------------------------------------------------------------------
+Generic memory / heap notes
+------------------------------------------------------------------------
+
+http://www.davehylands.com/avi/linker_scripts.htm
+
+Where does the heap begin? 
+
+    39: ffa00122     0 NOTYPE  LOCAL  DEFAULT    2 end
+
+Program Headers:
+  Type           Offset   VirtAddr   PhysAddr   FileSiz MemSiz  Flg Align
+  LOAD           0x001000 0xff800000 0xff800000 0x028bc 0x031c8 RW  0x1000
+  LOAD           0x004000 0xffa00000 0xffa00000 0x09738 0x09738 R E 0x1000
+
+is _end the symbol we care about? The heap starts at _end and moves up? 
+
+http://www.cs.utk.edu/~plank/plank/classes/cs360/360/notes/Memory/lecture.html
+
+void * operator new(size_t size) throw (std::bad_alloc)
+
+---------------------------------------------------------------------------
+constructor and destructor, static/ global
+---------------------------------------------------------------------------
+
+
+http://www.delorie.com/gnu/docs/gcc/gccint_149.html

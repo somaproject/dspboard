@@ -3,10 +3,22 @@
 
 // this is our custom new handler for small bits of memory
 
-size_t start = 0; 
-size_t end = 0; 
+#include <sys/types.h>
+
+
 int chunksize = 128; 
 
+extern "C" {
+  extern  char end;
+}
+
+void * operator new(size_t x) {
+  static char * pos = &end; 
+  char * oldpos = pos; 
+  pos += x; 
+  return (void *) oldpos; 
+
+}
 
 
 #endif // MEMORY_H

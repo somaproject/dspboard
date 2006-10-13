@@ -188,6 +188,7 @@ call_main:
 	
 	[--sp] = reti;  // pushing RETI allows interrupts to occur inside all main routines
 
+	
 	p0.l = _main;
 	p0.h = _main;
 
@@ -237,6 +238,9 @@ display_fail:
 
 
 _HWHANDLER:           // HW Error Handler 5
+	nop			;
+	nop			;
+	nop			;  
 rti;
 
 _NHANDLER:

@@ -2,27 +2,36 @@
 #define ACQSERIAL_H
 
 #include <acqboardif.h>
-#include <boost/array.hpp> 
 
-
-class AcqSerial: public AcqSerialBase
+class AcqSerial : public AcqSerialBase
 {
 public: 
   AcqSerial(); 
-  ~AcqSerial(); 
   
   bool checkRxEmpty(); 
-  bool getNextFrame(AcqFrame *); 
-  bool sendCommand(const AcqCommand &); 
+  void getNextFrame(AcqFrame *); 
+  void sendCommand(const AcqCommand &); 
+  bool checkLinkUp(); 
 
+  void setupSPORT(); 
+  void setupDMA(); 
+  void start();
+  void stop(); 
+
+  void RXDMAdoneISR(void); 
+  void TXDMAdoneISR(void);   
 private:
-  const int RXBUFLEN_ = 20; 
+  
+  static const int RXBUFLEN_ = 10; 
+  
+  unsigned short RXbuffer_[RXBUFLEN_ * 16]; 
+  unsigned short EmptyTXBuffer_[16]; 
+  unsigned short CommandTXBuffer_[16]; 
+  
+  int curRXpos_; 
+  int curReadPos_; 
+  bool txPending_; 
+ 
 
-  uint16_t RXbuffer_[RXBUFLEN_ * 16]; 
-  uint16_t EmptyTXBuffer_[16]; 
-  uint16_t CommandTXBuffer_[16]; 
-  
-  int curPos_; 
-  
 }; 
 #endif // ACQSERIAL_H
