@@ -12,8 +12,7 @@ INCLUDES = -I../../../dspcode/include -I. -I$(SRCDIR)
 ASMFLAGS = -x assembler-with-cpp $(CPUDEFINES) $(INCLUDES)
 ASMFLAGS += -DBOARD_$(BOARD)
 CFLAGS = $(INCLUDES)  -g -DBOARD_$(BOARD) 
-CFLAGS += $(CPUDEFINES) -fno-rtti -fno-builtin
-
+CFLAGS += $(CPUDEFINES) 
 BOARD=STAMP_BF533
 
 LDFLAGS =  -g -T bftiny.x  -L/opt/uClinux/bfin-elf/lib/ -L/opt/uClinux/bfin-elf/lib/gcc/bfin-elf/4.1.0/  -lsupc++  -lc  -lgcc 

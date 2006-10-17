@@ -120,8 +120,8 @@ setupPLL:
 	r0.h = _rxisr;  	// IVG8 Handler
   	[p0++] = r0;
   	
-     r0.l = _I9HANDLER;
-	r0.h = _I9HANDLER; 	// IVG9 Handler
+     r0.l = _txisr;
+	r0.h = _txisr;  	// IVG9 Handler
  	[p0++] = r0;
  	
     r0.l = _I10HANDLER;
