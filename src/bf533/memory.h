@@ -15,7 +15,7 @@ extern "C" {
 void * operator new(size_t x) {
   static char * pos = &end; 
   char * oldpos = pos; 
-  pos += x; 
+  pos += (x/4 + 1) * 4; 
   return (void *) oldpos; 
 
 }

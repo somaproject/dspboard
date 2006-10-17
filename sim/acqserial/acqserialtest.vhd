@@ -168,9 +168,9 @@ begin  -- Behavioral
   end process;
 
   -- dspa transmit test
-  dspadataout(3 downto 0)   <= dspacmdout;
-  dspadataout(7 downto 4)   <= dspacmdidout;
-  dspadataout(23 downto 16) <= dspadata0out;
+  dspadataout(19 downto 16)   <= dspacmdout;
+  dspadataout(23 downto 20)   <= dspacmdidout;
+  dspadataout(39 downto 32) <= dspadata0out;
 
   -----------------------------------------------------------------------------
   -- DSP B
@@ -195,9 +195,9 @@ begin  -- Behavioral
   end process;
 
   -- dspb transmit test
-  dspbdataout(3 downto 0)   <= dspbcmdout;
-  dspbdataout(7 downto 4)   <= dspbcmdidout;
-  dspbdataout(23 downto 16) <= dspbdata0out;
+  dspbdataout(19 downto 16)   <= dspbcmdout;
+  dspbdataout(23 downto 20)   <= dspbcmdidout;
+  dspbdataout(39 downto 32) <= dspbdata0out;
 
   -------------------------------------------------------------------------------
   --  A test

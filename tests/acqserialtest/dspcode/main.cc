@@ -31,16 +31,30 @@ extern "C" {
   {
 
 
+    as->TXDMAdoneISR();
+
     short q = *pDMA2_IRQ_STATUS; 
     *pDMA2_IRQ_STATUS = 0x1; 
     q = *pDMA2_IRQ_STATUS; 
 
-    as->TXDMAdoneISR();
-
-
   }
   
 } 
+
+void acqSpinWait(AcqSerial * as, char cmdid)
+{
+
+  AcqFrame afCmdTest; 
+  afCmdTest.cmdid = 0; 
+  while (afCmdTest.cmdid != cmdid) {
+    while (as->checkRxEmpty())
+      {
+	// spin
+      }
+    // no longer empty, get the frame
+    as->getNextFrame(&afCmdTest); 
+  }
+}
 
 int main()
 {
@@ -48,7 +62,7 @@ int main()
   int k = 0; 
   
    as = new AcqSerial(); 
-   /*
+   
   as->setupSPORT(); 
   as->setupDMA(); 
 
@@ -75,20 +89,20 @@ int main()
   
   
   
-  //as->start(); 
+  as->start(); 
   
   short x = 0; 
   int correctsamples = 0; 
   int errorsamples = 0; 
   AcqFrame af[10]; 
-   */
+   
   AcqCommand acqcmd; 
   acqcmd.cmd = 3; 
   acqcmd.cmdid = 6; 
-  acqcmd.data = 0x12345678; 
+  acqcmd.data = 0xAABBCCDD; 
   as->sendCommand(&acqcmd); 
 
-  /*
+  
   for (int i = 0; i < 10; i++)
     { 
       while (as->checkRxEmpty())
@@ -100,7 +114,8 @@ int main()
 
      
     }
-  // verify samples
+  
+// verify samples
   for (int i = 1; i < 10; i++)
     {
       unsigned char x1 = (af[i-1].samples[0] >> 8); 
@@ -115,17 +130,16 @@ int main()
     int j = 0; 
   }
 
-  AcqFrame afCmdTest; 
-  afCmdTest.cmdid = 0; 
-  while (afCmdTest.cmdid != 6) {
-    while (as->checkRxEmpty())
-      {
-	// spin
-      }
-    // no longer empty, get the frame
-    as->getNextFrame(&afCmdTest); 
+  acqSpinWait(as, 6); 
+
+  for (int i = 0; i < 15; i++) {
+    acqcmd.cmd = i / 4 + 1; 
+    acqcmd.cmdid = i; 
+    acqcmd.data = 0xAABBCCDD; 
+    as->sendCommand(&acqcmd); 
+
+    acqSpinWait(as, i); 
   }
-  */ 
   while(1){ 
     int i = 0; 
   } 

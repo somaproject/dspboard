@@ -62,8 +62,8 @@ begin  -- Behavioral
             cmdinbl <= CMDINB; 
           end if;
 
-          if not (cmdinal(3 downto 0) = X"0"
-            or  cmdinal(7 downto 4) = cmdinall(7 downto 0)) then
+          if cmdinal(3 downto 0) /= X"0"
+            and  cmdinal(7 downto 4) /= cmdinall(7 downto 4) then
             cmdinall <= cmdinal;
             newcmdal <= '1';
           else
@@ -72,8 +72,8 @@ begin  -- Behavioral
             end if;
           end if;
           
-          if not (cmdinbl(3 downto 0) = X"0"
-            or  cmdinbl(7 downto 4) = cmdinbll(7 downto 0)) then
+          if cmdinbl(3 downto 0) /= X"0"
+            and cmdinbl(7 downto 4) /= cmdinbll(7 downto 4) then
             cmdinbll <= cmdinbl;
             newcmdbl <= '1';
           else

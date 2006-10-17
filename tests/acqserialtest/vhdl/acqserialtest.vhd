@@ -89,7 +89,7 @@ architecture Behavioral of acqserialtest is
 
   end component;
 
-
+  signal jtagout : std_logic_vector(63 downto 0) := (others => '0');
   signal rxcmd, rxcmdid : std_logic_vector(3 downto 0) := (others => '0');
   
 
