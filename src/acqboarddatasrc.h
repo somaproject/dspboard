@@ -23,6 +23,8 @@ class AcqboardDataSrc : public DataSourceBase
   AcqboardDataSrc(AcqSerialBase *, ChanSets);
 
   // overridden functions
+  bool readySample(); 
+
   void sampleProcess();
   int getChanNum(void); 
   SampleBuffer<sample_t> * getChannelBuffer(int i); 

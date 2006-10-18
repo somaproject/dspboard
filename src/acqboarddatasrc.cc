@@ -27,7 +27,32 @@ AcqboardDataSrc::AcqboardDataSrc(AcqSerialBase * as, ChanSets cs) :
 
 } 
 
+void AcqboardDataSrc::setLinkState(bool state) 
+{
+  // set state
+  // send event
 
+
+}  
+void AcqboardDataSrc::readySample()
+{
+  
+  bool curLinkState = as->linkUp(); 
+  if (curLinkState != linkState_) {
+    setLinkState( curLinkState ); 
+  } else {
+    if (linkState_ == 0) {
+      return false; 
+    } else {
+      return (not as->checkRxEmpty()); 
+    }
+  }
+
+}
+
+		 
+   
+}
 void AcqboardDataSrc::sampleProcess()
 {
   // extract out the frames

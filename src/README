@@ -1,0 +1,13 @@
+Building: 
+
+Modules can depend on hw-specific chunks of code, which live in 
+<hw/name.cc> and <hw/name.h>. 
+
+These map, via CCFLAG, to either bf533 or host. 
+
+Thus we can test all of our hardware-independent code without needing to use the bf533 chain. 
+
+
+Testing: 
+Hardware-independent tests use boost::test and live in tests/. Create one directory for each test. 
+
