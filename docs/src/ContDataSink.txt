@@ -28,5 +28,3 @@ The only internal state of a continuous channel is:
 1. is it "on" 
 2. what is its ID
 3. 
-
-   
