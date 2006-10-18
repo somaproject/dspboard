@@ -4,7 +4,7 @@
 class DataSourceBase
 {
   void sampleProcess() = 0; 
-  void readySample() = 0; 
+  bool readySample() = 0; 
   int getChanNum(void) = 0; 
   sampleBuffer* getchannelBuffer(int i) = 0; 
   void onEvent(const Event &); 

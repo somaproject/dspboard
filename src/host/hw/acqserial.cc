@@ -6,7 +6,9 @@ AcqSerial::AcqSerial() :
   gains_(10), 
   hpfs_(10),
   recentCMDID_ (0), 
-  fpos_ (0)
+  fpos_ (0), 
+  linkUpState_(false), 
+  acDelaycnt_( -1)
 {
   // zero gains and filters
   for (int i = 0; i < 10; i++)
@@ -14,11 +16,15 @@ AcqSerial::AcqSerial() :
       gains_[i] = 0; 
       hpfs_[i] = 0; 
     }; 
-  
+
 }
 
 AcqSerial::~AcqSerial()
 {
+}
+
+bool AcqSerial::linkUp(){
+  return linkUpState_; 
 }
 
 bool AcqSerial::checkRxEmpty(){
@@ -28,19 +34,18 @@ bool AcqSerial::checkRxEmpty(){
 
 }
 
-void AcqSerial::sendCommand(const AcqCommand & ac)
+void AcqSerial::sendCommand(AcqCommand * ac)
 {
   if (acDelaycnt_ >= 0) {
     throw std::runtime_error("command sent before previous had completed"); 
   } else {
     acDelaycnt_ = 5; 
-    acPending_ = ac; 
+    acPending_ = *ac; 
   }
 
 }
 
 void AcqSerial::getNextFrame(AcqFrame * af) {
-  acDelaycnt_--; 
   
   if (acDelaycnt_ == 0) {
 
@@ -52,6 +57,13 @@ void AcqSerial::getNextFrame(AcqFrame * af) {
       char val = (acPending_.data >> 16) & 0xFF; 
 
       gains_[chan] = val; 
+    } else  if (acPending_.cmd == 0x02) {
+      // set gain
+      char chan = acPending_.data >> 24; 
+      bool val = (acPending_.data >> 16) & 0xFF; 
+
+      hpfs_[chan] = val; 
+
     }
   }
 
@@ -65,5 +77,6 @@ void AcqSerial::getNextFrame(AcqFrame * af) {
   
   fpos_ += 1; 
 
+  acDelaycnt_--; 
   
 }

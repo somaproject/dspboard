@@ -20,5 +20,4 @@ void * operator new(size_t x) {
 
 }
 
-
 #endif // MEMORY_H

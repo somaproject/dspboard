@@ -1,5 +1,6 @@
 #include <acqboarddatasrc.h>
 #include <acqboardif.h>
+#include <stdexcept>
 
 const unsigned short AcqboardDataSrc::ACQGAINS[]  = {0, 100, 200, 500, 
 				     1000, 2000, 5000, 10000}; 
@@ -10,7 +11,8 @@ AcqboardDataSrc::AcqboardDataSrc(AcqSerialBase * as, ChanSets cs) :
   pendingCommand_(false), 
   pendingOp_(SETGAIN), 
   pendingValue_(0), 
-  pendingChannel_(0)
+  pendingChannel_(0), 
+  linkState_(0)
 {
   
   // allocate new ring buffers
@@ -34,25 +36,24 @@ void AcqboardDataSrc::setLinkState(bool state)
 
 
 }  
-void AcqboardDataSrc::readySample()
+
+bool AcqboardDataSrc::readySample()
 {
   
-  bool curLinkState = as->linkUp(); 
+  bool curLinkState = pAcqSerial_->linkUp(); 
   if (curLinkState != linkState_) {
     setLinkState( curLinkState ); 
   } else {
     if (linkState_ == 0) {
       return false; 
     } else {
-      return (not as->checkRxEmpty()); 
+      return (not pAcqSerial_->checkRxEmpty()); 
     }
   }
 
 }
 
-		 
-   
-}
+
 void AcqboardDataSrc::sampleProcess()
 {
   // extract out the frames
@@ -66,14 +67,16 @@ void AcqboardDataSrc::sampleProcess()
   }
 
   for (int i = 0; i < CHANNUM; i++) {
-    float fx = ACQV_RANGE / gains_[i] / (float(af.samples[chanos + i]) / 32768.0); 
-    sample_t x = sample_t(fx * 1000000000); 
+    float fx = ACQV_RANGE / gains_[i] *  (float(af.samples[chanos + i]) / 32768.0); 
+    sample_t x = sample_t(fx * 1e9); 
     // stick in the output buffer
+    channels_[i]->append(x); 
     
   }
   
   // check to see if the date is updated
   if (pendingCommand_) {
+    
     if (af.cmdid == currentCMDID_) {
       pendingCommand_ = false; 
       if (pendingOp_ == SETGAIN) {
@@ -122,6 +125,8 @@ void AcqboardDataSrc::setGain(int chan, int value)
     sendCmd(cmd, data); 
     pendingOp_ = SETGAIN; 
     pendingValue_ = value; 
+    pendingChannel_ = chan; 
+
   }
 
 }
@@ -130,12 +135,28 @@ int AcqboardDataSrc::getGain(int chan) {
   return gains_[chan]; 
 }
 
+bool AcqboardDataSrc::getHPFilter(int chan) {
+  return hpfs_[chan]; 
+}
+
+void AcqboardDataSrc::setHPFilter(int chan, bool state)
+{
+  char cmd = 2; 
+  uint32_t data = ((chan & 0xFF) << 24) |
+    ((state& 0xFF) << 16); 
+  sendCmd(cmd, data); 
+  pendingOp_ = SETHPF; 
+  pendingValue_ =  state; 
+  pendingChannel_ = chan; 
+}
+
+
 void AcqboardDataSrc::sendCmd(char cmd, uint32_t data) {
   // get next cmdid: 
   
   if (pendingCommand_ ) {
-    // raise error
-
+    throw std::runtime_error("Pending Command"); 
+	
   } else {
     char cmdid = (currentCMDID_ + 2) % 16; 
     
@@ -143,7 +164,7 @@ void AcqboardDataSrc::sendCmd(char cmd, uint32_t data) {
     acmd.cmd = cmd; 
     acmd.cmdid = cmdid; 
     acmd.data = data; 
-    pAcqSerial_->sendCommand(acmd); 
+    pAcqSerial_->sendCommand(&acmd); 
     
     currentCMDID_ = cmdid; 
     pendingCommand_ = true; 

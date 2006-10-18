@@ -1,0 +1,15 @@
+How do we test the data output fifo?
+
+Remember, the DataOutFifo.sendbuffer() function should always be called when the dspdataout.done() feature is done. 
+
+That is, we should only call this once every t<T. 
+
+
+First, we have a simple test: 
+  1. get a buffer
+  2. put data in that buffer
+  3. commit that buffer
+  4. have dspdataout send the buffer, read what we get
+
+
+

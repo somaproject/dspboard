@@ -30,6 +30,8 @@ class AcqSerialBase
   virtual bool checkRxEmpty() = 0; 
   virtual void getNextFrame(AcqFrame *) = 0; 
   virtual void sendCommand(AcqCommand *) = 0; 
+  virtual bool linkUp() = 0; 
+
 }; 
 
 #endif //ACQBOARDIF_H

@@ -13,8 +13,10 @@ public:
   
   bool checkRxEmpty(); 
   void getNextFrame(AcqFrame *); 
-  void sendCommand(const AcqCommand &); 
+  void sendCommand(AcqCommand *); 
+  bool linkUp(); 
 
+  bool linkUpState_; 
   //  void addSample(); 
 
 
