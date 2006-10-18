@@ -1,0 +1,20 @@
+DSP object -- a singleton designed to serve as an interface to the
+primary DSP-specific features such as interrupt generation
+
+All interrupt functions are static which then access the static
+instance and call appropriate members of the ISR lookup table.
+
+
+
+dsp::getInstance()
+
+dsp::IVG7_HANDLER()
+dsp::IVG8_HANDLER()
+dsp::IVG9_HANDLER()
+...
+dsp::IVG15_HANDLER()
+
+
+dsp->register(functor, ISRparams) 
+
+

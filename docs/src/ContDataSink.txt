@@ -1,0 +1,32 @@
+The continuous data sink is the simplest data sink of them all.
+
+We simply take in all elements from a channel and packetize them. 
+
+every 128 samples (~512 bytes) we take the set, apply the current
+timestamp, and send out. 
+
+The constructor is 
+
+Continuous(ID, filterLinkManager, *SystemTimer, *dataBufferOutput, 
+	       eventBufferOutput)
+
+
+it has :
+
+  void sampleProcess() = 0 
+  void onEvent(const Event &) = 0
+
+The general sampleProcess behavior is:
+  acquire sample
+  convert to host byte order
+  stick in output fifo
+  when we've gotten 128 of these, packetize, 
+  send out, identifying it as a filter
+
+
+The only internal state of a continuous channel is: 
+1. is it "on" 
+2. what is its ID
+3. 
+
+   

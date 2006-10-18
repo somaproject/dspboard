@@ -1,0 +1,44 @@
+Data output fifo
+
+We configure the data output fifo to let people request fifo elements, fill them, and then we queue them up for transmission. 
+
+This lets us use the DSP's descriptor-based DMA system if we want. 
+
+Note that there is no guarantee that commit() will be called in the same set chunk of code as request()
+
+This way, simple code can avoid having to do duplicated writes if we
+know in advance where buffers will live.
+
+We return pointers to objects of type DataTXBuffer. 
+
+DataTXBuffer has private and public components; the DataTXFifo is a friend class. 
+
+We initially create an array of these and set their state_ to uncommitted. They are all of size BUFSIZE, which can be returned via the size() method. 
+
+How many do we create? initially we allocate space for one for each possible output device that would request one at a given time, plus one. 
+
+So, assuming we have 6 possible data sinks, we create 12 of these objects, or 3.6 kB @ 600 bytes each. We return pointers to our own internal array. 
+
+
+
+pDp = dataOutFifo.requst()
+pDp.buffer []
+pDp.commit()
+
+we then use the dsp object's underlying :
+data_send()
+
+
+What do we need from the DSP? Well, we're sending this out
+the... SPORT, right? at 25 Mbps that's 200 us for 600B.
+
+The DSP Data output module will need to keep track of what has been
+transmitted, what will be transmitted, etc.
+
+DSPDataOut.sendBuffer()
+DSPDataOut.checkDone()
+
+dsp.datasend(*ptr, N)
+dsp.datadone()
+
+
