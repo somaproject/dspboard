@@ -1,4 +1,5 @@
-#include <rawsink.h>
+#include <sinks/rawsink.h>
+#include <hw/byteswap.h>
 
 RawSink::RawSink(int ID, FilterLinkManager * flm, 
 		 SystemTimer * st, DataOutFifo * dof, 
@@ -9,10 +10,11 @@ RawSink::RawSink(int ID, FilterLinkManager * flm,
   pEventOutFifo_(eof), 
   ID_(ID), 
   fl_(NULL), 
-  samplePos_(0)
+  samplePos_(0), 
+  datasrc_(0)
 {
   
-  pOutBuffer_ = pDataOutFifo_.request();
+  pOutBuffer_ = pDataOutFifo_->request();
   
 }
   
@@ -33,10 +35,10 @@ void RawSink::sampleProcess(void)
       sample_t x = fl_->nextSample(); 
       sample_t y = hostToNet(x); 
       
-      memcpy(&pOutBuffer_[10 + sizeof(sample_t)*samplePos_], 
+      memcpy(&(pOutBuffer_->buffer[12 + sizeof(sample_t)*samplePos_]), 
 	     &y, sizeof(samplePos_)); 
       
-      samplePos++; 
+      samplePos_++; 
 
       if (samplePos_ == 128)
 	{
@@ -53,20 +55,28 @@ void RawSink::sendBuffer(void)
 
   // copy source
   // copy ID
-  pOutBuffer_[0] = DATATYPE; 
-  pOutBuffer_[1] = datasrc_; 
-  short len = hostToNet(sizeof(sample_t) * sample_pos_ + 10); 
+  pOutBuffer_->buffer[0] = DATATYPE; 
+  pOutBuffer_->buffer[1] = datasrc_; 
+  short len = hostToNet((unsigned short)
+			(sizeof(sample_t) * samplePos_ + 10)); 
 
-  memcpy(&pOutBuffer_[2], &len, sizeof(short)); 
+  unsigned long long ts = pSystemTimer_->getTime(); 
+  unsigned long long tsnet = hostToNet(ts); 
+
+  memcpy(&(pOutBuffer_->buffer[2]), &tsnet, 8); 
+
+  memcpy(&(pOutBuffer_->buffer[2]), &len, sizeof(short)); 
   
-  unsigned long ts = pSystemTimer->getTime(); 
-  unsigned long tsnet = hostToNet(ts); 
-
-  memcpy(&pOutBuffer_[4], &tsnet, 6); 
   
   pOutBuffer_->commit(); 
   
-  pOutBuffer_ = pDataOutFifo_.request(); 
+  pOutBuffer_ = pDataOutFifo_->request(); 
   
 
 }
+
+void RawSink::onEvent(const Event&)
+{
+
+}
+  

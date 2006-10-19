@@ -3,9 +3,9 @@
 
 #include <systemtimer.h>
 #include <filterlinkmanager.h>
-#include <dataoutfifo.h>
-#include <eventoutfifo.h>
-
+#include <dataout.h>
+#include <eventout.h>
+#include <datasinkbase.h>
 
 
 class RawSink : public DataSinkBase
@@ -18,7 +18,7 @@ class RawSink : public DataSinkBase
 	  EventOutFifo* eof); 
   void sampleProcess(void); 
   void onEvent(const Event&); 
-  
+  void newFilterLink(unsigned int type, int channel);   
  private: 
   FilterLinkManager * pFilterLinkManager_; 
   SystemTimer * pSystemTimer_; 
@@ -26,14 +26,14 @@ class RawSink : public DataSinkBase
   EventOutFifo * pEventOutFifo_; 
   int ID_; 
   
-  void newFilterLink(unsigned int type, int channel); 
+
   FilterLink* fl_; 
   int samplePos_; 
   
   DataOutBuffer* pOutBuffer_; 
   
   void sendBuffer(void); 
-  unsigned char datasrc_ = 0; 
+  unsigned char datasrc_; 
   
 }; 
 

@@ -1,18 +1,23 @@
 #include <filterlinkmanager.h>
-
+#include <datasourcebase.h>
 #include <filterlinks/delta.h>
-#include <filterlinks/fir.h>
-#include <filterlinks/iir.h>
+//#include <filterlinks/fir.h>
+//#include <filterlinks/iir.h>
 
 
-FilterLinkManager::FilterLinkManager(DataSource * ds) :
+FilterLinkManager::FilterLinkManager(DataSourceBase * ds) :
   ds_(ds)
 {
 }
 
-FilterLinkManager::newLink(int type, int channel)
+FilterLinkManager::~FilterLinkManager()
 {
-  SampleBuffer<sample_t> * sb = ds_->getChannel(channel); 
+
+}
+
+FilterLink* FilterLinkManager::newLink(int type, int channel)
+{
+  SampleBuffer<sample_t> * sb = ds_->getChannelBuffer(channel); 
   
   switch(type)
     {
@@ -20,10 +25,10 @@ FilterLinkManager::newLink(int type, int channel)
       return new Delta(sb); 
       break; 
     case 1:
-      return new FIR(sb, h1); 
+      //      return new FIR(sb, h1); 
       break;
     case 2:
-      return new FIR(sb, h2); 
+      //return new FIR(sb, h2); 
       break; 
     case 3:
       break; 

@@ -1,6 +1,7 @@
 #ifndef DATASINKBASE_H
 #define DATASINKBASE_H
 
+#include <event.h>
 
 class DataSinkBase
 {

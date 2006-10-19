@@ -31,7 +31,7 @@ public:
     zero(); 
   }
   
-  void zero(void) {
+  inline void zero(void) {
     
     for (int i = 0; i < N_; i++)
       pBuffer_[i] = 0; 
@@ -42,7 +42,7 @@ public:
   
 
   
-  void append(T x) {
+  inline void append(T x) {
     tpos_ = (tpos_ -  1);
     if (tpos_ < 0) 
       tpos_ += N_; 
@@ -50,19 +50,19 @@ public:
     pBuffer_[tpos_] = x; 
   }
   
-  T operator[] (unsigned i) {
+  inline T operator[] (unsigned i) {
     return pBuffer_[( i + tpos_) % N_]; 
   }
   
-  T * head() {
+  inline T * head() {
     return &(pBuffer_[tpos_]); 
   }
   
-  T * start() {
+  inline T * start() {
     return pBuffer_; 
   }
   
-  int length() {
+  inline int length() {
     return N_; 
   }
 
