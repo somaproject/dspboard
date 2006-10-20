@@ -1,0 +1,10 @@
+Unit test for data sport: 
+
+1. can we clock in 600*8 bits and read them out with TFS coming
+one-bit-ahead?
+
+2. Can we write three events and still read them out? does the
+read-out logic work properly?
+
+3. Is the data we're putting in there MSB or LSB? 
+
