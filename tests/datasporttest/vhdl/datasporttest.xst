@@ -1,12 +1,12 @@
 set -tmpdir build
 set -xsthdpdir ./xst
 run
--ifn multichanneltest.prj
+-ifn datasporttest.prj
 -ifmt mixed
--ofn multichanneltest
+-ofn datasporttest
 -ofmt NGC
 -p xc3s400-4-ft256
--top multichanneltest
+-top datasporttest
 -opt_mode Area
 -opt_level 2
 -iuc NO
