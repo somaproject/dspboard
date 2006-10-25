@@ -6,19 +6,18 @@
 
 ASMSRCS = crt0.asm 
 CCSRCS   = main.cc
-
+SRCDIR= ../../../src/
 CPUDEFINES = -D__ADSPBF561__ -D__ADSPLPBLACKFIN__
-INCLUDES = -I../../../dspcode/include -I. 
+INCLUDES =  -I. -I$(SRCDIR) -I$(SRCDIR)/bf533
 ASMFLAGS = -x assembler-with-cpp $(CPUDEFINES) $(INCLUDES)
-ASMFLAGS += -DBOARD_$(BOARD) -g 
-CFLAGS = $(INCLUDES) -g -DBOARD_$(BOARD) 
+ASMFLAGS += -DBOARD_$(BOARD)
+CFLAGS = $(INCLUDES)  -g -DBOARD_$(BOARD) 
 CFLAGS += $(CPUDEFINES) 
-
 BOARD=STAMP_BF533
 
-LDFLAGS =  -g -T bftiny.x  -L/opt/uClinux/bfin-elf/lib/ -L/opt/uClinux/bfin-elf/lib/gcc/bfin-elf/4.1.0/ 
+LDFLAGS =  -g -T bftiny.x  -L/opt/uClinux/bfin-elf/lib/ -L/opt/uClinux/bfin-elf/lib/gcc/bfin-elf/4.1.0/  -lsupc++  -lc  -lgcc 
 
-OBJS = $(ASMSRCS:%.asm=%.o) $(CCSRCS:%.cc=%.o)
+OBJS = $(ASMSRCS:%.asm=%.o)  $(CCSRCS:%.cc=%.o) 
 
 AS = bfin-elf-as
 CC = bfin-elf-gcc-4.1.0
@@ -26,16 +25,17 @@ CXX = bfin-elf-g++-4.1.0
 
 LD = bfin-elf-ld
 
-all: $(OBJS) multichantest.elf
+all: $(OBJS) datasporttest.elf
 
 main.o: main.cc
 	$(CXX) $(CFLAGS)  -c -o main.o main.cc
+
 %.o: %.asm
 	$(CC) $(ASMFLAGS) -c -o $@ $<
 
 
-multichantest.elf: $(OBJS)
-	$(LD) $(OBJS)  $(LDFLAGS) -o multichantest.elf
+datasporttest.elf: $(OBJS)
+	$(LD) $(OBJS)  $(LDFLAGS) -o datasporttest.elf
 
 clean:
 	rm -f *.o
