@@ -69,15 +69,15 @@ architecture Behavioral of devicemuxtxtest is
   signal ecnt : std_logic_vector(7 downto 0) := (others => '0');
 
 
-    type eventarray is array (0 to 5) of std_logic_vector(15 downto 0);
+  type eventarray is array (0 to 5) of std_logic_vector(15 downto 0);
 
   type events is array (0 to 77) of eventarray;
 
   signal eventinputs : events := (others => (others => X"0000"));
 
-
   signal dlgrant : std_logic_vector(3 downto 0) := (others => '0');
-  
+  signal evalidl : std_logic_vector(3 downto 0) := (others => '0');
+
 begin  -- Behavioral
 
   CLK <= not CLK after 10 ns;
@@ -136,28 +136,28 @@ begin  -- Behavioral
       TXKIN <= '0';
       wait until rising_edge(CLK);
       TXDIN <= (others => '0');
-                
+
       wait until rising_edge(CLK) and epos = 11;
       TXDIN <= "0000000" & dlgrant(1);
       TXKIN <= '0';
       wait until rising_edge(CLK);
       TXDIN <= (others => '0');
-                
-      
+
+
       wait until rising_edge(CLK) and epos = 22;
       TXDIN <= "0000000" & dlgrant(2);
       TXKIN <= '0';
       wait until rising_edge(CLK);
       TXDIN <= (others => '0');
-                
-      
+
+
       wait until rising_edge(CLK) and epos = 33;
       TXDIN <= "0000000" & dlgrant(3);
       TXKIN <= '0';
       wait until rising_edge(CLK);
       TXDIN <= (others => '0');
-                
-      
+
+
       wait until rising_edge(CLK) and epos = 47;
       -- now we send the events
       for i in 0 to 77 loop
@@ -174,39 +174,94 @@ begin  -- Behavioral
   end process;
 
 
-  EDATAA <= "000" & eaddr; 
-  EDATAB <= "010" & eaddr; 
-  EDATAC <= "100" & eaddr; 
-  EDATAD <= "110" & eaddr; 
+  EDATAA <= X"00" when EADDR = "00000" else
+            ecnt  when EADDR = "00001" else
+            "000" & EADDR;
 
-  DDATAA <= ecnt when DADDR =  "0000000000" else
+  EDATAB <= X"01" when EADDR = "00000" else
+            ecnt  when EADDR = "00001" else
+            "000" & EADDR;
+
+  EDATAC <= X"02" when EADDR = "00000" else
+            ecnt  when EADDR = "00001" else
+            "000" & EADDR;
+
+  EDATAD <= X"03" when EADDR = "00000" else
+            ecnt  when EADDR = "00001" else
+            "000" & EADDR;
+
+
+  DDATAA <= ecnt  when DADDR = "0000000000" else
             X"00" when DADDR = "0000000001" else
             DADDR(7 downto 0);
-  
-  DDATAB <= ecnt when DADDR =  "0000000000" else
+
+  DDATAB <= ecnt  when DADDR = "0000000000" else
             X"01" when DADDR = "0000000001" else
             DADDR(7 downto 0);
-  
-  DDATAC <= ecnt when DADDR =  "0000000000" else
+
+  DDATAC <= ecnt  when DADDR = "0000000000" else
             X"02" when DADDR = "0000000001" else
             DADDR(7 downto 0);
-  
-  DDATAD <= ecnt when DADDR =  "0000000000" else
+
+  DDATAD <= ecnt  when DADDR = "0000000000" else
             X"03" when DADDR = "0000000001" else
             DADDR(7 downto 0);
-  
-  
+
+
+  eventsend : process(CLK)
+  begin
+    if rising_edge(CLK) then
+      if ECYCLE = '1' then
+        EVALID  <= EVALID + 1;
+        evalidl <= evalid;
+      end if;
+    end if;
+  end process eventsend;
+
   testout : process
   begin
     wait for 1 us;
-    dlgrant(0) <= '1'; 
-    DVALID(0) <= '1';
-    wait until rising_edge(CLK) and ECYCLE = '1' ;
-    
+    dlgrant(0) <= '1';
+    DVALID(0)  <= '1';
+    wait until rising_edge(CLK) and ECYCLE = '1';
+
     wait until rising_edge(CLK) and DNEXT(0) = '1';
     DVALID(0) <= '0';
-    wait; 
-  end process testout; 
+    wait;
+  end process testout;
+
+  -- event validate
+  process
+  begin
+    for i in 0 to 15 loop
+      wait until rising_edge(CLK) and ECYCLE = '1';
+      
+      if evalid(0) = '1'  then
+        wait until rising_edge(CLK) and DOUT = X"1C" and KOUT = '1';
+        report "read event 0";
+      end if;
+
+      if evalid(1) = '1'  then
+        wait until rising_edge(CLK) and DOUT = X"3C" and KOUT = '1';        
+        report "read event 1";
+      end if;
+
+      if evalid(2) = '1'  then
+        wait until rising_edge(CLK) and DOUT = X"5C" and KOUT='1';        
+        report "read event 2";
+      end if;
+
+      if evalid(3) = '1'  then
+        wait until rising_edge(CLK) and DOUT = X"7C" and KOUT = '1';        
+        report "read event 3";
+      end if;
+
+
+    end loop;  -- i
+
+    report "End of Simulation" severity Failure;
+    
+  end process;
 
 
 end Behavioral;
