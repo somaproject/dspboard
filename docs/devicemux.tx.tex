@@ -1,0 +1,9 @@
+The TX half of the DeviceLink Mux interfaces between event and data FIFOs and the output DeviceLink module. 
+
+It: 
+  1. determines which device has its DGRANT asserted, and responds
+  2. if there is pending data, sends it
+  3. if there are pending events, sends them
+
+We have dedicated SendEvent modules and SendData modules which handle all of the actual interfacing with the fifos -- this module is mostly a multiplexing step. 
+

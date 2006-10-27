@@ -142,7 +142,7 @@ begin
       doutbyte(5 downto 0) <= (others => '0');
       doutbyte(7 downto 6) <= doutbyte(7 downto 6) + 1;
 
-      for i in 0 to 599 loop
+      for i in 0 to 800 loop
         for j in 0 to 7 loop
           wait until rising_edge(CLK);
           SCLK <= '0';
