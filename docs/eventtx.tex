@@ -1,0 +1,14 @@
+Event transmission to the DSPs takes place via the shared 8-bit wide
+parallel port (PPI) interface.
+
+We use the eventtx-Filter module to extract out the headers from the
+event stream and then selectively assert a DEN during the relevant
+event in the ECYCLE data stream (with a two cycle latency)
+
+This DEN selectively enables and disables events that are targeted for
+the device whose header begins at ESEL.
+
+This interface is somewhat ugly and a bit of a hack; I'm not entirely
+sure I'm happy with it.
+
+
