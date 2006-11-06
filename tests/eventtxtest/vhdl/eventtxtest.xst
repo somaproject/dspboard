@@ -1,12 +1,12 @@
 set -tmpdir build
 set -xsthdpdir ./xst
 run
--ifn datasporttest.prj
+-ifn eventtxtest.prj
 -ifmt mixed
--ofn datasporttest
+-ofn eventtxtest
 -ofmt NGC
 -p xc3s400-4-ft256
--top datasporttest
+-top eventtxtest
 -opt_mode Area
 -opt_level 2
 -iuc NO

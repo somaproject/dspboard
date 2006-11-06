@@ -1,0 +1,4 @@
+vhdl work "../../../vhdl/eventfilter.vhd"
+vhdl work "../../../vhdl/eventtx.vhd"
+
+vhdl work "eventtxtest.vhd"

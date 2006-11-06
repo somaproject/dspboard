@@ -3,19 +3,25 @@ VHDLS=vhdle
 WORKDIR=work.sym
 all: hw comp sim
 
-$(WORKDIR)/multichanneltest/_behavioral.var: ../vhdl/multichanneltest.vhd
-	$(VHDLC) ../vhdl/multichanneltest.vhd
+$(WORKDIR)/eventfilter/_behavioral.var: ../../../vhdl/eventfilter.vhd
+	$(VHDLC) ../../../vhdl/eventfilter.vhd
 
-hw: $(WORKDIR)/multichanneltest/_behavioral.var 
+$(WORKDIR)/eventtx/_behavioral.var: ../../../vhdl/eventfilter.vhd ../../../vhdl/eventtx.vhd
+	$(VHDLC) ../../../vhdl/eventtx.vhd
+
+$(WORKDIR)/eventtxtest/_behavioral.var: ../../../vhdl/eventfilter.vhd ../../../vhdl/eventtx.vhd ../vhdl/eventtxtest.vhd
+	$(VHDLC) ../vhdl/eventtxtest.vhd
+
+hw: $(WORKDIR)/eventfilter/_behavioral.var $(WORKDIR)/eventtx/_behavioral.var $(WORKDIR)/eventtxtest/_behavioral.var 
 
 comp: 
 
-$(WORKDIR)/multichantesttest/_behavioral.var: multichantesttest.vhd
-	$(VHDLC) multichantesttest.vhd
+$(WORKDIR)/eventtxtest/_behavioral.var: eventtxtest.vhd
+	$(VHDLC) eventtxtest.vhd
 
-sim: $(WORKDIR)/multichantesttest/_behavioral.var 
+sim: $(WORKDIR)/eventtxtest/_behavioral.var 
 runsim: all
-	$(VHDLS) multichantesttest
+	$(VHDLS) eventtxtesttest
 
 
 clean:

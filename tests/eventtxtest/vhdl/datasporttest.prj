@@ -1,2 +1,0 @@
-vhdl work "../../../vhdl/datasport.vhd"
-vhdl work "datasporttest.vhd"
