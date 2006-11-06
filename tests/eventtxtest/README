@@ -1,0 +1,5 @@
+Here we interface the DATASPORT interface with the BSCAN block. 
+
+USER1: its input is a 16-bit word that contains a byte address. Its output is the -last- requested byte address. 
+
+
