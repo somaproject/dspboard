@@ -10,11 +10,13 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    sodipodi:docname="datasport.svg"
    sodipodi:docbase="/home/jonas/soma/DSPboard/docs"
-   inkscape:version="0.44"
+   inkscape:version="0.44+devel"
    sodipodi:version="0.32"
    id="svg1996"
    height="792.00000pt"
-   width="612.00000pt">
+   width="612.00000pt"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   sodipodi:modified="true">
   <defs
      id="defs3">
     <marker

@@ -10,11 +10,13 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    sodipodi:docname="acqserial.svg"
    sodipodi:docbase="/home/jonas/soma/DSPboard/docs"
-   inkscape:version="0.44"
+   inkscape:version="0.44+devel"
    sodipodi:version="0.32"
    id="svg1996"
    height="792.00000pt"
-   width="612.00000pt">
+   width="612.00000pt"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   sodipodi:modified="true">
   <defs
      id="defs3">
     <marker
@@ -62,9 +64,9 @@
      showgrid="true"
      inkscape:current-layer="layer1"
      inkscape:document-units="pt"
-     inkscape:cy="626.76287"
-     inkscape:cx="244.98059"
-     inkscape:zoom="2"
+     inkscape:cy="963.56434"
+     inkscape:cx="-75.381421"
+     inkscape:zoom="0.25"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
      borderopacity="1.0"
@@ -977,8 +979,8 @@
     <text
        xml:space="preserve"
        style="font-size:7px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;stroke-width:1.25;font-family:Bitstream Vera Sans"
-       x="187.44922"
-       y="265"
+       x="186.91504"
+       y="271.25"
        id="text2045"
        sodipodi:linespacing="125%"><tspan
          id="tspan2047"
@@ -1227,5 +1229,35 @@
          id="tspan2145"
          x="568.75"
          y="318.125">SERDRBr</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:end;line-height:125%;writing-mode:lr-tb;text-anchor:end;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="-32.328125"
+       y="518.125"
+       id="text4752"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4754"
+         x="-32.328125"
+         y="518.125">FIBEROUT</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:end;line-height:125%;writing-mode:lr-tb;text-anchor:end;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="-32.328125"
+       y="252.5"
+       id="text4756"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4758"
+         x="-32.328125"
+         y="252.5">FIBEROUT</tspan></text>
+    <path
+       style="fill:none;fill-opacity:1;stroke:black;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="M -31.25,515 L -6.25,515"
+       id="path4760" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:black;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="M -31.25,249.375 L 15.625,249.375"
+       id="path4762" />
   </g>
 </svg>

@@ -47,7 +47,7 @@ begin  -- Behavioral
       if rising_edge(CLK) then
         cs <= ns;
 
-        if START = '1' then
+        if cs  = none then
           bcnt <= (others => '0');
         else
           bcnt <= bcnt + 1; 
