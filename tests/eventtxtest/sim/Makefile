@@ -16,10 +16,10 @@ hw: $(WORKDIR)/eventfilter/_behavioral.var $(WORKDIR)/eventtx/_behavioral.var $(
 
 comp: 
 
-$(WORKDIR)/eventtxtest/_behavioral.var: eventtxtest.vhd
-	$(VHDLC) eventtxtest.vhd
+$(WORKDIR)/eventtxtesttest/_behavioral.var: eventtxtesttest.vhd
+	$(VHDLC) eventtxtesttest.vhd
 
-sim: $(WORKDIR)/eventtxtest/_behavioral.var 
+sim: $(WORKDIR)/eventtxtesttest/_behavioral.var 
 runsim: all
 	$(VHDLS) eventtxtesttest
 
