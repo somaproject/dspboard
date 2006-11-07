@@ -1,0 +1,21 @@
+
+To test the proper functioning of our event receiver and filter, we
+generate a series of fake events:
+
+    AEN.. DEN are 80-bit arrays that are contain the bits that enable
+    reception of a given event. Each cycle they are rotated by some
+    number of bits as a test vector.
+
+    DIN: is our input value, and ouputs the ENables above on the correct
+    ticks. On the first byte of the i-th event DIN = i; on the second
+    byte of the i-th event DIN = 0xFF.
+
+To test if we have tx'd and filtered the events properly, for each
+assertion of EVENTENA... EVENTEND we latch the byte at that particular
+moment and place it in rxdeventsA ... rxdeventsD. We also increment
+the associated counter.
+
+At the very end of the ecycle, when nothing is really going on (epos
+~998) we verify that the event bytes recorded in rxdeventsA (etc.) are
+correct, along with the necessary heartbeat event.
+
