@@ -1,0 +1,15 @@
+The EventRX interface uses the DSP's SPI interface in slave mode to
+acquire events to place onto the event bus. While there is a FIFO
+involved, it's important to note that the DSP should rate limit its
+event transmission to roughly one event per ECYCLE to prevent overflowing the bus. 
+
+We use a 16-bit word interface with the upper byte being an address in
+the fifo to write to. Note that there only the bottom 32 locations
+have any meaning.
+
+We also make sure this entire interface can be bypassed for the
+optional ``booting of the DSP''
+
+We use SPISEL4 to select/enable/cs the FPGA. 
+
+
