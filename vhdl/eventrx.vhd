@@ -46,10 +46,14 @@ begin  -- Behavioral
 
   addrb(4 downto 0) <= ADDROUT;
 
+  VALID <= '1' when bpl /= addrb(10 downto 5) else '0';
+  
   main : process(CLK)
   begin
     if rising_edge(CLK) then
 
+      cs <= ns;
+      
       sclkl <= SCLK;
       sdinl <= SDIN;
       scsl  <= SCS;
@@ -77,7 +81,7 @@ begin  -- Behavioral
 
   RAMB16_S9_S9_inst : RAMB16_S9_S9
     generic map (
-      SIM_COLLISION_CHECK => "NONE",
+      SIM_COLLISION_CHECK => "NONE")
       port map (
       DOA                 => open,     
       DOB                 => DOUT,     
