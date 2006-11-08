@@ -8,7 +8,7 @@ ASMSRCS = crt0.asm
 CCSRCS   = main.cc
 SRCDIR= ../../../src/
 CPUDEFINES = -D__ADSPBF561__ -D__ADSPLPBLACKFIN__
-INCLUDES =  -I. -I$(SRCDIR) -I$(SRCDIR)/bf533
+INCLUDES =  -I. -I$(SRCDIR) -I$(SRCDIR)/bf533 -I$(SRCDIR)/include
 ASMFLAGS = -x assembler-with-cpp $(CPUDEFINES) $(INCLUDES)
 ASMFLAGS += -DBOARD_$(BOARD)
 CFLAGS = $(INCLUDES)  -g -DBOARD_$(BOARD) 
@@ -25,7 +25,7 @@ CXX = bfin-elf-g++-4.1.0
 
 LD = bfin-elf-ld
 
-all: $(OBJS) datasporttest.elf
+all: $(OBJS) eventtxtest.elf
 
 main.o: main.cc
 	$(CXX) $(CFLAGS)  -c -o main.o main.cc
@@ -34,8 +34,8 @@ main.o: main.cc
 	$(CC) $(ASMFLAGS) -c -o $@ $<
 
 
-datasporttest.elf: $(OBJS)
-	$(LD) $(OBJS)  $(LDFLAGS) -o datasporttest.elf
+eventtxtest.elf: $(OBJS)
+	$(LD) $(OBJS)  $(LDFLAGS) -o eventtxtest.elf
 
 clean:
 	rm -f *.o

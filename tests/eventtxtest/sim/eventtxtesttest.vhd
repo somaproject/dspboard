@@ -38,7 +38,7 @@ architecture Behavioral of eventtxtesttest is
   signal LEDPOWER  : std_logic                    := '0';
   signal DIN       : std_logic_vector(7 downto 0) := (others => '0');
   signal KIN       : std_logic                    := '0';
-  signal INTGEN    : std_logic                    := '0';
+  signal INTGEN    : std_logic                    := '1';
   signal ERRIN     : std_logic                    := '0';
   signal EVENTENA  : std_logic                    := '0';
   signal EVENTENB  : std_logic                    := '0';
@@ -69,7 +69,7 @@ architecture Behavioral of eventtxtesttest is
   
 begin  -- Behavioral
 
-
+  INTGEN <= '1'; 
   REFCLKIN <= not REFCLKIN after 10 ns;
 
   eventtxtest_uut: eventtxtest
