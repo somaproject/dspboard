@@ -10,14 +10,16 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    sodipodi:docname="overview.2.svg"
    sodipodi:docbase="/home/jonas/soma/DSPboard/docs/overview"
-   inkscape:version="0.44"
+   inkscape:version="0.44+devel"
    sodipodi:version="0.32"
    id="svg1996"
    height="792.00000pt"
    width="612.00000pt"
    inkscape:export-filename="/tmp/bus2.png"
    inkscape:export-xdpi="120"
-   inkscape:export-ydpi="120">
+   inkscape:export-ydpi="120"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   sodipodi:modified="true">
   <defs
      id="defs3">
     <marker
@@ -288,7 +290,7 @@
        style="fill:white;fill-opacity:1;stroke:black;stroke-width:1.25000012;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect2307"
        width="31.25"
-       height="281.328"
+       height="253.12497"
        x="328.125"
        y="83.750023" />
     <text
@@ -302,7 +304,7 @@
          sodipodi:role="line"
          id="tspan2311"
          x="-240"
-         y="343.75">Event TX Mux</tspan></text>
+         y="343.75">Event Mux</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
@@ -314,7 +316,7 @@
          sodipodi:role="line"
          id="tspan2315"
          x="-240"
-         y="421.875">Data TX MUx</tspan></text>
+         y="421.875">Data MUx</tspan></text>
     <g
        id="g1659"
        transform="translate(143.75,-28.125)">
@@ -704,13 +706,6 @@
        d="M 484.375,371.25 L 737.5,371.25 L 737.5,296.25 L 737.5,277.5 L 718.5,277.5 L 718.75,283.75 L 703.125,271.25 L 718.75,258.75 L 718.75,265 L 737.5,265 L 737.5,133.75 L 718.75,133.75 L 718.75,140 L 703.125,127.5 L 718.75,115 L 718.75,121.25 L 750,121.25 L 750,296.25 L 750,383.75 L 484.375,383.75"
        id="path5354"
        sodipodi:nodetypes="cccccccccccccccccccc" />
-    <rect
-       style="fill:#f3f3f3;fill-opacity:1;stroke:black;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect2303"
-       width="203.125"
-       height="31.25"
-       x="281.25"
-       y="365" />
     <g
        id="g6261"
        transform="translate(-546.875,-140.625)">
@@ -897,5 +892,113 @@
          id="tspan2966"
          x="106.25"
          y="380.625">Shared EventTX Bus</tspan></text>
+    <rect
+       style="fill:white;fill-opacity:1;stroke:black;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect5601"
+       width="93.75"
+       height="31.25"
+       x="328.125"
+       y="411.875" />
+    <text
+       xml:space="preserve"
+       style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="343.75"
+       y="440"
+       id="text5597"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan5599"
+         x="343.75"
+         y="440">DeviceLink</tspan></text>
+    <rect
+       style="fill:#ebe6ff;fill-opacity:1;stroke:black;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect5603"
+       width="46.875"
+       height="15.625"
+       x="375"
+       y="411.875" />
+    <text
+       xml:space="preserve"
+       style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="390.625"
+       y="424.375"
+       id="text5605"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan5607"
+         x="390.625"
+         y="424.375">TX</tspan></text>
+    <rect
+       style="fill:#ebe6ff;fill-opacity:1;stroke:black;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect5609"
+       width="46.875"
+       height="15.625"
+       x="328.125"
+       y="411.875" />
+    <text
+       xml:space="preserve"
+       style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="343.75"
+       y="424.375"
+       id="text5611"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan5613"
+         x="343.75"
+         y="424.375">RX</tspan></text>
+    <rect
+       style="fill:none;fill-opacity:1;stroke:black;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect5615"
+       width="62.5"
+       height="31.25"
+       x="312.5"
+       y="380.625" />
+    <text
+       xml:space="preserve"
+       style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="318.75"
+       y="399.375"
+       id="text5617"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan5619"
+         x="318.75"
+         y="399.375">Event RX</tspan></text>
+    <rect
+       style="fill:none;fill-opacity:1;stroke:black;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect5621"
+       width="62.5"
+       height="31.25"
+       x="375"
+       y="380.625" />
+    <text
+       xml:space="preserve"
+       style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="381.25"
+       y="399.375"
+       id="text5623"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan5625"
+         x="381.25"
+         y="399.375">DevMuxTX</tspan></text>
+    <rect
+       style="fill:white;fill-opacity:1;stroke:black;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect5806"
+       width="62.5"
+       height="12.5"
+       x="484.375"
+       y="71.25" />
+    <text
+       xml:space="preserve"
+       style="font-size:9px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="496.875"
+       y="80.625"
+       id="text6693"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan6695"
+         x="496.875"
+         y="80.625">BOOT IF</tspan></text>
   </g>
 </svg>
