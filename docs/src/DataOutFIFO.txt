@@ -1,19 +1,28 @@
 Data output fifo
 
-We configure the data output fifo to let people request fifo elements, fill them, and then we queue them up for transmission. 
+We configure the data output fifo to let people request fifo elements,
+fill them, and then we queue them up for transmission.
 
 This lets us use the DSP's descriptor-based DMA system if we want. 
 
-Note that there is no guarantee that commit() will be called in the same set chunk of code as request()
+Note that there is no guarantee that commit() will be called in the
+same set chunk of code as request()
 
-This way, simple code can avoid having to do duplicated writes if we
+This way, simple code can avoid having to perform duplicated writes if we
 know in advance where buffers will live.
 
-We return pointers to objects of type DataTXBuffer. 
+DataOutBuffer: 
 
-DataTXBuffer has private and public components; the DataTXFifo is a friend class. 
+We return pointers to objects of type DataOutBuffer, a simple buffer wrapper with a .buffer[] member variable, a .state, and a .commit() function. 
 
-We initially create an array of these and set their state_ to uncommitted. They are all of size BUFSIZE, which can be returned via the size() method. 
+The states are: 
+
+DOB_NONE: This buffer is not currently in use
+DOB_WRITING: this buffer is held by a client, and may be being written to. 
+DOB_TXREADY: The client is done writing this buffer, and it is ready for transmission
+DOB_SENDING: The fifo is currently transmitting this buffer. 
+
+We initially create an array of these and set their state_ to none. They are all of size BUFSIZE, which can be returned via the size() method. 
 
 How many do we create? initially we allocate space for one for each possible output device that would request one at a given time, plus one. 
 

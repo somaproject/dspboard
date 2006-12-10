@@ -1,6 +1,47 @@
 Generic software architecture notes. We really want to separate out
 dsp-specific functionality from non-DSP functionality.
 
+\section{Overall software goals}
+We want to be able to maintain an indefinite uptime. This means that
+we need to work agressively to eliminate problems such as memory
+fragmentation in our limited memory space from eventually hurting our
+performance. We also investigate the use of watchdog timers to
+guarantee and eliminate lost samples.
+
+\subsection{Error handling}
+The C++ exception handling features allow us to place our central data
+processing loop inside of a try/except statement; when we receive an
+exception we serialize it across the event bus.
+
+Fifos should be checked for potential overflow. 
+
+\subsection{Hardware Interfacing}
+Our hardware-based IO features include: 
+DataOutFifo
+EventOutFifo
+EventInFifo
+SystemTimer()
+
+Signal processing components include: 
+
+Each of these... accesses a DSP singleton object? How does that work? 
+
+\section{The Primary Event Loop}
+
+Our startup sequence goes something like this: 
+1. create static DSP(hw) components
+2. create IO components
+3. create signal processing components
+    1. create data sources
+    2. create data sinks
+    3. create filterlink manager
+
+Then our primary loop is: 
+   1. Check and TX output data
+   2. check and process input samples
+   3. push data for output samples
+   4. process N events
+
 
 \section{Signal Processing}
 
@@ -9,7 +50,7 @@ connection of data sources (such as the continuous data from the
 acquisition board) to Data Sinks (like a tetrode packetizer).
 
 These connections occur via signal processing elements called Filter
-Links. Each filter link is designed to provide a filtered (that is,
+Links. Each Filter Link is designed to provide a filtered (that is,
 processed) link back to a single Data Source channel.  A Data Sink can
 have as many Filter Links back to sources as are necessary for its
 application. Note that each data source channel will typicall have
