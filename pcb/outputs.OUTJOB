@@ -171,6 +171,14 @@ OutputDocumentPath21=
 OutputVariantName21=
 OutputEnabled21=0
 OutputDefault21=0
+Configuration21_Name1=General
+Configuration21_Item1=OpenExported=False|ForceFit=False|Preview=False|TemplateFilename=|BatchMode=5|FormWidth=1356|FormHeight=949
+Configuration21_Name2=GroupOrder
+Configuration21_Item2=LibRef=True|Footprint=True|Value=True
+Configuration21_Name3=SortOrder
+Configuration21_Item3=Model:Footprint=Up
+Configuration21_Name4=VisibleOrder
+Configuration21_Item4=Description=303|Designator=273|Footprint=100|LibRef=100|Model:Footprint=129|Quantity=100|Value=100
 OutputType22=ComponentCrossReference
 OutputName22=Component Cross Reference Report
 OutputDocumentPath22=
@@ -214,6 +222,34 @@ Configuration25_Name8=OutputConfigurationParameter9
 Configuration25_Item8=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CRegion=Full|CText=Full|CTrack=Full|CVia=Full|DDSymbolKind=0|DDSymbolSize=500000|DDSymbolSortKind=0|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|FArc=Full|FFill=Full|FPad=Full|FRegion=Full|FText=Full|FTrack=Full|FVia=Full|Layer=InternalPlane2|Polygon=Full|PrintOutIndex=0|Record=PcbPrintLayer
 Configuration25_Name9=OutputConfigurationParameter10
 Configuration25_Item9=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CRegion=Full|CText=Full|CTrack=Full|CVia=Full|DDSymbolKind=0|DDSymbolSize=500000|DDSymbolSortKind=0|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|FArc=Full|FFill=Full|FPad=Full|FRegion=Hidden|FText=Full|FTrack=Full|FVia=Full|Layer=BottomLayer|Polygon=Full|PrintOutIndex=0|Record=PcbPrintLayer
+OutputType26=BOM_PartType
+OutputName26=Copy of Bill of Materials
+OutputDocumentPath26=
+OutputVariantName26=
+OutputEnabled26=0
+OutputDefault26=0
+Configuration26_Name1=General
+Configuration26_Item1=OpenExported=False|ForceFit=False|Preview=False|TemplateFilename=|BatchMode=3|FormWidth=1356|FormHeight=949
+Configuration26_Name2=GroupOrder
+Configuration26_Item2=LibRef=True|Footprint=True|Value=True
+Configuration26_Name3=SortOrder
+Configuration26_Item3=Model:Footprint=Up
+Configuration26_Name4=VisibleOrder
+Configuration26_Item4=Description=303|Designator=273|Footprint=100|LibRef=100|Model:Footprint=129|Quantity=100|Value=100
+OutputType27=BOM_PartType
+OutputName27=CSVBOM
+OutputDocumentPath27=
+OutputVariantName27=
+OutputEnabled27=0
+OutputDefault27=0
+Configuration27_Name1=General
+Configuration27_Item1=OpenExported=False|ForceFit=False|Preview=False|TemplateFilename=|BatchMode=0|FormWidth=875|FormHeight=949
+Configuration27_Name2=GroupOrder
+Configuration27_Item2=
+Configuration27_Name3=SortOrder
+Configuration27_Item3=Description=Down
+Configuration27_Name4=VisibleOrder
+Configuration27_Item4=Designator=114|Description=181|Footprint=100|LibRef=100|Quantity=100|Value=100|Comment=114|Tolerance=114
 
 [CAMtasticOutputs]
 OpenODBOutput=False
