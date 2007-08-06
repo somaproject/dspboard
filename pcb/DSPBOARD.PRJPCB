@@ -159,69 +159,63 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 
 [GeneratedDocument1]
-DocumentPath=Outputs\pcb.DRL
-
-[GeneratedDocument2]
 DocumentPath=Outputs\pcb.DRR
 
-[GeneratedDocument3]
-DocumentPath=Outputs\pcb.EXTREP
-
-[GeneratedDocument4]
+[GeneratedDocument2]
 DocumentPath=Outputs\pcb.G1
 
-[GeneratedDocument5]
+[GeneratedDocument3]
 DocumentPath=Outputs\pcb.G2
 
-[GeneratedDocument6]
+[GeneratedDocument4]
 DocumentPath=Outputs\pcb.GBL
 
-[GeneratedDocument7]
+[GeneratedDocument5]
 DocumentPath=Outputs\pcb.GBO
 
-[GeneratedDocument8]
+[GeneratedDocument6]
 DocumentPath=Outputs\pcb.GBP
 
-[GeneratedDocument9]
+[GeneratedDocument7]
 DocumentPath=Outputs\pcb.GBS
 
-[GeneratedDocument10]
+[GeneratedDocument8]
 DocumentPath=Outputs\pcb.GM5
 
-[GeneratedDocument11]
+[GeneratedDocument9]
 DocumentPath=Outputs\pcb.GM6
 
-[GeneratedDocument12]
+[GeneratedDocument10]
 DocumentPath=Outputs\pcb.GP1
 
-[GeneratedDocument13]
+[GeneratedDocument11]
 DocumentPath=Outputs\pcb.GP2
 
-[GeneratedDocument14]
+[GeneratedDocument12]
 DocumentPath=Outputs\pcb.GTL
 
-[GeneratedDocument15]
+[GeneratedDocument13]
 DocumentPath=Outputs\pcb.GTO
 
-[GeneratedDocument16]
+[GeneratedDocument14]
 DocumentPath=Outputs\pcb.GTP
 
-[GeneratedDocument17]
+[GeneratedDocument15]
 DocumentPath=Outputs\pcb.GTS
 
-[GeneratedDocument18]
+[GeneratedDocument16]
 DocumentPath=Outputs\pcb.LDP
 
-[GeneratedDocument19]
+[GeneratedDocument17]
 DocumentPath=Outputs\pcb.REP
 
-[GeneratedDocument20]
+[GeneratedDocument18]
 DocumentPath=Outputs\pcb.RUL
 
-[GeneratedDocument21]
+[GeneratedDocument19]
 DocumentPath=Outputs\pcb.TXT
 
-[GeneratedDocument22]
+[GeneratedDocument20]
 DocumentPath=Outputs\Pick Place for pcb.txt
 
 [Generic_SmartPDF]
@@ -318,8 +312,8 @@ OutputDocumentPath4=
 OutputEnabled4=1
 OutputDefault4=0
 PageOptions4=Record=PageOptions|CenterHorizontal=True|CenterVertical=True|PrintScale=1.00|XCorrection=1.00|YCorrection=1.00|PrintKind=1|BorderSize=5000000|LeftOffset=0|BottomOffset=0|Orientation=2|PaperLength=1000|PaperWidth=1000|Scale=100|PaperSource=7|PrintQuality=-4|MediaType=1|DitherType=10|PaperKind=A4|PrintScaleMode=1
-OutputType5=SimView Print
-OutputName5=SimView Prints
+OutputType5=Wave Print
+OutputName5=Wave Prints
 OutputDocumentPath5=
 OutputEnabled5=1
 OutputDefault5=0
@@ -330,12 +324,6 @@ OutputDocumentPath6=
 OutputEnabled6=1
 OutputDefault6=0
 PageOptions6=Record=PageOptions|CenterHorizontal=True|CenterVertical=True|PrintScale=1.00|XCorrection=1.00|YCorrection=1.00|PrintKind=1|BorderSize=5000000|LeftOffset=0|BottomOffset=0|Orientation=2|PaperLength=1000|PaperWidth=1000|Scale=100|PaperSource=7|PrintQuality=-4|MediaType=1|DitherType=10|PaperKind=A4|PrintScaleMode=1
-OutputType7=Wave Print
-OutputName7=Wave Prints
-OutputDocumentPath7=
-OutputEnabled7=1
-OutputDefault7=0
-PageOptions7=Record=PageOptions|CenterHorizontal=True|CenterVertical=True|PrintScale=1.00|XCorrection=1.00|YCorrection=1.00|PrintKind=1|BorderSize=5000000|LeftOffset=0|BottomOffset=0|Orientation=2|PaperLength=1000|PaperWidth=1000|Scale=100|PaperSource=7|PrintQuality=-4|MediaType=1|DitherType=10|PaperKind=A4|PrintScaleMode=1
 
 [OutputGroup4]
 Name=Assembly Outputs
@@ -815,10 +803,10 @@ UpdateCurrentModels=1
 SelectedOnly=0
 
 [Comparison Options]
-ComparisonOptions0=`B= |Kind=Net|MinPercent=75|MinMatch=3|ShowMatch=-1|Confirm=-1|UseName=-1|InclAllRules=0
+ComparisonOptions0=Kind=Net|MinPercent=75|MinMatch=3|ShowMatch=-1|Confirm=-1|UseName=-1|InclAllRules=0
 ComparisonOptions1=Kind=Net Class|MinPercent=75|MinMatch=3|ShowMatch=-1|Confirm=-1|UseName=-1|InclAllRules=0
 ComparisonOptions2=Kind=Component Class|MinPercent=75|MinMatch=3|ShowMatch=-1|Confirm=-1|UseName=-1|InclAllRules=0
-ComparisonOptions3=`B= |Kind=Rule|MinPercent=75|MinMatch=3|ShowMatch=-1|Confirm=-1|UseName=-1|InclAllRules=0
+ComparisonOptions3=Kind=Rule|MinPercent=75|MinMatch=3|ShowMatch=-1|Confirm=-1|UseName=-1|InclAllRules=0
 
 [SmartPDF]
 PageOptions=Record=PageOptions|CenterHorizontal=True|CenterVertical=True|PrintScale=1.60|XCorrection=1.00|YCorrection=1.00|PrintKind=0|BorderSize=5000000|LeftOffset=0|BottomOffset=0|Orientation=2|PaperLength=1000|PaperWidth=1000|Scale=100|PaperSource=7|PrintQuality=-4|MediaType=1|DitherType=10|PaperKind=A4|PrintScaleMode=1
