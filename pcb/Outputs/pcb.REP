@@ -70,16 +70,16 @@ Generating : Mid-Layer 1
 
 
 Used DCodes :
-    D34
+    D14
+    D36
     D37
-    D38
     D39
     D40
-    D41
-    D46
+    D44
+    D45
+    D52
     D53
     D54
-    D55
     D57
 *************************************************************
 
@@ -93,14 +93,14 @@ Generating : Mid-Layer 2
 
 
 Used DCodes :
-    D34
+    D14
+    D36
     D37
-    D40
-    D41
-    D46
+    D39
+    D45
+    D52
     D53
     D54
-    D55
     D57
 *************************************************************
 
@@ -115,16 +115,16 @@ Generating : Bottom Layer
 
 Used DCodes :
     D10
-    D31
-    D34
+    D14
+    D17
     D36
     D37
     D38
     D39
     D40
     D41
-    D42
     D43
+    D44
     D45
     D46
     D47
@@ -152,10 +152,10 @@ Generating : Top Overlay
 
 Used DCodes :
     D36
-    D37
-    D38
     D39
+    D40
     D41
+    D44
     D57
     D61
     D62
@@ -171,8 +171,8 @@ Generating : Bottom Overlay
 
 
 Used DCodes :
-    D37
-    D61
+    D36
+    D62
 *************************************************************
 
 *************************************************************
@@ -191,7 +191,6 @@ Used DCodes :
     D11
     D12
     D13
-    D14
     D15
     D16
     D17
@@ -211,6 +210,7 @@ Used DCodes :
     D31
     D32
     D33
+    D34
     D35
 *************************************************************
 
@@ -227,7 +227,7 @@ Generating : Bottom Paste
 
 Used DCodes :
     D10
-    D31
+    D17
     D58
     D59
 *************************************************************
@@ -297,7 +297,7 @@ Generating : Bottom Solder
 
 Used DCodes :
     D65
-    D86
+    D72
     D91
     D92
     D93
@@ -325,9 +325,9 @@ Generating : Internal Plane 1
 
 
 Used DCodes :
-    D41
-    D91
-    D96
+    D39
+    D94
+    D97
     D99
     D101
     D106
@@ -357,20 +357,20 @@ Generating : Internal Plane 2
 
 
 Used DCodes :
-    D41
-    D91
-    D96
+    D39
+    D94
+    D97
     D99
     D101
     D106
-    D107
     D108
+    D109
+    D110
     D111
     D112
-    D113
-    D114
+    D115
+    D116
     D117
-    D118
     D119
     D121
 *************************************************************

@@ -224,9 +224,6 @@ DocumentPath=Outputs\pcb.TXT
 [GeneratedDocument22]
 DocumentPath=Outputs\Pick Place for pcb.txt
 
-[GeneratedDocument23]
-DocumentPath=C:\DOCUME~1\ERICJO~1\LOCALS~1\Temp\Pro1E2.csv
-
 [Generic_SmartPDF]
 AutoOpenFile=0
 
