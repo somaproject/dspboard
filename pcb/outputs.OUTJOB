@@ -99,7 +99,7 @@ OutputVariantName11=
 OutputEnabled11=1
 OutputDefault11=0
 Configuration11_Name1=OutputConfigurationParameter1
-Configuration11_Item1=Record=PickPlaceView|Units=Imperial|GenerateCSVFormat=False|GenerateTextFormat=True
+Configuration11_Item1=Record=PickPlaceView|Units=Imperial|GenerateCSVFormat=True|GenerateTextFormat=False
 OutputType12=CompositeDrill
 OutputName12=Composite Drill Drawing
 OutputDocumentPath12=
@@ -197,6 +197,8 @@ OutputDocumentPath24=
 OutputVariantName24=
 OutputEnabled24=0
 OutputDefault24=0
+Configuration24_Name1=OutputConfigurationParameter1
+Configuration24_Item1=Record=SimpleBOMView|SimpleBOMMode=0
 OutputType25=PCB Print
 OutputName25=Pretty PCB prints
 OutputDocumentPath25=
@@ -240,7 +242,7 @@ OutputType27=BOM_PartType
 OutputName27=CSVBOM
 OutputDocumentPath27=
 OutputVariantName27=
-OutputEnabled27=0
+OutputEnabled27=1
 OutputDefault27=0
 Configuration27_Name1=General
 Configuration27_Item1=OpenExported=False|ForceFit=False|Preview=False|TemplateFilename=|BatchMode=0|FormWidth=875|FormHeight=949

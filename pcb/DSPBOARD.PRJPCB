@@ -222,6 +222,9 @@ DocumentPath=Outputs\pcb.RUL
 DocumentPath=Outputs\pcb.TXT
 
 [GeneratedDocument22]
+DocumentPath=outputs\Pick Place for pcb.csv
+
+[GeneratedDocument23]
 DocumentPath=Outputs\Pick Place for pcb.txt
 
 [Generic_SmartPDF]
