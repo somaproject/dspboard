@@ -4,7 +4,7 @@
      changes made to this file may result in unpredictable
      behavior or data corruption.  It is strongly advised that
      users do not edit the contents of this file. -->
-<DesignSummary rev="7">
+<DesignSummary rev="20">
 <DesignStatistics TimeStamp="Tue Sep 19 16:54:47 2006"><group name="NetStatistics">
 <item name="NumNets_Active" rev="7">
 <attrib name="value" value="86"/></item>
@@ -94,51 +94,6 @@
 <attrib name="value" value="25"/></item>
 </group>
 </DesignStatistics>
-<DeviceUsage TimeStamp="Tue Sep 19 16:54:47 2006"><group name="SiteSummary">
-<item name="BUFGMUX" rev="7">
-<attrib name="total" value="1000000"/><attrib name="used" value="1"/></item>
-<item name="BUFGMUX_GCLKMUX" rev="7">
-<attrib name="total" value="1000000"/><attrib name="used" value="1"/></item>
-<item name="BUFGMUX_GCLK_BUFFER" rev="7">
-<attrib name="total" value="1000000"/><attrib name="used" value="1"/></item>
-<item name="IOB" rev="7">
-<attrib name="total" value="1000000"/><attrib name="used" value="4"/></item>
-<item name="IOB_INBUF" rev="7">
-<attrib name="total" value="1000000"/><attrib name="used" value="1"/></item>
-<item name="IOB_OFF1" rev="7">
-<attrib name="total" value="1000000"/><attrib name="used" value="2"/></item>
-<item name="IOB_OUTBUF" rev="7">
-<attrib name="total" value="1000000"/><attrib name="used" value="3"/></item>
-<item name="IOB_PAD" rev="7">
-<attrib name="total" value="1000000"/><attrib name="used" value="4"/></item>
-<item name="SLICEL" rev="7">
-<attrib name="total" value="1000000"/><attrib name="used" value="31"/></item>
-<item name="SLICEL_C1VDD" rev="7">
-<attrib name="total" value="1000000"/><attrib name="used" value="12"/></item>
-<item name="SLICEL_C2VDD" rev="7">
-<attrib name="total" value="1000000"/><attrib name="used" value="12"/></item>
-<item name="SLICEL_CYMUXF" rev="7">
-<attrib name="total" value="1000000"/><attrib name="used" value="23"/></item>
-<item name="SLICEL_CYMUXG" rev="7">
-<attrib name="total" value="1000000"/><attrib name="used" value="22"/></item>
-<item name="SLICEL_F" rev="7">
-<attrib name="total" value="1000000"/><attrib name="used" value="29"/></item>
-<item name="SLICEL_FFX" rev="7">
-<attrib name="total" value="1000000"/><attrib name="used" value="24"/></item>
-<item name="SLICEL_FFY" rev="7">
-<attrib name="total" value="1000000"/><attrib name="used" value="24"/></item>
-<item name="SLICEL_G" rev="7">
-<attrib name="total" value="1000000"/><attrib name="used" value="28"/></item>
-<item name="SLICEL_GNDF" rev="7">
-<attrib name="total" value="1000000"/><attrib name="used" value="11"/></item>
-<item name="SLICEL_GNDG" rev="7">
-<attrib name="total" value="1000000"/><attrib name="used" value="10"/></item>
-<item name="SLICEL_XORF" rev="7">
-<attrib name="total" value="1000000"/><attrib name="used" value="23"/></item>
-<item name="SLICEL_XORG" rev="7">
-<attrib name="total" value="1000000"/><attrib name="used" value="23"/></item>
-</group>
-</DeviceUsage>
 <ReportConfigData TimeStamp="Tue Sep 19 16:54:47 2006"><group name="IOB_OFF1">
 <item name="LATCH_OR_FF" rev="7">
 <attrib name="FF" value="2"/></item>
@@ -268,14 +223,6 @@
 <item name="OUT" rev="7">
 <attrib name="value" value="1"/></item>
 </group>
-<group name="SLICEL_XORF">
-<item name="0" rev="7">
-<attrib name="value" value="23"/></item>
-<item name="1" rev="7">
-<attrib name="value" value="23"/></item>
-<item name="O" rev="7">
-<attrib name="value" value="23"/></item>
-</group>
 <group name="SLICEL_FFX">
 <item name="CE" rev="7">
 <attrib name="value" value="13"/></item>
@@ -286,7 +233,7 @@
 <item name="Q" rev="7">
 <attrib name="value" value="24"/></item>
 </group>
-<group name="SLICEL_XORG">
+<group name="SLICEL_XORF">
 <item name="0" rev="7">
 <attrib name="value" value="23"/></item>
 <item name="1" rev="7">
@@ -303,6 +250,14 @@
 <attrib name="value" value="24"/></item>
 <item name="Q" rev="7">
 <attrib name="value" value="24"/></item>
+</group>
+<group name="SLICEL_XORG">
+<item name="0" rev="7">
+<attrib name="value" value="23"/></item>
+<item name="1" rev="7">
+<attrib name="value" value="23"/></item>
+<item name="O" rev="7">
+<attrib name="value" value="23"/></item>
 </group>
 <group name="IOB_PAD">
 <item name="PAD" rev="7">
