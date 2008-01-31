@@ -1,10 +1,10 @@
-NDS Database:  version J.37
+NDS Database:  version J.40
 
 NDS_INFO | xbr | 2C64A44VQ | XC2C64A-7-VQ44
 
 DEVICE | 2C64A | 2C64A44VQ | 
 
-NETWORK | boot | 0 | 0 | 1073758214
+NETWORK | boot | 0 | 0 | 1073758214 | 0
 
 INPUT_INSTANCE | 0 | 0 | NULL | CLK_II | boot_COPY_0_COPY_0 | 16 | 1 | 1
 INPUT_NODE_TYPE | 0 | 5 | II_IN
@@ -646,14 +646,12 @@ NODE | SERDIN_II/IREG | 1342 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | NULL | SE
 
 FB_INSTANCE | FOOBAR1_ | boot_COPY_0_COPY_0 | 0 | 0 | 0
 FBPIN | 1 | FCLK_MC | 1 | NULL | 0 | FCLK | 1 | 38 | 49152
-FBPIN | 2 | FDIN_MC | 1 | NULL | 0 | FDIN | 1 | 37 | 49152
 FBPIN | 3 | FPROG_MC | 1 | NULL | 0 | FPROG | 1 | 36 | 49152
 FBPIN | 4 | deserialize_inst/cnt<1>_MC | 1 | NULL | 0 | NULL | 0
 FBPIN | 5 | deserialize_inst/cnt<2>_MC | 1 | NULL | 0 | NULL | 0
 FBPIN | 6 | deserialize_inst/cnt<3>_MC | 1 | NULL | 0 | NULL | 0
 FBPIN | 7 | deserialize_inst/lfprog_MC | 1 | NULL | 0 | NULL | 0
 FBPIN | 8 | deserialize_inst/lfdin_MC | 1 | NULL | 0 | NULL | 0
-FBPIN | 9 | deserialize_inst/serinl_MC | 1 | SERDIN_II | 1 | NULL | 0 | 34 | 53248
 FBPIN | 12 | deserialize_inst/cs_FFd2_MC | 1 | NULL | 0 | NULL | 0 | 31 | 53248
 FBPIN | 13 | deserialize_inst/cnt<0>_MC | 1 | NULL | 0 | NULL | 0 | 30 | 51200
 FBPIN | 14 | deserialize_inst/lfclk_MC | 1 | NULL | 0 | NULL | 0
@@ -661,11 +659,13 @@ FBPIN | 15 | deserialize_inst/cs_FFd1_MC | 1 | NULL | 0 | NULL | 0
 FBPIN | 16 | deserialize_inst/cnt<4>_MC | 1 | NULL | 0 | NULL | 0
 
 FB_INSTANCE | FOOBAR2_ | boot_COPY_0_COPY_0 | 0 | 0 | 0
+FBPIN | 2 | FDIN_MC | 1 | NULL | 0 | FDIN | 1 | 40 | 49152
 FBPIN | 10 | NULL | 0 | CLK_II | 1 | NULL | 0 | 1 | 57344
 
 FB_INSTANCE | FOOBAR3_ | boot_COPY_0_COPY_0 | 0 | 0 | 0
 
 FB_INSTANCE | FOOBAR4_ | boot_COPY_0_COPY_0 | 0 | 0 | 0
+FBPIN | 7 | deserialize_inst/serinl_MC | 1 | SERDIN_II | 1 | NULL | 0 | 8 | 49152
 
 FB_INSTANCE | INPUTPINS_FOOBAR5_ | boot_COPY_0_COPY_0 | 0 | 0 | 0
 
@@ -677,43 +677,39 @@ CT_INSTANCE | FOOBAR3_ | FOOBAR3__ctinst | boot_COPY_0_COPY_0 | 0 | 0 | 0
 
 CT_INSTANCE | FOOBAR4_ | FOOBAR4__ctinst | boot_COPY_0_COPY_0 | 0 | 0 | 0
 
-PLA | FOOBAR1_ | 23
+PLA | FOOBAR1_ | 21
 PLA_TERM | 0 | 
 SPPTERM | 1 | IV_TRUE | deserialize_inst/lfclk
 PLA_TERM | 1 | 
-SPPTERM | 1 | IV_TRUE | deserialize_inst/lfdin
-PLA_TERM | 2 | 
 SPPTERM | 1 | IV_TRUE | deserialize_inst/lfprog
-PLA_TERM | 3 | 
+PLA_TERM | 2 | 
 SPPTERM | 5 | IV_TRUE | deserialize_inst/cnt<0> | IV_TRUE | deserialize_inst/cs_FFd1 | IV_TRUE | deserialize_inst/cnt<2> | IV_TRUE | deserialize_inst/cnt<1> | IV_TRUE | deserialize_inst/cnt<3>
-PLA_TERM | 4 | 
+PLA_TERM | 3 | 
 SPPTERM | 2 | IV_FALSE | deserialize_inst/cs_FFd1 | IV_TRUE | deserialize_inst/cnt<4>
-PLA_TERM | 5 | 
+PLA_TERM | 4 | 
 SPPTERM | 6 | IV_FALSE | deserialize_inst/cnt<0> | IV_TRUE | deserialize_inst/cs_FFd1 | IV_TRUE | deserialize_inst/cnt<2> | IV_FALSE | deserialize_inst/cnt<1> | IV_FALSE | deserialize_inst/cnt<3> | IV_TRUE | deserialize_inst/cnt<4>
-PLA_TERM | 6 | 
+PLA_TERM | 5 | 
 SPPTERM | 2 | IV_TRUE | deserialize_inst/cs_FFd1 | IV_TRUE | deserialize_inst/cs_FFd2
-PLA_TERM | 7 | 
+PLA_TERM | 6 | 
 SPPTERM | 2 | IV_FALSE | deserialize_inst/serinl | IV_TRUE | deserialize_inst/cs_FFd2
-PLA_TERM | 8 | 
+PLA_TERM | 7 | 
 SPPTERM | 1 | IV_TRUE | deserialize_inst/serinl
-PLA_TERM | 9 | 
+PLA_TERM | 8 | 
 SPPTERM | 4 | IV_TRUE | deserialize_inst/cnt<0> | IV_TRUE | deserialize_inst/cs_FFd1 | IV_TRUE | deserialize_inst/cnt<2> | IV_TRUE | deserialize_inst/cnt<1>
+PLA_TERM | 9 | 
+SPPTERM | 2 | IV_FALSE | deserialize_inst/cs_FFd1 | IV_TRUE | deserialize_inst/cnt<3>
 PLA_TERM | 10 | 
 SPPTERM | 5 | IV_FALSE | deserialize_inst/cnt<0> | IV_TRUE | deserialize_inst/cnt<2> | IV_FALSE | deserialize_inst/cnt<1> | IV_FALSE | deserialize_inst/cnt<3> | IV_TRUE | deserialize_inst/cnt<4>
 PLA_TERM | 11 | 
-SPPTERM | 2 | IV_FALSE | deserialize_inst/cs_FFd1 | IV_TRUE | deserialize_inst/cnt<3>
-PLA_TERM | 12 | 
 SPPTERM | 2 | IV_FALSE | deserialize_inst/cs_FFd1 | IV_TRUE | deserialize_inst/cnt<2>
-PLA_TERM | 13 | 
-SPPTERM | 5 | IV_FALSE | deserialize_inst/cnt<0> | IV_TRUE | deserialize_inst/cnt<2> | IV_FALSE | deserialize_inst/cnt<1> | IV_FALSE | deserialize_inst/cnt<3> | IV_TRUE | deserialize_inst/cnt<4>
-PLA_TERM | 14 | 
+PLA_TERM | 12 | 
 SPPTERM | 3 | IV_TRUE | deserialize_inst/cnt<0> | IV_TRUE | deserialize_inst/cs_FFd1 | IV_TRUE | deserialize_inst/cnt<1>
-PLA_TERM | 15 | 
+PLA_TERM | 13 | 
 SPPTERM | 3 | IV_FALSE | deserialize_inst/cnt<0> | IV_TRUE | deserialize_inst/cs_FFd1 | IV_TRUE | deserialize_inst/cnt<1>
+PLA_TERM | 14 | 
+SPPTERM | 3 | IV_TRUE | deserialize_inst/cnt<0> | IV_TRUE | deserialize_inst/cs_FFd1 | IV_FALSE | deserialize_inst/cnt<1>
 PLA_TERM | 16 | 
 SPPTERM | 5 | IV_FALSE | deserialize_inst/cnt<0> | IV_TRUE | deserialize_inst/cnt<2> | IV_FALSE | deserialize_inst/cnt<1> | IV_FALSE | deserialize_inst/cnt<3> | IV_TRUE | deserialize_inst/cnt<4>
-PLA_TERM | 17 | 
-SPPTERM | 3 | IV_TRUE | deserialize_inst/cnt<0> | IV_TRUE | deserialize_inst/cs_FFd1 | IV_FALSE | deserialize_inst/cnt<1>
 PLA_TERM | 28 | 
 SPPTERM | 5 | IV_FALSE | deserialize_inst/cnt<0> | IV_TRUE | deserialize_inst/cnt<2> | IV_TRUE | deserialize_inst/cnt<1> | IV_FALSE | deserialize_inst/cnt<3> | IV_FALSE | deserialize_inst/cnt<4>
 PLA_TERM | 31 | 
@@ -725,6 +721,12 @@ SPPTERM | 2 | IV_FALSE | deserialize_inst/cnt<0> | IV_TRUE | deserialize_inst/cs
 PLA_TERM | 49 | 
 SPPTERM | 5 | IV_TRUE | deserialize_inst/cnt<0> | IV_FALSE | deserialize_inst/cnt<2> | IV_TRUE | deserialize_inst/cnt<1> | IV_TRUE | deserialize_inst/cnt<3> | IV_FALSE | deserialize_inst/cnt<4>
 
+PLA | FOOBAR2_ | 2
+PLA_TERM | 0 | 
+SPPTERM | 1 | IV_TRUE | deserialize_inst/lfdin
+PLA_TERM | 13 | 
+SPPTERM | 5 | IV_FALSE | deserialize_inst/cnt<0> | IV_TRUE | deserialize_inst/cnt<2> | IV_FALSE | deserialize_inst/cnt<1> | IV_FALSE | deserialize_inst/cnt<3> | IV_TRUE | deserialize_inst/cnt<4>
+
 
 IOSTD | LVTTL
 CLK | LVTTL
@@ -733,11 +735,17 @@ FDIN | LVTTL
 FPROG | LVTTL
 SERDIN | LVTTL
 
-FB_ORDER_OF_INPUTS | FOOBAR1_ | 0 | deserialize_inst/cnt<2> | NULL | 1 | deserialize_inst/cnt<4> | NULL | 3 | deserialize_inst/cs_FFd2 | NULL | 4 | deserialize_inst/lfprog | NULL | 6 | deserialize_inst/lfclk | NULL
-FB_ORDER_OF_INPUTS | FOOBAR1_ | 8 | deserialize_inst/cs_FFd1 | NULL | 10 | deserialize_inst/cnt<0> | NULL | 13 | deserialize_inst/lfdin | NULL | 14 | deserialize_inst/cnt<1> | NULL | 15 | deserialize_inst/cnt<3> | NULL
-FB_ORDER_OF_INPUTS | FOOBAR1_ | 16 | deserialize_inst/serinl | NULL
 
-FB_IMUX_INDEX | FOOBAR1_ | 68 | 79 | -1 | 75 | 70 | -1 | 77 | -1 | 78 | -1 | 76 | -1 | -1 | 71 | 67 | 69 | 72 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1
+FB_ORDER_OF_INPUTS | FOOBAR1_ | 0 | deserialize_inst/cnt<2> | NULL | 1 | deserialize_inst/serinl | NULL | 3 | deserialize_inst/cs_FFd2 | NULL | 4 | deserialize_inst/lfprog | NULL | 6 | deserialize_inst/lfclk | NULL
+FB_ORDER_OF_INPUTS | FOOBAR1_ | 8 | deserialize_inst/cs_FFd1 | NULL | 10 | deserialize_inst/cnt<0> | NULL | 14 | deserialize_inst/cnt<1> | NULL | 15 | deserialize_inst/cnt<4> | NULL | 22 | deserialize_inst/cnt<3> | NULL
+
+FB_IMUX_INDEX | FOOBAR1_ | 68 | 118 | -1 | 75 | 70 | -1 | 77 | -1 | 78 | -1 | 76 | -1 | -1 | -1 | 67 | 79 | -1 | -1 | -1 | -1 | -1 | -1 | 69 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1
+
+
+FB_ORDER_OF_INPUTS | FOOBAR2_ | 0 | deserialize_inst/cnt<2> | NULL | 1 | deserialize_inst/cnt<4> | NULL | 3 | deserialize_inst/lfdin | NULL | 6 | deserialize_inst/cnt<3> | NULL | 10 | deserialize_inst/cnt<0> | NULL
+FB_ORDER_OF_INPUTS | FOOBAR2_ | 14 | deserialize_inst/cnt<1> | NULL
+
+FB_IMUX_INDEX | FOOBAR2_ | 68 | 79 | -1 | 71 | -1 | -1 | 69 | -1 | -1 | -1 | 76 | -1 | -1 | -1 | 67 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1
 
 
 GLOBAL_FCLK | CLK | 2 | 2
