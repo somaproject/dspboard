@@ -1,0 +1,3 @@
+vhdl work "../vhdl/deviceio/bootdeser.vhd"
+vhdl work "boot.vhd"
+

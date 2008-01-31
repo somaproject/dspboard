@@ -1,0 +1,743 @@
+NDS Database:  version J.37
+
+NDS_INFO | xbr | 2C64A44VQ | XC2C64A-7-VQ44
+
+DEVICE | 2C64A | 2C64A44VQ | 
+
+NETWORK | boot | 0 | 0 | 1073758214
+
+INPUT_INSTANCE | 0 | 0 | NULL | CLK_II | boot_COPY_0_COPY_0 | 16 | 1 | 1
+INPUT_NODE_TYPE | 0 | 5 | II_IN
+NODE | CLK | 1263 | PI | 0 | 0 | boot_COPY_0_COPY_0 | NULL | NULL | NULL | 0 | 100 | NOTYPE
+OUTPUT_NODE_TYPE | 3 | 5 | II_FCLK
+NODE | CLK_II/FCLK | 1274 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | NULL | CLK_II | 3 | 5 | II_FCLK
+
+MACROCELL_INSTANCE | PrldLow | FCLK_MC | boot_COPY_0_COPY_0 | 1024 | 7 | 1
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/lfclk | 1267 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/lfclk_MC.Q | deserialize_inst/lfclk_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<0> | 1276 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<0>_MC.Q | deserialize_inst/cnt<0>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<2> | 1286 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<2>_MC.Q | deserialize_inst/cnt<2>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<1> | 1291 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<1>_MC.Q | deserialize_inst/cnt<1>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<3> | 1296 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<3>_MC.Q | deserialize_inst/cnt<3>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<4> | 1301 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<4>_MC.Q | deserialize_inst/cnt<4>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | CLK_II/FCLK | 1274 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | NULL | CLK_II | 3 | 5 | II_FCLK
+OUTPUT_NODE_TYPE | 0 | 0 | MC_Q
+NODE | FCLK_MC.Q | 1313 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | FCLK_MC.Q | FCLK_MC | 0 | 0 | MC_Q
+
+SIGNAL_INSTANCE | FCLK_MC.SI | FCLK_MC | 0 | 6 | 3
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/lfclk | 1267 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/lfclk_MC.Q | deserialize_inst/lfclk_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<0> | 1276 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<0>_MC.Q | deserialize_inst/cnt<0>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<2> | 1286 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<2>_MC.Q | deserialize_inst/cnt<2>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<1> | 1291 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<1>_MC.Q | deserialize_inst/cnt<1>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<3> | 1296 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<3>_MC.Q | deserialize_inst/cnt<3>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<4> | 1301 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<4>_MC.Q | deserialize_inst/cnt<4>_MC | 1 | 0 | MC_UIM
+OUTPUT_NODE_TYPE | 1 | 9 | MC_SI_D1
+SIGNAL | NODE | FCLK_MC.D1 | 1266 | ? | 0 | 0 | FCLK_MC | NULL | NULL | FCLK_MC.SI | 1 | 9 | MC_SI_D1
+SPPTERM | 0 | IV_ZERO
+OUTPUT_NODE_TYPE | 2 | 9 | MC_SI_D2
+SIGNAL | NODE | FCLK_MC.D2 | 1265 | ? | 0 | 0 | FCLK_MC | NULL | NULL | FCLK_MC.SI | 2 | 9 | MC_SI_D2
+SPPTERM | 1 | IV_TRUE | deserialize_inst/lfclk
+OUTPUT_NODE_TYPE | 10 | 9 | MC_SI_CE
+SIGNAL | NODE | FCLK_MC.CE | 1311 | ? | 0 | 0 | FCLK_MC | NULL | NULL | FCLK_MC.SI | 10 | 9 | MC_SI_CE
+SPPTERM | 5 | IV_FALSE | deserialize_inst/cnt<0> | IV_TRUE | deserialize_inst/cnt<2> | IV_FALSE | deserialize_inst/cnt<1> | IV_FALSE | deserialize_inst/cnt<3> | IV_TRUE | deserialize_inst/cnt<4>
+
+SRFF_INSTANCE | FCLK_MC.REG | FCLK_MC | 0 | 3 | 1
+INPUT_NODE_TYPE | 0 | 8 | SRFF_D
+NODE | FCLK_MC.D | 1264 | ? | 0 | 0 | FCLK_MC | NULL | NULL | FCLK_MC.XOR | 0 | 7 | ALU_F
+INPUT_NODE_TYPE | 1 | 8 | SRFF_C
+NODE | CLK_II/FCLK | 1274 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | NULL | CLK_II | 3 | 5 | II_FCLK
+INPUT_NODE_TYPE | 4 | 8 | SRFF_CE
+SIGNAL | NODE | FCLK_MC.CE | 1311 | ? | 0 | 0 | FCLK_MC | NULL | NULL | FCLK_MC.SI | 10 | 9 | MC_SI_CE
+SPPTERM | 5 | IV_FALSE | deserialize_inst/cnt<0> | IV_TRUE | deserialize_inst/cnt<2> | IV_FALSE | deserialize_inst/cnt<1> | IV_FALSE | deserialize_inst/cnt<3> | IV_TRUE | deserialize_inst/cnt<4>
+OUTPUT_NODE_TYPE | 0 | 8 | SRFF_Q
+NODE | FCLK_MC.Q | 1312 | ? | 0 | 0 | FCLK_MC | NULL | NULL | FCLK_MC.REG | 0 | 8 | SRFF_Q
+
+MACROCELL_INSTANCE | PrldLow | deserialize_inst/lfclk_MC | boot_COPY_0_COPY_0 | 1024 | 7 | 1
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/serinl | 1272 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/serinl_MC.Q | deserialize_inst/serinl_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<0> | 1276 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<0>_MC.Q | deserialize_inst/cnt<0>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<2> | 1286 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<2>_MC.Q | deserialize_inst/cnt<2>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<1> | 1291 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<1>_MC.Q | deserialize_inst/cnt<1>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<3> | 1296 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<3>_MC.Q | deserialize_inst/cnt<3>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<4> | 1301 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<4>_MC.Q | deserialize_inst/cnt<4>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | CLK_II/FCLK | 1274 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | NULL | CLK_II | 3 | 5 | II_FCLK
+OUTPUT_NODE_TYPE | 1 | 0 | MC_UIM
+NODE | deserialize_inst/lfclk | 1267 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/lfclk_MC.Q | deserialize_inst/lfclk_MC | 1 | 0 | MC_UIM
+
+SIGNAL_INSTANCE | deserialize_inst/lfclk_MC.SI | deserialize_inst/lfclk_MC | 0 | 6 | 3
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/serinl | 1272 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/serinl_MC.Q | deserialize_inst/serinl_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<0> | 1276 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<0>_MC.Q | deserialize_inst/cnt<0>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<2> | 1286 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<2>_MC.Q | deserialize_inst/cnt<2>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<1> | 1291 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<1>_MC.Q | deserialize_inst/cnt<1>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<3> | 1296 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<3>_MC.Q | deserialize_inst/cnt<3>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<4> | 1301 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<4>_MC.Q | deserialize_inst/cnt<4>_MC | 1 | 0 | MC_UIM
+OUTPUT_NODE_TYPE | 1 | 9 | MC_SI_D1
+SIGNAL | NODE | deserialize_inst/lfclk_MC.D1 | 1271 | ? | 0 | 0 | deserialize_inst/lfclk_MC | NULL | NULL | deserialize_inst/lfclk_MC.SI | 1 | 9 | MC_SI_D1
+SPPTERM | 0 | IV_ZERO
+OUTPUT_NODE_TYPE | 2 | 9 | MC_SI_D2
+SIGNAL | NODE | deserialize_inst/lfclk_MC.D2 | 1270 | ? | 0 | 0 | deserialize_inst/lfclk_MC | NULL | NULL | deserialize_inst/lfclk_MC.SI | 2 | 9 | MC_SI_D2
+SPPTERM | 1 | IV_TRUE | deserialize_inst/serinl
+OUTPUT_NODE_TYPE | 10 | 9 | MC_SI_CE
+SIGNAL | NODE | deserialize_inst/lfclk_MC.CE | 1275 | ? | 0 | 0 | deserialize_inst/lfclk_MC | NULL | NULL | deserialize_inst/lfclk_MC.SI | 10 | 9 | MC_SI_CE
+SPPTERM | 5 | IV_TRUE | deserialize_inst/cnt<0> | IV_FALSE | deserialize_inst/cnt<2> | IV_TRUE | deserialize_inst/cnt<1> | IV_TRUE | deserialize_inst/cnt<3> | IV_FALSE | deserialize_inst/cnt<4>
+
+SRFF_INSTANCE | deserialize_inst/lfclk_MC.REG | deserialize_inst/lfclk_MC | 0 | 3 | 1
+INPUT_NODE_TYPE | 0 | 8 | SRFF_D
+NODE | deserialize_inst/lfclk_MC.D | 1269 | ? | 0 | 0 | deserialize_inst/lfclk_MC | NULL | NULL | deserialize_inst/lfclk_MC.XOR | 0 | 7 | ALU_F
+INPUT_NODE_TYPE | 1 | 8 | SRFF_C
+NODE | CLK_II/FCLK | 1274 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | NULL | CLK_II | 3 | 5 | II_FCLK
+INPUT_NODE_TYPE | 4 | 8 | SRFF_CE
+SIGNAL | NODE | deserialize_inst/lfclk_MC.CE | 1275 | ? | 0 | 0 | deserialize_inst/lfclk_MC | NULL | NULL | deserialize_inst/lfclk_MC.SI | 10 | 9 | MC_SI_CE
+SPPTERM | 5 | IV_TRUE | deserialize_inst/cnt<0> | IV_FALSE | deserialize_inst/cnt<2> | IV_TRUE | deserialize_inst/cnt<1> | IV_TRUE | deserialize_inst/cnt<3> | IV_FALSE | deserialize_inst/cnt<4>
+OUTPUT_NODE_TYPE | 0 | 8 | SRFF_Q
+NODE | deserialize_inst/lfclk_MC.Q | 1268 | ? | 0 | 0 | deserialize_inst/lfclk_MC | NULL | NULL | deserialize_inst/lfclk_MC.REG | 0 | 8 | SRFF_Q
+
+MACROCELL_INSTANCE | PrldHigh | deserialize_inst/serinl_MC | boot_COPY_0_COPY_0 | 512 | 2 | 1
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | CLK_II/FCLK | 1274 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | NULL | CLK_II | 3 | 5 | II_FCLK
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | SERDIN_II/IREG | 1342 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | NULL | SERDIN_II | 10 | 5 | II_REG
+OUTPUT_NODE_TYPE | 1 | 0 | MC_UIM
+NODE | deserialize_inst/serinl | 1272 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/serinl_MC.Q | deserialize_inst/serinl_MC | 1 | 0 | MC_UIM
+
+SRFF_INSTANCE | deserialize_inst/serinl_MC.REG | deserialize_inst/serinl_MC | 0 | 2 | 1
+INPUT_NODE_TYPE | 0 | 8 | SRFF_D
+NODE | SERDIN_II/IREG | 1342 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | NULL | SERDIN_II | 10 | 5 | II_REG
+INPUT_NODE_TYPE | 1 | 8 | SRFF_C
+NODE | CLK_II/FCLK | 1274 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | NULL | CLK_II | 3 | 5 | II_FCLK
+OUTPUT_NODE_TYPE | 0 | 8 | SRFF_Q
+NODE | deserialize_inst/serinl_MC.Q | 1273 | ? | 0 | 0 | deserialize_inst/serinl_MC | NULL | NULL | deserialize_inst/serinl_MC.REG | 0 | 8 | SRFF_Q
+
+MACROCELL_INSTANCE | PrldLow | deserialize_inst/cnt<0>_MC | boot_COPY_0_COPY_0 | 1024 | 3 | 1
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<0> | 1276 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<0>_MC.Q | deserialize_inst/cnt<0>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cs_FFd1 | 1281 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cs_FFd1_MC.Q | deserialize_inst/cs_FFd1_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | CLK_II/FCLK | 1274 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | NULL | CLK_II | 3 | 5 | II_FCLK
+OUTPUT_NODE_TYPE | 1 | 0 | MC_UIM
+NODE | deserialize_inst/cnt<0> | 1276 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<0>_MC.Q | deserialize_inst/cnt<0>_MC | 1 | 0 | MC_UIM
+
+SIGNAL_INSTANCE | deserialize_inst/cnt<0>_MC.SI | deserialize_inst/cnt<0>_MC | 0 | 2 | 2
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<0> | 1276 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<0>_MC.Q | deserialize_inst/cnt<0>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cs_FFd1 | 1281 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cs_FFd1_MC.Q | deserialize_inst/cs_FFd1_MC | 1 | 0 | MC_UIM
+OUTPUT_NODE_TYPE | 1 | 9 | MC_SI_D1
+SIGNAL | NODE | deserialize_inst/cnt<0>_MC.D1 | 1279 | ? | 0 | 0 | deserialize_inst/cnt<0>_MC | NULL | NULL | deserialize_inst/cnt<0>_MC.SI | 1 | 9 | MC_SI_D1
+SPPTERM | 2 | IV_FALSE | deserialize_inst/cnt<0> | IV_TRUE | deserialize_inst/cs_FFd1
+OUTPUT_NODE_TYPE | 2 | 9 | MC_SI_D2
+SIGNAL | NODE | deserialize_inst/cnt<0>_MC.D2 | 1280 | ? | 0 | 0 | deserialize_inst/cnt<0>_MC | NULL | NULL | deserialize_inst/cnt<0>_MC.SI | 2 | 9 | MC_SI_D2
+SPPTERM | 0 | IV_ZERO
+
+SRFF_INSTANCE | deserialize_inst/cnt<0>_MC.REG | deserialize_inst/cnt<0>_MC | 0 | 2 | 1
+INPUT_NODE_TYPE | 0 | 8 | SRFF_D
+NODE | deserialize_inst/cnt<0>_MC.D | 1278 | ? | 0 | 0 | deserialize_inst/cnt<0>_MC | NULL | NULL | deserialize_inst/cnt<0>_MC.XOR | 0 | 7 | ALU_F
+INPUT_NODE_TYPE | 1 | 8 | SRFF_C
+NODE | CLK_II/FCLK | 1274 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | NULL | CLK_II | 3 | 5 | II_FCLK
+OUTPUT_NODE_TYPE | 0 | 8 | SRFF_Q
+NODE | deserialize_inst/cnt<0>_MC.Q | 1277 | ? | 0 | 0 | deserialize_inst/cnt<0>_MC | NULL | NULL | deserialize_inst/cnt<0>_MC.REG | 0 | 8 | SRFF_Q
+
+MACROCELL_INSTANCE | PrldLow+Tff | deserialize_inst/cs_FFd1_MC | boot_COPY_0_COPY_0 | 5120 | 9 | 1
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/serinl | 1272 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/serinl_MC.Q | deserialize_inst/serinl_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cs_FFd2 | 1306 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cs_FFd2_MC.Q | deserialize_inst/cs_FFd2_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cs_FFd1 | 1281 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cs_FFd1_MC.Q | deserialize_inst/cs_FFd1_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<0> | 1276 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<0>_MC.Q | deserialize_inst/cnt<0>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<2> | 1286 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<2>_MC.Q | deserialize_inst/cnt<2>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<1> | 1291 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<1>_MC.Q | deserialize_inst/cnt<1>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<3> | 1296 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<3>_MC.Q | deserialize_inst/cnt<3>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<4> | 1301 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<4>_MC.Q | deserialize_inst/cnt<4>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | CLK_II/FCLK | 1274 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | NULL | CLK_II | 3 | 5 | II_FCLK
+OUTPUT_NODE_TYPE | 1 | 0 | MC_UIM
+NODE | deserialize_inst/cs_FFd1 | 1281 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cs_FFd1_MC.Q | deserialize_inst/cs_FFd1_MC | 1 | 0 | MC_UIM
+
+SIGNAL_INSTANCE | deserialize_inst/cs_FFd1_MC.SI | deserialize_inst/cs_FFd1_MC | 0 | 8 | 2
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/serinl | 1272 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/serinl_MC.Q | deserialize_inst/serinl_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cs_FFd2 | 1306 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cs_FFd2_MC.Q | deserialize_inst/cs_FFd2_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cs_FFd1 | 1281 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cs_FFd1_MC.Q | deserialize_inst/cs_FFd1_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<0> | 1276 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<0>_MC.Q | deserialize_inst/cnt<0>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<2> | 1286 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<2>_MC.Q | deserialize_inst/cnt<2>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<1> | 1291 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<1>_MC.Q | deserialize_inst/cnt<1>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<3> | 1296 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<3>_MC.Q | deserialize_inst/cnt<3>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<4> | 1301 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<4>_MC.Q | deserialize_inst/cnt<4>_MC | 1 | 0 | MC_UIM
+OUTPUT_NODE_TYPE | 1 | 9 | MC_SI_D1
+SIGNAL | NODE | deserialize_inst/cs_FFd1_MC.D1 | 1285 | ? | 0 | 0 | deserialize_inst/cs_FFd1_MC | NULL | NULL | deserialize_inst/cs_FFd1_MC.SI | 1 | 9 | MC_SI_D1
+SPPTERM | 0 | IV_ZERO
+OUTPUT_NODE_TYPE | 2 | 9 | MC_SI_D2
+SIGNAL | NODE | deserialize_inst/cs_FFd1_MC.D2 | 1284 | ? | 0 | 0 | deserialize_inst/cs_FFd1_MC | NULL | NULL | deserialize_inst/cs_FFd1_MC.SI | 2 | 9 | MC_SI_D2
+SPPTERM | 2 | IV_FALSE | deserialize_inst/serinl | IV_TRUE | deserialize_inst/cs_FFd2
+SPPTERM | 2 | IV_TRUE | deserialize_inst/cs_FFd1 | IV_TRUE | deserialize_inst/cs_FFd2
+SPPTERM | 6 | IV_FALSE | deserialize_inst/cnt<0> | IV_TRUE | deserialize_inst/cs_FFd1 | IV_TRUE | deserialize_inst/cnt<2> | IV_FALSE | deserialize_inst/cnt<1> | IV_FALSE | deserialize_inst/cnt<3> | IV_TRUE | deserialize_inst/cnt<4>
+
+SRFF_INSTANCE | deserialize_inst/cs_FFd1_MC.REG | deserialize_inst/cs_FFd1_MC | 0 | 2 | 1
+INPUT_NODE_TYPE | 0 | 8 | SRFF_D
+NODE | deserialize_inst/cs_FFd1_MC.D | 1283 | ? | 0 | 0 | deserialize_inst/cs_FFd1_MC | NULL | NULL | deserialize_inst/cs_FFd1_MC.XOR | 0 | 7 | ALU_F
+INPUT_NODE_TYPE | 1 | 8 | SRFF_C
+NODE | CLK_II/FCLK | 1274 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | NULL | CLK_II | 3 | 5 | II_FCLK
+OUTPUT_NODE_TYPE | 0 | 8 | SRFF_Q
+NODE | deserialize_inst/cs_FFd1_MC.Q | 1282 | ? | 0 | 0 | deserialize_inst/cs_FFd1_MC | NULL | NULL | deserialize_inst/cs_FFd1_MC.REG | 0 | 8 | SRFF_Q
+
+MACROCELL_INSTANCE | PrldLow+Tff | deserialize_inst/cnt<2>_MC | boot_COPY_0_COPY_0 | 5120 | 5 | 1
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cs_FFd1 | 1281 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cs_FFd1_MC.Q | deserialize_inst/cs_FFd1_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<2> | 1286 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<2>_MC.Q | deserialize_inst/cnt<2>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<0> | 1276 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<0>_MC.Q | deserialize_inst/cnt<0>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<1> | 1291 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<1>_MC.Q | deserialize_inst/cnt<1>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | CLK_II/FCLK | 1274 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | NULL | CLK_II | 3 | 5 | II_FCLK
+OUTPUT_NODE_TYPE | 1 | 0 | MC_UIM
+NODE | deserialize_inst/cnt<2> | 1286 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<2>_MC.Q | deserialize_inst/cnt<2>_MC | 1 | 0 | MC_UIM
+
+SIGNAL_INSTANCE | deserialize_inst/cnt<2>_MC.SI | deserialize_inst/cnt<2>_MC | 0 | 4 | 2
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cs_FFd1 | 1281 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cs_FFd1_MC.Q | deserialize_inst/cs_FFd1_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<2> | 1286 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<2>_MC.Q | deserialize_inst/cnt<2>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<0> | 1276 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<0>_MC.Q | deserialize_inst/cnt<0>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<1> | 1291 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<1>_MC.Q | deserialize_inst/cnt<1>_MC | 1 | 0 | MC_UIM
+OUTPUT_NODE_TYPE | 1 | 9 | MC_SI_D1
+SIGNAL | NODE | deserialize_inst/cnt<2>_MC.D1 | 1290 | ? | 0 | 0 | deserialize_inst/cnt<2>_MC | NULL | NULL | deserialize_inst/cnt<2>_MC.SI | 1 | 9 | MC_SI_D1
+SPPTERM | 0 | IV_ZERO
+OUTPUT_NODE_TYPE | 2 | 9 | MC_SI_D2
+SIGNAL | NODE | deserialize_inst/cnt<2>_MC.D2 | 1289 | ? | 0 | 0 | deserialize_inst/cnt<2>_MC | NULL | NULL | deserialize_inst/cnt<2>_MC.SI | 2 | 9 | MC_SI_D2
+SPPTERM | 2 | IV_FALSE | deserialize_inst/cs_FFd1 | IV_TRUE | deserialize_inst/cnt<2>
+SPPTERM | 3 | IV_TRUE | deserialize_inst/cnt<0> | IV_TRUE | deserialize_inst/cs_FFd1 | IV_TRUE | deserialize_inst/cnt<1>
+
+SRFF_INSTANCE | deserialize_inst/cnt<2>_MC.REG | deserialize_inst/cnt<2>_MC | 0 | 2 | 1
+INPUT_NODE_TYPE | 0 | 8 | SRFF_D
+NODE | deserialize_inst/cnt<2>_MC.D | 1288 | ? | 0 | 0 | deserialize_inst/cnt<2>_MC | NULL | NULL | deserialize_inst/cnt<2>_MC.XOR | 0 | 7 | ALU_F
+INPUT_NODE_TYPE | 1 | 8 | SRFF_C
+NODE | CLK_II/FCLK | 1274 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | NULL | CLK_II | 3 | 5 | II_FCLK
+OUTPUT_NODE_TYPE | 0 | 8 | SRFF_Q
+NODE | deserialize_inst/cnt<2>_MC.Q | 1287 | ? | 0 | 0 | deserialize_inst/cnt<2>_MC | NULL | NULL | deserialize_inst/cnt<2>_MC.REG | 0 | 8 | SRFF_Q
+
+MACROCELL_INSTANCE | PrldLow | deserialize_inst/cnt<1>_MC | boot_COPY_0_COPY_0 | 1024 | 4 | 1
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<0> | 1276 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<0>_MC.Q | deserialize_inst/cnt<0>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cs_FFd1 | 1281 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cs_FFd1_MC.Q | deserialize_inst/cs_FFd1_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<1> | 1291 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<1>_MC.Q | deserialize_inst/cnt<1>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | CLK_II/FCLK | 1274 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | NULL | CLK_II | 3 | 5 | II_FCLK
+OUTPUT_NODE_TYPE | 1 | 0 | MC_UIM
+NODE | deserialize_inst/cnt<1> | 1291 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<1>_MC.Q | deserialize_inst/cnt<1>_MC | 1 | 0 | MC_UIM
+
+SIGNAL_INSTANCE | deserialize_inst/cnt<1>_MC.SI | deserialize_inst/cnt<1>_MC | 0 | 3 | 2
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<0> | 1276 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<0>_MC.Q | deserialize_inst/cnt<0>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cs_FFd1 | 1281 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cs_FFd1_MC.Q | deserialize_inst/cs_FFd1_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<1> | 1291 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<1>_MC.Q | deserialize_inst/cnt<1>_MC | 1 | 0 | MC_UIM
+OUTPUT_NODE_TYPE | 1 | 9 | MC_SI_D1
+SIGNAL | NODE | deserialize_inst/cnt<1>_MC.D1 | 1295 | ? | 0 | 0 | deserialize_inst/cnt<1>_MC | NULL | NULL | deserialize_inst/cnt<1>_MC.SI | 1 | 9 | MC_SI_D1
+SPPTERM | 0 | IV_ZERO
+OUTPUT_NODE_TYPE | 2 | 9 | MC_SI_D2
+SIGNAL | NODE | deserialize_inst/cnt<1>_MC.D2 | 1294 | ? | 0 | 0 | deserialize_inst/cnt<1>_MC | NULL | NULL | deserialize_inst/cnt<1>_MC.SI | 2 | 9 | MC_SI_D2
+SPPTERM | 3 | IV_TRUE | deserialize_inst/cnt<0> | IV_TRUE | deserialize_inst/cs_FFd1 | IV_FALSE | deserialize_inst/cnt<1>
+SPPTERM | 3 | IV_FALSE | deserialize_inst/cnt<0> | IV_TRUE | deserialize_inst/cs_FFd1 | IV_TRUE | deserialize_inst/cnt<1>
+
+SRFF_INSTANCE | deserialize_inst/cnt<1>_MC.REG | deserialize_inst/cnt<1>_MC | 0 | 2 | 1
+INPUT_NODE_TYPE | 0 | 8 | SRFF_D
+NODE | deserialize_inst/cnt<1>_MC.D | 1293 | ? | 0 | 0 | deserialize_inst/cnt<1>_MC | NULL | NULL | deserialize_inst/cnt<1>_MC.XOR | 0 | 7 | ALU_F
+INPUT_NODE_TYPE | 1 | 8 | SRFF_C
+NODE | CLK_II/FCLK | 1274 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | NULL | CLK_II | 3 | 5 | II_FCLK
+OUTPUT_NODE_TYPE | 0 | 8 | SRFF_Q
+NODE | deserialize_inst/cnt<1>_MC.Q | 1292 | ? | 0 | 0 | deserialize_inst/cnt<1>_MC | NULL | NULL | deserialize_inst/cnt<1>_MC.REG | 0 | 8 | SRFF_Q
+
+MACROCELL_INSTANCE | PrldLow+Tff | deserialize_inst/cnt<3>_MC | boot_COPY_0_COPY_0 | 5120 | 6 | 1
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cs_FFd1 | 1281 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cs_FFd1_MC.Q | deserialize_inst/cs_FFd1_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<3> | 1296 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<3>_MC.Q | deserialize_inst/cnt<3>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<0> | 1276 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<0>_MC.Q | deserialize_inst/cnt<0>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<2> | 1286 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<2>_MC.Q | deserialize_inst/cnt<2>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<1> | 1291 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<1>_MC.Q | deserialize_inst/cnt<1>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | CLK_II/FCLK | 1274 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | NULL | CLK_II | 3 | 5 | II_FCLK
+OUTPUT_NODE_TYPE | 1 | 0 | MC_UIM
+NODE | deserialize_inst/cnt<3> | 1296 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<3>_MC.Q | deserialize_inst/cnt<3>_MC | 1 | 0 | MC_UIM
+
+SIGNAL_INSTANCE | deserialize_inst/cnt<3>_MC.SI | deserialize_inst/cnt<3>_MC | 0 | 5 | 2
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cs_FFd1 | 1281 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cs_FFd1_MC.Q | deserialize_inst/cs_FFd1_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<3> | 1296 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<3>_MC.Q | deserialize_inst/cnt<3>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<0> | 1276 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<0>_MC.Q | deserialize_inst/cnt<0>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<2> | 1286 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<2>_MC.Q | deserialize_inst/cnt<2>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<1> | 1291 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<1>_MC.Q | deserialize_inst/cnt<1>_MC | 1 | 0 | MC_UIM
+OUTPUT_NODE_TYPE | 1 | 9 | MC_SI_D1
+SIGNAL | NODE | deserialize_inst/cnt<3>_MC.D1 | 1300 | ? | 0 | 0 | deserialize_inst/cnt<3>_MC | NULL | NULL | deserialize_inst/cnt<3>_MC.SI | 1 | 9 | MC_SI_D1
+SPPTERM | 0 | IV_ZERO
+OUTPUT_NODE_TYPE | 2 | 9 | MC_SI_D2
+SIGNAL | NODE | deserialize_inst/cnt<3>_MC.D2 | 1299 | ? | 0 | 0 | deserialize_inst/cnt<3>_MC | NULL | NULL | deserialize_inst/cnt<3>_MC.SI | 2 | 9 | MC_SI_D2
+SPPTERM | 2 | IV_FALSE | deserialize_inst/cs_FFd1 | IV_TRUE | deserialize_inst/cnt<3>
+SPPTERM | 4 | IV_TRUE | deserialize_inst/cnt<0> | IV_TRUE | deserialize_inst/cs_FFd1 | IV_TRUE | deserialize_inst/cnt<2> | IV_TRUE | deserialize_inst/cnt<1>
+
+SRFF_INSTANCE | deserialize_inst/cnt<3>_MC.REG | deserialize_inst/cnt<3>_MC | 0 | 2 | 1
+INPUT_NODE_TYPE | 0 | 8 | SRFF_D
+NODE | deserialize_inst/cnt<3>_MC.D | 1298 | ? | 0 | 0 | deserialize_inst/cnt<3>_MC | NULL | NULL | deserialize_inst/cnt<3>_MC.XOR | 0 | 7 | ALU_F
+INPUT_NODE_TYPE | 1 | 8 | SRFF_C
+NODE | CLK_II/FCLK | 1274 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | NULL | CLK_II | 3 | 5 | II_FCLK
+OUTPUT_NODE_TYPE | 0 | 8 | SRFF_Q
+NODE | deserialize_inst/cnt<3>_MC.Q | 1297 | ? | 0 | 0 | deserialize_inst/cnt<3>_MC | NULL | NULL | deserialize_inst/cnt<3>_MC.REG | 0 | 8 | SRFF_Q
+
+MACROCELL_INSTANCE | PrldLow+Tff | deserialize_inst/cnt<4>_MC | boot_COPY_0_COPY_0 | 5120 | 7 | 1
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cs_FFd1 | 1281 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cs_FFd1_MC.Q | deserialize_inst/cs_FFd1_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<4> | 1301 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<4>_MC.Q | deserialize_inst/cnt<4>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<0> | 1276 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<0>_MC.Q | deserialize_inst/cnt<0>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<2> | 1286 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<2>_MC.Q | deserialize_inst/cnt<2>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<1> | 1291 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<1>_MC.Q | deserialize_inst/cnt<1>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<3> | 1296 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<3>_MC.Q | deserialize_inst/cnt<3>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | CLK_II/FCLK | 1274 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | NULL | CLK_II | 3 | 5 | II_FCLK
+OUTPUT_NODE_TYPE | 1 | 0 | MC_UIM
+NODE | deserialize_inst/cnt<4> | 1301 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<4>_MC.Q | deserialize_inst/cnt<4>_MC | 1 | 0 | MC_UIM
+
+SIGNAL_INSTANCE | deserialize_inst/cnt<4>_MC.SI | deserialize_inst/cnt<4>_MC | 0 | 6 | 2
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cs_FFd1 | 1281 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cs_FFd1_MC.Q | deserialize_inst/cs_FFd1_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<4> | 1301 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<4>_MC.Q | deserialize_inst/cnt<4>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<0> | 1276 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<0>_MC.Q | deserialize_inst/cnt<0>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<2> | 1286 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<2>_MC.Q | deserialize_inst/cnt<2>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<1> | 1291 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<1>_MC.Q | deserialize_inst/cnt<1>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<3> | 1296 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<3>_MC.Q | deserialize_inst/cnt<3>_MC | 1 | 0 | MC_UIM
+OUTPUT_NODE_TYPE | 1 | 9 | MC_SI_D1
+SIGNAL | NODE | deserialize_inst/cnt<4>_MC.D1 | 1305 | ? | 0 | 0 | deserialize_inst/cnt<4>_MC | NULL | NULL | deserialize_inst/cnt<4>_MC.SI | 1 | 9 | MC_SI_D1
+SPPTERM | 0 | IV_ZERO
+OUTPUT_NODE_TYPE | 2 | 9 | MC_SI_D2
+SIGNAL | NODE | deserialize_inst/cnt<4>_MC.D2 | 1304 | ? | 0 | 0 | deserialize_inst/cnt<4>_MC | NULL | NULL | deserialize_inst/cnt<4>_MC.SI | 2 | 9 | MC_SI_D2
+SPPTERM | 2 | IV_FALSE | deserialize_inst/cs_FFd1 | IV_TRUE | deserialize_inst/cnt<4>
+SPPTERM | 5 | IV_TRUE | deserialize_inst/cnt<0> | IV_TRUE | deserialize_inst/cs_FFd1 | IV_TRUE | deserialize_inst/cnt<2> | IV_TRUE | deserialize_inst/cnt<1> | IV_TRUE | deserialize_inst/cnt<3>
+
+SRFF_INSTANCE | deserialize_inst/cnt<4>_MC.REG | deserialize_inst/cnt<4>_MC | 0 | 2 | 1
+INPUT_NODE_TYPE | 0 | 8 | SRFF_D
+NODE | deserialize_inst/cnt<4>_MC.D | 1303 | ? | 0 | 0 | deserialize_inst/cnt<4>_MC | NULL | NULL | deserialize_inst/cnt<4>_MC.XOR | 0 | 7 | ALU_F
+INPUT_NODE_TYPE | 1 | 8 | SRFF_C
+NODE | CLK_II/FCLK | 1274 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | NULL | CLK_II | 3 | 5 | II_FCLK
+OUTPUT_NODE_TYPE | 0 | 8 | SRFF_Q
+NODE | deserialize_inst/cnt<4>_MC.Q | 1302 | ? | 0 | 0 | deserialize_inst/cnt<4>_MC | NULL | NULL | deserialize_inst/cnt<4>_MC.REG | 0 | 8 | SRFF_Q
+
+MACROCELL_INSTANCE | PrldLow | deserialize_inst/cs_FFd2_MC | boot_COPY_0_COPY_0 | 1024 | 3 | 1
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/serinl | 1272 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/serinl_MC.Q | deserialize_inst/serinl_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cs_FFd1 | 1281 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cs_FFd1_MC.Q | deserialize_inst/cs_FFd1_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | CLK_II/FCLK | 1274 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | NULL | CLK_II | 3 | 5 | II_FCLK
+OUTPUT_NODE_TYPE | 1 | 0 | MC_UIM
+NODE | deserialize_inst/cs_FFd2 | 1306 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cs_FFd2_MC.Q | deserialize_inst/cs_FFd2_MC | 1 | 0 | MC_UIM
+
+SIGNAL_INSTANCE | deserialize_inst/cs_FFd2_MC.SI | deserialize_inst/cs_FFd2_MC | 0 | 2 | 2
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/serinl | 1272 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/serinl_MC.Q | deserialize_inst/serinl_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cs_FFd1 | 1281 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cs_FFd1_MC.Q | deserialize_inst/cs_FFd1_MC | 1 | 0 | MC_UIM
+OUTPUT_NODE_TYPE | 1 | 9 | MC_SI_D1
+SIGNAL | NODE | deserialize_inst/cs_FFd2_MC.D1 | 1309 | ? | 0 | 0 | deserialize_inst/cs_FFd2_MC | NULL | NULL | deserialize_inst/cs_FFd2_MC.SI | 1 | 9 | MC_SI_D1
+SPPTERM | 2 | IV_TRUE | deserialize_inst/serinl | IV_FALSE | deserialize_inst/cs_FFd1
+OUTPUT_NODE_TYPE | 2 | 9 | MC_SI_D2
+SIGNAL | NODE | deserialize_inst/cs_FFd2_MC.D2 | 1310 | ? | 0 | 0 | deserialize_inst/cs_FFd2_MC | NULL | NULL | deserialize_inst/cs_FFd2_MC.SI | 2 | 9 | MC_SI_D2
+SPPTERM | 0 | IV_ZERO
+
+SRFF_INSTANCE | deserialize_inst/cs_FFd2_MC.REG | deserialize_inst/cs_FFd2_MC | 0 | 2 | 1
+INPUT_NODE_TYPE | 0 | 8 | SRFF_D
+NODE | deserialize_inst/cs_FFd2_MC.D | 1308 | ? | 0 | 0 | deserialize_inst/cs_FFd2_MC | NULL | NULL | deserialize_inst/cs_FFd2_MC.XOR | 0 | 7 | ALU_F
+INPUT_NODE_TYPE | 1 | 8 | SRFF_C
+NODE | CLK_II/FCLK | 1274 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | NULL | CLK_II | 3 | 5 | II_FCLK
+OUTPUT_NODE_TYPE | 0 | 8 | SRFF_Q
+NODE | deserialize_inst/cs_FFd2_MC.Q | 1307 | ? | 0 | 0 | deserialize_inst/cs_FFd2_MC | NULL | NULL | deserialize_inst/cs_FFd2_MC.REG | 0 | 8 | SRFF_Q
+
+OUTPUT_INSTANCE | 0 | FCLK | boot_COPY_0_COPY_0 | 3 | 1 | 1
+INPUT_NODE_TYPE | 0 | 6 | OI_IN
+NODE | FCLK_MC.Q | 1313 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | FCLK_MC.Q | FCLK_MC | 0 | 0 | MC_Q
+OUTPUT_NODE_TYPE | 0 | 6 | OI_OUT
+NODE | FCLK | 1314 | PO | 0 | 0 | boot_COPY_0_COPY_0 | NULL | NULL | FCLK | 0 | 6 | OI_OUT
+
+MACROCELL_INSTANCE | PrldLow | FDIN_MC | boot_COPY_0_COPY_0 | 1024 | 7 | 1
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/lfdin | 1318 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/lfdin_MC.Q | deserialize_inst/lfdin_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<0> | 1276 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<0>_MC.Q | deserialize_inst/cnt<0>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<2> | 1286 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<2>_MC.Q | deserialize_inst/cnt<2>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<1> | 1291 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<1>_MC.Q | deserialize_inst/cnt<1>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<3> | 1296 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<3>_MC.Q | deserialize_inst/cnt<3>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<4> | 1301 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<4>_MC.Q | deserialize_inst/cnt<4>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | CLK_II/FCLK | 1274 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | NULL | CLK_II | 3 | 5 | II_FCLK
+OUTPUT_NODE_TYPE | 0 | 0 | MC_Q
+NODE | FDIN_MC.Q | 1326 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | FDIN_MC.Q | FDIN_MC | 0 | 0 | MC_Q
+
+SIGNAL_INSTANCE | FDIN_MC.SI | FDIN_MC | 0 | 6 | 3
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/lfdin | 1318 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/lfdin_MC.Q | deserialize_inst/lfdin_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<0> | 1276 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<0>_MC.Q | deserialize_inst/cnt<0>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<2> | 1286 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<2>_MC.Q | deserialize_inst/cnt<2>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<1> | 1291 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<1>_MC.Q | deserialize_inst/cnt<1>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<3> | 1296 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<3>_MC.Q | deserialize_inst/cnt<3>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<4> | 1301 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<4>_MC.Q | deserialize_inst/cnt<4>_MC | 1 | 0 | MC_UIM
+OUTPUT_NODE_TYPE | 1 | 9 | MC_SI_D1
+SIGNAL | NODE | FDIN_MC.D1 | 1317 | ? | 0 | 0 | FDIN_MC | NULL | NULL | FDIN_MC.SI | 1 | 9 | MC_SI_D1
+SPPTERM | 0 | IV_ZERO
+OUTPUT_NODE_TYPE | 2 | 9 | MC_SI_D2
+SIGNAL | NODE | FDIN_MC.D2 | 1316 | ? | 0 | 0 | FDIN_MC | NULL | NULL | FDIN_MC.SI | 2 | 9 | MC_SI_D2
+SPPTERM | 1 | IV_TRUE | deserialize_inst/lfdin
+OUTPUT_NODE_TYPE | 10 | 9 | MC_SI_CE
+SIGNAL | NODE | FDIN_MC.CE | 1324 | ? | 0 | 0 | FDIN_MC | NULL | NULL | FDIN_MC.SI | 10 | 9 | MC_SI_CE
+SPPTERM | 5 | IV_FALSE | deserialize_inst/cnt<0> | IV_TRUE | deserialize_inst/cnt<2> | IV_FALSE | deserialize_inst/cnt<1> | IV_FALSE | deserialize_inst/cnt<3> | IV_TRUE | deserialize_inst/cnt<4>
+
+SRFF_INSTANCE | FDIN_MC.REG | FDIN_MC | 0 | 3 | 1
+INPUT_NODE_TYPE | 0 | 8 | SRFF_D
+NODE | FDIN_MC.D | 1315 | ? | 0 | 0 | FDIN_MC | NULL | NULL | FDIN_MC.XOR | 0 | 7 | ALU_F
+INPUT_NODE_TYPE | 1 | 8 | SRFF_C
+NODE | CLK_II/FCLK | 1274 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | NULL | CLK_II | 3 | 5 | II_FCLK
+INPUT_NODE_TYPE | 4 | 8 | SRFF_CE
+SIGNAL | NODE | FDIN_MC.CE | 1324 | ? | 0 | 0 | FDIN_MC | NULL | NULL | FDIN_MC.SI | 10 | 9 | MC_SI_CE
+SPPTERM | 5 | IV_FALSE | deserialize_inst/cnt<0> | IV_TRUE | deserialize_inst/cnt<2> | IV_FALSE | deserialize_inst/cnt<1> | IV_FALSE | deserialize_inst/cnt<3> | IV_TRUE | deserialize_inst/cnt<4>
+OUTPUT_NODE_TYPE | 0 | 8 | SRFF_Q
+NODE | FDIN_MC.Q | 1325 | ? | 0 | 0 | FDIN_MC | NULL | NULL | FDIN_MC.REG | 0 | 8 | SRFF_Q
+
+MACROCELL_INSTANCE | PrldLow | deserialize_inst/lfdin_MC | boot_COPY_0_COPY_0 | 1024 | 7 | 1
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/serinl | 1272 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/serinl_MC.Q | deserialize_inst/serinl_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<0> | 1276 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<0>_MC.Q | deserialize_inst/cnt<0>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<2> | 1286 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<2>_MC.Q | deserialize_inst/cnt<2>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<1> | 1291 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<1>_MC.Q | deserialize_inst/cnt<1>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<3> | 1296 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<3>_MC.Q | deserialize_inst/cnt<3>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<4> | 1301 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<4>_MC.Q | deserialize_inst/cnt<4>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | CLK_II/FCLK | 1274 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | NULL | CLK_II | 3 | 5 | II_FCLK
+OUTPUT_NODE_TYPE | 1 | 0 | MC_UIM
+NODE | deserialize_inst/lfdin | 1318 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/lfdin_MC.Q | deserialize_inst/lfdin_MC | 1 | 0 | MC_UIM
+
+SIGNAL_INSTANCE | deserialize_inst/lfdin_MC.SI | deserialize_inst/lfdin_MC | 0 | 6 | 3
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/serinl | 1272 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/serinl_MC.Q | deserialize_inst/serinl_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<0> | 1276 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<0>_MC.Q | deserialize_inst/cnt<0>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<2> | 1286 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<2>_MC.Q | deserialize_inst/cnt<2>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<1> | 1291 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<1>_MC.Q | deserialize_inst/cnt<1>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<3> | 1296 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<3>_MC.Q | deserialize_inst/cnt<3>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<4> | 1301 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<4>_MC.Q | deserialize_inst/cnt<4>_MC | 1 | 0 | MC_UIM
+OUTPUT_NODE_TYPE | 1 | 9 | MC_SI_D1
+SIGNAL | NODE | deserialize_inst/lfdin_MC.D1 | 1322 | ? | 0 | 0 | deserialize_inst/lfdin_MC | NULL | NULL | deserialize_inst/lfdin_MC.SI | 1 | 9 | MC_SI_D1
+SPPTERM | 0 | IV_ZERO
+OUTPUT_NODE_TYPE | 2 | 9 | MC_SI_D2
+SIGNAL | NODE | deserialize_inst/lfdin_MC.D2 | 1321 | ? | 0 | 0 | deserialize_inst/lfdin_MC | NULL | NULL | deserialize_inst/lfdin_MC.SI | 2 | 9 | MC_SI_D2
+SPPTERM | 1 | IV_TRUE | deserialize_inst/serinl
+OUTPUT_NODE_TYPE | 10 | 9 | MC_SI_CE
+SIGNAL | NODE | deserialize_inst/lfdin_MC.CE | 1323 | ? | 0 | 0 | deserialize_inst/lfdin_MC | NULL | NULL | deserialize_inst/lfdin_MC.SI | 10 | 9 | MC_SI_CE
+SPPTERM | 5 | IV_FALSE | deserialize_inst/cnt<0> | IV_FALSE | deserialize_inst/cnt<2> | IV_FALSE | deserialize_inst/cnt<1> | IV_FALSE | deserialize_inst/cnt<3> | IV_TRUE | deserialize_inst/cnt<4>
+
+SRFF_INSTANCE | deserialize_inst/lfdin_MC.REG | deserialize_inst/lfdin_MC | 0 | 3 | 1
+INPUT_NODE_TYPE | 0 | 8 | SRFF_D
+NODE | deserialize_inst/lfdin_MC.D | 1320 | ? | 0 | 0 | deserialize_inst/lfdin_MC | NULL | NULL | deserialize_inst/lfdin_MC.XOR | 0 | 7 | ALU_F
+INPUT_NODE_TYPE | 1 | 8 | SRFF_C
+NODE | CLK_II/FCLK | 1274 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | NULL | CLK_II | 3 | 5 | II_FCLK
+INPUT_NODE_TYPE | 4 | 8 | SRFF_CE
+SIGNAL | NODE | deserialize_inst/lfdin_MC.CE | 1323 | ? | 0 | 0 | deserialize_inst/lfdin_MC | NULL | NULL | deserialize_inst/lfdin_MC.SI | 10 | 9 | MC_SI_CE
+SPPTERM | 5 | IV_FALSE | deserialize_inst/cnt<0> | IV_FALSE | deserialize_inst/cnt<2> | IV_FALSE | deserialize_inst/cnt<1> | IV_FALSE | deserialize_inst/cnt<3> | IV_TRUE | deserialize_inst/cnt<4>
+OUTPUT_NODE_TYPE | 0 | 8 | SRFF_Q
+NODE | deserialize_inst/lfdin_MC.Q | 1319 | ? | 0 | 0 | deserialize_inst/lfdin_MC | NULL | NULL | deserialize_inst/lfdin_MC.REG | 0 | 8 | SRFF_Q
+
+OUTPUT_INSTANCE | 0 | FDIN | boot_COPY_0_COPY_0 | 3 | 1 | 1
+INPUT_NODE_TYPE | 0 | 6 | OI_IN
+NODE | FDIN_MC.Q | 1326 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | FDIN_MC.Q | FDIN_MC | 0 | 0 | MC_Q
+OUTPUT_NODE_TYPE | 0 | 6 | OI_OUT
+NODE | FDIN | 1327 | PO | 0 | 0 | boot_COPY_0_COPY_0 | NULL | NULL | FDIN | 0 | 6 | OI_OUT
+
+MACROCELL_INSTANCE | PrldHigh | FPROG_MC | boot_COPY_0_COPY_0 | 512 | 7 | 1
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/lfprog | 1331 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/lfprog_MC.Q | deserialize_inst/lfprog_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<0> | 1276 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<0>_MC.Q | deserialize_inst/cnt<0>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<2> | 1286 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<2>_MC.Q | deserialize_inst/cnt<2>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<1> | 1291 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<1>_MC.Q | deserialize_inst/cnt<1>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<3> | 1296 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<3>_MC.Q | deserialize_inst/cnt<3>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<4> | 1301 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<4>_MC.Q | deserialize_inst/cnt<4>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | CLK_II/FCLK | 1274 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | NULL | CLK_II | 3 | 5 | II_FCLK
+OUTPUT_NODE_TYPE | 0 | 0 | MC_Q
+NODE | FPROG_MC.Q | 1339 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | FPROG_MC.Q | FPROG_MC | 0 | 0 | MC_Q
+
+SIGNAL_INSTANCE | FPROG_MC.SI | FPROG_MC | 0 | 6 | 3
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/lfprog | 1331 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/lfprog_MC.Q | deserialize_inst/lfprog_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<0> | 1276 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<0>_MC.Q | deserialize_inst/cnt<0>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<2> | 1286 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<2>_MC.Q | deserialize_inst/cnt<2>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<1> | 1291 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<1>_MC.Q | deserialize_inst/cnt<1>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<3> | 1296 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<3>_MC.Q | deserialize_inst/cnt<3>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<4> | 1301 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<4>_MC.Q | deserialize_inst/cnt<4>_MC | 1 | 0 | MC_UIM
+OUTPUT_NODE_TYPE | 1 | 9 | MC_SI_D1
+SIGNAL | NODE | FPROG_MC.D1 | 1330 | ? | 0 | 0 | FPROG_MC | NULL | NULL | FPROG_MC.SI | 1 | 9 | MC_SI_D1
+SPPTERM | 0 | IV_ZERO
+OUTPUT_NODE_TYPE | 2 | 9 | MC_SI_D2
+SIGNAL | NODE | FPROG_MC.D2 | 1329 | ? | 0 | 0 | FPROG_MC | NULL | NULL | FPROG_MC.SI | 2 | 9 | MC_SI_D2
+SPPTERM | 1 | IV_TRUE | deserialize_inst/lfprog
+OUTPUT_NODE_TYPE | 10 | 9 | MC_SI_CE
+SIGNAL | NODE | FPROG_MC.CE | 1337 | ? | 0 | 0 | FPROG_MC | NULL | NULL | FPROG_MC.SI | 10 | 9 | MC_SI_CE
+SPPTERM | 5 | IV_FALSE | deserialize_inst/cnt<0> | IV_TRUE | deserialize_inst/cnt<2> | IV_FALSE | deserialize_inst/cnt<1> | IV_FALSE | deserialize_inst/cnt<3> | IV_TRUE | deserialize_inst/cnt<4>
+
+SRFF_INSTANCE | FPROG_MC.REG | FPROG_MC | 0 | 3 | 1
+INPUT_NODE_TYPE | 0 | 8 | SRFF_D
+NODE | FPROG_MC.D | 1328 | ? | 0 | 0 | FPROG_MC | NULL | NULL | FPROG_MC.XOR | 0 | 7 | ALU_F
+INPUT_NODE_TYPE | 1 | 8 | SRFF_C
+NODE | CLK_II/FCLK | 1274 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | NULL | CLK_II | 3 | 5 | II_FCLK
+INPUT_NODE_TYPE | 4 | 8 | SRFF_CE
+SIGNAL | NODE | FPROG_MC.CE | 1337 | ? | 0 | 0 | FPROG_MC | NULL | NULL | FPROG_MC.SI | 10 | 9 | MC_SI_CE
+SPPTERM | 5 | IV_FALSE | deserialize_inst/cnt<0> | IV_TRUE | deserialize_inst/cnt<2> | IV_FALSE | deserialize_inst/cnt<1> | IV_FALSE | deserialize_inst/cnt<3> | IV_TRUE | deserialize_inst/cnt<4>
+OUTPUT_NODE_TYPE | 0 | 8 | SRFF_Q
+NODE | FPROG_MC.Q | 1338 | ? | 0 | 0 | FPROG_MC | NULL | NULL | FPROG_MC.REG | 0 | 8 | SRFF_Q
+
+MACROCELL_INSTANCE | PrldHigh | deserialize_inst/lfprog_MC | boot_COPY_0_COPY_0 | 512 | 7 | 1
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/serinl | 1272 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/serinl_MC.Q | deserialize_inst/serinl_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<0> | 1276 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<0>_MC.Q | deserialize_inst/cnt<0>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<2> | 1286 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<2>_MC.Q | deserialize_inst/cnt<2>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<1> | 1291 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<1>_MC.Q | deserialize_inst/cnt<1>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<3> | 1296 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<3>_MC.Q | deserialize_inst/cnt<3>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<4> | 1301 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<4>_MC.Q | deserialize_inst/cnt<4>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | CLK_II/FCLK | 1274 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | NULL | CLK_II | 3 | 5 | II_FCLK
+OUTPUT_NODE_TYPE | 1 | 0 | MC_UIM
+NODE | deserialize_inst/lfprog | 1331 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/lfprog_MC.Q | deserialize_inst/lfprog_MC | 1 | 0 | MC_UIM
+
+SIGNAL_INSTANCE | deserialize_inst/lfprog_MC.SI | deserialize_inst/lfprog_MC | 0 | 6 | 3
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/serinl | 1272 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/serinl_MC.Q | deserialize_inst/serinl_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<0> | 1276 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<0>_MC.Q | deserialize_inst/cnt<0>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<2> | 1286 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<2>_MC.Q | deserialize_inst/cnt<2>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<1> | 1291 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<1>_MC.Q | deserialize_inst/cnt<1>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<3> | 1296 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<3>_MC.Q | deserialize_inst/cnt<3>_MC | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | deserialize_inst/cnt<4> | 1301 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | deserialize_inst/cnt<4>_MC.Q | deserialize_inst/cnt<4>_MC | 1 | 0 | MC_UIM
+OUTPUT_NODE_TYPE | 1 | 9 | MC_SI_D1
+SIGNAL | NODE | deserialize_inst/lfprog_MC.D1 | 1335 | ? | 0 | 0 | deserialize_inst/lfprog_MC | NULL | NULL | deserialize_inst/lfprog_MC.SI | 1 | 9 | MC_SI_D1
+SPPTERM | 0 | IV_ZERO
+OUTPUT_NODE_TYPE | 2 | 9 | MC_SI_D2
+SIGNAL | NODE | deserialize_inst/lfprog_MC.D2 | 1334 | ? | 0 | 0 | deserialize_inst/lfprog_MC | NULL | NULL | deserialize_inst/lfprog_MC.SI | 2 | 9 | MC_SI_D2
+SPPTERM | 1 | IV_TRUE | deserialize_inst/serinl
+OUTPUT_NODE_TYPE | 10 | 9 | MC_SI_CE
+SIGNAL | NODE | deserialize_inst/lfprog_MC.CE | 1336 | ? | 0 | 0 | deserialize_inst/lfprog_MC | NULL | NULL | deserialize_inst/lfprog_MC.SI | 10 | 9 | MC_SI_CE
+SPPTERM | 5 | IV_FALSE | deserialize_inst/cnt<0> | IV_TRUE | deserialize_inst/cnt<2> | IV_TRUE | deserialize_inst/cnt<1> | IV_FALSE | deserialize_inst/cnt<3> | IV_FALSE | deserialize_inst/cnt<4>
+
+SRFF_INSTANCE | deserialize_inst/lfprog_MC.REG | deserialize_inst/lfprog_MC | 0 | 3 | 1
+INPUT_NODE_TYPE | 0 | 8 | SRFF_D
+NODE | deserialize_inst/lfprog_MC.D | 1333 | ? | 0 | 0 | deserialize_inst/lfprog_MC | NULL | NULL | deserialize_inst/lfprog_MC.XOR | 0 | 7 | ALU_F
+INPUT_NODE_TYPE | 1 | 8 | SRFF_C
+NODE | CLK_II/FCLK | 1274 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | NULL | CLK_II | 3 | 5 | II_FCLK
+INPUT_NODE_TYPE | 4 | 8 | SRFF_CE
+SIGNAL | NODE | deserialize_inst/lfprog_MC.CE | 1336 | ? | 0 | 0 | deserialize_inst/lfprog_MC | NULL | NULL | deserialize_inst/lfprog_MC.SI | 10 | 9 | MC_SI_CE
+SPPTERM | 5 | IV_FALSE | deserialize_inst/cnt<0> | IV_TRUE | deserialize_inst/cnt<2> | IV_TRUE | deserialize_inst/cnt<1> | IV_FALSE | deserialize_inst/cnt<3> | IV_FALSE | deserialize_inst/cnt<4>
+OUTPUT_NODE_TYPE | 0 | 8 | SRFF_Q
+NODE | deserialize_inst/lfprog_MC.Q | 1332 | ? | 0 | 0 | deserialize_inst/lfprog_MC | NULL | NULL | deserialize_inst/lfprog_MC.REG | 0 | 8 | SRFF_Q
+
+OUTPUT_INSTANCE | 0 | FPROG | boot_COPY_0_COPY_0 | 3 | 1 | 1
+INPUT_NODE_TYPE | 0 | 6 | OI_IN
+NODE | FPROG_MC.Q | 1339 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | FPROG_MC.Q | FPROG_MC | 0 | 0 | MC_Q
+OUTPUT_NODE_TYPE | 0 | 6 | OI_OUT
+NODE | FPROG | 1340 | PO | 0 | 0 | boot_COPY_0_COPY_0 | NULL | NULL | FPROG | 0 | 6 | OI_OUT
+
+INPUT_INSTANCE | 0 | 0 | NULL | SERDIN_II | boot_COPY_0_COPY_0 | 16 | 1 | 1
+INPUT_NODE_TYPE | 0 | 5 | II_IN
+NODE | SERDIN | 1341 | PI | 0 | 0 | boot_COPY_0_COPY_0 | NULL | NULL | NULL | 0 | 100 | NOTYPE
+OUTPUT_NODE_TYPE | 10 | 5 | II_REG
+NODE | SERDIN_II/IREG | 1342 | ? | 0 | 0 | boot_COPY_0_COPY_0 | NULL | NULL | SERDIN_II | 10 | 5 | II_REG
+
+FB_INSTANCE | FOOBAR1_ | boot_COPY_0_COPY_0 | 0 | 0 | 0
+FBPIN | 1 | FCLK_MC | 1 | NULL | 0 | FCLK | 1 | 38 | 49152
+FBPIN | 2 | FDIN_MC | 1 | NULL | 0 | FDIN | 1 | 37 | 49152
+FBPIN | 3 | FPROG_MC | 1 | NULL | 0 | FPROG | 1 | 36 | 49152
+FBPIN | 4 | deserialize_inst/cnt<1>_MC | 1 | NULL | 0 | NULL | 0
+FBPIN | 5 | deserialize_inst/cnt<2>_MC | 1 | NULL | 0 | NULL | 0
+FBPIN | 6 | deserialize_inst/cnt<3>_MC | 1 | NULL | 0 | NULL | 0
+FBPIN | 7 | deserialize_inst/lfprog_MC | 1 | NULL | 0 | NULL | 0
+FBPIN | 8 | deserialize_inst/lfdin_MC | 1 | NULL | 0 | NULL | 0
+FBPIN | 9 | deserialize_inst/serinl_MC | 1 | SERDIN_II | 1 | NULL | 0 | 34 | 53248
+FBPIN | 12 | deserialize_inst/cs_FFd2_MC | 1 | NULL | 0 | NULL | 0 | 31 | 53248
+FBPIN | 13 | deserialize_inst/cnt<0>_MC | 1 | NULL | 0 | NULL | 0 | 30 | 51200
+FBPIN | 14 | deserialize_inst/lfclk_MC | 1 | NULL | 0 | NULL | 0
+FBPIN | 15 | deserialize_inst/cs_FFd1_MC | 1 | NULL | 0 | NULL | 0
+FBPIN | 16 | deserialize_inst/cnt<4>_MC | 1 | NULL | 0 | NULL | 0
+
+FB_INSTANCE | FOOBAR2_ | boot_COPY_0_COPY_0 | 0 | 0 | 0
+FBPIN | 10 | NULL | 0 | CLK_II | 1 | NULL | 0 | 1 | 57344
+
+FB_INSTANCE | FOOBAR3_ | boot_COPY_0_COPY_0 | 0 | 0 | 0
+
+FB_INSTANCE | FOOBAR4_ | boot_COPY_0_COPY_0 | 0 | 0 | 0
+
+FB_INSTANCE | INPUTPINS_FOOBAR5_ | boot_COPY_0_COPY_0 | 0 | 0 | 0
+
+CT_INSTANCE | FOOBAR1_ | FOOBAR1__ctinst | boot_COPY_0_COPY_0 | 0 | 0 | 0
+
+CT_INSTANCE | FOOBAR2_ | FOOBAR2__ctinst | boot_COPY_0_COPY_0 | 0 | 0 | 0
+
+CT_INSTANCE | FOOBAR3_ | FOOBAR3__ctinst | boot_COPY_0_COPY_0 | 0 | 0 | 0
+
+CT_INSTANCE | FOOBAR4_ | FOOBAR4__ctinst | boot_COPY_0_COPY_0 | 0 | 0 | 0
+
+PLA | FOOBAR1_ | 23
+PLA_TERM | 0 | 
+SPPTERM | 1 | IV_TRUE | deserialize_inst/lfclk
+PLA_TERM | 1 | 
+SPPTERM | 1 | IV_TRUE | deserialize_inst/lfdin
+PLA_TERM | 2 | 
+SPPTERM | 1 | IV_TRUE | deserialize_inst/lfprog
+PLA_TERM | 3 | 
+SPPTERM | 5 | IV_TRUE | deserialize_inst/cnt<0> | IV_TRUE | deserialize_inst/cs_FFd1 | IV_TRUE | deserialize_inst/cnt<2> | IV_TRUE | deserialize_inst/cnt<1> | IV_TRUE | deserialize_inst/cnt<3>
+PLA_TERM | 4 | 
+SPPTERM | 2 | IV_FALSE | deserialize_inst/cs_FFd1 | IV_TRUE | deserialize_inst/cnt<4>
+PLA_TERM | 5 | 
+SPPTERM | 6 | IV_FALSE | deserialize_inst/cnt<0> | IV_TRUE | deserialize_inst/cs_FFd1 | IV_TRUE | deserialize_inst/cnt<2> | IV_FALSE | deserialize_inst/cnt<1> | IV_FALSE | deserialize_inst/cnt<3> | IV_TRUE | deserialize_inst/cnt<4>
+PLA_TERM | 6 | 
+SPPTERM | 2 | IV_TRUE | deserialize_inst/cs_FFd1 | IV_TRUE | deserialize_inst/cs_FFd2
+PLA_TERM | 7 | 
+SPPTERM | 2 | IV_FALSE | deserialize_inst/serinl | IV_TRUE | deserialize_inst/cs_FFd2
+PLA_TERM | 8 | 
+SPPTERM | 1 | IV_TRUE | deserialize_inst/serinl
+PLA_TERM | 9 | 
+SPPTERM | 4 | IV_TRUE | deserialize_inst/cnt<0> | IV_TRUE | deserialize_inst/cs_FFd1 | IV_TRUE | deserialize_inst/cnt<2> | IV_TRUE | deserialize_inst/cnt<1>
+PLA_TERM | 10 | 
+SPPTERM | 5 | IV_FALSE | deserialize_inst/cnt<0> | IV_TRUE | deserialize_inst/cnt<2> | IV_FALSE | deserialize_inst/cnt<1> | IV_FALSE | deserialize_inst/cnt<3> | IV_TRUE | deserialize_inst/cnt<4>
+PLA_TERM | 11 | 
+SPPTERM | 2 | IV_FALSE | deserialize_inst/cs_FFd1 | IV_TRUE | deserialize_inst/cnt<3>
+PLA_TERM | 12 | 
+SPPTERM | 2 | IV_FALSE | deserialize_inst/cs_FFd1 | IV_TRUE | deserialize_inst/cnt<2>
+PLA_TERM | 13 | 
+SPPTERM | 5 | IV_FALSE | deserialize_inst/cnt<0> | IV_TRUE | deserialize_inst/cnt<2> | IV_FALSE | deserialize_inst/cnt<1> | IV_FALSE | deserialize_inst/cnt<3> | IV_TRUE | deserialize_inst/cnt<4>
+PLA_TERM | 14 | 
+SPPTERM | 3 | IV_TRUE | deserialize_inst/cnt<0> | IV_TRUE | deserialize_inst/cs_FFd1 | IV_TRUE | deserialize_inst/cnt<1>
+PLA_TERM | 15 | 
+SPPTERM | 3 | IV_FALSE | deserialize_inst/cnt<0> | IV_TRUE | deserialize_inst/cs_FFd1 | IV_TRUE | deserialize_inst/cnt<1>
+PLA_TERM | 16 | 
+SPPTERM | 5 | IV_FALSE | deserialize_inst/cnt<0> | IV_TRUE | deserialize_inst/cnt<2> | IV_FALSE | deserialize_inst/cnt<1> | IV_FALSE | deserialize_inst/cnt<3> | IV_TRUE | deserialize_inst/cnt<4>
+PLA_TERM | 17 | 
+SPPTERM | 3 | IV_TRUE | deserialize_inst/cnt<0> | IV_TRUE | deserialize_inst/cs_FFd1 | IV_FALSE | deserialize_inst/cnt<1>
+PLA_TERM | 28 | 
+SPPTERM | 5 | IV_FALSE | deserialize_inst/cnt<0> | IV_TRUE | deserialize_inst/cnt<2> | IV_TRUE | deserialize_inst/cnt<1> | IV_FALSE | deserialize_inst/cnt<3> | IV_FALSE | deserialize_inst/cnt<4>
+PLA_TERM | 31 | 
+SPPTERM | 5 | IV_FALSE | deserialize_inst/cnt<0> | IV_FALSE | deserialize_inst/cnt<2> | IV_FALSE | deserialize_inst/cnt<1> | IV_FALSE | deserialize_inst/cnt<3> | IV_TRUE | deserialize_inst/cnt<4>
+PLA_TERM | 43 | 
+SPPTERM | 2 | IV_TRUE | deserialize_inst/serinl | IV_FALSE | deserialize_inst/cs_FFd1
+PLA_TERM | 46 | 
+SPPTERM | 2 | IV_FALSE | deserialize_inst/cnt<0> | IV_TRUE | deserialize_inst/cs_FFd1
+PLA_TERM | 49 | 
+SPPTERM | 5 | IV_TRUE | deserialize_inst/cnt<0> | IV_FALSE | deserialize_inst/cnt<2> | IV_TRUE | deserialize_inst/cnt<1> | IV_TRUE | deserialize_inst/cnt<3> | IV_FALSE | deserialize_inst/cnt<4>
+
+
+IOSTD | LVTTL
+CLK | LVTTL
+FCLK | LVTTL
+FDIN | LVTTL
+FPROG | LVTTL
+SERDIN | LVTTL
+
+FB_ORDER_OF_INPUTS | FOOBAR1_ | 0 | deserialize_inst/cnt<2> | NULL | 1 | deserialize_inst/cnt<4> | NULL | 3 | deserialize_inst/cs_FFd2 | NULL | 4 | deserialize_inst/lfprog | NULL | 6 | deserialize_inst/lfclk | NULL
+FB_ORDER_OF_INPUTS | FOOBAR1_ | 8 | deserialize_inst/cs_FFd1 | NULL | 10 | deserialize_inst/cnt<0> | NULL | 13 | deserialize_inst/lfdin | NULL | 14 | deserialize_inst/cnt<1> | NULL | 15 | deserialize_inst/cnt<3> | NULL
+FB_ORDER_OF_INPUTS | FOOBAR1_ | 16 | deserialize_inst/serinl | NULL
+
+FB_IMUX_INDEX | FOOBAR1_ | 68 | 79 | -1 | 75 | 70 | -1 | 77 | -1 | 78 | -1 | 76 | -1 | -1 | 71 | 67 | 69 | 72 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1
+
+
+GLOBAL_FCLK | CLK | 2 | 2
