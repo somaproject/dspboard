@@ -7,7 +7,7 @@ library UNISIM;
 use UNISIM.VComponents.all;
 
 
-entity dlloop is
+entity dspboard is
   port (
     REFCLKIN  : in  std_logic;
     REFCLKOUT : out std_logic;
@@ -15,16 +15,11 @@ entity dlloop is
     RXLOCKED  : in  std_logic;
     RXDIN     : in  std_logic_vector(9 downto 0);
     TXIO_P    : out std_logic;
-    TXIO_N    : out std_logic;
-    LEDPOWER  : out std_logic;
-    LEDLOCKED : out std_logic;
-    LEDVALID  : out std_logic;
-    DECODEERR : out std_logic
+    TXIO_N    : out std_logic
     );
+end dspboard;
 
-end dlloop;
-
-architecture Behavioral of dlloop is
+architecture Behavioral of dspboard is
 
   component devicelink
     port (
@@ -79,13 +74,12 @@ begin  -- Behavioral
   begin  -- process ledpowerproc
     if rising_edge(clk) then
       pcnt      <= pcnt + 1;
-      LEDVALID  <=  not decodeerrint;
-      LEDPOWER  <= pcnt(21);
-      DECODEERR <= decodeerrint;
+--       LEDVALID  <=  not decodeerrint;
+--       LEDPOWER  <= pcnt(21);
+--       DECODEERR <= decodeerrint;
     end if;
   end process ledpowerproc;
 
   REFCLKOUT <= REFCLKIN;
-  LEDLOCKED <= not RXLOCKED;
 
 end Behavioral;

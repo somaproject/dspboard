@@ -13,11 +13,11 @@
 #   make parsim: post-place-and-route simulation 
 #   make multipar : multiple attemt place and route
 ######################################################################
-PROJECT = dlloop
+PROJECT = dspboard
 
 bitfile: $(PROJECT).bit
 
-SOURCES = *.vhd
+SOURCES := $(shell sed -n 's/^vhdl\s\+\w\+\s*"\([^[:blank:]]\+\)"/\1/p' < $(PROJECT).prj | xargs)
 OPTIMIZE = high
 PART = xc3s400-ft256-4
 SPEED = 4

@@ -1,12 +1,12 @@
 set -tmpdir build
 set -xsthdpdir ./xst
 run
--ifn dlloop.prj
+-ifn dspboard.prj
 -ifmt mixed
--ofn dlloop
+-ofn dspboard
 -ofmt NGC
 -p xc3s400-4-ft256
--top dlloop
+-top dspboard
 -opt_mode Speed
 -opt_level 2
 -iuc NO
@@ -21,7 +21,8 @@ run
 -case maintain
 -slice_utilization_ratio 100
 -verilog2001 YES
--fsm_extract YES -fsm_encoding One-Hot
+-fsm_extract YES 
+-fsm_encoding One-Hot
 -safe_implementation No
 -fsm_style lut
 -ram_extract Yes
