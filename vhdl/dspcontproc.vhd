@@ -3,11 +3,14 @@ use IEEE.STD_LOGIC_1164.all;
 use IEEE.STD_LOGIC_ARITH.all;
 use IEEE.STD_LOGIC_UNSIGNED.all;
 
+library eproc;
+use eproc.all;
+
 library UNISIM;
 use UNISIM.VComponents.all;
 
 entity dspcontproc is
-    generic (
+  generic (
     RAM_INIT_00 : bit_vector(0 to 255) := (others => '0');
     RAM_INIT_01 : bit_vector(0 to 255) := (others => '0');
     RAM_INIT_02 : bit_vector(0 to 255) := (others => '0');
@@ -24,7 +27,7 @@ entity dspcontproc is
     RAM_INIT_0D : bit_vector(0 to 255) := (others => '0');
     RAM_INIT_0E : bit_vector(0 to 255) := (others => '0');
     RAM_INIT_0F : bit_vector(0 to 255) := (others => '0');
-    
+
     RAM_INIT_10 : bit_vector(0 to 255) := (others => '0');
     RAM_INIT_11 : bit_vector(0 to 255) := (others => '0');
     RAM_INIT_12 : bit_vector(0 to 255) := (others => '0');
@@ -41,7 +44,7 @@ entity dspcontproc is
     RAM_INIT_1D : bit_vector(0 to 255) := (others => '0');
     RAM_INIT_1E : bit_vector(0 to 255) := (others => '0');
     RAM_INIT_1F : bit_vector(0 to 255) := (others => '0');
-    
+
     RAM_INIT_20 : bit_vector(0 to 255) := (others => '0');
     RAM_INIT_21 : bit_vector(0 to 255) := (others => '0');
     RAM_INIT_22 : bit_vector(0 to 255) := (others => '0');
@@ -76,35 +79,35 @@ entity dspcontproc is
     RAM_INIT_3E : bit_vector(0 to 255) := (others => '0');
     RAM_INIT_3F : bit_vector(0 to 255) := (others => '0');
 
-    RAM_INITP_00: bit_vector(0 to 255) := (others => '0');
-    RAM_INITP_01: bit_vector(0 to 255) := (others => '0');
-    RAM_INITP_02: bit_vector(0 to 255) := (others => '0');
-    RAM_INITP_03: bit_vector(0 to 255) := (others => '0');
-    RAM_INITP_04: bit_vector(0 to 255) := (others => '0');
-    RAM_INITP_05: bit_vector(0 to 255) := (others => '0');
-    RAM_INITP_06: bit_vector(0 to 255) := (others => '0');
-    RAM_INITP_07: bit_vector(0 to 255) := (others => '0') );
+    RAM_INITP_00 :     bit_vector(0 to 255) := (others => '0');
+    RAM_INITP_01 :     bit_vector(0 to 255) := (others => '0');
+    RAM_INITP_02 :     bit_vector(0 to 255) := (others => '0');
+    RAM_INITP_03 :     bit_vector(0 to 255) := (others => '0');
+    RAM_INITP_04 :     bit_vector(0 to 255) := (others => '0');
+    RAM_INITP_05 :     bit_vector(0 to 255) := (others => '0');
+    RAM_INITP_06 :     bit_vector(0 to 255) := (others => '0');
+    RAM_INITP_07 :     bit_vector(0 to 255) := (others => '0') );
   port (
-    CLK        : in  std_logic;
-    CLKHI      : in  std_logic;
-    DEVICE     : in  std_logic_vector(7 downto 0);
+    CLK          : in  std_logic;
+    CLKHI        : in  std_logic;
+    RESET        : in  std_logic;
+    DEVICE       : in  std_logic_vector(7 downto 0);
     -- Event input
-    ECYCLE     : in  std_logic;
-    EARX       : in  std_logic_vector(79 downto 0);
-    EDRX       : in  std_logic_vector(7 downto 0);
+    ECYCLE       : in  std_logic;
+    EARX         : in  std_logic_vector(79 downto 0);
+    EDRX         : in  std_logic_vector(7 downto 0);
     -- Event output 
-    ESENDREQ   : out std_logic;
-    ESENDGRANT : in  std_logic;
-    ESENDDONE  : out std_logic;
-    ESENDDATA  : out std_logic_vector(7 downto 0);
-    ESENDD     : out std_logic_vector(7 downto 0);
+    ESENDREQ     : out std_logic;
+    ESENDGRANT   : in  std_logic;
+    ESENDDONE    : out std_logic;
+    ESENDDATA    : out std_logic_vector(7 downto 0);
     -- DSP interface
-    DSPRESET   : out std_logic;
-    DSPSPIEN   : out std_logic;
-    DSPSPISS   : out std_logic;
-    DSPSPIMISO : in  std_logic;
-    DSPSPIMOSI : out std_logic;
-    DSPSPICLK  : out std_logic);
+    DSPRESET     : out std_logic;
+    DSPSPIEN     : out std_logic;
+    DSPSPISS     : out std_logic;
+    DSPSPIMISO   : in  std_logic;
+    DSPSPIMOSI   : out std_logic;
+    DSPSPICLK    : out std_logic);
 end dspcontproc;
 
 architecture Behavioral of dspcontproc is
@@ -124,16 +127,18 @@ architecture Behavioral of dspcontproc is
   signal edtx    : std_logic_vector(7 downto 0)  := (others => '0');
   signal edseltx : std_logic_vector(3 downto 0)  := (others => '0');
 
+
 begin  -- Behavioral
 
   eproc_inst : entity eproc.eproc
     port map (
       CLK         => CLK,
+      CLKHI       => CLKHI,
       RESET       => RESET,
       EDTX        => EDRX,
-      EATX        => EARX,
+      EATX        => EARX(77 downto 0),
       EDRX        => edtx,
-      EARX        => eatx,
+      EARX        => eatx(77 downto 0),
       EDSELRX     => edseltx,
       ECYCLE      => ECYCLE,
       IADDR       => iaddr,
@@ -164,7 +169,7 @@ begin  -- Behavioral
       INIT_0D => RAM_INIT_0D,
       INIT_0E => RAM_INIT_0E,
       INIT_0F => RAM_INIT_0F,
-      
+
       INIT_10 => RAM_INIT_10,
       INIT_11 => RAM_INIT_11,
       INIT_12 => RAM_INIT_12,
@@ -181,7 +186,7 @@ begin  -- Behavioral
       INIT_1D => RAM_INIT_1D,
       INIT_1E => RAM_INIT_1E,
       INIT_1F => RAM_INIT_1F,
-      
+
       INIT_20 => RAM_INIT_20,
       INIT_21 => RAM_INIT_21,
       INIT_22 => RAM_INIT_22,
@@ -198,7 +203,7 @@ begin  -- Behavioral
       INIT_2D => RAM_INIT_2D,
       INIT_2E => RAM_INIT_2E,
       INIT_2F => RAM_INIT_2F,
-      
+
       INIT_30 => RAM_INIT_30,
       INIT_31 => RAM_INIT_31,
       INIT_32 => RAM_INIT_32,
@@ -225,7 +230,7 @@ begin  -- Behavioral
       INITP_06 => RAM_INITP_06,
       INITP_07 => RAM_INITP_07)
     port map (
-      
+
       DOA   => idata(15 downto 0),
       DOPA  => idata(17 downto 16),
       ADDRA => iaddr,
@@ -245,5 +250,14 @@ begin  -- Behavioral
       WEB   => '0',
       SSRB  => RESET);
 
-
+  main: process(CLKHI)
+    begin
+      if rising_edge(CLkHI) then
+        if oportaddr = X"00" and OPORTSTROBE = '1' then
+          DSPRESET <= oportdata(0); 
+        end if;
+        
+      end if;
+    end process main;
+    
 end Behavioral;

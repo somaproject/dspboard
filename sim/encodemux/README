@@ -1,0 +1,8 @@
+EncodeMux test: test the encode muxer by waiting for an ecycle, 
+
+for ecyclecnt in range (10):
+   if ecyclecnt mod 2 == 0:
+      send data packet
+
+   every Nth event send an event
+

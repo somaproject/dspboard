@@ -1,2 +1,21 @@
-vhdl work "dspboard.vhd"
+
+
+vhdl soma "../../../vhdl/somabackplane.vhd"
+
+vhdl eproc "../../../vhdl/eproc/alu.vhd" 
+vhdl eproc "../../../vhdl/eproc/ecore.vhd"
+vhdl eproc "../../../vhdl/eproc/eproc.vhd"
+vhdl eproc "../../../vhdl/eproc/eventtx.vhd"
+vhdl eproc "../../../vhdl/eproc/evtdnd.vhd"
+vhdl eproc "../../../vhdl/eproc/regfile.vhd"
+vhdl eproc "../../../vhdl/eproc/txeventbuffer.vhd"
+
+
 vhdl work "../../../vhdl/deviceio/devicelink.vhd"
+
+vhdl work "../../../vhdl/decodemux.vhd"
+vhdl work "../../../vhdl/encodemux.vhd"
+vhdl work "../../../vhdl/dspcontproc.vhd"
+vhdl work "dspboard.vhd"
+
+#
