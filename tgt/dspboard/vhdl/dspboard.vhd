@@ -54,11 +54,11 @@ architecture Behavioral of dspboard is
   signal txdata : std_logic_vector(7 downto 0) := (others => '0');
   signal txk    : std_logic                    := '0';
 
-  signal rxdata, rxdatal     : std_logic_vector(7 downto 0) := (others => '0');
-  signal rxk, rxkl        : std_logic                    := '0';
-  
-  signal clk : std_logic                    := '0';
-  signal RESET      : std_logic                    := '0';
+  signal rxdata, rxdatal : std_logic_vector(7 downto 0) := (others => '0');
+  signal rxk, rxkl       : std_logic                    := '0';
+
+  signal clk   : std_logic := '0';
+  signal RESET : std_logic := '0';
 
   signal pcnt         : std_logic_vector(21 downto 0) := (others => '0');
   signal decodeerrint : std_logic                     := '0';
@@ -221,44 +221,44 @@ architecture Behavioral of dspboard is
   signal edspdatac : std_logic_vector(7 downto 0) := (others => '0');
   signal edspdatad : std_logic_vector(7 downto 0) := (others => '0');
 
-  signal devicea : std_logic_vector(7 downto 0) := (others => '0');
-  signal dspspiena   : std_logic := '0';
-  signal dspspissa   : std_logic := '0';
-  signal dspspimisoa : std_logic := '0';
-  signal dspspimosia : std_logic := '0';
-  signal dspspiclka  : std_logic := '0';
+  signal devicea     : std_logic_vector(7 downto 0) := (others => '0');
+  signal dspspiena   : std_logic                    := '0';
+  signal dspspissa   : std_logic                    := '0';
+  signal dspspimisoa : std_logic                    := '0';
+  signal dspspimosia : std_logic                    := '0';
+  signal dspspiclka  : std_logic                    := '0';
 
-  signal deviceb : std_logic_vector(7 downto 0) := (others => '0');
-  signal dspspienb   : std_logic := '0';
-  signal dspspissb   : std_logic := '0';
-  signal dspspimisob : std_logic := '0';
-  signal dspspimosib : std_logic := '0';
-  signal dspspiclkb  : std_logic := '0';
+  signal deviceb     : std_logic_vector(7 downto 0) := (others => '0');
+  signal dspspienb   : std_logic                    := '0';
+  signal dspspissb   : std_logic                    := '0';
+  signal dspspimisob : std_logic                    := '0';
+  signal dspspimosib : std_logic                    := '0';
+  signal dspspiclkb  : std_logic                    := '0';
 
-  signal devicec : std_logic_vector(7 downto 0) := (others => '0');
-  signal dspspienc   : std_logic := '0';
-  signal dspspissc   : std_logic := '0';
-  signal dspspimisoc : std_logic := '0';
-  signal dspspimosic : std_logic := '0';
-  signal dspspiclkc  : std_logic := '0';
+  signal devicec     : std_logic_vector(7 downto 0) := (others => '0');
+  signal dspspienc   : std_logic                    := '0';
+  signal dspspissc   : std_logic                    := '0';
+  signal dspspimisoc : std_logic                    := '0';
+  signal dspspimosic : std_logic                    := '0';
+  signal dspspiclkc  : std_logic                    := '0';
 
-  signal deviced : std_logic_vector(7 downto 0) := (others => '0');
-  signal dspspiend   : std_logic := '0';
-  signal dspspissd   : std_logic := '0';
-  signal dspspimisod : std_logic := '0';
-  signal dspspimosid : std_logic := '0';
-  signal dspspiclkd  : std_logic := '0';
+  signal deviced     : std_logic_vector(7 downto 0) := (others => '0');
+  signal dspspiend   : std_logic                    := '0';
+  signal dspspissd   : std_logic                    := '0';
+  signal dspspimisod : std_logic                    := '0';
+  signal dspspimosid : std_logic                    := '0';
+  signal dspspiclkd  : std_logic                    := '0';
 
   signal linkup : std_logic := '0';
 
   signal clk2, clk2int : std_logic := '0';
-  
+
   signal clk2x, clk2xint : std_logic := '0';
-  
+
 begin  -- Behavioral
 
 
-  devicelink_inst : devicelink
+  devicelinkinst : devicelink
     port map (
       TXCLKIN   => RXCLKIN,
       TXLOCKED  => RXLOCKED,
@@ -266,7 +266,7 @@ begin  -- Behavioral
       TXDOUT    => rxdata,
       TXKOUT    => rxk,
       CLK       => clk,
-      CLK2X     => open, 
+      CLK2X     => open,
       RESET     => RESET,
       RXDIN     => txdata,
       RXKIN     => txk,
@@ -276,17 +276,17 @@ begin  -- Behavioral
 
   maindcm : dcm
     port map (
-      CLKIN            => clk,
-      CLKFB            => clk2,
-      RST              => '0', 
-      CLK0             => clk2int, 
-      CLK2x            => clk2xint);
+      CLKIN => clk,
+      CLKFB => clk2,
+      RST   => '0',
+      CLK0  => clk2int,
+      CLK2x => clk2xint);
 
-    clk2_bufg : BUFG port map (
+  clk2_bufg : BUFG port map (
     O => clk2,
     I => clk2int);
 
-    clk2x_bufg : BUFG port map (
+  clk2x_bufg : BUFG port map (
     O => clk2x,
     I => clk2xint);
 
@@ -325,78 +325,78 @@ begin  -- Behavioral
       -- dsp interface
       DSPRESET   => DSPRESETA,
       DSPSPIEN   => dspspiena,
-      DSPSPISS  => dspspissa,
+      DSPSPISS   => dspspissa,
       DSPSPIMISO => dspspimisoa,
       DSPSPIMOSI => dspspimosia,
       DSPSPICLK  => dspspiclka);
 
---    dspcontproc_b : dspcontproc
---      port map (
---        CLK        => clk,
---        CLKHI      => clk2x,
---        DEVICE     => deviceb,
---        ECYCLE     => ecycle,
---        EARX       => earxb,
---        EDRX       => edata,
---        ESENDREQ   => eprocreq(1),
---        ESENDGRANT => eprocgrant(1),
---        ESENDDONE  => eprocdone(1),
---        ESENDDATA  => eprocdatab,
---        -- dsp interface
---        DSPRESET   => DSPRESETB,
---        DSPSPIEN   => dspspienb,
---        DSPSPISS  => dspspissb,
---        DSPSPIMISO => dspspimisob,
---        DSPSPIMOSI => dspspimosib,
---        DSPSPICLK  => dspspiclkb);
+  dspcontproc_b : dspcontproc
+    port map (
+      CLK        => clk,
+      CLKHI      => clk2x,
+      DEVICE     => deviceb,
+      ECYCLE     => ecycle,
+      EARX       => earxb,
+      EDRX       => edata,
+      ESENDREQ   => eprocreq(1),
+      ESENDGRANT => eprocgrant(1),
+      ESENDDONE  => eprocdone(1),
+      ESENDDATA  => eprocdatab,
+      -- dsp interface
+      DSPRESET   => DSPRESETB,
+      DSPSPIEN   => dspspienb,
+      DSPSPISS   => dspspissb,
+      DSPSPIMISO => dspspimisob,
+      DSPSPIMOSI => dspspimosib,
+      DSPSPICLK  => dspspiclkb);
 
   process(CLK)
-    begin
-      if rising_edge(clk) then
-        rxdatal <= rxdata;
-        rxkl <= rxk; 
-        
-      end if;
-    end process; 
---   dspcontproc_c : dspcontproc
---     port map (
---       CLK        => clk,
---       CLKHI      => clk2x,
---       DEVICE     => devicec,
---       ECYCLE     => ecycle,
---       EARX       => earxc,
---       EDRX       => edata,
---       ESENDREQ   => eprocreq(2),
---       ESENDGRANT => eprocgrant(2),
---       ESENDDONE  => eprocdone(2),
---       ESENDDATA  => eprocdatac,
---       -- dsp interface
---       DSPRESET   => DSPRESETC,
---       DSPSPIEN   => dspspienc,
---       DSPSPISS  => dspspissc,
---       DSPSPIMISO => dspspimisoc,
---       DSPSPIMOSI => dspspimosic,
---       DSPSPICLK  => dspspiclkc);
+  begin
+    if rising_edge(clk) then
+      rxdatal <= rxdata;
+      rxkl    <= rxk;
 
---   dspcontproc_d : dspcontproc
---     port map (
---       CLK        => clk,
---       CLKHI      => clk2x,
---       DEVICE     => deviced,
---       ECYCLE     => ecycle,
---       EARX       => earxd,
---       EDRX       => edata,
---       ESENDREQ   => eprocreq(3),
---       ESENDGRANT => eprocgrant(3),
---       ESENDDONE  => eprocdone(3),
---       ESENDDATA  => eprocdatad,
---       -- dsp interface
---       DSPRESET   => DSPRESETD,
---       DSPSPIEN   => dspspiend,
---       DSPSPISS  => dspspissd,
---       DSPSPIMISO => dspspimisod,
---       DSPSPIMOSI => dspspimosid,
---       DSPSPICLK  => dspspiclkd);
+    end if;
+  end process;
+  dspcontproc_c : dspcontproc
+    port map (
+      CLK        => clk,
+      CLKHI      => clk2x,
+      DEVICE     => devicec,
+      ECYCLE     => ecycle,
+      EARX       => earxc,
+      EDRX       => edata,
+      ESENDREQ   => eprocreq(2),
+      ESENDGRANT => eprocgrant(2),
+      ESENDDONE  => eprocdone(2),
+      ESENDDATA  => eprocdatac,
+      -- dsp interface
+      DSPRESET   => DSPRESETC,
+      DSPSPIEN   => dspspienc,
+      DSPSPISS   => dspspissc,
+      DSPSPIMISO => dspspimisoc,
+      DSPSPIMOSI => dspspimosic,
+      DSPSPICLK  => dspspiclkc);
+
+  dspcontproc_d : dspcontproc
+    port map (
+      CLK        => clk,
+      CLKHI      => clk2x,
+      DEVICE     => deviced,
+      ECYCLE     => ecycle,
+      EARX       => earxd,
+      EDRX       => edata,
+      ESENDREQ   => eprocreq(3),
+      ESENDGRANT => eprocgrant(3),
+      ESENDDONE  => eprocdone(3),
+      ESENDDATA  => eprocdatad,
+      -- dsp interface
+      DSPRESET   => DSPRESETD,
+      DSPSPIEN   => dspspiend,
+      DSPSPISS   => dspspissd,
+      DSPSPIMISO => dspspimisod,
+      DSPSPIMOSI => dspspimosid,
+      DSPSPICLK  => dspspiclkd);
 
 
-  end Behavioral;
+end Behavioral;
