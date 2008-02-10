@@ -3,12 +3,12 @@
 vhdl soma "../../../vhdl/somabackplane.vhd"
 
 vhdl eproc "../../../vhdl/eproc/alu.vhd" 
+vhdl eproc "../../../vhdl/eproc/regfile.vhd"
 vhdl eproc "../../../vhdl/eproc/ecore.vhd"
-vhdl eproc "../../../vhdl/eproc/eproc.vhd"
 vhdl eproc "../../../vhdl/eproc/eventtx.vhd"
 vhdl eproc "../../../vhdl/eproc/evtdnd.vhd"
-vhdl eproc "../../../vhdl/eproc/regfile.vhd"
-vhdl eproc "../../../vhdl/eproc/txeventbuffer.vhd"
+vhdl eproc "../../../vhdl/eproc/txreqeventbuffer.vhd"
+vhdl eproc "../../../vhdl/eproc/eproc.vhd"
 
 
 vhdl work "../../../vhdl/deviceio/devicelink.vhd"

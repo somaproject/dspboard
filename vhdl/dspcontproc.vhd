@@ -123,9 +123,10 @@ architecture Behavioral of dspcontproc is
   signal iaddr : std_logic_vector(9 downto 0)  := (others => '0');
   signal idata : std_logic_vector(17 downto 0) := (others => '0');
 
-  signal eatx    : std_logic_vector(79 downto 0) := (others => '0');
-  signal edtx    : std_logic_vector(7 downto 0)  := (others => '0');
-  signal edseltx : std_logic_vector(3 downto 0)  := (others => '0');
+  signal eaout, eaoutl  : std_logic_vector(77 downto 0) := (others => '0');
+  signal edout, edoutl : std_logic_vector(95 downto 0) := (others => '0');
+
+  signal enewout, enewoutl, enewoutd : std_logic := '0';
 
 
 begin  -- Behavioral
@@ -137,9 +138,9 @@ begin  -- Behavioral
       RESET       => RESET,
       EDTX        => EDRX,
       EATX        => EARX(77 downto 0),
-      EDRX        => edtx,
-      EARX        => eatx(77 downto 0),
-      EDSELRX     => edseltx,
+      EAOUT       => eaout,
+      EDOUT       => edout,
+      --ENEWOUT     => enewoutl,
       ECYCLE      => ECYCLE,
       IADDR       => iaddr,
       IDATA       => idata,
@@ -150,6 +151,20 @@ begin  -- Behavioral
       IPORTDATA   => iportdata,
       IPORTSTROBE => iportstrobe,
       DEVICE      => DEVICE);
+
+  eprocbuf_inst : entity eproc.txreqeventbuffer
+    port map (
+      CLK     => CLK,
+      EVENTIN   => edoutl,
+      EADDRIN   => eaoutl,
+      NEWEVENT  => enewoutd,
+      ECYCLE    => ECYCLE,
+      SENDREQ   => ESENDREQ,
+      SENDGRANT => ESENDGRANT,
+      SENDDONE  => ESENDDONE,
+      DOUT      => ESENDDATA);
+
+
 
   instruction_ram : RAMB16_S18_S18
     generic map (
@@ -250,14 +265,29 @@ begin  -- Behavioral
       WEB   => '0',
       SSRB  => RESET);
 
-  main: process(CLKHI)
-    begin
-      if rising_edge(CLkHI) then
-        if oportaddr = X"00" and OPORTSTROBE = '1' then
-          DSPRESET <= oportdata(0); 
+  main : process(CLKHI)
+  begin
+    if rising_edge(CLkHI) then
+      if oportaddr = X"00" and OPORTSTROBE = '1' then
+        DSPRESET <= oportdata(0);
+        enewoutl <= enewout;
+        if enewout = '1' then
+          edoutl <= edout;
+          eaoutl <= eaout;
         end if;
-        
       end if;
-    end process main;
-    
+    end if;
+  end process main;
+
+  process (CLK)
+  begin
+    if rising_edge(CLK) then
+      if enewoutl = '1' or enewout = '1' then
+        enewoutd <= '1';
+      else
+        enewoutd <= '0';
+      end if;
+    end if;
+  end process;
+
 end Behavioral;
