@@ -120,6 +120,8 @@ architecture Behavioral of dspcontproc is
   signal iportdata   : std_logic_vector(15 downto 0) := (others => '0');
   signal iportstrobe : std_logic                     := '0';
 
+  signal earxl : std_logic_vector(79 downto 0) := (others => '0');
+  
   signal iaddr : std_logic_vector(9 downto 0)  := (others => '0');
   signal idata : std_logic_vector(17 downto 0) := (others => '0');
 
@@ -137,7 +139,8 @@ begin  -- Behavioral
       CLKHI       => CLKHI,
       RESET       => RESET,
       EDTX        => EDRX,
-      EATX        => EARX(77 downto 0),
+--      EATX        => EARX(77 downto 0),
+      EATX        => earxl(77 downto 0), 
       EAOUT       => eaout,
       EDOUT       => edout,
       --ENEWOUT     => enewoutl,
@@ -282,6 +285,7 @@ begin  -- Behavioral
   process (CLK)
   begin
     if rising_edge(CLK) then
+      earxl <= EARX; 
       if enewoutl = '1' or enewout = '1' then
         enewoutd <= '1';
       else
