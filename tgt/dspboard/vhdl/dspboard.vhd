@@ -362,7 +362,7 @@ begin  -- Behavioral
       rxdatal <= rxdata;
       rxkl    <= rxk;
 
-      LEDPOWER <= RXLOCKED;
+      LEDPOWER <= not RXLOCKED;
       LEDEVENTA <= decodeerrint;
       LEDEVENTB <= '1';
       LEDEVENTC <= '1';
