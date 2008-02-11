@@ -1,0 +1,19 @@
+EncodeMux: 
+
+EncodeMux muxes TX access to the TX interface, allowing one
+transmission of a datapacket and one event from each interface.
+
+Simple interface:
+
+Each ecycle, 
+1. check to see if there's a datapacket to send; if so, send.
+2. check to see if there is an A event, a B event, a C event, and
+   or a D event. 
+
+
+When we issue the "GRANT" the data source has two ticks before it
+needs to begin sending the data, and it needs to assert DONE on the
+-last byte- of the data. This is so we can properly frame the
+data with the 8b/10b comma characters. 
+
+
