@@ -17,6 +17,12 @@ entity dspboard is
     RXDIN     : in  std_logic_vector(9 downto 0);
     TXIO_P    : out std_logic;
     TXIO_N    : out std_logic;
+    -- STATUS LEDS
+    LEDPOWER  : out std_logic;
+    LEDEVENTA : out std_logic;
+    LEDEVENTB : out std_logic;
+    LEDEVENTC : out std_logic;
+    LEDEVENTD : out std_logic; 
     -- DSP A
     DSPRESETA : out std_logic;
     -- DSP B
@@ -356,8 +362,14 @@ begin  -- Behavioral
       rxdatal <= rxdata;
       rxkl    <= rxk;
 
+      LEDPOWER <= RXLOCKED;
+      LEDEVENTA <= decodeerrint;
+      LEDEVENTB <= '1';
+      LEDEVENTC <= '1';
+      LEDEVENTD <= '1'; 
     end if;
   end process;
+  
   dspcontproc_c : dspcontproc
     port map (
       CLK        => clk,
