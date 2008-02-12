@@ -231,7 +231,9 @@ architecture Behavioral of dspboard is
       DSPSPISS     : out std_logic;
       DSPSPIMISO   : in  std_logic;
       DSPSPIMOSI   : out std_logic;
-      DSPSPICLK    : out std_logic);
+      DSPSPICLK    : out std_logic;
+      LEDEVENT : out std_logic
+      );
   end component;
 
   signal dreq   : std_logic := '0'; 
@@ -366,7 +368,8 @@ begin  -- Behavioral
       DSPSPISS   => dspspissa,
       DSPSPIMISO => dspspimisoa,
       DSPSPIMOSI => dspspimosia,
-      DSPSPICLK  => dspspiclka);
+      DSPSPICLK  => dspspiclka,
+      LEDEVENT => LEDEVENTA);
 
   dspcontproc_b : dspcontproc
     port map (
@@ -386,7 +389,8 @@ begin  -- Behavioral
       DSPSPISS   => dspspissb,
       DSPSPIMISO => dspspimisob,
       DSPSPIMOSI => dspspimosib,
-      DSPSPICLK  => dspspiclkb);
+      DSPSPICLK  => dspspiclkb,
+      LEDEVENT => LEDEVENTB);
 
   process(CLK)
   begin
@@ -395,10 +399,7 @@ begin  -- Behavioral
       rxkl    <= rxk;
 
       LEDPOWER <= not RXLOCKED;
-      LEDEVENTA <= decodeerrint;
-      LEDEVENTB <= '1';
-      LEDEVENTC <= '1';
-      LEDEVENTD <= '1'; 
+
     end if;
   end process;
   
@@ -420,7 +421,8 @@ begin  -- Behavioral
       DSPSPISS   => dspspissc,
       DSPSPIMISO => dspspimisoc,
       DSPSPIMOSI => dspspimosic,
-      DSPSPICLK  => dspspiclkc);
+      DSPSPICLK  => dspspiclkc,
+      LEDEVENT => LEDEVENTC);
 
   dspcontproc_d : dspcontproc
     port map (
@@ -440,7 +442,8 @@ begin  -- Behavioral
       DSPSPISS   => dspspissd,
       DSPSPIMISO => dspspimisod,
       DSPSPIMOSI => dspspimosid,
-      DSPSPICLK  => dspspiclkd);
+      DSPSPICLK  => dspspiclkd,
+      LEDEVENT => LEDEVENTD);
 
   encodemux_inst : encodemux
     port map (
