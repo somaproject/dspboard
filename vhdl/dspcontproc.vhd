@@ -121,11 +121,11 @@ architecture Behavioral of dspcontproc is
   signal iportstrobe : std_logic                     := '0';
 
   signal earxl : std_logic_vector(79 downto 0) := (others => '0');
-  
+
   signal iaddr : std_logic_vector(9 downto 0)  := (others => '0');
   signal idata : std_logic_vector(17 downto 0) := (others => '0');
 
-  signal eaout, eaoutl  : std_logic_vector(77 downto 0) := (others => '0');
+  signal eaout, eaoutl : std_logic_vector(77 downto 0) := (others => '0');
   signal edout, edoutl : std_logic_vector(95 downto 0) := (others => '0');
 
   signal enewout, enewoutl, enewoutd : std_logic := '0';
@@ -139,11 +139,10 @@ begin  -- Behavioral
       CLKHI       => CLKHI,
       RESET       => RESET,
       EDTX        => EDRX,
---      EATX        => EARX(77 downto 0),
-      EATX        => earxl(77 downto 0), 
+      EATX        => earxl(77 downto 0),
       EAOUT       => eaout,
       EDOUT       => edout,
-      --ENEWOUT     => enewoutl,
+      ENEWOUT     => enewout,
       ECYCLE      => ECYCLE,
       IADDR       => iaddr,
       IDATA       => idata,
@@ -157,7 +156,7 @@ begin  -- Behavioral
 
   eprocbuf_inst : entity eproc.txreqeventbuffer
     port map (
-      CLK     => CLK,
+      CLK       => CLK,
       EVENTIN   => edoutl,
       EADDRIN   => eaoutl,
       NEWEVENT  => enewoutd,
@@ -273,19 +272,21 @@ begin  -- Behavioral
     if rising_edge(CLkHI) then
       if oportaddr = X"00" and OPORTSTROBE = '1' then
         DSPRESET <= oportdata(0);
-        enewoutl <= enewout;
-        if enewout = '1' then
-          edoutl <= edout;
-          eaoutl <= eaout;
-        end if;
+      end if;
+
+      enewoutl <= enewout;
+      if enewout = '1' then
+        edoutl <= edout;
+        eaoutl <= eaout;
       end if;
     end if;
+
   end process main;
 
   process (CLK)
   begin
     if rising_edge(CLK) then
-      earxl <= EARX; 
+      earxl      <= EARX;
       if enewoutl = '1' or enewout = '1' then
         enewoutd <= '1';
       else

@@ -91,6 +91,35 @@ architecture Behavioral of dspboard is
       );
   end component;
 
+  component encodemux
+    port (
+      CLK        : in  std_logic;
+      ECYCLE     : in  std_logic;
+      DOUT       : out std_logic_vector(7 downto 0);
+      KOUT       : out std_logic;
+      -- data interface
+      DREQ       : in  std_logic;
+      DGRANT     : out std_logic;
+      DDONE      : in  std_logic;
+      DDATA      : in  std_logic_vector(7 downto 0);
+      -- event interface for DSPs
+      EDSPREQ    : in  std_logic_vector(3 downto 0);
+      EDSPGRANT  : out std_logic_vector(3 downto 0);
+      EDSPDONE   : in  std_logic_vector(3 downto 0);
+      EDSPDATAA  : in  std_logic_vector(7 downto 0);
+      EDSPDATAB  : in  std_logic_vector(7 downto 0);
+      EDSPDATAC  : in  std_logic_vector(7 downto 0);
+      EDSPDATAD  : in  std_logic_vector(7 downto 0);
+                                        -- event interface for EPROCs
+      EPROCREQ   : in  std_logic_vector(3 downto 0);
+      EPROCGRANT : out std_logic_vector(3 downto 0);
+      EPROCDONE  : in  std_logic_vector(3 downto 0);
+      EPROCDATAA : in  std_logic_vector(7 downto 0);
+      EPROCDATAB : in  std_logic_vector(7 downto 0);
+      EPROCDATAC : in  std_logic_vector(7 downto 0);
+      EPROCDATAD : in  std_logic_vector(7 downto 0));
+  end component;
+
 
   signal ECYCLE : std_logic                    := '0';
   signal EDATA  : std_logic_vector(7 downto 0) := (others => '0');
@@ -205,9 +234,9 @@ architecture Behavioral of dspboard is
       DSPSPICLK    : out std_logic);
   end component;
 
-  signal dreq   : std_logic_vector(3 downto 0) := (others => '0');
-  signal dgrant : std_logic_vector(3 downto 0) := (others => '0');
-  signal ddone  : std_logic_vector(3 downto 0) := (others => '0');
+  signal dreq   : std_logic := '0'; 
+  signal dgrant : std_logic := '0'; 
+  signal ddone  : std_logic := '0'; 
 
   signal edspreq   : std_logic_vector(3 downto 0) := (others => '0');
   signal edspgrant : std_logic_vector(3 downto 0) := (others => '0');
@@ -254,6 +283,9 @@ architecture Behavioral of dspboard is
   signal dspspimisod : std_logic                    := '0';
   signal dspspimosid : std_logic                    := '0';
   signal dspspiclkd  : std_logic                    := '0';
+
+
+  signal ddata : std_logic_vector(7 downto 0) := (others => '0');
 
   signal linkup : std_logic := '0';
 
@@ -409,6 +441,31 @@ begin  -- Behavioral
       DSPSPIMISO => dspspimisod,
       DSPSPIMOSI => dspspimosid,
       DSPSPICLK  => dspspiclkd);
+
+  encodemux_inst : encodemux
+    port map (
+      CLK        => CLK,
+      ECYCLE     => ECYCLE,
+      DOUT       => txdata,
+      KOUT       => txk,
+      DREQ       => DREQ,
+      DGRANT     => DGRANT,
+      DDONE      => DDONE,
+      DDATA      => ddata,
+      EDSPREQ    => EDSPREQ,
+      EDSPGRANT  => edspgrant,
+      EDSPDONE   => edspdone,
+      EDSPDATAA  => edspdataa,
+      EDSPDATAB  => edspdatab,
+      EDSPDATAC  => edspdatac,
+      EDSPDATAD  => edspdatad,
+      EPROCREQ   => EPROCREQ,
+      EPROCGRANT => eprocgrant,
+      EPROCDONE  => eprocdone,
+      EPROCDATAA => eprocdataa,
+      EPROCDATAB => eprocdatab,
+      EPROCDATAC => eprocdatac,
+      EPROCDATAD => eprocdatad);
 
 
 end Behavioral;

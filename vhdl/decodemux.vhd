@@ -15,13 +15,13 @@ entity decodemux is
 
     -- data interface
     DGRANTA : out std_logic;
-    EARXA   : out std_logic_vector(79 downto 0);
+    EARXA   : out std_logic_vector(79 downto 0) := (others => '0');
     DGRANTB : out std_logic;
-    EARXB   : out std_logic_vector(79 downto 0);
+    EARXB   : out std_logic_vector(79 downto 0) := (others => '0');
     DGRANTC : out std_logic;
-    EARXC   : out std_logic_vector(79 downto 0);
+    EARXC   : out std_logic_vector(79 downto 0)  := (others => '0');
     DGRANTD : out std_logic;
-    EARXD   : out std_logic_vector(79 downto 0)
+    EARXD   : out std_logic_vector(79 downto 0) := (others => '0')
     );
 end decodemux;
 
@@ -37,7 +37,7 @@ begin  -- Behavioral
 
   ECYCLE <= '1' when KIN = '1' and DIN = X"BC" else '0';
   
-
+  EDATA <= DIN; 
   main : process(CLK)
   begin
     if rising_edge(CLK) then

@@ -100,10 +100,10 @@ begin  -- Behavioral
   EDATAC <= EPROCDATAC when esel(2) = '0' else EDSPDATAC;
   EDATAD <= EPROCDATAD when esel(3) = '0' else EDSPDATAD;
 
-  ereq(0) <= eprocreq(0) when esel(0) = '0' else edspreq(0);
-  ereq(1) <= eprocreq(1) when esel(1) = '0' else edspreq(1);
-  ereq(2) <= eprocreq(2) when esel(2) = '0' else edspreq(2);
-  ereq(3) <= eprocreq(3) when esel(3) = '0' else edspreq(3);
+  ereq(0) <= EPROCREQ(0) when esel(0) = '0' else edspreq(0);
+  ereq(1) <= EPROCREQ(1) when esel(1) = '0' else edspreq(1);
+  ereq(2) <= EPROCREQ(2) when esel(2) = '0' else edspreq(2);
+  ereq(3) <= EPROCREQ(3) when esel(3) = '0' else edspreq(3);
 
   edone(0) <= eprocdone(0) when esel(0) = '0' else edspdone(0);
   edone(1) <= eprocdone(1) when esel(1) = '0' else edspdone(1);
