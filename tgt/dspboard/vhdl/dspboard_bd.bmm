@@ -1,0 +1,67 @@
+// BMM LOC annotation file.
+//
+// Release 9.3i - Data2MEM J.40, build 1.5.4 Aug 14, 2007
+// Copyright (c) 1995-2008 Xilinx, Inc.  All rights reserved.
+//
+// Created on 02/12/08 05:36 pm
+//
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Unnamed 405 PPC processor, ID 0, memory map.
+//
+///////////////////////////////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Address space 'dspcontproca' 0x00000000:0x000007FF (2 KB).
+//
+///////////////////////////////////////////////////////////////////////////////
+
+ADDRESS_SPACE dspcontproca RAMB18 [0x00000000:0x000007FF]
+    BUS_BLOCK
+        dspcontproc_a/instruction_ram [17:0] PLACED = X0Y2;
+    END_BUS_BLOCK;
+END_ADDRESS_SPACE;
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Address space 'dspcontprocb' 0x10000000:0x100007FF (2 KB).
+//
+///////////////////////////////////////////////////////////////////////////////
+
+ADDRESS_SPACE dspcontprocb RAMB18 [0x10000000:0x100007FF]
+    BUS_BLOCK
+        dspcontproc_b/instruction_ram [17:0] PLACED = X1Y4;
+    END_BUS_BLOCK;
+END_ADDRESS_SPACE;
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Address space 'dspcontprocc' 0x20000000:0x200007FF (2 KB).
+//
+///////////////////////////////////////////////////////////////////////////////
+
+ADDRESS_SPACE dspcontprocc RAMB18 [0x20000000:0x200007FF]
+    BUS_BLOCK
+        dspcontproc_c/instruction_ram [17:0] PLACED = X1Y0;
+    END_BUS_BLOCK;
+END_ADDRESS_SPACE;
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Address space 'dspcontprocd' 0x30000000:0x300007FF (2 KB).
+//
+///////////////////////////////////////////////////////////////////////////////
+
+ADDRESS_SPACE dspcontprocd RAMB18 [0x30000000:0x300007FF]
+    BUS_BLOCK
+        dspcontproc_d/instruction_ram [17:0] PLACED = X0Y7;
+    END_BUS_BLOCK;
+END_ADDRESS_SPACE;
+

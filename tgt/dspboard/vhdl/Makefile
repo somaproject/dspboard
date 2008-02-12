@@ -22,16 +22,19 @@ OPTIMIZE = high
 PART = xc3s400-ft256-4
 SPEED = 4
 
-$(PROJECT): build/$(PROJECT).ncd decode8b10b.edn  encode8b10b.edn
 
-$(PROJECT).bit: build/$(PROJECT).bit
+bitfile: $(PROJECT).bit $(PROJECT).postmem.bit 
+
+$(PROJECT): build/$(PROJECT).ncd
+	echo $(SOURCES)
+$(PROJECT).bit: $(PROJECT).postmem.bit
 	rm -rf $(PROJECT).bit
-	cp build/$(PROJECT).bit . 
-	cp build/$(PROJECT).bit ~/soma/
+	cp $(PROJECT).postmem.bit $(PROJECT).bit
 
-$(PROJECT).rbt: build/$(PROJECT).rbt
+$(PROJECT).rbt: build/$(PROJECT).rbt 
 	rm -rf $(PROJECT).rbt
 	cp build/$(PROJECT).rbt . 
+
 
 # coregen files:
 %.edn : %.xco
@@ -53,7 +56,7 @@ build/$(PROJECT).ngc: $(SOURCES) $(PROJECT).xst $(PROJECT).prj
 trans: build/$(PROJECT).ngd
 
 build/$(PROJECT).ngd: build/$(PROJECT).ngc $(PROJECT).ucf 
-	ngdbuild -p $(PART) -uc $(PROJECT).ucf -dd build build/$(PROJECT).ngc build/$(PROJECT).ngd
+	ngdbuild -p $(PART) -uc $(PROJECT).ucf -bm $(PROJECT).bmm  -dd build build/$(PROJECT).ngc build/$(PROJECT).ngd
 
 
 # third stage: map: produces pcf, map.ncd
@@ -102,6 +105,39 @@ synthsim: build/$(PROJECT).ngc
 
 transsim: build/$(PROJECT).ngd
 	netgen -intstyle ise -rpw 100 -tpw 0 -ar Structure -tm $(PROJECT) -w -dir build -ofmt vhdl -sim build/$(PROJECT).ngd $(PROJECT)_transsim.vhd
+
+
+
+# update roms
+# It's not clear how we handle mutliple roms? 
+
+GENROM = python ../../../../backplane/eproc/assemble/genrom.py
+ASSEMBLEPY = python ../../../../backplane/eproc/assemble/assemble.py
+
+
+$(PROJECT).postmem.bit: $(PROJECT).mem build/$(PROJECT).bit
+	data2mem  -bm $(PROJECT)_bd.bmm  -bd $(PROJECT).mem  -bt build/$(PROJECT).bit  -o h $(PROJECT)_mem.vhd -o b $(PROJECT).postmem.bit
+	$(GENROM) $(PROJECT).bmm $(PROJECT).dspcontproc.imem
+
+forceromupdate: $(PROJECT).mem
+	data2mem  -bm $(PROJECT)_bd.bmm  -bd $(PROJECT).mem  -bt build/$(PROJECT).bit  -o h $(PROJECT)_mem.vhd -o b $(PROJECT).postmem.bit
+	$(GENROM) $(PROJECT).bmm $(PROJECT).dspcontproc.imem 
+	cp $(PROJECT).postmem.bit $(PROJECT).bit
+
+$(PROJECT).dspcontproc.mem:  ../../../vhdl/dspcontproc.asmpy
+	$(ASSEMBLEPY) ../../../vhdl/dspcontproc.asmpy \
+	$(PROJECT).dspcontproc.imem $(PROJECT).dspcontproc.mem > $(PROJECT).dspcontproc.log
+
+
+$(PROJECT).mem: $(PROJECT).dspcontproc.mem
+	echo "@00000000" > $(PROJECT).mem
+	cat $(PROJECT).dspcontproc.mem >> $(PROJECT).mem
+	echo "@10000000" >> $(PROJECT).mem
+	cat $(PROJECT).dspcontproc.mem >> $(PROJECT).mem
+	echo "@20000000" >> $(PROJECT).mem
+	cat $(PROJECT).dspcontproc.mem >> $(PROJECT).mem
+	echo "@30000000" >> $(PROJECT).mem
+	cat $(PROJECT).dspcontproc.mem >> $(PROJECT).mem
 
 
 # cleanup

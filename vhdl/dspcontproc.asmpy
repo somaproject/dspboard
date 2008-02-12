@@ -1,0 +1,60 @@
+"""
+
+"""
+
+### CONSTANTS
+
+EVENTOUT_CMD = 0x80
+EVENTOUT_DEST = 0x87
+EVENTOUT_DATA0 = 0x81
+EVENTOUT_DATA1 = 0x82
+EVENTOUT_DATA2 = 0x83
+EVENTOUT_DATA3 = 0x84
+EVENTOUT_DATA4 = 0x85
+
+EVENTPROC_ENABLE = 0x89
+EVENTPROC_ADDR = 0x88
+
+env = createEnvironment()
+
+# state variables are used for persistence across ECYCLEs
+
+def createEventCycleProc():
+  ecp = env.createECycleProc()
+  tmp = ecp.createVariable("tmp")
+  
+  ecp.foreverLoop()
+
+
+def createEnableEventCycleProc():
+  newproc = env.createProc("enableEventCycleProc")
+  y = newproc.createVariable("y")
+  #first thing we do is send a test event
+
+  newproc.load(y, 1)
+  newproc.output(EVENTPROC_ENABLE, y)
+
+def pingResponseEvent():
+  proc = env.createEProc((0x20, 0x20), (0, 255))
+  tmp = env.createVariable("tmp")
+  proc.move(tmp, ereg.src)
+  proc.output(EVENTOUT_DEST, tmp)
+
+  proc.move(tmp, ereg.edata[0])
+  proc.output(EVENTOUT_DATA1, tmp)
+
+  proc.load(tmp, 0xDEAD)
+  proc.output(EVENTOUT_DATA2, tmp)
+
+  proc.load(tmp, 0xBEEF)
+  proc.output(EVENTOUT_DATA3, tmp)
+
+  proc.load(tmp, 0x16)
+  proc.output(EVENTOUT_CMD, tmp)
+
+createEnableEventCycleProc()
+createEventCycleProc()
+pingResponseEvent()
+
+proc = env.createProc("test")
+proc.foreverLoop()
