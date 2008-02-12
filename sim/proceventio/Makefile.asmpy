@@ -1,0 +1,7 @@
+
+ASM = python ~/soma/backplane/eproc/assemble/assemble.py
+ROM = python /home/jonas/soma/backplane/eproc/assemble/genrom.py  
+
+all:
+	$(ASM) proceventiotest.asmpy proceventiotest.imem
+	$(ROM) -s  proceventiotest.imem test

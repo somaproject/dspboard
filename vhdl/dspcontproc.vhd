@@ -130,7 +130,6 @@ architecture Behavioral of dspcontproc is
 
   signal enewout, enewoutl, enewoutd : std_logic := '0';
 
-
 begin  -- Behavioral
 
   eproc_inst : entity eproc.eproc
