@@ -351,7 +351,8 @@ begin  -- Behavioral
 
 
   REFCLKOUT <= REFCLKIN;
-
+  linkup <= not RESET;
+  
   decodemux_inst : decodemux
     port map (
       CLK     => CLK,
