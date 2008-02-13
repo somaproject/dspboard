@@ -57,13 +57,14 @@ def pingResponseEvent():
 def pingSetLT():
   proc = env.createEProc((0x21, 0x21), (0, 255))
 
-  tmp = env.createVariable("tmp")
-  proc.move(tmp, env.edata[0])
+  tmp = proc.createVariable("tmp2")
+  proc.move(tmp, ereg.edata[0])
   proc.output(OUTPUT_EVENTLED,  tmp)
 
 createEnableEventCycleProc()
 createEventCycleProc()
 pingResponseEvent()
+pingSetLT()
 
 proc = env.createProc("test")
 proc.foreverLoop()
