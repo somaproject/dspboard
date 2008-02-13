@@ -3,7 +3,7 @@
 // Release 9.3i - Data2MEM J.40, build 1.5.4 Aug 14, 2007
 // Copyright (c) 1995-2008 Xilinx, Inc.  All rights reserved.
 //
-// Created on 02/12/08 11:33 pm
+// Created on 02/12/08 11:57 pm
 //
 
 
@@ -22,7 +22,7 @@
 
 ADDRESS_SPACE dspcontproca RAMB18 [0x00000000:0x000007FF]
     BUS_BLOCK
-        dspcontproc_a/instruction_ram [17:0] PLACED = X1Y1;
+        dspcontproc_a/instruction_ram [17:0] PLACED = X0Y5;
     END_BUS_BLOCK;
 END_ADDRESS_SPACE;
 
@@ -35,7 +35,7 @@ END_ADDRESS_SPACE;
 
 ADDRESS_SPACE dspcontprocb RAMB18 [0x10000000:0x100007FF]
     BUS_BLOCK
-        dspcontproc_b/instruction_ram [17:0] PLACED = X0Y2;
+        dspcontproc_b/instruction_ram [17:0] PLACED = X1Y7;
     END_BUS_BLOCK;
 END_ADDRESS_SPACE;
 
@@ -61,7 +61,7 @@ END_ADDRESS_SPACE;
 
 ADDRESS_SPACE dspcontprocd RAMB18 [0x30000000:0x300007FF]
     BUS_BLOCK
-        dspcontproc_d/instruction_ram [17:0] PLACED = X0Y7;
+        dspcontproc_d/instruction_ram [17:0] PLACED = X0Y6;
     END_BUS_BLOCK;
 END_ADDRESS_SPACE;
 
