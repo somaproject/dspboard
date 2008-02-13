@@ -30,7 +30,10 @@ entity dspboard is
     -- DSP C
     DSPRESETC : out std_logic;
     -- DSP D
-    DSPRESETD : out std_logic
+    DSPRESETD : out std_logic; 
+    -- FIBER INTERFACE
+    FIBEROUTA : out std_logic;
+    FIBEROUTB : out std_logic
     );
 end dspboard;
 
@@ -398,8 +401,9 @@ begin  -- Behavioral
       rxdatal <= rxdata;
       rxkl    <= rxk;
 
-      LEDPOWER <= not RXLOCKED;
-
+      LEDPOWER <= decodeerrint; 
+      FIBEROUTA <= ecycle;
+      FIBEROUTB <= rxk; 
     end if;
   end process;
   
