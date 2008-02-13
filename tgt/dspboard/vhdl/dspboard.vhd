@@ -261,28 +261,28 @@ architecture Behavioral of dspboard is
   signal edspdatac : std_logic_vector(7 downto 0) := (others => '0');
   signal edspdatad : std_logic_vector(7 downto 0) := (others => '0');
 
-  signal devicea     : std_logic_vector(7 downto 0) := (others => '0');
+  signal devicea     : std_logic_vector(7 downto 0) := X"08";
   signal dspspiena   : std_logic                    := '0';
   signal dspspissa   : std_logic                    := '0';
   signal dspspimisoa : std_logic                    := '0';
   signal dspspimosia : std_logic                    := '0';
   signal dspspiclka  : std_logic                    := '0';
 
-  signal deviceb     : std_logic_vector(7 downto 0) := (others => '0');
+  signal deviceb     : std_logic_vector(7 downto 0) := X"09"; 
   signal dspspienb   : std_logic                    := '0';
   signal dspspissb   : std_logic                    := '0';
   signal dspspimisob : std_logic                    := '0';
   signal dspspimosib : std_logic                    := '0';
   signal dspspiclkb  : std_logic                    := '0';
 
-  signal devicec     : std_logic_vector(7 downto 0) := (others => '0');
+  signal devicec     : std_logic_vector(7 downto 0) := X"0A"; 
   signal dspspienc   : std_logic                    := '0';
   signal dspspissc   : std_logic                    := '0';
   signal dspspimisoc : std_logic                    := '0';
   signal dspspimosic : std_logic                    := '0';
   signal dspspiclkc  : std_logic                    := '0';
 
-  signal deviced     : std_logic_vector(7 downto 0) := (others => '0');
+  signal deviced     : std_logic_vector(7 downto 0) := X"0B"; 
   signal dspspiend   : std_logic                    := '0';
   signal dspspissd   : std_logic                    := '0';
   signal dspspimisod : std_logic                    := '0';
