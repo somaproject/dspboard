@@ -431,15 +431,13 @@ begin  -- Behavioral
         jtagwordout(7 downto 0) <= edata; 
       end if;
       
-      if pos = "0000000001" then
+
+      if pos = "0000000010" then
         jtagwordout(15 downto 8) <= edata; 
       end if;
-      
-      if pos = "0000000010" then
-        jtagwordout(23 downto 16) <= edata; 
-      end if;
 
-      jtagwordout(31 downto 24) <= earxa(7 downto 0);
+      jtagwordout(23 downto 16) <= earxa(7 downto 0);
+      jtagwordout(31 downto 24) <= earxa(15 downto 8);
       
       if pos = "0000101111" then
         jtagwordout(39 downto 32) <= edata; 
