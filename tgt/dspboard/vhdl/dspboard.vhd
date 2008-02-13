@@ -428,23 +428,23 @@ begin  -- Behavioral
       end if;
 
       if ecycle = '1' then 
-        jtagwordout(7 downto 0) <= rxdata; 
+        jtagwordout(7 downto 0) <= edata; 
       end if;
       
       if pos = "0000000001" then
-        jtagwordout(15 downto 8) <= rxdata; 
+        jtagwordout(15 downto 8) <= edata; 
       end if;
       
       if pos = "0000000010" then
-        jtagwordout(23 downto 16) <= rxdata; 
+        jtagwordout(23 downto 16) <= edata; 
       end if;
       
       if pos = "0000101111" then
-        jtagwordout(39 downto 32) <= rxdata; 
+        jtagwordout(39 downto 32) <= edata; 
       end if;
       
       if pos = "0000110000" then
-        jtagwordout(47 downto 40) <= rxdata; 
+        jtagwordout(47 downto 40) <= edata; 
       end if;
       
 
