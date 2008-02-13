@@ -15,6 +15,9 @@ EVENTOUT_DATA4 = 0x85
 EVENTPROC_ENABLE = 0x89
 EVENTPROC_ADDR = 0x88
 
+OUTPUT_DSPRESET = 0x00
+OUTPUT_EVENTLED = 0x01
+
 env = createEnvironment()
 
 # state variables are used for persistence across ECYCLEs
@@ -22,7 +25,6 @@ env = createEnvironment()
 def createEventCycleProc():
   ecp = env.createECycleProc()
   tmp = ecp.createVariable("tmp")
-  
   ecp.foreverLoop()
 
 
@@ -51,6 +53,13 @@ def pingResponseEvent():
 
   proc.load(tmp, 0x16)
   proc.output(EVENTOUT_CMD, tmp)
+
+def pingSetLT():
+  proc = env.createEProc((0x21, 0x21), (0, 255))
+
+  tmp = env.createVariable("tmp")
+  proc.move(tmp, env.edata[0])
+  proc.output(OUTPUT_EVENTLED,  tmp)
 
 createEnableEventCycleProc()
 createEventCycleProc()

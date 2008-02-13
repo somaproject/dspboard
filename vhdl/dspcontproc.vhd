@@ -107,7 +107,10 @@ entity dspcontproc is
     DSPSPISS     : out std_logic;
     DSPSPIMISO   : in  std_logic;
     DSPSPIMOSI   : out std_logic;
-    DSPSPICLK    : out std_logic);
+    DSPSPICLK    : out std_logic;
+    -- STATUS
+    LEDEVENT : out std_logic
+    );
 end dspcontproc;
 
 architecture Behavioral of dspcontproc is
@@ -129,6 +132,9 @@ architecture Behavioral of dspcontproc is
   signal edout, edoutl : std_logic_vector(95 downto 0) := (others => '0');
 
   signal enewout, enewoutl, enewoutd : std_logic := '0';
+
+  signal lledevent : std_logic := '0';
+  
 
 begin  -- Behavioral
 
@@ -271,8 +277,10 @@ begin  -- Behavioral
     if rising_edge(CLkHI) then
       if oportaddr = X"00" and OPORTSTROBE = '1' then
         DSPRESET <= oportdata(0);
+      elsif oportaddr = X"01" and OPORTSTROBE = '1' then
+        lledevent <= oportdata(0); 
       end if;
-
+      LEDEVENT <= lledevent; 
       enewoutl <= enewout;
       if enewout = '1' then
         edoutl <= edout;
