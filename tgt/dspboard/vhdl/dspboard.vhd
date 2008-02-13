@@ -326,7 +326,7 @@ begin  -- Behavioral
       TXKOUT    => rxk,
       CLK       => clk,
       CLK2X     => open,
-      RESET     => RESET,
+      RESET     => reset,
       RXDIN     => txdata,
       RXKIN     => txk,
       RXIO_P    => TXIO_P,
