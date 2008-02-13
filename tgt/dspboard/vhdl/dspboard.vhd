@@ -413,6 +413,11 @@ begin  -- Behavioral
       LEDEVENT => LEDEVENTB);
 
   process(CLK)
+    variable txacnt : std_logic_vector(7 downto 0) := (others => '0');
+    variable txbcnt : std_logic_vector(7 downto 0) := (others => '0');
+    variable txccnt : std_logic_vector(7 downto 0) := (others => '0');
+    variable txdcnt : std_logic_vector(7 downto 0) := (others => '0');
+    
   begin
     if rising_edge(clk) then
       rxdatal <= rxdata;
@@ -431,24 +436,30 @@ begin  -- Behavioral
       if ecycle = '1' then 
         jtagwordout(7 downto 0) <= edata; 
       end if;
-      
 
-      if pos = "0000000010" then
-        jtagwordout(15 downto 8) <= edata; 
-      end if;
+      
+      
+      if txdata = X"1C" and txk = '1' then
+        txacnt := txacnt + 1;
+      end if; 
+        
+      if txdata = X"3C" and txk = '1' then
+        txbcnt := txbcnt + 1;
+      end if; 
+        
+      if txdata = X"5C" and txk = '1' then
+        txccnt := txccnt + 1;
+      end if; 
+        
+      if txdata = X"7C" and txk = '1' then
+        txdcnt := txdcnt + 1;
+      end if; 
 
-      jtagwordout(23 downto 16) <= earxa(7 downto 0);
-      jtagwordout(31 downto 24) <= earxa(15 downto 8);
+      jtagwordout(15 downto 8) <= txacnt; 
+      jtagwordout(23 downto 16) <= txbcnt; 
+      jtagwordout(31 downto 24) <= txccnt; 
+      jtagwordout(39 downto 32) <= txdcnt; 
       
-      if pos = "0000101111" then
-        jtagwordout(39 downto 32) <= edata; 
-      end if;
-      
-      if pos = "0000110000" then
-        jtagwordout(47 downto 40) <= edata; 
-      end if;
-      
-
       
     end if;
   end process;
