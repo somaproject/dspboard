@@ -10,13 +10,26 @@ use UNISIM.VComponents.all;
 entity simplerun is
   port (
     SYSCLKIN  : in  std_logic;
-    DSPCLKOUT : out std_logic;
-    DSPRESET  : out std_logic;
+
     LEDPOWER  : out std_logic;
     LEDEVENTA : out std_logic;
     LEDEVENTB : out std_logic;
     LEDEVENTC : out std_logic;
-    LEDEVENTD : out std_logic
+    LEDEVENTD : out std_logic;
+    -- DSP A
+    DSPCLKOUTA : out std_logic; 
+    DSPRESETA : out std_logic;
+    -- DSP B
+    DSPCLKOUTB : out std_logic; 
+    DSPRESETB : out std_logic;
+    -- DSP C
+    DSPCLKOUTC : out std_logic; 
+    DSPRESETC : out std_logic;
+    -- DSP D
+    DSPCLKOUTD : out std_logic; 
+    DSPRESETD : out std_logic
+    -- FIBER INTERFACE
+    
     );
 end simplerun;
 
@@ -32,13 +45,24 @@ architecture Behavioral of simplerun is
 begin  -- Behavioral
 
   clk       <= SYSCLKIN;
-  DSPCLKOUT <= clk;
+
+  DSPCLKOUTA <= clk;
+  DSPRESETA <= '1';
+
+  DSPCLKOUTB <= clk;
+  DSPRESETB <= '1';
+
+  DSPCLKOUTC <= clk;
+  DSPRESETC <= '1';
+
+  DSPCLKOUTD <= clk;
+  DSPRESETD <= '1';
+
+  
 
   main : process(clk)
   begin
     if rising_edge(clk) then
-
-      DSPRESET <= ldspreset;
 
       if dspcntdown /= "0000000000000000000000000" then
         dspcntdown <= dspcntdown - 1;
