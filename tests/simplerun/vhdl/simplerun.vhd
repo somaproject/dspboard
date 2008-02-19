@@ -19,6 +19,7 @@ entity simplerun is
     -- DSP A
     DSPCLKOUTA : out std_logic; 
     DSPRESETA : out std_logic;
+    DSPAPF4 : in std_logic; 
     -- DSP B
     DSPCLKOUTB : out std_logic; 
     DSPRESETB : out std_logic;
@@ -50,13 +51,13 @@ begin  -- Behavioral
   DSPRESETA <= '1';
 
   DSPCLKOUTB <= clk;
-  DSPRESETB <= '1';
+  DSPRESETB <= DSPAPF4; 
 
   DSPCLKOUTC <= clk;
-  DSPRESETC <= '1';
+  DSPRESETC <= DSPAPF4; 
 
   DSPCLKOUTD <= clk;
-  DSPRESETD <= '1';
+  DSPRESETD <= DSPAPF4;
 
   
 

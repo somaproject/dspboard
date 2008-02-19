@@ -1,7 +1,9 @@
 Simplerun:
   * Provides a 50 MHz clock to the DSPs 
-  * Brings the DSPs out of reset after 1 second
+  * Brings first DSP out of reset after 1 sec
   * Flashes the power LED and event leds in a pretty pattern
+  * Let's DSPA control dspB-D reset
+
 
 
 
