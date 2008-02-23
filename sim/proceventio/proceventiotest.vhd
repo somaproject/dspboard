@@ -197,7 +197,8 @@ architecture Behavioral of proceventiotest is
       DSPSPISS     : out std_logic;
       DSPSPIMISO   : in  std_logic;
       DSPSPIMOSI   : out std_logic;
-      DSPSPICLK    : out std_logic);
+      DSPSPICLK    : out std_logic;
+      DSPSPIHOLD   : in  std_logic);
   end component;
 
   signal dreq   : std_logic                    := '0';
@@ -230,6 +231,8 @@ architecture Behavioral of proceventiotest is
   signal dspspimisoa : std_logic                    := '0';
   signal dspspimosia : std_logic                    := '0';
   signal dspspiclka  : std_logic                    := '0';
+  signal dspspiholda : std_logic                    := '0';
+
 
   signal deviceb     : std_logic_vector(7 downto 0) := (others => '0');
   signal dspspienb   : std_logic                    := '0';
@@ -237,6 +240,7 @@ architecture Behavioral of proceventiotest is
   signal dspspimisob : std_logic                    := '0';
   signal dspspimosib : std_logic                    := '0';
   signal dspspiclkb  : std_logic                    := '0';
+  signal dspspiholdb : std_logic                    := '0';
 
   signal devicec     : std_logic_vector(7 downto 0) := (others => '0');
   signal dspspienc   : std_logic                    := '0';
@@ -244,6 +248,7 @@ architecture Behavioral of proceventiotest is
   signal dspspimisoc : std_logic                    := '0';
   signal dspspimosic : std_logic                    := '0';
   signal dspspiclkc  : std_logic                    := '0';
+  signal dspspiholdc : std_logic                    := '0';
 
   signal deviced     : std_logic_vector(7 downto 0) := (others => '0');
   signal dspspiend   : std_logic                    := '0';
@@ -251,6 +256,7 @@ architecture Behavioral of proceventiotest is
   signal dspspimisod : std_logic                    := '0';
   signal dspspimosid : std_logic                    := '0';
   signal dspspiclkd  : std_logic                    := '0';
+  signal dspspiholdd : std_logic                    := '0';
 
   signal linkup : std_logic := '1';
 
@@ -460,7 +466,8 @@ begin  -- Behavioral
       DSPSPISS     => dspspissa,
       DSPSPIMISO   => dspspimisoa,
       DSPSPIMOSI   => dspspimosia,
-      DSPSPICLK    => dspspiclka);
+      DSPSPICLK    => dspspiclka,
+      DSPSPIHOLD   => dspspiholda);
 
   dspcontproc_b : dspcontproc
     generic map (
@@ -558,7 +565,8 @@ begin  -- Behavioral
       DSPSPISS     => dspspissb,
       DSPSPIMISO   => dspspimisob,
       DSPSPIMOSI   => dspspimosib,
-      DSPSPICLK    => dspspiclkb);
+      DSPSPICLK    => dspspiclkb,
+      DSPSPIHOLD   => dspspiholdb);
 
   dspcontproc_c : dspcontproc
     generic map (
@@ -656,7 +664,8 @@ begin  -- Behavioral
       DSPSPISS     => dspspissc,
       DSPSPIMISO   => dspspimisoc,
       DSPSPIMOSI   => dspspimosic,
-      DSPSPICLK    => dspspiclkc);
+      DSPSPICLK    => dspspiclkc,
+      DSPSPIHOLD   => dspspiholdc);
 
   dspcontproc_d : dspcontproc
     generic map (
@@ -754,7 +763,8 @@ begin  -- Behavioral
       DSPSPISS     => dspspissd,
       DSPSPIMISO   => dspspimisod,
       DSPSPIMOSI   => dspspimosid,
-      DSPSPICLK    => dspspiclkd);
+      DSPSPICLK    => dspspiclkd,
+      DSPSPIHOLD   => dspspiholdd);
 
   encodemux_inst : encodemux
     port map (
@@ -852,21 +862,21 @@ begin  -- Behavioral
       wait until rising_edge(CLK);
       event_data(i)(15 downto 8) := dout;
       wait until rising_edge(CLK);
-      event_data(i)(7 downto 0) := dout;
+      event_data(i)(7 downto 0)  := dout;
     end loop;  -- i 
     wait until rising_edge(clk);
     if esrc = 1 then
-      event_addr_a                    <= event_addr;
-      event_data_a                     <= event_data;
+      event_addr_a <= event_addr;
+      event_data_a <= event_data;
     elsif esrc = 2 then
-      event_addr_b                    <= event_addr;
-      event_data_b                     <= event_data;
+      event_addr_b <= event_addr;
+      event_data_b <= event_data;
     elsif esrc = 3 then
-      event_addr_c                    <= event_addr;
-      event_data_c                     <= event_data;
+      event_addr_c <= event_addr;
+      event_data_c <= event_data;
     elsif esrc = 4 then
-      event_addr_d                    <= event_addr;
-      event_data_d                     <= event_data;
+      event_addr_d <= event_addr;
+      event_data_d <= event_data;
     end if;
 
   end process event_recovery;
@@ -877,14 +887,17 @@ begin  -- Behavioral
 
     wait until rising_edge(CLK) and epos = 0;
     -- try and get initial event TX
-    assert event_data_a(0) = X"0800" report "errror with event_data_a" severity Error;
-    assert event_data_a(1) = X"1111" report "errror with event_data_a" severity Error;
-    assert event_data_a(2) = X"2222" report "errror with event_data_a" severity Error;
-    assert event_data_a(3) = X"3333" report "errror with event_data_a" severity Error;
-    assert event_data_a(4) = X"4444" report "errror with event_data_a" severity Error;
-    assert event_data_a(5) = X"5555" report "errror with event_data_a" severity Error;
+    assert event_data_a(0) = X"0800" report "errror with event_data_a" severity error;
+    assert event_data_a(1) = X"1111" report "errror with event_data_a" severity error;
+    assert event_data_a(2) = X"2222" report "errror with event_data_a" severity error;
+    assert event_data_a(3) = X"3333" report "errror with event_data_a" severity error;
+    assert event_data_a(4) = X"4444" report "errror with event_data_a" severity error;
+    assert event_data_a(5) = X"5555" report "errror with event_data_a" severity error;
 
-    
+
+    wait until rising_edge(CLK) and epos = 0;
+    wait until rising_edge(CLK) and epos = 0;
+    wait until rising_edge(CLK) and epos = 0;
     wait until rising_edge(CLK) and epos = 0;
     -- send a simple event
     dleventinputs(0)(0) <= X"0123";
@@ -911,11 +924,15 @@ begin  -- Behavioral
     dlEATXc(0)          <= '1';
     dlEATXd(0)          <= '0';
     wait until rising_edge(CLK) and epos = 0;
+    dleventinputs(0)(0) <= (others => '0'); 
+    dleventinputs(0)(1) <= (others => '0');
+    dleventinputs(0)(2) <= (others => '0'); 
+    
     dlEATXa             <= (others => '0');
     dlEATXb             <= (others => '0');
     dlEATXc             <= (others => '0');
     dlEATXd             <= (others => '0');
-    
+
     wait;
   end process event_transmission;
 end Behavioral;

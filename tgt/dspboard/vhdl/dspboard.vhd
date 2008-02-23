@@ -22,15 +22,44 @@ entity dspboard is
     LEDEVENTA : out std_logic;
     LEDEVENTB : out std_logic;
     LEDEVENTC : out std_logic;
-    LEDEVENTD : out std_logic; 
+    LEDEVENTD : out std_logic;
+
     -- DSP A
-    DSPRESETA : out std_logic;
+    DSPRESETA   : out std_logic;
+    DSPCLKA : out std_logic; 
+    DSPSPISSA   : out std_logic;
+    DSPSPIMISOA : in  std_logic;
+    DSPSPIMOSIA : out std_logic;
+    DSPSPICLKA  : out std_logic;
+    DSPSPIHOLDA : in  std_logic;
+
     -- DSP B
-    DSPRESETB : out std_logic;
+    DSPRESETB   : out std_logic;
+    DSPCLKB : out std_logic; 
+    DSPSPISSB   : out std_logic;
+    DSPSPIMISOB : in  std_logic;
+    DSPSPIMOSIB : out std_logic;
+    DSPSPICLKB  : out std_logic;
+    DSPSPIHOLDB : in  std_logic;
+
     -- DSP C
-    DSPRESETC : out std_logic;
+    DSPRESETC   : out std_logic;
+    DSPCLKC : out std_logic; 
+    DSPSPISSC   : out std_logic;
+    DSPSPIMISOC : in  std_logic;
+    DSPSPIMOSIC : out std_logic;
+    DSPSPICLKC  : out std_logic;
+    DSPSPIHOLDC : in  std_logic;
+
     -- DSP D
-    DSPRESETD : out std_logic; 
+    DSPRESETD   : out std_logic;
+    DSPCLKD : out std_logic; 
+    DSPSPISSD   : out std_logic;
+    DSPSPIMISOD : in  std_logic;
+    DSPSPIMOSID : out std_logic;
+    DSPSPICLKD  : out std_logic;
+    DSPSPIHOLDD : in  std_logic;
+
     -- FIBER INTERFACE
     FIBEROUTA : out std_logic;
     FIBEROUTB : out std_logic
@@ -235,13 +264,37 @@ architecture Behavioral of dspboard is
       DSPSPIMISO   : in  std_logic;
       DSPSPIMOSI   : out std_logic;
       DSPSPICLK    : out std_logic;
-      LEDEVENT : out std_logic
+      DSPSPIHOLD   : in  std_logic;
+      LEDEVENT     : out std_logic
       );
   end component;
 
-  signal dreq   : std_logic := '0'; 
-  signal dgrant : std_logic := '0'; 
-  signal ddone  : std_logic := '0'; 
+  component spimux
+    port (
+      CLK  : in std_logic;
+      ASEL : in std_logic;
+
+      SPISS    : out std_logic;
+      SPISCLK  : out std_logic;
+      SPIMOSI  : out std_logic;
+      SPIMISO  : in  std_logic;
+      -- A port
+      SPISSA   : in  std_logic;
+      SPISCLKA : in  std_logic;
+      SPIMOSIA : in  std_logic;
+      SPIMISOA : out std_logic;
+      -- B port
+      SPISSB   : in  std_logic;
+      SPISCLKB : in  std_logic;
+      SPIMOSIB : in  std_logic;
+      SPIMISOB : out std_logic
+      );
+  end component;
+
+
+  signal dreq   : std_logic := '0';
+  signal dgrant : std_logic := '0';
+  signal ddone  : std_logic := '0';
 
   signal edspreq   : std_logic_vector(3 downto 0) := (others => '0');
   signal edspgrant : std_logic_vector(3 downto 0) := (others => '0');
@@ -261,33 +314,54 @@ architecture Behavioral of dspboard is
   signal edspdatac : std_logic_vector(7 downto 0) := (others => '0');
   signal edspdatad : std_logic_vector(7 downto 0) := (others => '0');
 
-  signal devicea     : std_logic_vector(7 downto 0) := X"08";
-  signal dspspiena   : std_logic                    := '0';
-  signal dspspissa   : std_logic                    := '0';
-  signal dspspimisoa : std_logic                    := '0';
-  signal dspspimosia : std_logic                    := '0';
-  signal dspspiclka  : std_logic                    := '0';
+  signal devicea         : std_logic_vector(7 downto 0) := X"08";
+  signal procdspspiena   : std_logic                    := '0';
+  signal procdspspissa   : std_logic                    := '0';
+  signal procdspspimisoa : std_logic                    := '0';
+  signal procdspspimosia : std_logic                    := '0';
+  signal procdspspiclka  : std_logic                    := '0';
 
-  signal deviceb     : std_logic_vector(7 downto 0) := X"09"; 
-  signal dspspienb   : std_logic                    := '0';
-  signal dspspissb   : std_logic                    := '0';
-  signal dspspimisob : std_logic                    := '0';
-  signal dspspimosib : std_logic                    := '0';
-  signal dspspiclkb  : std_logic                    := '0';
+  signal dspissa   : std_logic := '0';
+  signal dspimisoa : std_logic := '0';
+  signal dspimosia : std_logic := '0';
+  signal dspiclka  : std_logic := '0';
 
-  signal devicec     : std_logic_vector(7 downto 0) := X"0A"; 
-  signal dspspienc   : std_logic                    := '0';
-  signal dspspissc   : std_logic                    := '0';
-  signal dspspimisoc : std_logic                    := '0';
-  signal dspspimosic : std_logic                    := '0';
-  signal dspspiclkc  : std_logic                    := '0';
+  signal deviceb         : std_logic_vector(7 downto 0) := X"09";
+  signal procdspspienb   : std_logic                    := '0';
+  signal procdspspissb   : std_logic                    := '0';
+  signal procdspspimisob : std_logic                    := '0';
+  signal procdspspimosib : std_logic                    := '0';
+  signal procdspspiclkb  : std_logic                    := '0';
+  signal dspissb         : std_logic                    := '0';
+  signal dspimisob       : std_logic                    := '0';
+  signal dspimosib       : std_logic                    := '0';
+  signal dspiclkb        : std_logic                    := '0';
 
-  signal deviced     : std_logic_vector(7 downto 0) := X"0B"; 
-  signal dspspiend   : std_logic                    := '0';
-  signal dspspissd   : std_logic                    := '0';
-  signal dspspimisod : std_logic                    := '0';
-  signal dspspimosid : std_logic                    := '0';
-  signal dspspiclkd  : std_logic                    := '0';
+
+  signal devicec         : std_logic_vector(7 downto 0) := X"0A";
+  signal procdspspienc   : std_logic                    := '0';
+  signal procdspspissc   : std_logic                    := '0';
+  signal procdspspimisoc : std_logic                    := '0';
+  signal procdspspimosic : std_logic                    := '0';
+  signal procdspspiclkc  : std_logic                    := '0';
+  signal dspissc         : std_logic                    := '0';
+  signal dspimisoc       : std_logic                    := '0';
+  signal dspimosic       : std_logic                    := '0';
+  signal dspiclkc        : std_logic                    := '0';
+
+
+
+  signal deviced         : std_logic_vector(7 downto 0) := X"0B";
+  signal procdspspiend   : std_logic                    := '0';
+  signal procdspspissd   : std_logic                    := '0';
+  signal procdspspimisod : std_logic                    := '0';
+  signal procdspspimosid : std_logic                    := '0';
+  signal procdspspiclkd  : std_logic                    := '0';
+  signal dspissd         : std_logic                    := '0';
+  signal dspimisod       : std_logic                    := '0';
+  signal dspimosid       : std_logic                    := '0';
+  signal dspiclkd        : std_logic                    := '0';
+
 
 
   signal ddata : std_logic_vector(7 downto 0) := (others => '0');
@@ -311,9 +385,9 @@ architecture Behavioral of dspboard is
   signal jtagtdo2    : std_logic := '0';
   signal jtagupdate  : std_logic := '0';
 
-  signal jtagout : std_logic_vector(63 downto 0) := (others => '0');
+  signal jtagout     : std_logic_vector(63 downto 0) := (others => '0');
   signal jtagwordout : std_logic_vector(47 downto 0) := (others => '0');
-  
+
 begin  -- Behavioral
 
 
@@ -351,7 +425,13 @@ begin  -- Behavioral
 
 
   REFCLKOUT <= REFCLKIN;
-  linkup <= not RESET;
+  linkup    <= not RESET;
+
+  DSPCLKA <= CLK;
+  DSPCLKB <= CLK;
+  DSPCLKC <= CLK;
+  DSPCLKD <= CLK;
+
   
   decodemux_inst : decodemux
     port map (
@@ -384,12 +464,30 @@ begin  -- Behavioral
       ESENDDATA  => eprocdataa,
       -- dsp interface
       DSPRESET   => DSPRESETA,
-      DSPSPIEN   => dspspiena,
-      DSPSPISS   => dspspissa,
-      DSPSPIMISO => dspspimisoa,
-      DSPSPIMOSI => dspspimosia,
-      DSPSPICLK  => dspspiclka,
-      LEDEVENT => LEDEVENTA);
+      DSPSPIEN   => procdspspiena,
+      DSPSPISS   => procdspspissa,
+      DSPSPIMISO => procdspspimisoa,
+      DSPSPIMOSI => procdspspimosia,
+      DSPSPICLK  => procdspspiclka,
+      DSPSPIHOLD => DSPSPIHOLDA,
+      LEDEVENT   => LEDEVENTA);
+
+  spimux_a : spimux
+    port map (
+      CLK      => CLK,
+      ASEL     => procdspspiena,
+      SPISS    => DSPSPISSA,
+      SPISCLK  => DSPSPICLKA,
+      SPIMOSI  => DSPSPIMOSIA,
+      SPIMISO  => DSPSPIMISOA,
+      SPISSA   => procdspspissa,
+      SPISCLKA => procdspspiclka,
+      SPIMOSIA => procdspspimosia,
+      SPIMISOA => procdspspimisoa,
+      SPISSB   => dspissa,
+      SPISCLKB => dspiclka,
+      SPIMOSIB => dspimosia,
+      SPIMISOB => dspimisoa);
 
   dspcontproc_b : dspcontproc
     port map (
@@ -405,65 +503,32 @@ begin  -- Behavioral
       ESENDDATA  => eprocdatab,
       -- dsp interface
       DSPRESET   => DSPRESETB,
-      DSPSPIEN   => dspspienb,
-      DSPSPISS   => dspspissb,
-      DSPSPIMISO => dspspimisob,
-      DSPSPIMOSI => dspspimosib,
-      DSPSPICLK  => dspspiclkb,
-      LEDEVENT => LEDEVENTB);
+      DSPSPIEN   => procdspspienb,
+      DSPSPISS   => procdspspissb,
+      DSPSPIMISO => procdspspimisob,
+      DSPSPIMOSI => procdspspimosib,
+      DSPSPICLK  => procdspspiclkb,
+      DSPSPIHOLD => DSPSPIHOLDB,
+      LEDEVENT   => LEDEVENTB);
 
-  process(CLK)
-    variable txacnt : std_logic_vector(7 downto 0) := (others => '0');
-    variable txbcnt : std_logic_vector(7 downto 0) := (others => '0');
-    variable txccnt : std_logic_vector(7 downto 0) := (others => '0');
-    variable txdcnt : std_logic_vector(7 downto 0) := (others => '0');
-    
-  begin
-    if rising_edge(clk) then
-      rxdatal <= rxdata;
-      rxkl    <= rxk;
+  spimux_b : spimux
+    port map (
+      CLK      => CLK,
+      ASEL     => procdspspienb,
+      SPISS    => DSPSPISSB,
+      SPISCLK  => DSPSPICLKB,
+      SPIMOSI  => DSPSPIMOSIB,
+      SPIMISO  => DSPSPIMISOB,
+      SPISSA   => procdspspissb,
+      SPISCLKA => procdspspiclkb,
+      SPIMOSIA => procdspspimosib,
+      SPIMISOA => procdspspimisob,
+      SPISSB   => dspissb,
+      SPISCLKB => dspiclkb,
+      SPIMOSIB => dspimosib,
+      SPIMISOB => dspimisob);
 
-      LEDPOWER <= decodeerrint; 
-      FIBEROUTA <= ecycle;
-      FIBEROUTB <= rxk;
 
-      if ecycle = '1' then
-        pos <= "0000000001";
-      else
-        pos <= pos + 1; 
-      end if;
-
-      if ecycle = '1' then 
-        jtagwordout(7 downto 0) <= edata; 
-      end if;
-
-      
-      
-      if txdata = X"1C" and txk = '1' then
-        txacnt := txacnt + 1;
-      end if; 
-        
-      if txdata = X"3C" and txk = '1' then
-        txbcnt := txbcnt + 1;
-      end if; 
-        
-      if txdata = X"5C" and txk = '1' then
-        txccnt := txccnt + 1;
-      end if; 
-        
-      if txdata = X"7C" and txk = '1' then
-        txdcnt := txdcnt + 1;
-      end if; 
-
-      jtagwordout(15 downto 8) <= txacnt; 
-      jtagwordout(23 downto 16) <= txbcnt; 
-      jtagwordout(31 downto 24) <= txccnt; 
-      jtagwordout(39 downto 32) <= txdcnt; 
-      
-      
-    end if;
-  end process;
-  
   dspcontproc_c : dspcontproc
     port map (
       CLK        => clk,
@@ -478,12 +543,31 @@ begin  -- Behavioral
       ESENDDATA  => eprocdatac,
       -- dsp interface
       DSPRESET   => DSPRESETC,
-      DSPSPIEN   => dspspienc,
-      DSPSPISS   => dspspissc,
-      DSPSPIMISO => dspspimisoc,
-      DSPSPIMOSI => dspspimosic,
-      DSPSPICLK  => dspspiclkc,
-      LEDEVENT => LEDEVENTC);
+      DSPSPIEN   => procdspspienc,
+      DSPSPISS   => procdspspissc,
+      DSPSPIMISO => procdspspimisoc,
+      DSPSPIMOSI => procdspspimosic,
+      DSPSPICLK  => procdspspiclkc,
+      DSPSPIHOLD => DSPSPIHOLDC,
+      LEDEVENT   => LEDEVENTC);
+
+  spimux_c : spimux
+    port map (
+      CLK      => CLK,
+      ASEL     => procdspspienc,
+      SPISS    => DSPSPISSC,
+      SPISCLK  => DSPSPICLKC,
+      SPIMOSI  => DSPSPIMOSIC,
+      SPIMISO  => DSPSPIMISOC,
+      SPISSA   => procdspspissc,
+      SPISCLKA => procdspspiclkc,
+      SPIMOSIA => procdspspimosic,
+      SPIMISOA => procdspspimisoc,
+      SPISSB   => dspissc,
+      SPISCLKB => dspiclkc,
+      SPIMOSIB => dspimosic,
+      SPIMISOB => dspimisoc);
+
 
   dspcontproc_d : dspcontproc
     port map (
@@ -499,12 +583,31 @@ begin  -- Behavioral
       ESENDDATA  => eprocdatad,
       -- dsp interface
       DSPRESET   => DSPRESETD,
-      DSPSPIEN   => dspspiend,
-      DSPSPISS   => dspspissd,
-      DSPSPIMISO => dspspimisod,
-      DSPSPIMOSI => dspspimosid,
-      DSPSPICLK  => dspspiclkd,
-      LEDEVENT => LEDEVENTD);
+      DSPSPIEN   => procdspspiend,
+      DSPSPISS   => procdspspissd,
+      DSPSPIMISO => procdspspimisod,
+      DSPSPIMOSI => procdspspimosid,
+      DSPSPICLK  => procdspspiclkd,
+      DSPSPIHOLD => DSPSPIHOLDD,
+      LEDEVENT   => LEDEVENTD);
+
+  spimux_d : spimux
+    port map (
+      CLK      => CLK,
+      ASEL     => procdspspiend,
+      SPISS    => DSPSPISSD,
+      SPISCLK  => DSPSPICLKD,
+      SPIMOSI  => DSPSPIMOSID,
+      SPIMISO  => DSPSPIMISOD,
+      SPISSA   => procdspspissd,
+      SPISCLKA => procdspspiclkd,
+      SPIMOSIA => procdspspimosid,
+      SPIMISOA => procdspspimisod,
+      SPISSB   => dspissd,
+      SPISCLKB => dspiclkd,
+      SPIMOSIB => dspimosid,
+      SPIMISOB => dspimisod);
+
 
   encodemux_inst : encodemux
     port map (
@@ -534,11 +637,11 @@ begin  -- Behavioral
   process(jtagDRCK1, clk)
   begin
     if jtagupdate = '1' then
-      jtagout   <= X"1234" & jtagwordout; 
+      jtagout    <= X"1234" & jtagwordout;
     else
       if rising_edge(jtagDRCK1) then
-        jtagout <= '0' & jtagout(63 downto 1);
-        jtagtdo1      <= jtagout(0);       
+        jtagout  <= '0' & jtagout(63 downto 1);
+        jtagtdo1 <= jtagout(0);
       end if;
 
     end if;
@@ -546,17 +649,68 @@ begin  -- Behavioral
 
   BSCAN_SPARTAN3_inst : BSCAN_SPARTAN3
     port map (
-      CAPTURE => jtagcapture,           -- CAPTURE output from TAP controller
-      DRCK1   => jtagdrck1,             -- Data register output for USER1 functions
-      DRCK2   => jtagDRCK2,             -- Data register output for USER2 functions
-      SEL1    => jtagSEL1,              -- USER1 active output
-      SEL2    => jtagSEL2,              -- USER2 active output
-      SHIFT   => jtagSHIFT,             -- SHIFT output from TAP controller
-      TDI     => jtagTDI,               -- TDI output from TAP controller
-      UPDATE  => jtagUPDATE,            -- UPDATE output from TAP controller
-      TDO1    => jtagtdo1,              -- Data input for USER1 function
-      TDO2    => jtagtdo2             -- Data input for USER2 function
+      CAPTURE                                                   => jtagcapture,  -- CAPTURE output from TAP controller
+      DRCK1                                                     => jtagdrck1,  -- Data register output for USER1 functions
+      DRCK2                                                     => jtagDRCK2,  -- Data register output for USER2 functions
+      SEL1                                                      => jtagSEL1,  -- USER1 active output
+      SEL2                                                      => jtagSEL2,  -- USER2 active output
+      SHIFT                                                     => jtagSHIFT,  -- SHIFT output from TAP controller
+      TDI                                                       => jtagTDI,  -- TDI output from TAP controller
+      UPDATE                                                    => jtagUPDATE,  -- UPDATE output from TAP controller
+      TDO1                                                      => jtagtdo1,  -- Data input for USER1 function
+      TDO2                                                      => jtagtdo2  -- Data input for USER2 function
       );
+  process(CLK)
+    variable txacnt   : std_logic_vector(7 downto 0) := (others => '0');
+    variable txbcnt   : std_logic_vector(7 downto 0) := (others => '0');
+    variable txccnt   : std_logic_vector(7 downto 0) := (others => '0');
+    variable txdcnt   : std_logic_vector(7 downto 0) := (others => '0');
+
+  begin
+    if rising_edge(clk) then
+      rxdatal <= rxdata;
+      rxkl    <= rxk;
+
+      LEDPOWER  <= decodeerrint;
+      FIBEROUTA <= ecycle;
+      FIBEROUTB <= rxk;
+
+      if ecycle = '1' then
+        pos <= "0000000001";
+      else
+        pos <= pos + 1;
+      end if;
+
+      if ecycle = '1' then
+        jtagwordout(7 downto 0) <= edata;
+      end if;
+
+
+
+      if txdata = X"1C" and txk = '1' then
+        txacnt := txacnt + 1;
+      end if;
+
+      if txdata = X"3C" and txk = '1' then
+        txbcnt := txbcnt + 1;
+      end if;
+
+      if txdata = X"5C" and txk = '1' then
+        txccnt := txccnt + 1;
+      end if;
+
+      if txdata = X"7C" and txk = '1' then
+        txdcnt := txdcnt + 1;
+      end if;
+
+      jtagwordout(15 downto 8)  <= txacnt;
+      jtagwordout(23 downto 16) <= txbcnt;
+      jtagwordout(31 downto 24) <= txccnt;
+      jtagwordout(39 downto 32) <= txdcnt;
+
+
+    end if;
+  end process;
 
 
 end Behavioral;

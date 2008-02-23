@@ -17,15 +17,42 @@ EVENTPROC_ADDR = 0x88
 
 OUTPUT_DSPRESET = 0x00
 OUTPUT_EVENTLED = 0x01
+OUTPUT_BOOTSERWE = 0x02
+OUTPUT_BOOTSTART = 0x03
+OUTPUT_SPISS = 0x04
+OUTPUT_SPIEN = 0x05
+
+INPUT_BOOTSERDONE = 0x03
+
+EVENTRXCMD_PING = 0x30
+EVENTRXCMD_LEDSET = 0x31
+EVENTRXCMD_DATABUF = 0x32
+EVENTRXCMD_DATABUFTX = 0x33
+EVENTRXCMD_DSPSPISS = 0x34
+EVENTRXCMD_DSPSPIEN = 0x35
 
 env = createEnvironment()
+counter = env.createVariable("counter")
+pendingDataBufTXSrc = env.createVariable("pendingDataBufTXSrc")
 
 # state variables are used for persistence across ECYCLEs
 
 def createEventCycleProc():
-  ecp = env.createECycleProc()
-  tmp = ecp.createVariable("tmp")
-  ecp.foreverLoop()
+  proc = env.createECycleProc()
+  tmp = proc.createVariable("tmp")
+  tmp2 = proc.createVariable("tmp2")
+  proc.load(tmp2, 0)
+  proc.add(tmp, tmp2)
+  proc.jz("ecycleproc_notx")
+  proc.output(EVENTOUT_DEST, env.pendingDataBufTXSrc)
+  proc.load(tmp, EVENTRXCMD_DATABUFTX)
+  proc.output(EVENTOUT_CMD, tmp)
+  
+  proc.load(env.pendingDataBufTXSrc, 0)
+  
+  proc.label("ecycleproc_notx")
+  proc.load(tmp, 10)
+  proc.foreverLoop()
 
 
 def createEnableEventCycleProc():
@@ -35,36 +62,75 @@ def createEnableEventCycleProc():
 
   newproc.load(y, 1)
   newproc.output(EVENTPROC_ENABLE, y)
+  newproc.foreverLoop()
 
 def pingResponseEvent():
-  proc = env.createEProc((0x20, 0x20), (0, 255))
-  tmp = env.createVariable("tmp")
+  proc = env.createEProc((EVENTRXCMD_PING, EVENTRXCMD_PING), (0, 255))
+  tmp = proc.createVariable("tmp")
+
   proc.move(tmp, ereg.src)
   proc.output(EVENTOUT_DEST, tmp)
 
+  proc.output(EVENTOUT_DATA1, env.counter)
+  proc.load(tmp, 1)
+  proc.add(env.counter, tmp)
+  
   proc.move(tmp, ereg.edata[0])
-  proc.output(EVENTOUT_DATA1, tmp)
+  proc.output(EVENTOUT_DATA0, tmp)
 
-  proc.load(tmp, 0xDEAD)
-  proc.output(EVENTOUT_DATA2, tmp)
-
-  proc.load(tmp, 0xBEEF)
-  proc.output(EVENTOUT_DATA3, tmp)
-
-  proc.load(tmp, 0x16)
+  proc.load(tmp, EVENTRXCMD_PING)
   proc.output(EVENTOUT_CMD, tmp)
+  proc.load(tmp, EVENTRXCMD_PING)
+
 
 def pingSetLT():
-  proc = env.createEProc((0x21, 0x21), (0, 255))
+  proc = env.createEProc((EVENTRXCMD_LEDSET, EVENTRXCMD_LEDSET ), (0, 255))
 
-  tmp = proc.createVariable("tmp2")
+  tmp = proc.createVariable("tmp")
   proc.move(tmp, ereg.edata[0])
   proc.output(OUTPUT_EVENTLED,  tmp)
+
+def proc_bootserwe():
+  proc = env.createEProc((EVENTRXCMD_DATABUF, EVENTRXCMD_DATABUF), (0, 255))
+
+  tmp = proc.createVariable("tmp")
+  proc.move(tmp, ereg.edata[0])
+  proc.output(OUTPUT_BOOTSERWE, tmp)
+  
+  proc.move(tmp, ereg.edata[1])
+  proc.output(OUTPUT_BOOTSERWE, tmp)
+  
+  proc.move(tmp, ereg.edata[2])
+  proc.output(OUTPUT_BOOTSERWE, tmp)
+  
+  proc.move(tmp, ereg.edata[3])
+  proc.output(OUTPUT_BOOTSERWE, tmp)
+
+def proc_databuftx():
+  proc = env.createEProc((EVENTRXCMD_DATABUFTX, EVENTRXCMD_DATABUFTX), (0, 255))
+  tmp = proc.createVariable("tmp")
+  proc.move(tmp, ereg.edata[0])
+  proc.output(OUTPUT_SPISS, tmp)
+  
+def proc_spiss():
+  proc = env.createEProc((EVENTRXCMD_DSPSPISS, EVENTRXCMD_DSPSPISS), (0, 255))
+  tmp = proc.createVariable("tmp")
+  proc.move(tmp, ereg.edata[0])
+  proc.output(OUTPUT_SPISS, tmp)
+
+def proc_spien():
+  proc = env.createEProc((EVENTRXCMD_DSPSPIEN, EVENTRXCMD_DSPSPIEN), (0, 255))
+  tmp = proc.createVariable("tmp")
+  proc.move(env.pendingDataBufTXSrc, ereg.src)
+  proc.output(OUTPUT_BOOTSTART, tmp)
+
 
 createEnableEventCycleProc()
 createEventCycleProc()
 pingResponseEvent()
 pingSetLT()
 
-proc = env.createProc("test")
-proc.foreverLoop()
+proc_bootserwe()
+proc_spiss()
+proc_spien()
+proc_databuftx()

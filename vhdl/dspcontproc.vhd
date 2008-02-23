@@ -108,8 +108,9 @@ entity dspcontproc is
     DSPSPIMISO   : in  std_logic;
     DSPSPIMOSI   : out std_logic;
     DSPSPICLK    : out std_logic;
+    DSPSPIHOLD   : in  std_logic;
     -- STATUS
-    LEDEVENT : out std_logic
+    LEDEVENT     : out std_logic
     );
 end dspcontproc;
 
@@ -134,7 +135,22 @@ architecture Behavioral of dspcontproc is
   signal enewout, enewoutl, enewoutd : std_logic := '0';
 
   signal lledevent : std_logic := '0';
-  
+
+  component bootser
+    port ( CLK   : in  std_logic;
+           DIN   : in  std_logic_vector(15 downto 0);
+           WE    : in  std_logic;
+           START : in  std_logic;
+           DONE  : out std_logic;
+           MOSI  : out std_logic;
+           HOLD  : in  std_logic;
+           SCLK  : out std_logic
+           );
+  end component;
+
+  signal bootserwe    : std_logic := '0';
+  signal bootserstart : std_logic := '0';
+  signal bootserdone  : std_logic := '0';
 
 begin  -- Behavioral
 
@@ -144,7 +160,7 @@ begin  -- Behavioral
       CLKHI       => CLKHI,
       RESET       => RESET,
       EDTX        => EDRX,
-      EATX        => earxl(77 downto 0),
+      EATX        => earx(77 downto 0),
       EAOUT       => eaout,
       EDOUT       => edout,
       ENEWOUT     => enewout,
@@ -171,7 +187,17 @@ begin  -- Behavioral
       SENDDONE  => ESENDDONE,
       DOUT      => ESENDDATA);
 
-
+  bootser_inst : bootser
+    port map (
+      CLK   => CLK,
+      DIN   => oportdata,
+      WE    => bootserwe,
+      START => bootserstart,
+      DONE  => bootserdone,
+      MOSI  => DSPSPIMOSI,
+      --MISO => DSPSPIMISO,
+      HOLD  => DSPSPIHOLD,
+      SCLK  => DSPSPICLK);
 
   instruction_ram : RAMB16_S18_S18
     generic map (
@@ -272,34 +298,41 @@ begin  -- Behavioral
       WEB   => '0',
       SSRB  => RESET);
 
+  bootserwe <= '1' when oportaddr = X"02" and oportstrobe = '1' else '0';
+  bootserstart <= '1' when oportaddr = X"03" and oportstrobe = '1' else '0';
+    
+
   main : process(CLKHI)
   begin
     if rising_edge(CLkHI) then
       if oportaddr = X"00" and OPORTSTROBE = '1' then
-        DSPRESET <= oportdata(0);
+        DSPRESET  <= oportdata(0);
       elsif oportaddr = X"01" and OPORTSTROBE = '1' then
-        lledevent <= oportdata(0); 
+        lledevent <= oportdata(0);
+      elsif oportaddr = X"04" and OPORTSTROBE = '1' then
+        DSPSPISS <= oportdata(0);
+      elsif oportaddr = X"05" and OPORTSTROBE = '1' then
+        DSPSPIEN <= oportdata(0);
       end if;
-      LEDEVENT <= lledevent; 
-      enewoutl <= enewout;
+
+      if iportstrobe = '1'  then
+        if iportaddr = X"03" then
+          iportdata(0) <= bootserdone; 
+        end if;
+      end if;
+            
+      LEDEVENT    <= lledevent;
+      
+      enewoutl    <= enewout;
+      enewoutd  <= enewoutl or enewout;       
       if enewout = '1' then
-        edoutl <= edout;
-        eaoutl <= eaout;
+        edoutl    <= edout;
+        eaoutl    <= eaout;
       end if;
+
     end if;
 
   end process main;
 
-  process (CLK)
-  begin
-    if rising_edge(CLK) then
-      earxl      <= EARX;
-      if enewoutl = '1' or enewout = '1' then
-        enewoutd <= '1';
-      else
-        enewoutd <= '0';
-      end if;
-    end if;
-  end process;
 
 end Behavioral;
