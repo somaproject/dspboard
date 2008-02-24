@@ -687,26 +687,26 @@ begin  -- Behavioral
 
 
 
-      if txdata = X"1C" and txk = '1' then
-        txacnt := txacnt + 1;
-      end if;
+--       if txdata = X"1C" and txk = '1' then
+--         txacnt := txacnt + 1;
+--       end if;
 
-      if txdata = X"3C" and txk = '1' then
-        txbcnt := txbcnt + 1;
-      end if;
+--       if txdata = X"3C" and txk = '1' then
+--         txbcnt := txbcnt + 1;
+--       end if;
 
-      if txdata = X"5C" and txk = '1' then
-        txccnt := txccnt + 1;
-      end if;
+--       if txdata = X"5C" and txk = '1' then
+--         txccnt := txccnt + 1;
+--       end if;
 
-      if txdata = X"7C" and txk = '1' then
-        txdcnt := txdcnt + 1;
-      end if;
+--       if txdata = X"7C" and txk = '1' then
+--         txdcnt := txdcnt + 1;
+--       end if;
 
-      jtagwordout(15 downto 8)  <= txacnt;
-      jtagwordout(23 downto 16) <= txbcnt;
-      jtagwordout(31 downto 24) <= txccnt;
-      jtagwordout(39 downto 32) <= txdcnt;
+--       jtagwordout(15 downto 8)  <= txacnt;
+--       jtagwordout(23 downto 16) <= txbcnt;
+--       jtagwordout(31 downto 24) <= txccnt;
+--       jtagwordout(39 downto 32) <= txdcnt;
 
 
     end if;
