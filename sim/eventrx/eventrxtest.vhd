@@ -1,10 +1,8 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
-use IEEE.STD_LOGIC_ARITH.all;
+--use IEEE.STD_LOGIC_ARITH.all;
 use IEEE.STD_LOGIC_UNSIGNED.all;
-
 use ieee.numeric_std.all;
-
 
 library UNISIM;
 use UNISIM.VComponents.all;
@@ -18,32 +16,36 @@ architecture Behavioral of eventrxtest is
   component eventrx
     port (
       CLK      : in  std_logic;
+      RESET    : in  std_logic;
       SCLK     : in  std_logic;
-      SDIN     : in  std_logic;
+      MOSI     : in  std_logic;
       SCS      : in  std_logic;
+      FIFOFULL : out std_logic;
       DOUT     : out std_logic_vector(7 downto 0);
-      ADDROUT  : in  std_logic_vector(4 downto 0);
-      NEXTFIFO : in  std_logic;
-      VALID    : out std_logic);
+      REQ      : out  std_logic;
+      GRANT    : in  std_logic);
   end component;
 
-
   signal CLK      : std_logic                    := '0';
+  signal RESET    : std_logic                    := '0';
   signal SCLK     : std_logic                    := '0';
-  signal SDIN     : std_logic                    := '0';
+  signal MOSI     : std_logic                    := '0';
   signal SCS      : std_logic                    := '0';
+  signal FIFOFULL : std_logic                    := '0';
   signal DOUT     : std_logic_vector(7 downto 0) := (others => '0');
-  signal ADDROUT  : std_logic_vector(4 downto 0) := (others => '0');
-  signal NEXTFIFO : std_logic                    := '0';
-  signal VALID    : std_logic                    := '0';
+
+  signal REQ   : std_logic := '0';
+  signal GRANT : std_logic := '0';
 
 
-  signal dataword : std_logic_vector(15 downto 0) := (others => '0');
-  signal sendword : std_logic                     := '0';
+  type dataword_t is array (0 to 10) of std_logic_vector(15 downto 0 );
 
-  signal expected  : std_logic_Vector(7 downto 0) := (others => '0');
+  signal txwords, txwordsa, txwordsb   : dataword_t := (others => (others => '0'));
+  signal sendevent : std_logic  := '0';
+  signal sendeventdone : std_logic  := '0';
 
-  
+  signal recoverdwords : dataword_t := (others => (others => '0'));
+
 begin  -- Behavioral
 
 
@@ -52,94 +54,179 @@ begin  -- Behavioral
   eventrx_uut : eventrx
     port map (
       CLK      => CLK,
+      RESET    => RESET,
       SCLK     => SCLK,
-      SDIN     => SDIN,
+      MOSI     => MOSI,
       SCS      => SCS,
+      FIFOFULL => FIFOFULL,
       DOUT     => DOUT,
-      ADDROUT  => ADDROUT,
-      NEXTFIFO => NEXTFIFO,
-      VALID    => VALID);
+      REQ      => REQ,
+      GRANT    => GRANT);
+
+
 
   writedata : process
   begin
     while true loop
-      SCS    <= '1';
-      wait until rising_edge(CLK) and sendword = '1';
-      SCS    <= '0';
-      wait until rising_edge(CLK);
-      for i in 15 downto 0 loop
-        SCLK <= '0';
-        SDIN <= dataword(i);
+      SCS      <= '1';
+      wait until rising_edge(sendevent);
+      for word in 0 to 10 loop
+        SCS    <= '1';
+        wait for 500 ns;
         wait until rising_edge(CLK);
-        SCLK <= '1';
-        SDIN <= dataword(i);
         wait until rising_edge(CLK);
-      end loop;  -- i
+        SCS    <= '0';
+        wait until rising_edge(CLK);
+        wait until rising_edge(CLK);
+        wait until rising_edge(CLK);
+        for i in 15 downto 0 loop
+          SCLK <= '0';
+          MOSI <= txwords(word)(i);
+          wait until rising_edge(CLK);
+          wait until rising_edge(CLK);
+          wait until rising_edge(CLK);
+          SCLK <= '1';
+          MOSI <= txwords(word)(i);
+          wait until rising_edge(CLK);
+          wait until rising_edge(CLK);
+          wait until rising_edge(CLK);
+        end loop;  -- i
+        wait until rising_edge(CLK);
+        wait until rising_edge(CLK);
+        SCS    <= '1';
+        wait until rising_edge(CLK);
+      end loop;  -- word
       wait until rising_edge(CLK);
-      SCS    <= '1';
       wait until rising_edge(CLK);
+      wait until rising_edge(CLK);
+      wait until rising_edge(CLK);
+      
+      sendeventdone <= '1';
+      wait until rising_edge(CLK);
+      sendeventdone <= '0';
+
+      
     end loop;
   end process writedata;
 
-  main : process
-  begin
-    for j in 0 to 7 loop
 
-
-      wait for 10 us;
-      wait until rising_edge(CLK);
-      -- send word
-      for i in 0 to 21 loop
-        wait until rising_edge(CLK);
-        dataword <= std_logic_vector(TO_UNSIGNED(i, 8))
-                    & std_logic_vector(TO_UNSIGNED(j, 3))
-                    & std_logic_vector(TO_UNSIGNED(i, 5));
-        sendword <= '1';
-        wait until rising_edge(CLK);
-        sendword <= '0';
-        wait until rising_edge(CLK);
-        wait until rising_edge(SCS);
-
-      end loop;  -- i
-
-      wait until rising_edge(CLK);
-      dataword <= X"8000";
-      sendword <= '1';
-      wait until rising_edge(CLK);
-      sendword <= '0';
-
-    end loop;  -- j
-
-  end process main;
-
-
-  -- readout
-  validate : process
-  begin
-    for j in 0 to 7 loop
-
-      wait until rising_edge(CLK) and VALID = '1';
-      for i in 0 to 21 loop
-        ADDROUT <= std_logic_vector(TO_UNSIGNED(i, 5));
-        wait until rising_edge(CLK);
-        wait for 1 ns;
-        
-        expected <= 
-          (std_logic_vector(TO_UNSIGNED(j, 3)) &
-           std_logic_vector(TO_UNSIGNED(i, 5)));
-        wait for 2 ns;
-        assert expected = dout report "Error reading byte" severity Error;
-      end loop;  -- i
-      wait until rising_edge(CLK) and VALID = '1';
-      NExTFIFO <= '1' ;
-      wait until rising_edge(CLK);
-      NEXTFIFO <= '0'; 
-      
-    end loop;  -- j
-
-    report "End of Simulation" severity Failure;
+  main: process
+    variable recoveredword : std_logic_vector(15 downto 0) := (others => '0');
     
+    begin
+      ---------------------------------------------------------------------
+      -- Transmit first event
+      --------------------------------------------------------------------
+      wait for 10 us;
+      for i in 0 to 10 loop
+        txwords(i) <= X"AB" & std_logic_vector(TO_UNSIGNED(i,8));
+      end loop;  -- i      
+      wait until rising_edge(CLK);
+      sendevent <= '1'; 
+      wait until rising_edge(CLK);
+      sendevent <= '0'; 
 
-  end process validate; 
+      wait until rising_edge(REQ);
+      wait until rising_edge(sendeventdone); 
+      wait until rising_edge(CLK);
+      GRANT <= '1' ;
+      wait until rising_edge(CLK);
+      
+      for i in 0 to 10 loop
+        wait until rising_edge(CLK);
+        recoveredword(15 downto 8) := DOUT;
+        GRANT <= '0'; 
+        wait until rising_edge(CLK);
+        recoveredword(7 downto 0) := DOUT;
+        recoverdwords(i) <= recoveredword;
+      end loop;  -- i
+
+      -- check
+      wait until rising_edge(CLK);
+      
+      for i in 0 to 10 loop
+        assert recoverdwords(i) = txwords(i)
+          report "Error reading recoverdwords " & integer'image(i) severity Error;
+      end loop;  -- i
+      
+      ---------------------------------------------------------------------
+      -- Transmit two events, check fifo
+      --------------------------------------------------------------------
+      wait for 10 us;
+      for i in 0 to 10 loop
+        txwordsA(i) <= X"12" & std_logic_vector(TO_UNSIGNED(i,8));
+        txwordsB(i) <= X"34" & std_logic_vector(TO_UNSIGNED(i,8));
+      end loop;  -- i
+      wait until rising_edge(CLK);
+      wait until rising_edge(CLK);      
+      txwords <= txwordsA; 
+      wait until rising_edge(CLK);
+      sendevent <= '1'; 
+      wait until rising_edge(CLK);
+      sendevent <= '0'; 
+      wait until rising_edge(sendeventdone); 
+      
+      txwords <= txwordsB; 
+      wait until rising_edge(CLK);
+      sendevent <= '1'; 
+      wait until rising_edge(CLK);
+      sendevent <= '0'; 
+      wait until rising_edge(sendeventdone); 
+      assert FIFOFULL = '1' report "Fifofull not asserted" severity Error;
+      -- first read
+      wait until rising_edge(CLK) and REQ = '1'; 
+      wait for 1 us;
+      wait until rising_edge(CLK);
+      GRANT <= '1' ;
+      wait until rising_edge(CLK);
+      
+      for i in 0 to 10 loop
+        wait until rising_edge(CLK);
+        recoveredword(15 downto 8) := DOUT;
+        GRANT <= '0'; 
+        wait until rising_edge(CLK);
+        recoveredword(7 downto 0) := DOUT;
+        recoverdwords(i) <= recoveredword;
+      end loop;  -- i
+
+      -- check
+      wait until rising_edge(CLK);
+      
+      for i in 0 to 10 loop
+        assert recoverdwords(i) = txwordsA(i)
+          report "Error reading recoverdwords for txwordsA " & integer'image(i) severity Error;
+      end loop;  -- i
+      
+
+      -- second read
+      wait until rising_edge(CLK) and REQ = '1'; 
+
+      wait for 1 us;
+      wait until rising_edge(CLK);
+      GRANT <= '1' ;
+      wait until rising_edge(CLK);
+      
+      for i in 0 to 10 loop
+        wait until rising_edge(CLK);
+        recoveredword(15 downto 8) := DOUT;
+        GRANT <= '0'; 
+        wait until rising_edge(CLK);
+        recoveredword(7 downto 0) := DOUT;
+        recoverdwords(i) <= recoveredword;
+      end loop;  -- i
+
+      -- check
+      wait until rising_edge(CLK);
+      
+      for i in 0 to 10 loop
+        assert recoverdwords(i) = txwords(i)
+          report "Error reading recoverdwords for txwordsB " & integer'image(i) severity Error;
+      end loop;  -- i
+
+      report "End of Simulation" severity Failure;
+      
+      wait; 
+    end process;
+    
 
 end Behavioral;

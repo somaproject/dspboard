@@ -1,2 +1,11 @@
-A basic simple test of the eventRX interface. 
+Test of the EventRX interface, simulating events being sent
+from the DSP to the FPGA. 
+
+Things to check: 
+
+1. can we send an event and read it out
+2. can we send two events in rapid succession and read them out. 
+3. Can we send two events, not read them out, and have FIFOFULL properly
+asserted? 
+
 
