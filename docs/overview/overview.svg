@@ -8,9 +8,9 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   sodipodi:docname="overview.2.svg"
-   sodipodi:docbase="/home/jonas/soma/DSPboard/docs/overview"
-   inkscape:version="0.43+0.44pre2"
+   sodipodi:docname="overview.svg"
+   sodipodi:docbase="/home/jonas/soma/dspboard/docs/overview"
+   inkscape:version="0.44.1"
    sodipodi:version="0.32"
    id="svg1996"
    height="792.00000pt"
@@ -1137,7 +1137,7 @@
          id="tspan5503">BF533</tspan></text>
     <g
        id="g5505"
-       transform="translate(-462.5,137.5)">
+       transform="translate(-462.5,75)">
       <rect
          y="146.25"
          x="609.375"
@@ -1179,7 +1179,7 @@
          y="153.82098">SPORT1</tspan></text>
     <g
        id="g5519"
-       transform="translate(-462.5,74.94421)">
+       transform="translate(-462.5,137.5)">
       <rect
          y="146.30579"
          x="609.375"

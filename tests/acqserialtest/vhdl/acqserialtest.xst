@@ -7,7 +7,7 @@ run
 -ofmt NGC
 -p xc3s400-4-ft256
 -top acqserialtest
--opt_mode Area
+-opt_mode Speed
 -opt_level 2
 -iuc NO
 -keep_hierarchy NO
@@ -16,7 +16,7 @@ run
 -read_cores YES
 -write_timing_constraints NO
 -cross_clock_analysis NO
--hierarchy_separator _
+-hierarchy_separator /
 -bus_delimiter <>
 -case maintain
 -slice_utilization_ratio 100
@@ -41,8 +41,8 @@ run
 -max_fanout 500
 -bufg 8
 -register_duplication YES
--equivalent_register_removal YES
--register_balancing No
+-equivalent_register_removal NO
+-register_balancing YES
 -slice_packing YES
 -optimize_primitives NO
 -use_clock_enable Yes

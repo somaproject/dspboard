@@ -82,7 +82,7 @@ architecture Behavioral of acqserialtest is
       CLKIN        : in  std_logic;
       RXDATA       : out std_logic_vector(31 downto 0) := (others => '0');
       RXCMD        : out std_logic_vector(3 downto 0);
-      rxcmdid : out std_logic_vector(3 downto 0); 
+      rxcmdid      : out std_logic_vector(3 downto 0);
       RXCHKSUM     : out std_logic_vector(7 downto 0);
       FIBEROUT     : out std_logic;
       FIBERIN      : in  std_logic;
@@ -113,7 +113,7 @@ begin  -- Behavioral
       FIBERIN      => FIBEROUT,
       RXDATA       => RXDATA,
       RXCMD        => RXCMD,
-      RXCMDID => RXCMDID, 
+      RXCMDID      => RXCMDID,
       RXCHKSUM     => RXCHKSUM,
       TXCMDSTS     => TXCMDSTS,
       TXCMDSUCCESS => TXCMDSUCCESS,
@@ -168,8 +168,8 @@ begin  -- Behavioral
   end process;
 
   -- dspa transmit test
-  dspadataout(19 downto 16)   <= dspacmdout;
-  dspadataout(23 downto 20)   <= dspacmdidout;
+  dspadataout(19 downto 16) <= dspacmdout;
+  dspadataout(23 downto 20) <= dspacmdidout;
   dspadataout(39 downto 32) <= dspadata0out;
 
   -----------------------------------------------------------------------------
@@ -195,8 +195,8 @@ begin  -- Behavioral
   end process;
 
   -- dspb transmit test
-  dspbdataout(19 downto 16)   <= dspbcmdout;
-  dspbdataout(23 downto 20)   <= dspbcmdidout;
+  dspbdataout(19 downto 16) <= dspbcmdout;
+  dspbdataout(23 downto 20) <= dspbcmdidout;
   dspbdataout(39 downto 32) <= dspbdata0out;
 
   -------------------------------------------------------------------------------
@@ -208,7 +208,7 @@ begin  -- Behavioral
   begin
     for i in 0 to 7 loop
       wait until rising_edge(clk) and dspabitpos = 256;
-      dspacmdout <= X"1"; 
+      dspacmdout <= X"1";
 
       dspacmdidout <= std_logic_vector(TO_UNSIGNED(i*2+1, 4));
       dspadata0out <= X"FE";
@@ -217,11 +217,11 @@ begin  -- Behavioral
       dspacmdout   <= X"0";
 
       wait until rising_edge(clk) and dspabitpos = 256 and
-        dspadatain(11 downto 8) = std_logic_vector(TO_UNSIGNED(i*2+1, 4)); 
+        dspadatain(11 downto 8) = std_logic_vector(TO_UNSIGNED(i*2+1, 4));
       report "Successful read of A event";
     end loop;  -- i
-    
 
+    report "end of simulation" severity Failure;
     wait;
 
   end process;
@@ -235,7 +235,7 @@ begin  -- Behavioral
   begin
     for i in 0 to 6 loop
       wait until rising_edge(clk) and dspbbitpos = 256;
-      dspbcmdout <= X"1"; 
+      dspbcmdout <= X"1";
 
       dspbcmdidout <= std_logic_vector(TO_UNSIGNED(i*2+2, 4));
       dspbdata0out <= X"FE";
@@ -244,18 +244,18 @@ begin  -- Behavioral
       dspbcmdout   <= X"0";
 
       wait until rising_edge(clk) and dspbbitpos = 256 and
-        dspbdatain(11 downto 8) = std_logic_vector(TO_UNSIGNED(i*2+2, 4)); 
+        dspbdatain(11 downto 8) = std_logic_vector(TO_UNSIGNED(i*2+2, 4));
       report "Successful read a B event";
       wait for 3 us;
 
-      
+
     end loop;  -- i
-    
+
 
     wait;
 
   end process;
 
   -- generic output verify
-  
+
 end Behavioral;

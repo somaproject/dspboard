@@ -32,6 +32,8 @@ entity dspboard is
     DSPSPIMOSIA : out std_logic;
     DSPSPICLKA  : out std_logic;
     DSPSPIHOLDA : in  std_logic;
+    DSPFLAG1A : in std_logic;
+    DSPFLAG4A : in std_logic; 
 
     -- DSP B
     DSPRESETB   : out std_logic;
@@ -41,6 +43,8 @@ entity dspboard is
     DSPSPIMOSIB : out std_logic;
     DSPSPICLKB  : out std_logic;
     DSPSPIHOLDB : in  std_logic;
+    DSPFLAG1B : in std_logic;
+    DSPFLAG4B : in std_logic; 
 
     -- DSP C
     DSPRESETC   : out std_logic;
@@ -50,6 +54,8 @@ entity dspboard is
     DSPSPIMOSIC : out std_logic;
     DSPSPICLKC  : out std_logic;
     DSPSPIHOLDC : in  std_logic;
+    DSPFLAG1C : in std_logic;
+    DSPFLAG4C : in std_logic; 
 
     -- DSP D
     DSPRESETD   : out std_logic;
@@ -59,6 +65,8 @@ entity dspboard is
     DSPSPIMOSID : out std_logic;
     DSPSPICLKD  : out std_logic;
     DSPSPIHOLDD : in  std_logic;
+    DSPFLAG1D : in std_logic;
+    DSPFLAG4D : in std_logic; 
 
     -- FIBER INTERFACE
     FIBEROUTA : out std_logic;

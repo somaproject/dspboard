@@ -1,48 +1,62 @@
+##############################################################
+#
+# Xilinx Core Generator version J.40
+# Date: Sun Feb 24 19:39:35 2008
+#
+##############################################################
+#
+#  This file contains the customisation parameters for a
+#  Xilinx CORE Generator IP GUI. It is strongly recommended
+#  that you do not manually alter this file as it may cause
+#  unexpected and unsupported behavior.
+#
+##############################################################
+#
 # BEGIN Project Options
-SET flowvendor = Foundation_iSE
-SET vhdlsim = True
-SET verilogsim = True
-SET workingdirectory = /home/jonas/soma/DSPboard/sim/decoder/tmp
-SET speedgrade = -6
-SET simulationfiles = Behavioral
-SET asysymbol = True
 SET addpads = False
-SET device = xc2s15
-SET implementationfiletype = Edif
+SET asysymbol = True
 SET busformat = BusFormatAngleBracketNotRipped
-SET foundationsym = False
-SET package = cs144
 SET createndf = False
 SET designentry = VHDL
+SET device = xc2s15
 SET devicefamily = Spartan2
+SET flowvendor = Foundation_iSE
 SET formalverification = False
+SET foundationsym = False
+SET implementationfiletype = Edif
+SET package = cs144
 SET removerpms = False
+SET simulationfiles = Behavioral
+SET speedgrade = -6
+SET verilogsim = True
+SET vhdlsim = True
 # END Project Options
 # BEGIN Select
 SELECT Decode_8b/10b family Xilinx,_Inc. 5.0
 # END Select
 # BEGIN Parameters
-CSET symbol_disparity_out=false
-CSET b_new_data=false
-CSET synchronous_reset=false
-CSET running_disparity_in=false
-CSET clock_enable=true
-CSET running_disparity_out=false
-CSET b_synchronous_reset=false
-CSET new_data=false
-CSET b_symbol_disparity_out=false
-CSET secondary_decoder=false
-CSET component_name=decode8b10b
-CSET synchronous_reset_value=D_0_0_pos
-CSET b_disparity_violation_out=false
-CSET implementation=LUT_Based
-CSET disparity_violation_out=true
 CSET b_clock_enable=false
 CSET b_code_violation_out=false
-CSET b_running_disparity_out=false
-CSET code_violation_out=true
-CSET b_synchronous_reset_value=B_D_0_0_pos
+CSET b_disparity_violation_out=false
+CSET b_new_data=false
 CSET b_running_disparity_in=false
+CSET b_running_disparity_out=false
+CSET b_symbol_disparity_out=false
+CSET b_synchronous_reset=false
+CSET b_synchronous_reset_value=B_D_0_0_pos
+CSET clock_enable=true
+CSET code_violation_out=true
+CSET component_name=decode8b10b
+CSET disparity_violation_out=true
+CSET implementation=LUT_Based
+CSET new_data=false
+CSET running_disparity_in=false
+CSET running_disparity_out=false
+CSET secondary_decoder=false
+CSET symbol_disparity_out=false
+CSET synchronous_reset=false
+CSET synchronous_reset_value=D_0_0_pos
 # END Parameters
 GENERATE
+# CRC: 2bace162
 

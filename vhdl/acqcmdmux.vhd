@@ -35,12 +35,11 @@ architecture Behavioral of acqcmdmux is
   signal osel : integer range 0 to 2 := 0;
   
   signal cs, ns : states := none;
-  
+
+  signal lsendcmd : std_logic := '0';
+
 begin  -- Behavioral
 
-  CMDOUT <= cmdinall when osel = 0 else
-            cmdinbll when osel = 1 else
-            (others => '0'); 
   
   main: process(CLK, LINKUP)
     begin
@@ -57,6 +56,14 @@ begin  -- Behavioral
         if rising_edge(CLK) then
           cs <= ns;
 
+          SENDCMD <= lsendcmd;
+          
+          if osel = 0 then
+            CMDOUT <= cmdinall;
+          elsif osel = 1 then
+            CMDOUT <=cmdinbll;
+          end if;
+          
           if NEWCMDS = '1' then
             cmdinal <= CMDINA;
             cmdinbl <= CMDINB; 
@@ -81,7 +88,8 @@ begin  -- Behavioral
               newcmdbl <= '0'; 
             end if;
           end if;
-          
+
+
         end if;
       end if;
 
@@ -93,7 +101,7 @@ begin  -- Behavioral
         case cs is
           when none =>
             osel <= 0;
-            SENDCMD <= '0';
+            lsendcmd <= '0';
             if LINKUP = '0' then
               ns <= linkwait;
             else
@@ -101,7 +109,7 @@ begin  -- Behavioral
             end if;
           when linkwait =>
             osel <= 2;
-            SENDCMD <= '0';
+            lsendcmd <= '0';
             if LINKUP = '1' then
               ns <= sendsync;
             else
@@ -110,12 +118,12 @@ begin  -- Behavioral
             
           when sendsync =>
             osel <= 2;
-            SENDCMD <= '1';
+            lsendcmd <= '1';
             ns <= none;
             
           when checka =>
             osel <= 0;
-            SENDCMD <= '0';
+            lsendcmd <= '0';
             if newcmdal = '1' then
               ns <= senda;
             else
@@ -124,12 +132,12 @@ begin  -- Behavioral
 
           when senda =>
             osel <= 0;
-            sendcmd <= '1';
+            lsendcmd <= '1';
             ns <= waita;
 
           when waita =>
             osel <= 0;
-            sendcmd <= '0';
+            lsendcmd <= '0';
             if cmdid = cmdinall(7 downto 4)  then
               ns <= donea;
             else
@@ -138,12 +146,12 @@ begin  -- Behavioral
 
           when donea =>
             osel <= 0;
-            sendcmd <= '0';
+            lsendcmd <= '0';
             ns <= checkb; 
             
           when checkb =>
             osel <= 1;
-            SENDCMD <= '0';
+            lsendcmd <= '0';
             if newcmdbl = '1' then
               ns <= sendb;
             else
@@ -152,12 +160,12 @@ begin  -- Behavioral
 
           when sendb =>
             osel <= 1;
-            sendcmd <= '1';
+            lsendcmd <= '1';
             ns <= waitb;
 
           when waitb =>
             osel <= 1;
-            sendcmd <= '0';
+            lsendcmd <= '0';
             if cmdid = cmdinbll(7 downto 4)  then
               ns <= doneb;
             else
@@ -166,12 +174,12 @@ begin  -- Behavioral
 
           when doneb =>
             osel <= 1;
-            sendcmd <= '0';
+            lsendcmd <= '0';
             ns <= none; 
             
           when others =>
             osel <= 0;
-            sendcmd <= '0';
+            lsendcmd <= '0';
             ns <= none; 
             
         end case;
