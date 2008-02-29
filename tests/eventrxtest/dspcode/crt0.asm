@@ -34,7 +34,8 @@ start:
 	sp.h = 0xFFB0;		//Set up supervisor stack in scratch pad
 	sp.l = 0x0400;
 	fp = sp;
-	
+
+
 ////////////////////////////////////////////////////////////////////////////
 // PLL and clock setups
 //
@@ -177,7 +178,6 @@ wait:
 
 call_main:
 
-	
 	// enable the cycle counter
 	r2 = 0;
 	cycles = r2;
@@ -185,9 +185,9 @@ call_main:
 	r2 = syscfg;
 	bitset(r2, 1);
 	syscfg = r2;
-
 	
 	[--sp] = reti;  // pushing RETI allows interrupts to occur inside all main routines
+
 	
 	p0.l = _main;
 	p0.h = _main;

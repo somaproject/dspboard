@@ -1,0 +1,34 @@
+The EventRX Interface receives events from the DSP to place onto the
+EventBus via the DSP's SPI interface operating in SPI MASTER mode.
+Note that because we boot the DSP via SPI, we must mux access to the
+actual SPI interface, which is done via the spimux component. 
+
+We need our design to be small, so we're using distram to store the
+inbound data. We thus perform minimal buffering, and rely on the DSP
+itself to queue events. The DSP should always rate-limit its event
+transmission to at most one per ecycle. On top of that, sometimes the
+dspcontproc might wish to send an event, and so the DSP will
+potentially be denied on a given ECYCLE. But once the DSP begins
+transmitting an event, it takes roughly a full ECYCLE due to the slow
+speed of the SPI interface. 
+
+The timing would look something like this:
+
+  ECYCLE                 ECYCLE             ECYCLE               ECYCLE
+    |                      |                  |                    |
+DSP  SEND EVENT ----------> 
+FPGA                        Actually TX EVENT
+
+So to enable full throughput the queue must be double-buffered.
+
+We then use a FLAG to indicate FIFOFULL status. 
+
+Interface: 
+
+Data is transmitted via the SPI interface in 16-bit words, and thus
+11 words will constitute a full event. So every 11 words we call the 
+received data an event and GO.
+
+We use 16 bit words so we can more easily use a 16-bit-wide register
+file out of distram. 
+

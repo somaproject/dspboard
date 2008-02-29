@@ -8,16 +8,20 @@ ASMSRCS = crt0.asm
 CCSRCS   = main.cc
 SRCDIR= ../../../src/
 CPUDEFINES = -D__ADSPBF561__ -D__ADSPLPBLACKFIN__
-INCLUDES =  -I. -I$(SRCDIR) -I$(SRCDIR)/bf533 -I$(SRCDIR)/include
+INCLUDES = -I../../../dspcode/include -I. -I$(SRCDIR)
 ASMFLAGS = -x assembler-with-cpp $(CPUDEFINES) $(INCLUDES)
 ASMFLAGS += -DBOARD_$(BOARD)
-CFLAGS = $(INCLUDES)  -g -DBOARD_$(BOARD) 
+CFLAGS = -mcpu=bf533 $(INCLUDES)  -g -DBOARD_$(BOARD) 
 CFLAGS += $(CPUDEFINES) 
 BOARD=STAMP_BF533
 
-LDFLAGS =  -g -T bftiny.x  -L/opt/uClinux/bfin-elf/lib/ -L/opt/uClinux/bfin-elf/lib/gcc/bfin-elf/4.1.1/  -lsupc++  -lc  -lgcc 
+BFROOT = /home/jonas/blackfin/opt/uClinux/bfin-elf/
 
-OBJS = $(ASMSRCS:%.asm=%.o)  $(CCSRCS:%.cc=%.o) 
+LDFLAGS =  -g -T bftiny.x  -L$(BFROOT)lib/ -L$(BFROOT)/lib/gcc/bfin-elf/4.1.1/ -lsupc++ -lc -lgcc -lnosys
+
+
+OBJS = $(ASMSRCS:%.asm=%.o)  $(CCSRCS:%.cc=%.o) eventtx.o
+
 
 AS = bfin-elf-as
 CC = bfin-elf-gcc-4.1.1
@@ -25,17 +29,20 @@ CXX = bfin-elf-g++-4.1.1
 
 LD = bfin-elf-ld
 
-all: $(OBJS) eventtxtest.elf
+all: $(OBJS) eventrxtest.dxe
 
 main.o: main.cc
 	$(CXX) $(CFLAGS)  -c -o main.o main.cc
+
+eventtx.o: $(SRCDIR)bf533/hw/eventtx.cc
+	$(CXX) $(CFLAGS) -c $(SRCDIR)bf533/hw/eventtx.cc -o eventtx.o
 
 %.o: %.asm
 	$(CC) $(ASMFLAGS) -c -o $@ $<
 
 
-eventtxtest.elf: $(OBJS)
-	$(LD) $(OBJS)  $(LDFLAGS) -o eventtxtest.elf
+eventrxtest.dxe: $(OBJS)
+	$(LD) $(OBJS)  $(LDFLAGS) -o eventrxtest.dxe
 
 clean:
 	rm -f *.o

@@ -1,0 +1,3 @@
+vhdl work "../../../vhdl/regfile.vhd"
+vhdl work "../../../vhdl/eventrx.vhd"
+vhdl work "eventrxtest.vhd"

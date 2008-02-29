@@ -4,7 +4,7 @@
 # $Id: .gdbinit,v 1.2 2006/01/22 17:08:05 strubi Exp $
 # 
 
-file blink.dxe
+file simpletest.elf
 target remote :2000
 set remotetimeout 999
 set remoteaddresssize 32
@@ -33,3 +33,4 @@ define target_init
 end
 
 set scheduler-locking off
+

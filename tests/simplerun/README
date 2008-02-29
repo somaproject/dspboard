@@ -6,4 +6,6 @@ Simplerun:
 
 
 
+We also try and test if we have some sort of dynamic memory allocation
+and static constructor running
 

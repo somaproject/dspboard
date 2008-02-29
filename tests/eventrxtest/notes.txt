@@ -1,0 +1,6 @@
+Clearly nothing happens until we assert the DMA Enable signal. More
+specifically, modification of the SPI register settings does not
+trigger a dma incorrectly.
+
+For some reason we are getting CURR_X_COUNT stopping at 9, whihc is IIRC after
+4 words have been trasnferred. 

@@ -1,0 +1,2 @@
+We boot the DSP using BMODE=01, SPI Slive Mode Boot. 
+

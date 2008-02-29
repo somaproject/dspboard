@@ -5,7 +5,6 @@ All interrupt functions are static which then access the static
 instance and call appropriate members of the ISR lookup table.
 
 
-
 dsp::getInstance()
 
 dsp::IVG7_HANDLER()

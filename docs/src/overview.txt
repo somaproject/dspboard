@@ -1,5 +1,6 @@
 The software overview: 
 
 We use 2D DMA to DMA in events into a circ buffer-like interface. This
-will be relatively simple and primitive, and will not be part of our generic circular-buffer interface. 
+will be relatively simple and primitive, and will not be part of our
+generic circular-buffer interface.
 

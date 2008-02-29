@@ -1,0 +1,22 @@
+
+
+Outputs via OPORT 
+
+0:   OPORTDATA(0) => DSPRESET
+1:   OPORTDATA(0) => LEDEVENT
+2:   BOOTSERWE, with OPORTDATA being the data
+
+3:   BOOT Serial Start, begin serial TXN
+4:   OPORTDATA(0) => DSPISS 
+5:   OPORTDATA(0) => DSPISPIEN , the mux sel (1 == proc)
+
+-----------------------------------------------------------------
+Events: 
+0x30: Echo event, take DATA0-4 and spit them back out, good for debugging
+0x31: Set the LED to DATA0[0]
+0x32: put data in the tX buffer, with 
+       DATA0-3 being the data, 
+       which is transmitted
+       DATA0[15] to DATA0[0], DATA1[15] to DATA1[0], ... 
+0x33: BOOT serial start, begin the rom dump; reply with 0x33 when done
+      

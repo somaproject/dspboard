@@ -17,7 +17,8 @@ entity eventrx is
     FIFOFULL : out std_logic;
     DOUT     : out std_logic_vector(7 downto 0);
     REQ      : out  std_logic;
-    GRANT    : in  std_logic);
+    GRANT    : in  std_logic;
+    DEBUG : out std_logic_vector(15 downto 0));
 end eventrx;
 
 architecture Behavioral of eventrx is
@@ -77,7 +78,7 @@ architecture Behavioral of eventrx is
 
 begin  -- Behavioral
 
-  biten <= sclkl and not sclkll;
+  biten <= '1' when sclkl ='0' and sclkll = '1' else '0';
 
   wea <= '1' when we = '1' and isel = '0' else '0';
   web <= '1' when we = '1' and isel = '1' else '0';
@@ -90,6 +91,8 @@ begin  -- Behavioral
   REQ <= '1' when ocs = armareq or ocs = armbreq else '0';
 
   FIFOFULL <= armeda and armedb;
+
+  DEBUG <= din;
   
   regfile_a : regfile
     generic map (

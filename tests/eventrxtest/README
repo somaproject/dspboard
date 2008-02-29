@@ -1,0 +1,50 @@
+Test if we can send TXEvents from the DSP to the FPGA via:
+
+1. single per-word SPI interface
+2. simple hand-written DMA  interface
+3. the real "EventTX" dma-able interface
+
+We have the DSP send an event every time it detects a transition from
+low to high on FLAG4. 
+
+USER1[0]: set FLAG (SENDEVENT)
+USER1[8]: grant REQ
+
+USER2 will be completely passive, reading the output
+
+The events are then forced into a giant array output register for JTAG
+query. After REQ is asserted, the FPGA waits until USER1[8] is
+asserted, and then blit the data into the register.
+
+DSPRESET is controlled by the 15th bit of inword, so that all
+operations to USER2 must always be || "00 80" if you want the DSP to
+stay up.
+
+To bring the dsp out of reset:
+./xc3sprog  1 0x03 "00 80"
+
+
+
+So To send an event: 
+./xc3sprog  1 0x03 "01 80"
+./xc3sprog  1 0x03 "00 80"
+
+So to assert grant
+./xc3sprog  1 0x03 "00 81"
+./xc3sprog  1 0x03 "00 80"
+
+
+To read it: 
+[jonas@shannon XC3Sprog]$ 
+./xc3sprog 1 0x02 "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+
+0 0 ab 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 80 34 
+
+Things to test: 
+  simpletest() : can we simply send out bytes
+  eventtest() : can we properly serialize and send out an event? 
+  dmatest() : set up a DMA transaction and try and DMA an entire
+              chunk of memory
+
+  
+

@@ -18,9 +18,7 @@ SEARCH_DIR("/opt/uClinux/bfin-elf/lib");
 MEMORY
 {
 	l1code(x)     : ORIGIN = 0xffa00000, LENGTH = 0x14000
-	l1dataA(rw)   : ORIGIN = 0xff800000, LENGTH = 0x8000
-	l1dataB(rw)   : ORIGIN = 0xff900000, LENGTH = 0x8000
-
+	l1data(rw)    : ORIGIN = 0xff800000, LENGTH = 0x4000
 }
 
 
@@ -29,7 +27,7 @@ SECTIONS
   /* L1 memory sections */
 
   .l1code         : { crt0.o(STARTUP_SECTION) *(.l1code) } >l1code
-  .l1dataA         : { _l1_data_a = .; } > l1dataA
+  .l1data         : { _l1_data_a = .; } > l1data
   /* Read-only sections, merged into text segment: */
   PROVIDE (__executable_start = 0x0); . = 0x0;
   .interp         : { *(.interp) }
@@ -114,14 +112,7 @@ SECTIONS
   .data           :
   {
     *(.data .data.* .gnu.linkonce.d.*)
-		 SORT(CONSTRUCTORS)
-/*    __CTOR_LIST__ = .; 
-    LONG((__CTOR_END__ - __CTOR_LIST__) / 4 -2); 	 
-    *(.ctors)
-    LONG(0) __CTOR_END__ = .; */
-
-	
-
+    SORT(CONSTRUCTORS)
   }
   .data1          : { *(.data1) }
   .tdata	  : { *(.tdata .tdata.* .gnu.linkonce.td.*) }
