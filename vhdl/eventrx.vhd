@@ -90,7 +90,11 @@ begin  -- Behavioral
 
   REQ <= '1' when ocs = armareq or ocs = armbreq else '0';
 
-  FIFOFULL <= armeda and armedb;
+--  FIFOFULL <= armeda and armedb;      -- causes race conditions
+  FIFOFULL <= '1' when (armeda = '1' and armedb = '1' ) or
+                       (armeda='1' and ics = wordw) or
+                       (armedb ='1' and ics = wordw) else
+              '0';
 
   DEBUG <= din;
   

@@ -151,34 +151,40 @@ int dma_main()
   
 }
 
-EventTX etx; 
 
 int eventtx_object_main()
 {
 
   //etx.setup(); 
-
-  EventTX_t et; 
-  for (int z = 0; z < 10; z++) {
-    et.addr[z] = z+1; 
-  }
+  EventTX * etx = new EventTX; 
+  
+  etx->setup(); 
   int iteration = 0; 
 
-  et.event.cmd = iteration; 
-  et.event.src = 0xAB; 
-  et.event.data[0] = 0x1122;
-  et.event.data[1] = 0x3344;
-  et.event.data[2] = 0x5566;
-  et.event.data[3] = 0x7788;
-  et.event.data[4] = 0x99AA;
-  
+  while (1) {
+    int read = *pFIO_FLAG_D; 
 
-  etx.newEvent(et); 
-  etx.sendEvent(); 
-  while(1) {
-
-    // DO NOTHING
-
+    if ( ! etx->txBufferFull()) { 
+      EventTX_t et; 
+      for (int z = 0; z < 10; z++) {
+	et.addr[z] = z+1; 
+      }
+      
+      et.event.cmd = iteration; 
+      et.event.src = 0xAB; 
+      et.event.data[0] = iteration; 
+      et.event.data[1] = 0x3344;
+      et.event.data[2] = 0x5566;
+      et.event.data[3] = 0x7788;
+      et.event.data[4] = 0x99AA;
+      
+    
+      etx->newEvent(et); 
+      iteration++; 
+    }
+    int i = *pDMA5_IRQ_STATUS; 
+    
+    etx->sendEvent(); 
   }
 }
 

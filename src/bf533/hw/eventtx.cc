@@ -16,13 +16,20 @@ EventTX::EventTX() :
 void EventTX::newEvent(const EventTX_t &evt)
 {
   // copy to the next free buffer
-  if ((nextFreeEvent_ + 1) % EVTBUFLEN == nextSendEvent_) {
+  if (txBufferFull()) {
     // should throw event-output-fifo-error
   }
 
-  //  eventToDMABuffer(evt, &buffer_[nextFreeEvent_][0]); 
-  nextFreeEvent_ = (nextFreeEvent_+1) % BUFSIZE; 
+  eventToDMABuffer(evt, &buffer_[nextFreeEvent_][0]); 
+  nextFreeEvent_ = (nextFreeEvent_+1) % EVTBUFLEN; 
 
+}
+
+bool EventTX::txBufferFull() {
+  if (((nextFreeEvent_ + 2) % EVTBUFLEN) == nextSendEvent_) {
+    return true; 
+  }
+  return false; 
 }
 
 void EventTX::eventToDMABuffer(const EventTX_t & etx, uint16_t * tgtbuff) {
@@ -58,7 +65,7 @@ bool EventTX::sendEvent()
 {
   
   if(txPending_) {
-    if ( (*pDMA5_IRQ_STATUS & 0x01)  == 0) {
+    if ( (*pDMA5_IRQ_STATUS & DMA_RUN) or !(*pDMA5_IRQ_STATUS & DMA_DONE) ) {
       // not done yet, just return
       return false; 
     } else {
@@ -68,16 +75,22 @@ bool EventTX::sendEvent()
     
   }
   // txpending should be false, we are done. 
-
+  for (int i = 0; i < 10; i++) {
+    // race condition in waiting for full buffer
+  }
+  // check if the fifo is full 
+  if (isFPGAFIFOFull()){
+    return false; 
+  }
   if (nextSendEvent_ != nextFreeEvent_) {
     // check for empty 
-
+    
     *pDMA5_START_ADDR =  &buffer_[nextSendEvent_][0]; 
     *pDMA5_CONFIG |= 1; // start actual DMA activity
     nextSendEvent_ = (nextSendEvent_ + 1) % EVTBUFLEN; 
     txPending_ = true; 
   }
-
+  
   return txPending_; 
 
 }
@@ -107,8 +120,6 @@ void EventTX::setupFPGAFIFOFlag()
   *pFIO_DIR    &= ~FIFOFULL_MASK; 
   *pFIO_INEN   |= FIFOFULL_MASK; 
 
-
-
 }
 
 
@@ -134,6 +145,6 @@ void EventTX::setupDMA()
 bool EventTX::isFPGAFIFOFull()
 {
   // read the relevant line 
-  return (*pFIO_FLAG_D && FIFOFULL_MASK); 
+  return (*pFIO_FLAG_D & FIFOFULL_MASK); 
 
 }
