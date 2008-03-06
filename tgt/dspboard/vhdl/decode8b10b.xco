@@ -1,7 +1,7 @@
 ##############################################################
 #
 # Xilinx Core Generator version J.37
-# Date: Thu Feb  7 03:49:24 2008
+# Date: Sun Feb 10 02:36:32 2008
 #
 ##############################################################
 #
@@ -58,5 +58,5 @@ CSET synchronous_reset=false
 CSET synchronous_reset_value=D_0_0_pos
 # END Parameters
 GENERATE
-# CRC: e1faa662
+# CRC: e12e8cb8
 

@@ -1,7 +1,7 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
-use IEEE.STD_LOGIC_ARITH.all;
-use IEEE.STD_LOGIC_UNSIGNED.all;
+-- use IEEE.STD_LOGIC_ARITH.all;
+-- use IEEE.STD_LOGIC_UNSIGNED.all;
 use IEEE.numeric_std.all;
 
 entity acqserialtest is
@@ -218,13 +218,43 @@ begin  -- Behavioral
 
       wait until rising_edge(clk) and dspabitpos = 256 and
         dspadatain(11 downto 8) = std_logic_vector(TO_UNSIGNED(i*2+1, 4));
-      report "Successful read of A event";
+      report "Successful read of A cmdid";
     end loop;  -- i
 
-    report "end of simulation" severity Failure;
+    report "end of simulation" severity failure;
     wait;
 
   end process;
+
+  a_data_read        : process
+    variable datacnt : integer := 0;
+  begin
+    wait until rising_edge(CLK) and dspabitpos = 256;
+    wait until rising_edge(CLK) and dspabitpos = 0;
+
+    for datacnt in 1 to 15 loop
+      wait until rising_edge(CLK) and dspabitpos = 256;
+      for i in 0 to 9 loop
+        assert dspadatain(i*16 + 19 downto i*16 + 16) =
+          std_logic_vector(TO_UNSIGNED(i, 4))
+          report "Error reading DSPA Data In channel" severity error;
+
+        assert dspadatain(i*16 + 31 downto i*16 + 24) =
+          std_logic_vector(TO_UNSIGNED(datacnt, 8))
+          report "Error reading DSPA data In cycle count " &
+          integer'image(to_integer(unsigned(dspadatain(i*16 +31 downto i*16 +24))))
+          & " " & integer'image(datacnt)
+                                            severity error;
+      end loop;  -- i
+
+
+      report "Done Reading data for A";
+      wait until rising_edge(CLK) and dspabitpos = 0;
+    end loop;  -- datacnt
+
+
+  end process;
+
 
   -------------------------------------------------------------------------------
   --  b test

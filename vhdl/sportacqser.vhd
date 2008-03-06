@@ -14,7 +14,8 @@ entity sportacqser is
     SERDRB   : in  std_logic;
     START    : in  std_logic;
     DONE     : out std_logic;
-    DATAIN   : in  std_logic_vector(255 downto 0);
+    SAMPLEIN : in std_logic_vector(15 downto 0);
+    SAMPLESEL : in std_logic_vector(3 downto 0); 
     DATAOUTA : out std_logic_vector(255 downto 0);
     DATAOUTB : out std_logic_vector(255 downto 0)
     );
