@@ -10,6 +10,13 @@ vhdl eproc "../../../vhdl/eproc/evtdnd.vhd"
 vhdl eproc "../../../vhdl/eproc/txreqeventbuffer.vhd"
 vhdl eproc "../../../vhdl/eproc/eproc.vhd"
 
+vhdl work "../../../vhdl/fiberrx.vhd"
+vhdl work "../../../vhdl/fibertx.vhd"
+vhdl work "../../../vhdl/framedis.vhd"
+vhdl work "../../../vhdl/framedis.vhd"
+vhdl work "../../../vhdl/acqcmdmux.vhd"
+vhdl work "../../../vhdl/sportacqser.vhd"
+vhdl work "../../../vhdl/acqserial.vhd"
 
 vhdl work "../../../vhdl/deviceio/devicelink.vhd"
 

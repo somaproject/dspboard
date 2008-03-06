@@ -25,53 +25,76 @@ entity dspboard is
     LEDEVENTD : out std_logic;
 
     -- DSP A
-    DSPRESETA   : out   std_logic;
-    DSPCLKA     : out   std_logic;
-    DSPSPIMISOA : inout std_logic;
-    DSPSPIMOSIA : inout std_logic;
-    DSPSPICLKA  : inout std_logic;
-    DSPFLAG0A   : out   std_logic;
-    DSPFLAG1A   : in    std_logic;
-    DSPFLAG2A   : out   std_logic;
-    DSPFLAG4A   : out    std_logic;
+    DSPRESETA     : out   std_logic;
+    DSPCLKA       : out   std_logic;
+    DSPSPIMISOA   : inout std_logic;
+    DSPSPIMOSIA   : inout std_logic;
+    DSPSPICLKA    : inout std_logic;
+    DSPFLAG0A     : out   std_logic;
+    DSPFLAG1A     : in    std_logic;
+    DSPFLAG2A     : out   std_logic;
+    DSPFLAG4A     : out   std_logic;
+    DSPSPORTSCLKA : out   std_logic;
+    DSPSPORT0RFSA : out   std_logic;
+    DSPSPORT0DRA  : in    std_logic;
+    DSPSPORT0TFSA : in    std_logic;
+    DSPSPORT0DTA  : out   std_logic;
 
     -- DSP B
-    DSPRESETB   : out   std_logic;
-    DSPCLKB     : out   std_logic;
-    DSPSPIMISOB : inout std_logic;
-    DSPSPIMOSIB : inout std_logic;
-    DSPSPICLKB  : inout std_logic;
-    DSPFLAG0B   : out   std_logic;
-    DSPFLAG1B   : in    std_logic;
-    DSPFLAG2B   : out   std_logic;
-    DSPFLAG4B   : out   std_logic;
+    DSPRESETB     : out   std_logic;
+    DSPCLKB       : out   std_logic;
+    DSPSPIMISOB   : inout std_logic;
+    DSPSPIMOSIB   : inout std_logic;
+    DSPSPICLKB    : inout std_logic;
+    DSPFLAG0B     : out   std_logic;
+    DSPFLAG1B     : in    std_logic;
+    DSPFLAG2B     : out   std_logic;
+    DSPFLAG4B     : out   std_logic;
+    DSPSPORTSCLKB : out   std_logic;
+    DSPSPORT0RFSB : out   std_logic;
+    DSPSPORT0DRB  : in    std_logic;
+    DSPSPORT0TFSB : in    std_logic;
+    DSPSPORT0DTB  : out   std_logic;
 
     -- DSP C
-    DSPRESETC   : out   std_logic;
-    DSPCLKC     : out   std_logic;
-    DSPSPIMISOC : inout std_logic;
-    DSPSPIMOSIC : inout std_logic;
-    DSPSPICLKC  : inout std_logic;
-    DSPFLAG0C   : out   std_logic;
-    DSPFLAG1C   : in    std_logic;
-    DSPFLAG2C   : out   std_logic;
-    DSPFLAG4C   : out    std_logic;
+    DSPRESETC     : out   std_logic;
+    DSPCLKC       : out   std_logic;
+    DSPSPIMISOC   : inout std_logic;
+    DSPSPIMOSIC   : inout std_logic;
+    DSPSPICLKC    : inout std_logic;
+    DSPFLAG0C     : out   std_logic;
+    DSPFLAG1C     : in    std_logic;
+    DSPFLAG2C     : out   std_logic;
+    DSPFLAG4C     : out   std_logic;
+    DSPSPORTSCLKC : out   std_logic;
+    DSPSPORT0RFSC : out   std_logic;
+    DSPSPORT0DRC  : in    std_logic;
+    DSPSPORT0TFSC : in    std_logic;
+    DSPSPORT0DTC  : out   std_logic;
+
 
     -- DSP D
-    DSPRESETD   : out   std_logic;
-    DSPCLKD     : out   std_logic;
-    DSPSPIMISOD : inout std_logic;
-    DSPSPIMOSID : inout std_logic;
-    DSPSPICLKD  : inout std_logic;
-    DSPFLAG0D   : out   std_logic;
-    DSPFLAG1D   : in    std_logic;
-    DSPFLAG2D   : out   std_logic;
-    DSPFLAG4D   : out    std_logic;
+    DSPRESETD     : out   std_logic;
+    DSPCLKD       : out   std_logic;
+    DSPSPIMISOD   : inout std_logic;
+    DSPSPIMOSID   : inout std_logic;
+    DSPSPICLKD    : inout std_logic;
+    DSPFLAG0D     : out   std_logic;
+    DSPFLAG1D     : in    std_logic;
+    DSPFLAG2D     : out   std_logic;
+    DSPFLAG4D     : out   std_logic;
+    DSPSPORTSCLKD : out   std_logic;
+    DSPSPORT0RFSD : out   std_logic;
+    DSPSPORT0DRD  : in    std_logic;
+    DSPSPORT0TFSD : in    std_logic;
+    DSPSPORT0DTD  : out   std_logic;
+
 
     -- FIBER INTERFACE
-    FIBEROUTA : out std_logic;
-    FIBEROUTB : out std_logic
-    );
+    FIBEROUTAB : out std_logic;
+    FIBERINAB  : in  std_logic;
+    FIBEROUTCD : out std_logic;
+    FIBERINCD  : in  std_logic );
 end dspboard;
 
 architecture Behavioral of dspboard is
@@ -318,6 +341,31 @@ architecture Behavioral of dspboard is
       );
   end component;
 
+  component acqserial
+    port (
+      CLK         : in  std_logic;
+      CLKHI       : in  std_logic;
+      RESET       : in  std_logic;
+      FIBERIN     : in  std_logic;
+      FIBEROUT    : out std_logic;
+      NEWCMDDEBUG : out std_logic;
+      -- SPORT outputs
+      DSPASERCLK  : out std_logic;
+      DSPASERDT   : out std_logic;
+      DSPASERFS   : out std_logic;
+      DSPASERDR   : in  std_logic;
+
+      DSPBSERCLK : out std_logic;
+      DSPBSERDT  : out std_logic;
+      DSPBSERFS  : out std_logic;
+      DSPBSERDR  : in  std_logic;
+
+      -- link status
+      DSPALINKUP : out std_logic;
+      DSPBLINKUP : out std_logic
+      );
+  end component;
+
 
   signal dreq   : std_logic := '0';
   signal dgrant : std_logic := '0';
@@ -400,9 +448,13 @@ architecture Behavioral of dspboard is
 
   signal linkup : std_logic := '0';
 
+  signal fiberlinkupa, fiberlinkupb, fiberlinkupc, fiberlinkupd : std_logic := '0';
+
   signal clk2, clk2int : std_logic := '0';
 
   signal clk2x, clk2xint : std_logic := '0';
+
+  signal clkacqint, clkacq : std_logic := '0';
 
   signal pos : std_logic_vector(9 downto 0) := (others => '0');
 
@@ -440,12 +492,18 @@ begin  -- Behavioral
       DECODEERR => decodeerrint);
 
   maindcm : dcm
+    generic map (
+      CLKFX_DIVIDE   => 5,              -- Can be any interger from 1 to 32
+      CLKFX_MULTIPLY => 8,              -- Can be any integer from 2 to 32
+      CLKIN_PERIOD   => 15.0,
+      CLK_FEEDBACK   => "1X")
     port map (
-      CLKIN => clk,
-      CLKFB => clk2,
-      RST   => '0',
-      CLK0  => clk2int,
-      CLK2x => clk2xint);
+      CLKIN          => clk,
+      CLKFB          => clk2,
+      RST            => '0',
+      CLK0           => clk2int,
+      CLK2x          => clk2xint,
+      CLKFX          => clkacqint);
 
   clk2_bufg : BUFG port map (
     O => clk2,
@@ -455,6 +513,9 @@ begin  -- Behavioral
     O => clk2x,
     I => clk2xint);
 
+  clkacq_bufg : BUFG port map (
+    O => clkacq,
+    I => clkacqint);
 
   REFCLKOUT <= REFCLKIN;
   linkup    <= not RESET;
@@ -530,7 +591,7 @@ begin  -- Behavioral
       EVTFIFOFULL => devtfifofulla
       );
 
-  eventrx_a: eventrx
+  eventrx_a : eventrx
     port map (
       CLK      => CLK,
       RESET    => '0',
@@ -541,8 +602,8 @@ begin  -- Behavioral
       DOUT     => edspdataa,
       REQ      => edspreq(0),
       GRANT    => edspgrant(0));
-  
-      
+
+
   dspcontproc_b : dspcontproc
     port map (
       CLK        => clk,
@@ -565,7 +626,7 @@ begin  -- Behavioral
       DSPSPIHOLD => dspspiholdb,
       LEDEVENT   => LEDEVENTB);
 
-  eventrx_b: eventrx
+  eventrx_b : eventrx
     port map (
       CLK      => CLK,
       RESET    => '0',
@@ -576,8 +637,8 @@ begin  -- Behavioral
       DOUT     => edspdatab,
       REQ      => edspreq(1),
       GRANT    => edspgrant(1));
-  
-  
+
+
   dspiomux_b : dspiomux
     port map (
       CLK         => CLK,
@@ -653,7 +714,7 @@ begin  -- Behavioral
       EVTFIFOFULL => devtfifofullc
       );
 
-  eventrx_c: eventrx
+  eventrx_c : eventrx
     port map (
       CLK      => CLK,
       RESET    => '0',
@@ -664,8 +725,8 @@ begin  -- Behavioral
       DOUT     => edspdatac,
       REQ      => edspreq(2),
       GRANT    => edspgrant(2));
-  
-      
+
+
 
 
   dspcontproc_d : dspcontproc
@@ -690,7 +751,7 @@ begin  -- Behavioral
       DSPSPIHOLD => DSPSPIHOLDD,
       LEDEVENT   => LEDEVENTD);
 
-  
+
   dspiomux_d : dspiomux
     port map (
       CLK         => CLK,
@@ -717,7 +778,7 @@ begin  -- Behavioral
       EVTFIFOFULL => devtfifofulld
       );
 
-  eventrx_d: eventrx
+  eventrx_d : eventrx
     port map (
       CLK      => CLK,
       RESET    => '0',
@@ -728,8 +789,6 @@ begin  -- Behavioral
       DOUT     => edspdatad,
       REQ      => edspreq(3),
       GRANT    => edspgrant(3));
-  
-      
 
 
   encodemux_inst : encodemux
@@ -756,6 +815,49 @@ begin  -- Behavioral
       EPROCDATAB => eprocdatab,
       EPROCDATAC => eprocdatac,
       EPROCDATAD => eprocdatad);
+
+  acqserial_ab : acqserial
+    port map (
+      CLK         => clk,
+      CLKHI       => clkacq,
+      RESET       => '0',
+      FIBERIN     => FIBERINAB,
+      FIBEROUT    => FIBEROUTAB,
+      NEWCMDDEBUG => open,
+      DSPASERCLK  => DSPSPORTSCLKA,
+      DSPASERDT   => DSPSPORT0DTA,
+      DSPASERFS   => DSPSPORT0RFSA,
+      DSPASERDR   => DSPSPORT0DRA,
+      DSPBSERCLK  => DSPSPORTSCLKB,
+      DSPBSERDT   => DSPSPORT0DTB,
+      DSPBSERFS   => DSPSPORT0RFSB,
+      DSPBSERDR   => DSPSPORT0DRB,
+      DSPALINKUP  => fiberlinkupa,
+      DSPBLINKUP  => fiberlinkupb);
+
+  acqserial_cd : acqserial
+    port map (
+      CLK         => clk,
+      CLKHI       => clkacq,
+      RESET       => '0',
+      FIBERIN     => FIBERINCD,
+      FIBEROUT    => FIBEROUTCD,
+      NEWCMDDEBUG => open,
+      DSPASERCLK  => DSPSPORTSCLKC,
+      DSPASERDT   => DSPSPORT0DTC,
+      DSPASERFS   => DSPSPORT0RFSC,
+      DSPASERDR   => DSPSPORT0DRC,
+      DSPBSERCLK  => DSPSPORTSCLKD,
+      DSPBSERDT   => DSPSPORT0DTD,
+      DSPBSERFS   => DSPSPORT0RFSD,
+      DSPBSERDR   => DSPSPORT0DRD,
+      DSPALINKUP  => fiberlinkupc,
+      DSPBLINKUP  => fiberlinkupd);
+
+
+
+
+
 
   process(jtagDRCK1, clk)
   begin
@@ -794,14 +896,11 @@ begin  -- Behavioral
       rxdatal <= rxdata;
       rxkl    <= rxk;
 
-      LEDPOWER  <= decodeerrint;
-      FIBEROUTA <= ecycle;
-      FIBEROUTB <= rxk;
-
+      LEDPOWER <= decodeerrint;
       if ecycle = '1' then
-        pos <= "0000000001";
+        pos    <= "0000000001";
       else
-        pos <= pos + 1;
+        pos    <= pos + 1;
       end if;
 
       if ecycle = '1' then

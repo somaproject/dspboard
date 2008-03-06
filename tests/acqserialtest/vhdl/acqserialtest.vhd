@@ -67,7 +67,6 @@ architecture Behavioral of acqserialtest is
       DSPBSERDT  : out std_logic;
       DSPBSERFS  : out std_logic;
       DSPBSERDR  : in  std_logic;
-
       -- link status
       DSPALINKUP : out std_logic;
       DSPBLINKUP : out std_logic
@@ -86,7 +85,6 @@ architecture Behavioral of acqserialtest is
       TXCMDSTS     : in  std_logic_vector(3 downto 0);
       TXCMDSUCCESS : in  std_logic;
       TXCHKSUM     : in  std_logic_vector(7 downto 0));
-
   end component;
 
   signal rxcmd, rxcmdid : std_logic_vector(3 downto 0) := (others => '0');
@@ -191,20 +189,20 @@ begin  -- Behavioral
       DSPBSERDR  => DSPBDT,
       DSPBLINKUP => DSPBLINKUPint);
 
-  acqboard_inst : acqboard
-    port map (
-      CLKIN        => clkacq,
-      RXDATA       => open,
-      RXCMD        => rxcmd,
-      RXCMDID      => rxcmdid,
-      RXCHKSUM     => open,
-      FIBEROUT     => ACQFIBEROUT,
-      FIBERIN      => ACQFIBERIN,
-      TXCMDSTS     => "0110",
-      TXCMDSUCCESS => '1',
-      TXCHKSUM     => X"AB");
+--   acqboard_inst : acqboard
+--     port map (
+--       CLKIN        => clkacq,
+--       RXDATA       => open,
+--       RXCMD        => rxcmd,
+--       RXCMDID      => rxcmdid,
+--       RXCHKSUM     => open,
+--       FIBEROUT     => ACQFIBEROUT,
+--       FIBERIN      => ACQFIBERIN,
+--       TXCMDSTS     => "0110",
+--       TXCMDSUCCESS => '1',
+--       TXCHKSUM     => X"AB");
 
-
+  ACQFIBEROUT <= '1';                   -- DEBUGGING; 
 
   LEDPOWER <= '1';
   DSPRESET <= '1';

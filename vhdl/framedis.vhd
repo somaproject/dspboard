@@ -75,7 +75,7 @@ begin
       DOA   => open,
       ADDRA => sampleinaddr,
       WEA   => wea,
-      DOB   => dobb,
+      DOB   => doba,
       ADDRB => SAMPLESEL);
 
   regfile_b : regfile
@@ -90,7 +90,7 @@ begin
       DOB   => dobb,
       ADDRB => SAMPLESEL);
 
-  SAMPLE <= doba when bufsel = '0'              else dobb;
+  SAMPLE <= doba when bufsel = '1'              else dobb;
   wea    <= '1'  when we = '1' and bufsel = '0' else '0';
   web    <= '1'  when we = '1' and bufsel = '1' else '0';
 

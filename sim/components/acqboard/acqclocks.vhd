@@ -16,7 +16,8 @@ entity acqclocks is
          INSAMPLE  : out std_logic;
          OUTSAMPLE : out std_logic;
          OUTBYTE   : out std_logic := '0';
-         SPICLK    : out std_logic);
+         SPICLK    : out std_logic; 
+         LOCKED : out std_logic);
 end acqclocks;
 
 architecture Behavioral of acqclocks is
@@ -27,7 +28,7 @@ architecture Behavioral of acqclocks is
 -- space. 
 
   signal clkin_w, clk2x : std_logic := '0';
-  signal clk_g, locked  : std_logic := '0';
+  signal clk_g, lockedint  : std_logic := '0';
 
   signal outsamplecnt : std_logic_vector(11 downto 0) := (others => '0');
   signal insamplecnt : std_logic_vector(8 downto 0) := (others => '0');
@@ -72,9 +73,9 @@ begin
       CLK270 => open,
       CLK2X => clk2x,
       CLKDV => open,
-      LOCKED => LOCKED);
+      LOCKED => LOCKEDint);
 
-  
+  LOCKED <= lockedint; 
   clk2xg : BUFG
     port map (
       I       => clk2x,
@@ -85,7 +86,7 @@ begin
   
   process(clk_g, RESET)
   begin
-    if RESET = '1' or LOCKED = '0' then
+    if RESET = '1' or LOCKEDint = '0' then
       INSAMPLE      <= '0';
       OUTBYTE       <= '0';
       OUTSAMPLE     <= '0';

@@ -36,7 +36,7 @@ architecture Behavioral of acqserialtest is
 
   signal CLK        : std_logic := '0';
   signal CLKHI      : std_logic := '0';
-  signal RESET      : std_logic := '0';
+  signal RESET      : std_logic := '1';
   signal FIBERIN    : std_logic := '0';
   signal FIBEROUT   : std_logic := '0';
   -- SPORT outputs
@@ -124,7 +124,7 @@ begin  -- Behavioral
   CLKHI  <= not CLKHI  after 6.25 ns;   -- 80 MHz
   acqclk <= not acqclk after 13.88888 ns;
 
-
+  RESET <= '0' after 100 ns;
   acqserial_uut : acqserial
     port map (
       CLK        => CLK,
@@ -232,7 +232,7 @@ begin  -- Behavioral
     wait until rising_edge(CLK) and dspabitpos = 256;
     wait until rising_edge(CLK) and dspabitpos = 0;
 
-    for datacnt in 1 to 15 loop
+    for datacnt in 0 to 15 loop
       wait until rising_edge(CLK) and dspabitpos = 256;
       for i in 0 to 9 loop
         assert dspadatain(i*16 + 19 downto i*16 + 16) =
@@ -244,7 +244,7 @@ begin  -- Behavioral
           report "Error reading DSPA data In cycle count " &
           integer'image(to_integer(unsigned(dspadatain(i*16 +31 downto i*16 +24))))
           & " " & integer'image(datacnt)
-                                            severity error;
+          severity error;
       end loop;  -- i
 
 
@@ -252,7 +252,7 @@ begin  -- Behavioral
       wait until rising_edge(CLK) and dspabitpos = 0;
     end loop;  -- datacnt
 
-
+    wait; 
   end process;
 
 
