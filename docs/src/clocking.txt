@@ -1,0 +1,4 @@
+CLKIN is 50 MHz
+DF = 10 ==> VCO = 500 MHz
+CSEL = 00    ==> CCLK = 500 MHz
+SSEL = 0100  ==> SCLK = 125 MHz

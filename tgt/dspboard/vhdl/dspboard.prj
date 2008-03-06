@@ -14,7 +14,10 @@ vhdl eproc "../../../vhdl/eproc/eproc.vhd"
 vhdl work "../../../vhdl/deviceio/devicelink.vhd"
 
 vhdl work "../../../vhdl/bootser.vhd"
-vhdl work "../../../vhdl/spimux.vhd"
+vhdl work "../../../vhdl/dspiomux.vhd"
+
+vhdl work "../../../vhdl/eventrx.vhd"
+vhdl work "../../../vhdl/regfile.vhd"
 
 vhdl work "../../../vhdl/decodemux.vhd"
 vhdl work "../../../vhdl/encodemux.vhd"

@@ -1,0 +1,22 @@
+The EventRXDispatcher reads events from the EventRX interface and then
+dispatches them to various callback-able objects based on the cmd (not
+the src).
+
+
+The interface goes something like this:
+
+
+EventRXDispatcher(EventRX* ) [constructor]
+.registerDispatch(eventcmd_t, callback) (possibly via boost::bind)
+.nextevent() : primary loop function, reads and dispatches a single event, 
+or does nothing
+
+We use an internal function pointer table to do the relevant dispatch,
+and initialize this table to null. We must always check
+to make sure there's no null pointer. 
+
+
+
+
+
+

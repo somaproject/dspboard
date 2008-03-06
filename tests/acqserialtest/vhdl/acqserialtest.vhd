@@ -89,10 +89,26 @@ architecture Behavioral of acqserialtest is
 
   end component;
 
-  signal jtagout : std_logic_vector(63 downto 0) := (others => '0');
   signal rxcmd, rxcmdid : std_logic_vector(3 downto 0) := (others => '0');
   
 
+  signal jtagcapture : std_logic := '0';
+  signal jtagdrck1   : std_logic := '0';
+  signal jtagdrck2   : std_logic := '0';
+  signal jtagsel1    : std_logic := '0';
+  signal jtagsel2    : std_logic := '0';
+  signal jtagshift   : std_logic := '0';
+  signal jtagtdi     : std_logic := '0';
+  signal jtagtdo1    : std_logic := '0';
+  signal jtagtdo2    : std_logic := '0';
+  signal jtagupdate  : std_logic := '0';
+
+  signal jtagout : std_logic_vector(63 downto 0) := (others => '0');
+
+  signal inword, inwordl : std_logic_vector(15 downto 0) := (others => '0');
+
+  signal dspalinkupint, dspblinkupint : std_logic := '0';
+  
 begin  -- Behavioral
 
   mainclksrc : DCM
@@ -151,6 +167,9 @@ begin  -- Behavioral
       O => clkacq,
       I => clkacqint);
 
+  DSPALINKUP <= dspalinkupint;
+  DSPBLINKUP <= dspblinkupint;
+  
 
   acqserial_inst : acqserial
     port map (
@@ -164,13 +183,13 @@ begin  -- Behavioral
       DSPASERDT   => DSPADR,
       DSPASERFS   => DSPARFS,
       DSPASERDR   => DSPADT,
-      DSPALINKUP  => DSPALINKUP,
+      DSPALINKUP  => DSPALINKUPint,
 
       DSPBSERCLK => DSPBRSCLK,
       DSPBSERDT  => DSPBDR,
       DSPBSERFS  => DSPBRFS,
       DSPBSERDR  => DSPBDT,
-      DSPBLINKUP => DSPBLINKUP);
+      DSPBLINKUP => DSPBLINKUPint);
 
   acqboard_inst : acqboard
     port map (
@@ -190,5 +209,43 @@ begin  -- Behavioral
   LEDPOWER <= '1';
   DSPRESET <= '1';
 
+  process(jtagDRCK1, clk)
+  begin
+
+    if jtagupdate = '1' then
+      jtagout    <= X"12345678" & X"000000" & "000000" & DSPALINKUPint
+                  & DSPBLINKUPint; 
+    else
+      if rising_edge(jtagDRCK1) then
+        jtagout  <= '0' & jtagout(63 downto 1);
+        jtagtdo1 <= jtagout(0);
+      end if;
+
+    end if;
+  end process;
+
+  process(jtagDRCK2, jtagUPDATE)
+  begin
+    if JTAGUPDATE = '1' and jtagsel2 = '1' then
+      inwordl <= inword;
+    end if;
+    if rising_edge(jtagDRCK2) then
+      inword  <= jtagtdi & inword(15 downto 1);
+    end if;
+  end process;
+
+  BSCAN_SPARTAN3_inst : BSCAN_SPARTAN3
+    port map (
+      CAPTURE => jtagcapture,           -- CAPTURE output from TAP controller
+      DRCK1   => jtagdrck1,             -- Data register output for USER1 functions
+      DRCK2   => jtagDRCK2,             -- Data register output for USER2 functions
+      SEL1    => jtagSEL1,              -- USER1 active output
+      SEL2    => jtagSEL2,              -- USER2 active output
+      SHIFT   => jtagSHIFT,             -- SHIFT output from TAP controller
+      TDI     => jtagTDI,               -- TDI output from TAP controller
+      UPDATE  => jtagUPDATE,            -- UPDATE output from TAP controller
+      TDO1    => jtagtdo1,              -- Data input for USER1 function
+      TDO2    => jtagtdo2               -- Data input for USER2 function
+      );
 
 end Behavioral;

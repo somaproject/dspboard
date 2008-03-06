@@ -1,9 +1,4 @@
-Simple attempt to generate fake events for the DSPboard. We can
-optionally use an external stream or use an internally-generated set
-of events. The external stream is to allow for post-p&R synth, the
-interla one for actual implementation on the fpga.
+Simple attempt to generate fake events for the DSPboard. We use the
+JTAG interface to drive PPI_FS1 with some series of back-to-back events. 
 
-# DSP CODE 
 
-The DSP configures a PPI-based DMA transaction and tries to DMA in 100
-events; we then examine those events to make sure stuff works.

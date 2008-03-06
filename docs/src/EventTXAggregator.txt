@@ -1,0 +1,15 @@
+EventTX Aggregator is the object that client objects use to place
+EventTX_t events onto the event bus. It keeps its own (static) queue
+of dma-able events, which is potentially quite large. 
+
+EventTXAggregator(eventtx *)
+
+EventTXAggregator.send(EventTX_t &)
+
+We do the to-DMA conversion here so that 
+
+
+How is this different from the standard eventTX interface? 
+
+It's not, really? We don't actually do anything here, but keep it as
+the abstraction -above- the eventtx. 

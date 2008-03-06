@@ -1,0 +1,14 @@
+EventTX:  The low-level hardware interface that handles
+transmission of events. 
+
+newEvent(const EventTX_t &): 
+
+convert to DMA-able form
+stick in internal FIFO which is just a static array of bytes
+We then just periodically call eventtx.send() which will send
+any available events if possible
+
+
+Under no circumstances should you ever instantiate more than one of
+these.
+

@@ -29,16 +29,17 @@ The DSP implementation performs autobuffered 2-d DMA for rx with the
 inner loop triggering an interrupt. This interrupt is used to advance
 the curRXpos_ pointer.
 
-EmpytTXBuffer_ is a no-op buffer with all zeros. CommandTXBuffer_ is a buffer where we write a command. 
+EmpytTXBuffer_ is a no-op buffer with all zeros. CommandTXBuffer_ is a
+buffer where we write a command.
 
-When we write a command we set the txPending_ flag. Upon completion of a TX buffer DMA, we cause an interrupt to 
+When we write a command we set the txPending_ flag. Upon completion of
+a TX buffer DMA, we cause an interrupt to
   
 void TXDMAdoneISR(void)
   which checks if there's a pending operation. if there is, we
   configure the next DMA to use the commandTXBuffer_ and clear pending. 
   else we just send another nop buffer. 
   
-
 
 void RXDMAdoneISR(void)
   increments the curRXpos_

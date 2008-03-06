@@ -25,48 +25,48 @@ entity dspboard is
     LEDEVENTD : out std_logic;
 
     -- DSP A
-    DSPRESETA   : out std_logic;
-    DSPCLKA : out std_logic; 
-    DSPSPISSA   : out std_logic;
-    DSPSPIMISOA : in  std_logic;
-    DSPSPIMOSIA : out std_logic;
-    DSPSPICLKA  : out std_logic;
-    DSPSPIHOLDA : in  std_logic;
-    DSPFLAG1A : in std_logic;
-    DSPFLAG4A : in std_logic; 
+    DSPRESETA   : out   std_logic;
+    DSPCLKA     : out   std_logic;
+    DSPSPIMISOA : inout std_logic;
+    DSPSPIMOSIA : inout std_logic;
+    DSPSPICLKA  : inout std_logic;
+    DSPFLAG0A   : out   std_logic;
+    DSPFLAG1A   : in    std_logic;
+    DSPFLAG2A   : out   std_logic;
+    DSPFLAG4A   : out    std_logic;
 
     -- DSP B
-    DSPRESETB   : out std_logic;
-    DSPCLKB : out std_logic; 
-    DSPSPISSB   : out std_logic;
-    DSPSPIMISOB : in  std_logic;
-    DSPSPIMOSIB : out std_logic;
-    DSPSPICLKB  : out std_logic;
-    DSPSPIHOLDB : in  std_logic;
-    DSPFLAG1B : in std_logic;
-    DSPFLAG4B : in std_logic; 
+    DSPRESETB   : out   std_logic;
+    DSPCLKB     : out   std_logic;
+    DSPSPIMISOB : inout std_logic;
+    DSPSPIMOSIB : inout std_logic;
+    DSPSPICLKB  : inout std_logic;
+    DSPFLAG0B   : out   std_logic;
+    DSPFLAG1B   : in    std_logic;
+    DSPFLAG2B   : out   std_logic;
+    DSPFLAG4B   : out   std_logic;
 
     -- DSP C
-    DSPRESETC   : out std_logic;
-    DSPCLKC : out std_logic; 
-    DSPSPISSC   : out std_logic;
-    DSPSPIMISOC : in  std_logic;
-    DSPSPIMOSIC : out std_logic;
-    DSPSPICLKC  : out std_logic;
-    DSPSPIHOLDC : in  std_logic;
-    DSPFLAG1C : in std_logic;
-    DSPFLAG4C : in std_logic; 
+    DSPRESETC   : out   std_logic;
+    DSPCLKC     : out   std_logic;
+    DSPSPIMISOC : inout std_logic;
+    DSPSPIMOSIC : inout std_logic;
+    DSPSPICLKC  : inout std_logic;
+    DSPFLAG0C   : out   std_logic;
+    DSPFLAG1C   : in    std_logic;
+    DSPFLAG2C   : out   std_logic;
+    DSPFLAG4C   : out    std_logic;
 
     -- DSP D
-    DSPRESETD   : out std_logic;
-    DSPCLKD : out std_logic; 
-    DSPSPISSD   : out std_logic;
-    DSPSPIMISOD : in  std_logic;
-    DSPSPIMOSID : out std_logic;
-    DSPSPICLKD  : out std_logic;
-    DSPSPIHOLDD : in  std_logic;
-    DSPFLAG1D : in std_logic;
-    DSPFLAG4D : in std_logic; 
+    DSPRESETD   : out   std_logic;
+    DSPCLKD     : out   std_logic;
+    DSPSPIMISOD : inout std_logic;
+    DSPSPIMOSID : inout std_logic;
+    DSPSPICLKD  : inout std_logic;
+    DSPFLAG0D   : out   std_logic;
+    DSPFLAG1D   : in    std_logic;
+    DSPFLAG2D   : out   std_logic;
+    DSPFLAG4D   : out    std_logic;
 
     -- FIBER INTERFACE
     FIBEROUTA : out std_logic;
@@ -277,25 +277,44 @@ architecture Behavioral of dspboard is
       );
   end component;
 
-  component spimux
+  component eventrx
     port (
-      CLK  : in std_logic;
-      ASEL : in std_logic;
+      CLK      : in  std_logic;
+      RESET    : in  std_logic;
+      SCLK     : in  std_logic;
+      MOSI     : in  std_logic;
+      SCS      : in  std_logic;
+      FIFOFULL : out std_logic;
+      DOUT     : out std_logic_vector(7 downto 0);
+      REQ      : out std_logic;
+      GRANT    : in  std_logic;
+      DEBUG    : out std_logic_vector(15 downto 0));
+  end component;
 
-      SPISS    : out std_logic;
-      SPISCLK  : out std_logic;
-      SPIMOSI  : out std_logic;
-      SPIMISO  : in  std_logic;
-      -- A port
-      SPISSA   : in  std_logic;
-      SPISCLKA : in  std_logic;
-      SPIMOSIA : in  std_logic;
-      SPIMISOA : out std_logic;
-      -- B port
-      SPISSB   : in  std_logic;
-      SPISCLKB : in  std_logic;
-      SPIMOSIB : in  std_logic;
-      SPIMISOB : out std_logic
+  component dspiomux
+    port (
+      CLK         : in    std_logic;
+      PSEL        : in    std_logic;
+      -- dsp pins                      
+      SPISCLK     : inout std_logic;
+      SPIMOSI     : inout std_logic;
+      SPIMISO     : inout std_logic;
+      FLAG0       : out   std_logic;
+      FLAG1       : in    std_logic;
+      FLAG2       : out   std_logic;
+      FLAG4       : out   std_logic;
+      -- FPGA Master SPI interface
+      SPISSM      : in    std_logic;
+      SPISCLKM    : in    std_logic;
+      SPIMOSIM    : in    std_logic;
+      SPIMISOM    : out   std_logic;
+      BOOTHOLDOFF : out   std_logic;
+      -- FPGA Slave SPI interface
+      SPISSS      : out   std_logic;
+      SPISCLKS    : out   std_logic;
+      SPIMOSIS    : out   std_logic;
+      SPIMISOS    : in    std_logic;
+      EVTFIFOFULL : in    std_logic
       );
   end component;
 
@@ -329,10 +348,13 @@ architecture Behavioral of dspboard is
   signal procdspspimosia : std_logic                    := '0';
   signal procdspspiclka  : std_logic                    := '0';
 
-  signal dspissa   : std_logic := '0';
-  signal dspimisoa : std_logic := '0';
-  signal dspimosia : std_logic := '0';
-  signal dspiclka  : std_logic := '0';
+  signal dspissa       : std_logic := '0';
+  signal dspimisoa     : std_logic := '0';
+  signal dspimosia     : std_logic := '0';
+  signal dspiclka      : std_logic := '0';
+  signal dspspiholda   : std_logic := '0';
+  signal devtfifofulla : std_logic := '0';
+
 
   signal deviceb         : std_logic_vector(7 downto 0) := X"09";
   signal procdspspienb   : std_logic                    := '0';
@@ -344,7 +366,8 @@ architecture Behavioral of dspboard is
   signal dspimisob       : std_logic                    := '0';
   signal dspimosib       : std_logic                    := '0';
   signal dspiclkb        : std_logic                    := '0';
-
+  signal dspspiholdb     : std_logic                    := '0';
+  signal devtfifofullb   : std_logic                    := '0';
 
   signal devicec         : std_logic_vector(7 downto 0) := X"0A";
   signal procdspspienc   : std_logic                    := '0';
@@ -356,8 +379,8 @@ architecture Behavioral of dspboard is
   signal dspimisoc       : std_logic                    := '0';
   signal dspimosic       : std_logic                    := '0';
   signal dspiclkc        : std_logic                    := '0';
-
-
+  signal dspspiholdc     : std_logic                    := '0';
+  signal devtfifofullc   : std_logic                    := '0';
 
   signal deviced         : std_logic_vector(7 downto 0) := X"0B";
   signal procdspspiend   : std_logic                    := '0';
@@ -369,7 +392,8 @@ architecture Behavioral of dspboard is
   signal dspimisod       : std_logic                    := '0';
   signal dspimosid       : std_logic                    := '0';
   signal dspiclkd        : std_logic                    := '0';
-
+  signal dspspiholdd     : std_logic                    := '0';
+  signal devtfifofulld   : std_logic                    := '0';
 
 
   signal ddata : std_logic_vector(7 downto 0) := (others => '0');
@@ -440,7 +464,7 @@ begin  -- Behavioral
   DSPCLKC <= CLK;
   DSPCLKD <= CLK;
 
-  
+
   decodemux_inst : decodemux
     port map (
       CLK     => CLK,
@@ -477,26 +501,48 @@ begin  -- Behavioral
       DSPSPIMISO => procdspspimisoa,
       DSPSPIMOSI => procdspspimosia,
       DSPSPICLK  => procdspspiclka,
-      DSPSPIHOLD => DSPSPIHOLDA,
+      DSPSPIHOLD => dspspiholda,
       LEDEVENT   => LEDEVENTA);
 
-  spimux_a : spimux
+  dspiomux_a : dspiomux
+    port map (
+      CLK         => CLK,
+      PSEL        => procdspspiena,
+      -- IO Pins
+      SPISCLK     => DSPSPICLKA,
+      SPIMOSI     => DSPSPIMOSIA,
+      SPIMISO     => DSPSPIMISOA,
+      FLAG0       => DSPFLAG0A,
+      FLAG1       => DSPFLAG1A,
+      FLAG2       => DSPFLAG2A,
+      FLAG4       => DSPFLAG4A,
+      -- FPGA EPROC master SPI interface
+      SPISSM      => procdspspissa,
+      SPISCLKM    => procdspspiclka,
+      SPIMOSIM    => procdspspimosia,
+      SPIMISOM    => procdspspimisoa,
+      BOOTHOLDOFF => dspspiholda,
+      -- DSP slave SPI interface
+      SPISSS      => dspissa,
+      SPISCLKS    => dspiclka,
+      SPIMOSIS    => dspimosia,
+      SPIMISOS    => dspimisoa,
+      EVTFIFOFULL => devtfifofulla
+      );
+
+  eventrx_a: eventrx
     port map (
       CLK      => CLK,
-      ASEL     => procdspspiena,
-      SPISS    => DSPSPISSA,
-      SPISCLK  => DSPSPICLKA,
-      SPIMOSI  => DSPSPIMOSIA,
-      SPIMISO  => DSPSPIMISOA,
-      SPISSA   => procdspspissa,
-      SPISCLKA => procdspspiclka,
-      SPIMOSIA => procdspspimosia,
-      SPIMISOA => procdspspimisoa,
-      SPISSB   => dspissa,
-      SPISCLKB => dspiclka,
-      SPIMOSIB => dspimosia,
-      SPIMISOB => dspimisoa);
-
+      RESET    => '0',
+      SCLK     => dspiclka,
+      MOSI     => dspimosia,
+      SCS      => dspissa,
+      FIFOFULL => devtfifofulla,
+      DOUT     => edspdataa,
+      REQ      => edspreq(0),
+      GRANT    => edspgrant(0));
+  
+      
   dspcontproc_b : dspcontproc
     port map (
       CLK        => clk,
@@ -516,25 +562,47 @@ begin  -- Behavioral
       DSPSPIMISO => procdspspimisob,
       DSPSPIMOSI => procdspspimosib,
       DSPSPICLK  => procdspspiclkb,
-      DSPSPIHOLD => DSPSPIHOLDB,
+      DSPSPIHOLD => dspspiholdb,
       LEDEVENT   => LEDEVENTB);
 
-  spimux_b : spimux
+  eventrx_b: eventrx
     port map (
       CLK      => CLK,
-      ASEL     => procdspspienb,
-      SPISS    => DSPSPISSB,
-      SPISCLK  => DSPSPICLKB,
-      SPIMOSI  => DSPSPIMOSIB,
-      SPIMISO  => DSPSPIMISOB,
-      SPISSA   => procdspspissb,
-      SPISCLKA => procdspspiclkb,
-      SPIMOSIA => procdspspimosib,
-      SPIMISOA => procdspspimisob,
-      SPISSB   => dspissb,
-      SPISCLKB => dspiclkb,
-      SPIMOSIB => dspimosib,
-      SPIMISOB => dspimisob);
+      RESET    => '0',
+      SCLK     => dspiclkb,
+      MOSI     => dspimosib,
+      SCS      => dspissb,
+      FIFOFULL => devtfifofullb,
+      DOUT     => edspdatab,
+      REQ      => edspreq(1),
+      GRANT    => edspgrant(1));
+  
+  
+  dspiomux_b : dspiomux
+    port map (
+      CLK         => CLK,
+      PSEL        => procdspspienb,
+      -- IO Pins
+      SPISCLK     => DSPSPICLKB,
+      SPIMOSI     => DSPSPIMOSIB,
+      SPIMISO     => DSPSPIMISOB,
+      FLAG0       => DSPFLAG0B,
+      FLAG1       => DSPFLAG1B,
+      FLAG2       => DSPFLAG2B,
+      FLAG4       => DSPFLAG4B,
+      -- FPGA EPROC master SPI interface
+      SPISSM      => procdspspissb,
+      SPISCLKM    => procdspspiclkb,
+      SPIMOSIM    => procdspspimosib,
+      SPIMISOM    => procdspspimisob,
+      BOOTHOLDOFF => dspspiholdb,
+      -- DSP slave SPI interface
+      SPISSS      => dspissb,
+      SPISCLKS    => dspiclkb,
+      SPIMOSIS    => dspimosib,
+      SPIMISOS    => dspimisob,
+      EVTFIFOFULL => devtfifofullb
+      );
 
 
   dspcontproc_c : dspcontproc
@@ -559,22 +627,45 @@ begin  -- Behavioral
       DSPSPIHOLD => DSPSPIHOLDC,
       LEDEVENT   => LEDEVENTC);
 
-  spimux_c : spimux
+  dspiomux_c : dspiomux
+    port map (
+      CLK         => CLK,
+      PSEL        => procdspspienc,
+      -- IO Pins
+      SPISCLK     => DSPSPICLKC,
+      SPIMOSI     => DSPSPIMOSIC,
+      SPIMISO     => DSPSPIMISOC,
+      FLAG0       => DSPFLAG0C,
+      FLAG1       => DSPFLAG1C,
+      FLAG2       => DSPFLAG2C,
+      FLAG4       => DSPFLAG4C,
+      -- FPGA EPROC master SPI interface
+      SPISSM      => procdspspissc,
+      SPISCLKM    => procdspspiclkc,
+      SPIMOSIM    => procdspspimosic,
+      SPIMISOM    => procdspspimisoc,
+      BOOTHOLDOFF => dspspiholdc,
+      -- DSP slave SPI interface
+      SPISSS      => dspissc,
+      SPISCLKS    => dspiclkc,
+      SPIMOSIS    => dspimosic,
+      SPIMISOS    => dspimisoc,
+      EVTFIFOFULL => devtfifofullc
+      );
+
+  eventrx_c: eventrx
     port map (
       CLK      => CLK,
-      ASEL     => procdspspienc,
-      SPISS    => DSPSPISSC,
-      SPISCLK  => DSPSPICLKC,
-      SPIMOSI  => DSPSPIMOSIC,
-      SPIMISO  => DSPSPIMISOC,
-      SPISSA   => procdspspissc,
-      SPISCLKA => procdspspiclkc,
-      SPIMOSIA => procdspspimosic,
-      SPIMISOA => procdspspimisoc,
-      SPISSB   => dspissc,
-      SPISCLKB => dspiclkc,
-      SPIMOSIB => dspimosic,
-      SPIMISOB => dspimisoc);
+      RESET    => '0',
+      SCLK     => dspiclkc,
+      MOSI     => dspimosic,
+      SCS      => dspissc,
+      FIFOFULL => devtfifofullc,
+      DOUT     => edspdatac,
+      REQ      => edspreq(2),
+      GRANT    => edspgrant(2));
+  
+      
 
 
   dspcontproc_d : dspcontproc
@@ -599,22 +690,46 @@ begin  -- Behavioral
       DSPSPIHOLD => DSPSPIHOLDD,
       LEDEVENT   => LEDEVENTD);
 
-  spimux_d : spimux
+  
+  dspiomux_d : dspiomux
+    port map (
+      CLK         => CLK,
+      PSEL        => procdspspiend,
+      -- IO Pins
+      SPISCLK     => DSPSPICLKD,
+      SPIMOSI     => DSPSPIMOSID,
+      SPIMISO     => DSPSPIMISOD,
+      FLAG0       => DSPFLAG0D,
+      FLAG1       => DSPFLAG1D,
+      FLAG2       => DSPFLAG2D,
+      FLAG4       => DSPFLAG4D,
+      -- FPGA EPROC master SPI interface
+      SPISSM      => procdspspissd,
+      SPISCLKM    => procdspspiclkd,
+      SPIMOSIM    => procdspspimosid,
+      SPIMISOM    => procdspspimisod,
+      BOOTHOLDOFF => dspspiholdd,
+      -- DSP slave SPI interface
+      SPISSS      => dspissd,
+      SPISCLKS    => dspiclkd,
+      SPIMOSIS    => dspimosid,
+      SPIMISOS    => dspimisod,
+      EVTFIFOFULL => devtfifofulld
+      );
+
+  eventrx_d: eventrx
     port map (
       CLK      => CLK,
-      ASEL     => procdspspiend,
-      SPISS    => DSPSPISSD,
-      SPISCLK  => DSPSPICLKD,
-      SPIMOSI  => DSPSPIMOSID,
-      SPIMISO  => DSPSPIMISOD,
-      SPISSA   => procdspspissd,
-      SPISCLKA => procdspspiclkd,
-      SPIMOSIA => procdspspimosid,
-      SPIMISOA => procdspspimisod,
-      SPISSB   => dspissd,
-      SPISCLKB => dspiclkd,
-      SPIMOSIB => dspimosid,
-      SPIMISOB => dspimisod);
+      RESET    => '0',
+      SCLK     => dspiclkd,
+      MOSI     => dspimosid,
+      SCS      => dspissd,
+      FIFOFULL => devtfifofulld,
+      DOUT     => edspdatad,
+      REQ      => edspreq(3),
+      GRANT    => edspgrant(3));
+  
+      
 
 
   encodemux_inst : encodemux
@@ -695,26 +810,26 @@ begin  -- Behavioral
 
 
 
---       if txdata = X"1C" and txk = '1' then
---         txacnt := txacnt + 1;
---       end if;
+-- if txdata = X"1C" and txk = '1' then
+-- txacnt := txacnt + 1;
+-- end if;
 
---       if txdata = X"3C" and txk = '1' then
---         txbcnt := txbcnt + 1;
---       end if;
+-- if txdata = X"3C" and txk = '1' then
+-- txbcnt := txbcnt + 1;
+-- end if;
 
---       if txdata = X"5C" and txk = '1' then
---         txccnt := txccnt + 1;
---       end if;
+-- if txdata = X"5C" and txk = '1' then
+-- txccnt := txccnt + 1;
+-- end if;
 
---       if txdata = X"7C" and txk = '1' then
---         txdcnt := txdcnt + 1;
---       end if;
+-- if txdata = X"7C" and txk = '1' then
+-- txdcnt := txdcnt + 1;
+-- end if;
 
---       jtagwordout(15 downto 8)  <= txacnt;
---       jtagwordout(23 downto 16) <= txbcnt;
---       jtagwordout(31 downto 24) <= txccnt;
---       jtagwordout(39 downto 32) <= txdcnt;
+-- jtagwordout(15 downto 8) <= txacnt;
+-- jtagwordout(23 downto 16) <= txbcnt;
+-- jtagwordout(31 downto 24) <= txccnt;
+-- jtagwordout(39 downto 32) <= txdcnt;
 
 
     end if;

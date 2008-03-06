@@ -1,4 +1,4 @@
-#include <bf533/acqserial.h>
+#include <hw/acqserial.h>
 #include <cdefBF533.h>
 
 AcqSerial::AcqSerial() :

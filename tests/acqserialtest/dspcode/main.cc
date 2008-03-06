@@ -5,8 +5,8 @@
 
 
 #include <cdefBF533.h>
-#include <bf533/acqserial.h> 
-#include <bf533/memory.h> 
+#include <bf533/hw/acqserial.h> 
+#include <bf533/hw/memory.h> 
 
 AcqSerial * as;  // global so we can get function wrappers
 

@@ -31,7 +31,7 @@ private:
   int curRXpos_; 
   int curReadPos_; 
   bool txPending_; 
- 
+  bool linkUp() { return true;}
 
 }; 
 #endif // ACQSERIAL_H

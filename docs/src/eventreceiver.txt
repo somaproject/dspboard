@@ -1,0 +1,8 @@
+Event recevier: we DMA in events, and then periodically check the
+resulting queue, and set things accordingly...
+
+Our interface is the (possibly-race-condition-laden?)
+if (queue.notEmpty())
+   Event_t evt = queue.nextEvent(); 
+
+

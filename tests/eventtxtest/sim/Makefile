@@ -1,29 +1,28 @@
-VHDLC=vhdlp
-VHDLS=vhdle
-WORKDIR=work.sym
+VHDLC=vcom
+VHDLS=vsim
+WORKDIR=work
 all: hw comp sim
 
-$(WORKDIR)/eventfilter/_behavioral.var: ../../../vhdl/eventfilter.vhd
-	$(VHDLC) ../../../vhdl/eventfilter.vhd
-
-$(WORKDIR)/eventtx/_behavioral.var: ../../../vhdl/eventfilter.vhd ../../../vhdl/eventtx.vhd
-	$(VHDLC) ../../../vhdl/eventtx.vhd
-
-$(WORKDIR)/eventtxtest/_behavioral.var: ../../../vhdl/eventfilter.vhd ../../../vhdl/eventtx.vhd ../vhdl/eventtxtest.vhd
+$(WORKDIR)/eventtxtest/behavioral.dat: $(WORKDIR)/touched ../vhdl/eventtxtest.vhd
+	mkdir -p $(WORKDIR)
 	$(VHDLC) ../vhdl/eventtxtest.vhd
 
-hw: $(WORKDIR)/eventfilter/_behavioral.var $(WORKDIR)/eventtx/_behavioral.var $(WORKDIR)/eventtxtest/_behavioral.var 
+hw: $(WORKDIR)/eventtxtest/behavioral.dat 
 
 comp: 
 
-$(WORKDIR)/eventtxtesttest/_behavioral.var: eventtxtesttest.vhd
+$(WORKDIR)/eventtxtesttest/behavioral.dat: $(WORKDIR)/touched eventtxtesttest.vhd
+	mkdir -p $(WORKDIR)
 	$(VHDLC) eventtxtesttest.vhd
 
-sim: $(WORKDIR)/eventtxtesttest/_behavioral.var 
+sim: $(WORKDIR)/eventtxtesttest/behavioral.dat 
 runsim: all
 	$(VHDLS) eventtxtesttest
 
 
 clean:
-	rm -Rf $(WORKDIR)$
+	rm -Rf work 
 
+work/touched:
+	vlib  work
+	touch  work/touched

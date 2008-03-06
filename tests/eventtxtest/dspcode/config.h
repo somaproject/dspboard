@@ -22,29 +22,10 @@
 // SCLK = VCO / SCLK_DIVIDER
 //
 
-#if defined(BOARD_EZKIT_BF533) || defined(BOARD_EZKIT_BF537)
-
-#define MASTER_CLOCK   27000000
-#define SCLK_DIVIDER   4
-#define VCO_MULTIPLIER 16
+#define MASTER_CLOCK   50000000
+#define VCO_MULTIPLIER 10
 #define CCLK_DIVIDER   1
-
-#elif defined(BOARD_STAMP_BF533)
-
-#define MASTER_CLOCK   11000000
 #define SCLK_DIVIDER   4
-#define VCO_MULTIPLIER 16
-#define CCLK_DIVIDER   1
-
-#elif defined(BOARD_EZKIT_BF561)
-
-#define MASTER_CLOCK   30000000
-#define SCLK_DIVIDER   4
-#define VCO_MULTIPLIER 12
-#define CCLK_DIVIDER   1
-
-
-#endif
 
 // Blackfin environment memory map
 
