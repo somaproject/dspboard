@@ -40,151 +40,153 @@ architecture Behavioral of acqcmdmux is
 
 begin  -- Behavioral
 
+  CMDOUT <= CMDINA when newcmds = '1' else CMDINB;  -- TOTALLY NON FUNCTIONAL,
+                                                    -- DEBUGGING, TEST, ETC
   
-  main: process(CLK, LINKUP)
-    begin
-      if LINKUP = '0'  then
-        -- global reset
-        cmdinal <= (others => '0');
-        cmdinbl <= (others => '0');
-        cmdinall <= (others => '0');
-        cmdinbll <= (others => '0');
-        newcmdal <= '0';
-        newcmdbl <= '0';
-        cs <= linkwait; 
-      else
-        if rising_edge(CLK) then
-          cs <= ns;
+--   main: process(CLK, LINKUP)
+--     begin
+--       if LINKUP = '0'  then
+--         -- global reset
+--         cmdinal <= (others => '0');
+--         cmdinbl <= (others => '0');
+--         cmdinall <= (others => '0');
+--         cmdinbll <= (others => '0');
+--         newcmdal <= '0';
+--         newcmdbl <= '0';
+--         cs <= linkwait; 
+--       else
+--         if rising_edge(CLK) then
+--           cs <= ns;
 
-          SENDCMD <= lsendcmd;
+--           SENDCMD <= lsendcmd;
           
-          if osel = 0 then
-            CMDOUT <= cmdinall;
-          elsif osel = 1 then
-            CMDOUT <=cmdinbll;
-          end if;
+--           if osel = 0 then
+--             CMDOUT <= cmdinall;
+--           elsif osel = 1 then
+--             CMDOUT <=cmdinbll;
+--           end if;
           
-          if NEWCMDS = '1' then
-            cmdinal <= CMDINA;
-            cmdinbl <= CMDINB; 
-          end if;
+--           if NEWCMDS = '1' then
+--             cmdinal <= CMDINA;
+--             cmdinbl <= CMDINB; 
+--           end if;
 
-          if cmdinal(3 downto 0) /= X"0"
-            and  cmdinal(7 downto 4) /= cmdinall(7 downto 4) then
-            cmdinall <= cmdinal;
-            newcmdal <= '1';
-          else
-            if cs = donea then
-              newcmdal <= '0'; 
-            end if;
-          end if;
+--           if cmdinal(3 downto 0) /= X"0"
+--             and  cmdinal(7 downto 4) /= cmdinall(7 downto 4) then
+--             cmdinall <= cmdinal;
+--             newcmdal <= '1';
+--           else
+--             if cs = donea then
+--               newcmdal <= '0'; 
+--             end if;
+--           end if;
           
-          if cmdinbl(3 downto 0) /= X"0"
-            and cmdinbl(7 downto 4) /= cmdinbll(7 downto 4) then
-            cmdinbll <= cmdinbl;
-            newcmdbl <= '1';
-          else
-            if cs = doneb then
-              newcmdbl <= '0'; 
-            end if;
-          end if;
+--           if cmdinbl(3 downto 0) /= X"0"
+--             and cmdinbl(7 downto 4) /= cmdinbll(7 downto 4) then
+--             cmdinbll <= cmdinbl;
+--             newcmdbl <= '1';
+--           else
+--             if cs = doneb then
+--               newcmdbl <= '0'; 
+--             end if;
+--           end if;
 
 
-        end if;
-      end if;
+--         end if;
+--       end if;
 
-    end process main; 
+--     end process main; 
   
-    fsm: process(cs, newcmdal, LINKUP,
-                 cmdid, cmdinall, cmdinbll, newcmdbl)
-      begin
-        case cs is
-          when none =>
-            osel <= 0;
-            lsendcmd <= '0';
-            if LINKUP = '0' then
-              ns <= linkwait;
-            else
-              ns <= checka; 
-            end if;
-          when linkwait =>
-            osel <= 2;
-            lsendcmd <= '0';
-            if LINKUP = '1' then
-              ns <= sendsync;
-            else
-              ns <= linkwait;
-            end if;
+--     fsm: process(cs, newcmdal, LINKUP,
+--                  cmdid, cmdinall, cmdinbll, newcmdbl)
+--       begin
+--         case cs is
+--           when none =>
+--             osel <= 0;
+--             lsendcmd <= '0';
+--             if LINKUP = '0' then
+--               ns <= linkwait;
+--             else
+--               ns <= checka; 
+--             end if;
+--           when linkwait =>
+--             osel <= 2;
+--             lsendcmd <= '0';
+--             if LINKUP = '1' then
+--               ns <= sendsync;
+--             else
+--               ns <= linkwait;
+--             end if;
             
-          when sendsync =>
-            osel <= 2;
-            lsendcmd <= '1';
-            ns <= none;
+--           when sendsync =>
+--             osel <= 2;
+--             lsendcmd <= '1';
+--             ns <= none;
             
-          when checka =>
-            osel <= 0;
-            lsendcmd <= '0';
-            if newcmdal = '1' then
-              ns <= senda;
-            else
-              ns <= checkb; 
-            end if;
+--           when checka =>
+--             osel <= 0;
+--             lsendcmd <= '0';
+--             if newcmdal = '1' then
+--               ns <= senda;
+--             else
+--               ns <= checkb; 
+--             end if;
 
-          when senda =>
-            osel <= 0;
-            lsendcmd <= '1';
-            ns <= waita;
+--           when senda =>
+--             osel <= 0;
+--             lsendcmd <= '1';
+--             ns <= waita;
 
-          when waita =>
-            osel <= 0;
-            lsendcmd <= '0';
-            if cmdid = cmdinall(7 downto 4)  then
-              ns <= donea;
-            else
-              ns <= waita;
-            end if;
+--           when waita =>
+--             osel <= 0;
+--             lsendcmd <= '0';
+--             if cmdid = cmdinall(7 downto 4)  then
+--               ns <= donea;
+--             else
+--               ns <= waita;
+--             end if;
 
-          when donea =>
-            osel <= 0;
-            lsendcmd <= '0';
-            ns <= checkb; 
+--           when donea =>
+--             osel <= 0;
+--             lsendcmd <= '0';
+--             ns <= checkb; 
             
-          when checkb =>
-            osel <= 1;
-            lsendcmd <= '0';
-            if newcmdbl = '1' then
-              ns <= sendb;
-            else
-              ns <= none; 
-            end if;
+--           when checkb =>
+--             osel <= 1;
+--             lsendcmd <= '0';
+--             if newcmdbl = '1' then
+--               ns <= sendb;
+--             else
+--               ns <= none; 
+--             end if;
 
-          when sendb =>
-            osel <= 1;
-            lsendcmd <= '1';
-            ns <= waitb;
+--           when sendb =>
+--             osel <= 1;
+--             lsendcmd <= '1';
+--             ns <= waitb;
 
-          when waitb =>
-            osel <= 1;
-            lsendcmd <= '0';
-            if cmdid = cmdinbll(7 downto 4)  then
-              ns <= doneb;
-            else
-              ns <= waitb;
-            end if;
+--           when waitb =>
+--             osel <= 1;
+--             lsendcmd <= '0';
+--             if cmdid = cmdinbll(7 downto 4)  then
+--               ns <= doneb;
+--             else
+--               ns <= waitb;
+--             end if;
 
-          when doneb =>
-            osel <= 1;
-            lsendcmd <= '0';
-            ns <= none; 
+--           when doneb =>
+--             osel <= 1;
+--             lsendcmd <= '0';
+--             ns <= none; 
             
-          when others =>
-            osel <= 0;
-            lsendcmd <= '0';
-            ns <= none; 
+--           when others =>
+--             osel <= 0;
+--             lsendcmd <= '0';
+--             ns <= none; 
             
-        end case;
+--         end case;
 
-      end process fsm;
+--       end process fsm;
 
       
 end Behavioral;

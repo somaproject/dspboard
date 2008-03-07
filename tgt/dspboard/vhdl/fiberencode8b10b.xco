@@ -1,7 +1,7 @@
 ##############################################################
 #
 # Xilinx Core Generator version J.40
-# Date: Thu Mar  6 19:45:27 2008
+# Date: Fri Mar  7 00:26:39 2008
 #
 ##############################################################
 #
@@ -49,10 +49,10 @@ CSET disparity_output=false
 CSET force_code=false
 CSET force_code_symbol=D_10_2_pos
 CSET force_disparity=false
-CSET implementation=LUT_Based
+CSET implementation=Block_Ram_Based
 CSET new_data=false
 CSET secondary_encoder=false
 # END Parameters
 GENERATE
-# CRC:  bc212df
+# CRC: 47993767
 

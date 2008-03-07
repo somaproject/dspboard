@@ -77,7 +77,7 @@ begin  -- Behavioral
              doutword(15);
   samplesel <= bitpos(7 downto 4) - 1;
   
-  main : process(CLK)
+ main : process(CLK)
   begin
     if rising_edge(CLK) then
       cs <= ns;

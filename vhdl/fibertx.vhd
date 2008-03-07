@@ -76,18 +76,21 @@ begin
     DOUT => dout,
     CLK  => CLK);
 
+--  cmdinlll <= cmdinll;
+  cmdinlll <= CMDIN;
+
   clock : process( CLK) is
   begin
     if rising_edge(CLK) then
       cs <= ns;
 
       sendcmdl <= sendcmd;
-      cmdinl   <= CMDIN;
-      cmdinll <= cmdinl; 
+--       cmdinl   <= CMDIN;
+      --cmdinll <= cmdinl; 
       
-      if cs = cmdlat then
-        cmdinlll <= cmdinll;
-      end if;
+--       if cs = cmdlat then
+--         cmdinll <= cmdinl; 
+--       end if;
 
       -- timing
       if clk8pos = "1001" then

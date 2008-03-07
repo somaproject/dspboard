@@ -178,8 +178,8 @@ begin  -- Behavioral
   eprocbuf_inst : entity eproc.txreqeventbuffer
     port map (
       CLK       => CLK,
-      EVENTIN   => edoutl,
-      EADDRIN   => eaoutl,
+      EVENTIN   => edout,
+      EADDRIN   => eaout,
       NEWEVENT  => enewoutd,
       ECYCLE    => ECYCLE,
       SENDREQ   => ESENDREQ,
@@ -325,10 +325,10 @@ begin  -- Behavioral
       
       enewoutl    <= enewout;
       enewoutd  <= enewoutl or enewout;       
-      if enewout = '1' then
-        edoutl    <= edout;
-        eaoutl    <= eaout;
-      end if;
+--       if enewout = '1' then
+--         edoutl    <= edout;
+--         eaoutl    <= eaout;
+--       end if;
 
     end if;
 
