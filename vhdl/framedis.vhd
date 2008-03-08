@@ -128,14 +128,13 @@ begin
           errin = '1' then
           incnt   <= 0;
         else
-          if inwe = '1' then
+          if inwe = '1' and incnt /= 24 then
             incnt <= incnt + 1;
           end if;
         end if;
 
         NEWSAMPLES <= donef;
 
-        -- SAMPLE A1
         if (incnt = 1 or incnt = 3 or incnt = 5 or
             incnt = 7 or incnt = 9 or incnt = 11 or incnt = 13
             or incnt = 15 or incnt = 17 or incnt = 19 ) and inwe = '1' then

@@ -325,10 +325,10 @@ begin  -- Behavioral
       
       enewoutl    <= enewout;
       enewoutd  <= enewoutl or enewout;       
---       if enewout = '1' then
---         edoutl    <= edout;
---         eaoutl    <= eaout;
---       end if;
+--        if enewout = '1' then
+--          edoutl    <= edout;
+--          eaoutl    <= eaout;
+--        end if;
 
     end if;
 

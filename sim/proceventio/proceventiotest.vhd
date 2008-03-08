@@ -933,6 +933,7 @@ begin  -- Behavioral
     dlEATXc             <= (others => '0');
     dlEATXd             <= (others => '0');
 
-    wait;
+    report "End of Simulation" severity Failure;
+    
   end process event_transmission;
 end Behavioral;

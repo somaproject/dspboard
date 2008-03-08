@@ -12,21 +12,20 @@ architecture Behavioral of acqserialtest is
 
   component acqserial
     port (
-      CLK        : in  std_logic;
-      CLKHI      : in  std_logic;
-      RESET      : in  std_logic;
-      FIBERIN    : in  std_logic;
-      FIBEROUT   : out std_logic;
+      CLK       : in  std_logic;
+      CLKHI     : in  std_logic;
+      RESET     : in  std_logic;
+      FIBERIN   : in  std_logic;
+      FIBEROUT  : out std_logic;
+      SERCLK    : in  std_logic;
       -- SPORT outputs
-      DSPASERCLK : out std_logic;
-      DSPASERDT  : out std_logic;
-      DSPASERFS  : out std_logic;
-      DSPASERDR  : in  std_logic;
+      DSPASERDT : out std_logic;
+      DSPASERFS : out std_logic;
+      DSPASERDR : in  std_logic;
 
-      DSPBSERCLK : out std_logic;
-      DSPBSERDT  : out std_logic;
-      DSPBSERFS  : out std_logic;
-      DSPBSERDR  : in  std_logic;
+      DSPBSERDT : out std_logic;
+      DSPBSERFS : out std_logic;
+      DSPBSERDR : in  std_logic;
 
       -- link status
       DSPALINKUP : out std_logic;
@@ -34,21 +33,21 @@ architecture Behavioral of acqserialtest is
       );
   end component;
 
-  signal CLK        : std_logic := '0';
-  signal CLKHI      : std_logic := '0';
-  signal RESET      : std_logic := '1';
-  signal FIBERIN    : std_logic := '0';
-  signal FIBEROUT   : std_logic := '0';
-  -- SPORT outputs
-  signal DSPASERCLK : std_logic := '0';
-  signal DSPASERDT  : std_logic := '0';
-  signal DSPASERFS  : std_logic := '0';
-  signal DSPASERDR  : std_logic := '0';
+  signal CLK      : std_logic := '0';
+  signal CLKHI    : std_logic := '0';
+  signal RESET    : std_logic := '1';
+  signal FIBERIN  : std_logic := '0';
+  signal FIBEROUT : std_logic := '0';
+  signal SERCLK   : std_logic := '0';
 
-  signal DSPBSERCLK : std_logic := '0';
-  signal DSPBSERDT  : std_logic := '0';
-  signal DSPBSERFS  : std_logic := '0';
-  signal DSPBSERDR  : std_logic := '0';
+  -- SPORT outputs
+  signal DSPASERDT : std_logic := '0';
+  signal DSPASERFS : std_logic := '0';
+  signal DSPASERDR : std_logic := '0';
+
+  signal DSPBSERDT : std_logic := '0';
+  signal DSPBSERFS : std_logic := '0';
+  signal DSPBSERDR : std_logic := '0';
 
   -- link status
   signal DSPALINKUP : std_logic := '0';
@@ -57,18 +56,20 @@ architecture Behavioral of acqserialtest is
   signal dspadatain  : std_logic_vector(255 downto 0) := (others => '0');
   signal dspadataout : std_logic_vector(255 downto 0) := (others => '0');
   signal dspadone    : std_logic                      := '0';
-  signal dspabitpos  : integer                        := 0;
+  signal dspabitpos  : integer                        := 257;
 
   signal dspacmdout   : std_logic_vector(3 downto 0) := (others => '0');
   signal dspacmdidout : std_logic_vector(3 downto 0) := (others => '0');
   signal dspadata0out : std_logic_vector(7 downto 0) := (others => '0');
 
+  signal dspaserclk : std_logic := '0';
+  signal dspbserclk : std_logic := '0';
 
 
   signal dspbdatain  : std_logic_vector(255 downto 0) := (others => '0');
   signal dspbdataout : std_logic_vector(255 downto 0) := (others => '0');
   signal dspbdone    : std_logic                      := '0';
-  signal dspbbitpos  : integer                        := 0;
+  signal dspbbitpos  : integer                        := 257;
 
   signal dspbcmdout   : std_logic_vector(3 downto 0) := (others => '0');
   signal dspbcmdidout : std_logic_vector(3 downto 0) := (others => '0');
@@ -132,12 +133,10 @@ begin  -- Behavioral
       RESET      => RESET,
       FIBERIN    => FIBERIN,
       FIBEROUT   => FIBEROUT,
-      DSPASERCLK => DSPASERCLK,
+      SERCLK     => SERCLK,
       DSPASERDT  => DSPASERDT,
       DSPASERFS  => DSPASERFS,
       DSPASERDR  => DSPASERDR,
-
-      DSPBSERCLK => DSPBSERCLK,
       DSPBSERDT  => DSPBSERDT,
       DSPBSERFS  => DSPBSERFS,
       DSPBSERDR  => DSPBSERDR,
@@ -145,6 +144,28 @@ begin  -- Behavioral
       DSPBLINKUP => DSPBLINKUP
       );
 
+  process(CLK)
+    variable scnt : integer range 0 to 2 := 0;
+  begin
+    if rising_edge(CLK) then
+
+      if scnt = 2 then
+        scnt := 0;
+      else
+        scnt := scnt + 1;
+      end if;
+
+      if scnt = 2 then
+        SERCLK <= '1';
+      else
+        SERCLK <= '0';
+      end if;
+
+      DSPASERCLK <= SERCLK;
+      DSPBSERCLK <= SERCLK;
+
+    end if;
+  end process;
   -----------------------------------------------------------------------------
   -- DSP A 
   -----------------------------------------------------------------------------
@@ -152,10 +173,13 @@ begin  -- Behavioral
   begin
     if rising_edge(DSPASERCLK) then
       if DSPASERFS = '1' then
-        dspabitpos             <= 0;
+        dspabitpos               <= 0;
       else
-        dspabitpos             <= dspabitpos + 1;
-        dspadatain(dspabitpos) <= DSPASERDT;
+        if dspabitpos < 256 then
+          dspabitpos             <= dspabitpos + 1;
+          dspadatain(dspabitpos) <= DSPASERDT;
+        end if;
+
       end if;
 
       -- bit rx
@@ -179,10 +203,12 @@ begin  -- Behavioral
   begin
     if rising_edge(DSPBSERCLK) then
       if DSPBSERFS = '1' then
-        dspbbitpos             <= 0;
+        dspbbitpos               <= 0;
       else
-        dspbbitpos             <= dspbbitpos + 1;
-        dspbdatain(dspbbitpos) <= DSPBSERDT;
+        if dspbbitpos < 256 then
+          dspbbitpos             <= dspbbitpos + 1;
+          dspbdatain(dspbbitpos) <= DSPBSERDT;
+        end if;
       end if;
 
       -- bit rx
@@ -252,7 +278,7 @@ begin  -- Behavioral
       wait until rising_edge(CLK) and dspabitpos = 0;
     end loop;  -- datacnt
 
-    wait; 
+    wait;
   end process;
 
 

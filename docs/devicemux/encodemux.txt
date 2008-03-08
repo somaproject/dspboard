@@ -16,4 +16,9 @@ needs to begin sending the data, and it needs to assert DONE on the
 -last byte- of the data. This is so we can properly frame the
 data with the 8b/10b comma characters. 
 
+How do we handle the data interface without some sort of horrible
+latency? We know that on a given ECYCLE we have a DGRANT for a
+particular packet. So we query to see if that packet has a pending
+REQ, and if so we then grant, TX. 
 
+So the 

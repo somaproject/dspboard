@@ -1,26 +1,17 @@
-Data packets are received via SPORT1 in a bit-serial manner. The Data interface is dominated by the maximum data packet size, MAXDATAN. 
+Data packets are received via SPORT1 in a bit-serial manner. The Data
+interface is dominated by the maximum data packet size, MAXDATAN.
 
 SPORT1 is configured as: 
 
 external clock
 no frame sync
-RFS is internally generated
+RFS is externally generated
 
+We're limited by FPGA resources to using a single BRAM, which means we
+have a maximum of 1024 bytes per packet.
 
-Thus the initiation of a block transfer of MAXDATAN bytes will be proceeded by the assertion of RFS, which we use to begin clocking in bits. 
+We use the FRAME SYNC to indicate 8-bit bytes. We use a FLAG to frame
+the 1024-byte frame.
 
-
-Interface: 
-
-We use two BlockRAMs to get a total of 4 1024-byte packets in the FIFO. We use a 1-bit wide block ram interface and clock in MAXDATAN*8 bits. 
-
-The output of the buffer is a simple 
-ADDR: select bytes in the buffer
-VALID: The data in the fifo represents a valid packet.
-DOUT: 8-bit data
-NEXTBUF: advance the fifo output one byte. 
-
-The thought is that this interface will be easy to work with when we need to serialize these bytes out the EVENTBUS. 
-
-
-We initially develop a       
+We can store two packets in here; we need to be careful about our FIFO
+FULL signal. We could always use a 2-bit up-down counter or something. 

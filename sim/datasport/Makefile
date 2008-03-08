@@ -1,23 +1,28 @@
-VHDLC=vhdlp
-VHDLS=vhdle
-WORKDIR=work.sym
+VHDLC=vcom
+VHDLS=vsim
+WORKDIR=work
 all: hw comp sim
 
-$(WORKDIR)/datasport/_behavioral.var: ../../vhdl/datasport.vhd
+$(WORKDIR)/datasport/behavioral.dat: $(WORKDIR)/touched ../../vhdl/datasport.vhd
+	mkdir -p $(WORKDIR)
 	$(VHDLC) ../../vhdl/datasport.vhd
 
-hw: $(WORKDIR)/datasport/_behavioral.var 
+hw: $(WORKDIR)/datasport/behavioral.dat 
 
 comp: 
 
-$(WORKDIR)/datasporttest/_behavioral.var: datasporttest.vhd
+$(WORKDIR)/datasporttest/behavioral.dat: $(WORKDIR)/touched datasporttest.vhd
+	mkdir -p $(WORKDIR)
 	$(VHDLC) datasporttest.vhd
 
-sim: $(WORKDIR)/datasporttest/_behavioral.var 
+sim: $(WORKDIR)/datasporttest/behavioral.dat 
 runsim: all
 	$(VHDLS) datasporttest
 
 
 clean:
-	rm -Rf $(WORKDIR)$
+	rm -Rf work 
 
+work/touched:
+	vlib  work
+	touch  work/touched

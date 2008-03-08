@@ -30,7 +30,9 @@ entity dspiomux is
     SPISCLKS    : out   std_logic;
     SPIMOSIS    : out   std_logic;
     SPIMISOS    : in    std_logic;
-    EVTFIFOFULL : in    std_logic
+    EVTFIFOFULL : in    std_logic;
+    -- DATA SPORT IF interface
+    DATAFULL : in std_logic
     );
 end dspiomux;
 
@@ -52,6 +54,7 @@ begin  -- Behavioral
   SPISSS      <= FLAG1  when PSEL = '0' else '1';
 
   FLAG2 <= '0';
-  FLAG4 <= '0'; 
+  FLAG4 <= DATAFULL; 
 
+  
 end Behavioral;

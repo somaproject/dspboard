@@ -4,352 +4,220 @@ use IEEE.STD_LOGIC_ARITH.all;
 use IEEE.STD_LOGIC_UNSIGNED.all;
 
 
-Library UNISIM;
+library UNISIM;
 use UNISIM.vcomponents.all;
 
 
 entity datasport is
   port (
-    CLK      : in  std_logic;
-    RESET    : in  std_logic;
+    CLK    : in  std_logic;
+    RESET  : in  std_logic;
     -- serial IO
-    SDIN     : in  std_logic;
-    STFS     : in  std_logic;
-    SCLK     : in  std_logic;
+    SERCLK : in  std_logic;
+    SERDT  : in  std_logic;
+    SERTFS : in  std_logic;
+    FULL : out std_logic; 
     -- FiFO interface
-    VALID    : out std_logic;
-    DOUT     : out std_logic_vector(7 downto 0);
-    ADDRIN   : in  std_logic_vector(9 downto 0);
-    FIFONEXT : in  std_logic);
+    REQ    : out std_logic;
+    GRANT  : in  std_logic;
+    DOUT   : out std_logic_vector(7 downto 0);
+    DONE : out std_logic);
 end datasport;
 
 architecture Behavioral of datasport is
 
   -- input side
-  signal dinl  : std_logic_vector(0 downto 0) := "0";
-  signal tfsl  : std_logic := '0';
-  signal sclkl : std_logic := '0';
-
-  signal nextbuf : std_logic := '0';
-  
-  signal bitwe    : std_logic                     := '0';
-  signal bitaddr  : std_logic_vector(12 downto 0) := (others => '0');
-
-  signal we1, we2 : std_logic := '0';
-
-  signal fain  : std_logic_vector(1 downto 0)  := (others => '0');
+  signal incnt : std_logic_vector(12 downto 0) := (others => '0');
+  signal insel : std_logic                     := '0';
   signal addra : std_logic_vector(13 downto 0) := (others => '0');
 
-  -- output side
-  signal fainl    : std_logic_vector(1 downto 0) := (others => '0');
-  signal faout    : std_logic_vector(9 downto 0) := (others => '0');
-  signal do1, do2 : std_logic_vector(7 downto 0) := (others => '0');
-  signal addrb : std_logic_vector(10 downto 0) := (others => '0');
+  signal dinint : std_logic_vector(0 downto 0) := (others => '0');
+
+  signal seren : std_logic := '0';
+
+  signal bufcnt : std_logic_vector(1 downto 0)  := (others => '0');
+  signal addrb   : std_logic_vector(10 downto 0) := (others => '0');
+  signal len     : std_logic_vector(15 downto 0) := (others => '0');
+
+  type instates is (none, low, high, bufdone);
+  signal ics, ins : instates := none;
+
+  type outstates is (none, reqs, len1, len2, dwait, ddone);
+  signal ocs, ons : outstates := none;
+
+  signal dob : std_logic_vector(7 downto 0) := (others => '0');
+
+  signal outsel : std_logic := '0';
+  signal ocnten : std_logic := '0';
   
 
-  type states is (none, clkl, clkh, bufdone);
-  signal cs, ns : states := none;
-
 begin  -- Behavioral
+  dinint(0) <= SERDT;
 
-
-  we1 <= (not fain(1)) and bitwe;
-  we2 <= fain(1) and bitwe;
-
-  VALID <= '1' when fainl /= faout else '0';
-
-  DOUT <= do1 when faout(1) = '0' else do2;
-
-  -- bit-wrangling
-  addra <= fain(0) & bitaddr;
-  addrb <= faout(0) & ADDRIN;
-
-  main : process(RESET, CLK)
-  begin
-    if RESET = '1' then
-      fain    <= (others => '0');
-      bitaddr <= (others => '0');
-      faout   <= (others => '0');
-
-      cs   <= none;
-    else
-      if rising_edge(CLK) then
-        cs <= ns;
-
-
-        -- inputs
-        dinl(0)  <= SDIN;
-        tfsl  <= STFS;
-        sclkl <= SCLK;
-
-        if nextbuf = '1' then
-          fain      <= fain + 1;
-          bitaddr   <= (others => '0');
-        else
-          if bitwe = '1' then
-            bitaddr <= bitaddr + 1;
-          end if;
-        end if;
-
-        fainl <= fain;
-
-        -- output
-        if FIFONEXT = '1' then
-          faout <= faout + 1;
-        end if;
-
-      end if;
-    end if;
-
-  end process main;
-
-  FSM : process(cs, tfsl, sclkl, bitaddr)
-  begin
-    case cs is
-      when none =>
-        nextbuf <= '0';
-        bitwe    <= '0';
-        if tfsl = '1' and sclkl = '1' then
-          ns     <= clkl;
-        else
-          ns     <= none;
-        end if;
-
-      when clkl =>
-        nextbuf <= '0';
-        bitwe    <= '0';
-        ns       <= clkh;
-
-      when clkh =>
-        nextbuf <= '0';
-        bitwe    <= '1';
-        if bitaddr = "1001011000000" then
-          ns     <= bufdone;
-        else
-          ns     <= clkl;
-        end if;
-
-      when bufdone =>
-        nextbuf <= '1';
-        bitwe    <= '0';
-        ns       <= none;
-
-      when others =>
-        nextbuf <= '0';
-        bitwe    <= '0';
-        ns       <= none;
-
-    end case;
-  end process fsm;
-
+  FULL <= '1' when BUFCNT = "10" else '0';
+  DONE <= '1' when ocs = ddone else '0';
+    
   RAM1 : RAMB16_S1_S9
     generic map (
       WRITE_MODE_A        => "WRITE_FIRST",  --  WRITE_FIRST, READ_FIRST or NO_CHANGE
       WRITE_MODE_B        => "WRITE_FIRST",  --  WRITE_FIRST, READ_FIRST or NO_CHANGE
-      SIM_COLLISION_CHECK => "NONE",
-      -- Port A Address 0 to 4095, Port B Address 0 to 255
-      INIT_00             => X"AABBCCDDEE000000000000000000000000000000000000000000000044332211",
-      INIT_01             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_02             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_03             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_04             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_05             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_06             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_07             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_08             => X"0000000000000000000000000000000000000000000000000000000000000000", 
-      INIT_09             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_0A             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_0B             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_0C             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_0D             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_0E             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_0F             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      -- Port A Address 4096 to 8191, Port B Address 256 to 511
-      INIT_10             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_11             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_12             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_13             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_14             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_15             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_16             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_17             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_18             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_19             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_1A             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_1B             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_1C             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_1D             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_1E             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_1F             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      -- Port A Address 8192 to 12287, Port B Address 512 to 767
-      INIT_20             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_21             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_22             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_23             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_24             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_25             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_26             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_27             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_28             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_29             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_2A             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_2B             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_2C             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_2D             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_2E             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_2F             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      -- Port A Address 12288 to 16383, Port B Address 768 to 1023
-      INIT_30             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_31             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_32             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_33             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_34             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_35             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_36             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_37             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_38             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_39             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_3A             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_3B             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_3C             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_3D             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_3E             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_3F             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      -- The next set of INITP_xx are for the parity bits
-      -- Port B Address 0 to 255
-      INITP_00            => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INITP_01            => X"0000000000000000000000000000000000000000000000000000000000000000",
-      -- Port B Address 256 to 511
-      INITP_02            => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INITP_03            => X"0000000000000000000000000000000000000000000000000000000000000000",
-      -- Port B Address 512 to 767
-      INITP_04            => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INITP_05            => X"0000000000000000000000000000000000000000000000000000000000000000",
-      -- Port B Address 768 to 1023 
-      INITP_06            => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INITP_07            => X"0000000000000000000000000000000000000000000000000000000000000000")
+      SIM_COLLISION_CHECK => "NONE")
     port map (
-      DOA                 => open,      -- Port A 1-bit Data Output
-      DOB                 => do1,      -- Port B 16-bit Data Output
-      DOPB                => open,      -- Port B 2-bit Parity Output
-      ADDRA               => addra,     -- Port A 14-bit Address Input
-      ADDRB               => addrb,     -- Port B 10-bit Address Input
-      CLKA                => CLK,       -- Port A Clock
-      CLKB                => CLK,       -- Port B Clock
-      DIA                 => dinl,      -- Port A 1-bit Data Input
-      DIB                 => X"00",     -- Port B 16-bit Data Input
-      DIPB                => "0",      -- Port-B 2-bit parity Input
-      ENA                 => '1',       -- Port A RAM Enable Input
-      ENB                 => '1',       -- PortB RAM Enable Input
-      SSRA                => RESET,     -- Port A Synchronous Set/Reset Input
-      SSRB                => RESET,     -- Port B Synchronous Set/Reset Input
-      WEA                 => we1,       -- Port A Write Enable Input
-      WEB                 => '0'        -- Port B Write Enable Input
-      );
+      DOA                 => open,
+      DOB                 => dob,
+      DOPB                => open,
+      ADDRA               => addra,
+      ADDRB               => addrb,
+      CLKA                => CLK,
+      CLKB                => CLK,
+      DIB                 => X"00",
+      DIA                 => dinint,
+      DIPB                => "0",
+      ENA                 => '1',
+      ENB                 => '1',
+      SSRA                => RESET,
+      SSRB                => RESET,
+      WEA                 => seren,
+      WEB                 => '0' );
 
-  RAM2 : RAMB16_S1_S9
-    generic map (
-      WRITE_MODE_A        => "WRITE_FIRST",  --  WRITE_FIRST, READ_FIRST or NO_CHANGE
-      WRITE_MODE_B        => "WRITE_FIRST",  --  WRITE_FIRST, READ_FIRST or NO_CHANGE
-      SIM_COLLISION_CHECK => "NONE",
-      -- Port A Address 0 to 4095, Port B Address 0 to 255
-      INIT_00             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_01             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_02             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_03             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_04             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_05             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_06             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_07             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_08             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_09             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_0A             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_0B             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_0C             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_0D             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_0E             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_0F             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      -- Port A Address 4096 to 8191, Port B Address 256 to 511
-      INIT_10             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_11             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_12             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_13             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_14             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_15             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_16             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_17             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_18             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_19             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_1A             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_1B             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_1C             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_1D             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_1E             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_1F             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      -- Port A Address 8192 to 12287, Port B Address 512 to 767
-      INIT_20             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_21             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_22             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_23             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_24             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_25             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_26             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_27             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_28             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_29             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_2A             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_2B             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_2C             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_2D             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_2E             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_2F             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      -- Port A Address 12288 to 16383, Port B Address 768 to 1023
-      INIT_30             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_31             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_32             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_33             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_34             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_35             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_36             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_37             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_38             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_39             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_3A             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_3B             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_3C             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_3D             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_3E             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_3F             => X"0000000000000000000000000000000000000000000000000000000000000000",
-      -- The next set of INITP_xx are for the parity bits
-      -- Port B Address 0 to 255
-      INITP_00            => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INITP_01            => X"0000000000000000000000000000000000000000000000000000000000000000",
-      -- Port B Address 256 to 511
-      INITP_02            => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INITP_03            => X"0000000000000000000000000000000000000000000000000000000000000000",
-      -- Port B Address 512 to 767
-      INITP_04            => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INITP_05            => X"0000000000000000000000000000000000000000000000000000000000000000",
-      -- Port B Address 768 to 1023 
-      INITP_06            => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INITP_07            => X"0000000000000000000000000000000000000000000000000000000000000000")
-    port map (
-      DOA                 => open,      -- Port A 1-bit Data Output
-      DOB                 => do2,      -- Port B 16-bit Data Output
-      DOPB                => open,      -- Port B 2-bit Parity Output
-      ADDRA               => addra,     -- Port A 14-bit Address Input
-      ADDRB               => addrb,     -- Port B 10-bit Address Input
-      CLKA                => CLK,       -- Port A Clock
-      CLKB                => CLK,       -- Port B Clock
-      DIA                 => dinl,      -- Port A 1-bit Data Input
-      DIB                 => X"00",     -- Port B 16-bit Data Input
-      DIPB                => "0",      -- Port-B 2-bit parity Input
-      ENA                 => '1',       -- Port A RAM Enable Input
-      ENB                 => '1',       -- PortB RAM Enable Input
-      SSRA                => RESET,     -- Port A Synchronous Set/Reset Input
-      SSRB                => RESET,     -- Port B Synchronous Set/Reset Input
-      WEA                 => we2,       -- Port A Write Enable Input
-      WEB                 => '0'        -- Port B Write Enable Input
-      );
+  DOUT <= dob;
+  addra(13) <= insel;
+  addra(12 downto 0) <= incnt; 
+        
+  seren <= SERCLK; 
+  addrb(10) <= outsel;
+
+  REQ <= '1' when ocs = REQS else '0'; 
+  main : process(CLK)
+  begin
+    if rising_edge(CLK) then
+      ics <= ins;
+      ocs <= ons;
+
+      if ics = none then
+        incnt   <= (others => '0');
+      else
+        if seren = '1' then
+          incnt <= incnt + 1;
+        end if;
+      end if;
+
+      if ics = bufdone then
+        insel <= not insel;
+      end if;
+
+      if ocs = len1 then
+        len(15 downto 8) <= dob;
+      end if;
+
+      if ocs = len2 then
+        len(7 downto 0) <= dob;
+      end if;
+
+      if ocs = none then
+        addrb(9 downto 0)   <= (others => '0');
+      else
+        if ocnten = '1' or GRANT = '1' then
+          addrb(9 downto 0) <= addrb(9 downto 0) + 1;
+        end if;
+      end if;
+
+      if ics = bufdone and ocs = ddone then
+        null;
+      elsif ics = bufdone and ocs /= ddone then
+        bufcnt <= bufcnt + 1;
+      elsif ics /= bufdone and ocs = ddone then
+        bufcnt <= bufcnt - 1;
+      end if;
+
+      if ocs = ddone then
+        outsel <= not outsel;
+      end if;
+
+
+    end if;
+  end process main;
+
+
+  infsm : process(ics, seren, SERTFS, incnt)
+  begin
+
+    case ics is
+      when none =>
+        if seren = '1' and SERTFS = '1' then
+          ins <= low;
+        else
+          ins <= none;
+        end if;
+
+      when low =>
+        if seren = '1' then
+          ins <= high;
+        else
+          ins <= low;
+        end if;
+
+      when high =>
+        if incnt = "000000000000" then
+          ins <= bufdone;
+        else
+          ins <= low;
+        end if;
+
+      when bufdone =>
+        ins <= none;
+
+      when others =>
+        ins <= none;
+
+    end case;
+  end process infsm;
+
+  outfsm : process(ocs, bufcnt, GRANT, len, addrb)
+  begin
+    case ocs is
+      when none =>
+        ocnten <= '0';
+        if bufcnt /= "00" then
+          ons  <= reqs;
+        else
+          ons  <= none;
+        end if;
+
+      when reqs =>
+        ocnten <= '0';
+        if GRANT = '1' then
+          ons  <= len1;
+        else
+          ons  <= reqs;
+        end if;
+
+      when len1 =>
+        ocnten <= '1';
+        ons    <= len2;
+
+      when len2 =>
+        ocnten <= '1';
+        ons    <= dwait;
+
+      when dwait =>
+        ocnten <= '1';
+        if addrb(9 downto 0) = len(9 downto 0) then
+          ons  <= ddone;
+        else
+          ons  <= dwait;
+
+        end if;
+
+      when ddone =>
+        ocnten <= '0';
+        ons    <= none;
+
+      when others =>
+        ocnten <= '0';
+        ons    <= none;
+    end case;
+
+  end process outfsm;
 
 end Behavioral;

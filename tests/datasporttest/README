@@ -1,5 +1,9 @@
-Here we interface the DATASPORT interface with the BSCAN block. 
+Here we interface the DATASPORT interface with the BSCAN block.
 
-USER1: its input is a 16-bit word that contains a byte address. Its output is the -last- requested byte address. 
+The generic interface here is we create a buffer of 512
+16-bit words with the length as the first word
+
+We then can send the buffer via SPORT1. Ideally we can set things
+up in a loop waiting on the fifofull signal
 
 

@@ -10,11 +10,12 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    sodipodi:docname="acqserial.svg"
    sodipodi:docbase="/home/jonas/soma/dspboard/docs/acqserial"
-   inkscape:version="0.44.1"
+   inkscape:version="0.45.1"
    sodipodi:version="0.32"
    id="svg1996"
    height="792.00000pt"
-   width="612.00000pt">
+   width="612.00000pt"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape">
   <defs
      id="defs3">
     <marker
@@ -47,8 +48,8 @@
     </marker>
   </defs>
   <sodipodi:namedview
-     inkscape:window-y="0"
-     inkscape:window-x="1609"
+     inkscape:window-y="25"
+     inkscape:window-x="0"
      inkscape:window-height="1021"
      inkscape:window-width="1004"
      guidetolerance="2.5000000pt"
@@ -62,9 +63,9 @@
      showgrid="true"
      inkscape:current-layer="layer1"
      inkscape:document-units="pt"
-     inkscape:cy="746.50467"
-     inkscape:cx="380.2036"
-     inkscape:zoom="1.4142136"
+     inkscape:cy="649.10764"
+     inkscape:cx="585.96502"
+     inkscape:zoom="2.0000001"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
      borderopacity="1.0"
@@ -566,15 +567,15 @@
          y="290.25">SERFS</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:9px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:end;line-height:125%;writing-mode:lr-tb;text-anchor:end;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
-       x="559.39453"
-       y="255.96074"
+       style="font-size:9px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:end;line-height:125%;writing-mode:lr-tb;text-anchor:end;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="559.43555"
+       y="427.5"
        id="text2207"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan2209"
-         x="559.39453"
-         y="255.96074">SERCLK</tspan></text>
+         x="559.43555"
+         y="427.5">SERCLK</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:9px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:end;line-height:125%;writing-mode:lr-tb;text-anchor:end;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
@@ -1006,17 +1007,6 @@
        xml:space="preserve"
        style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
        x="656.25"
-       y="224.375"
-       id="text2061"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         id="tspan2063"
-         x="656.25"
-         y="224.375">DSPASERCLK</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
-       x="656.25"
        y="240"
        id="text2065"
        sodipodi:linespacing="125%"><tspan
@@ -1046,17 +1036,6 @@
          id="tspan2075"
          x="656.25"
          y="271.25">DSPASERDR</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
-       x="656.25"
-       y="318.125"
-       id="text2077"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         id="tspan2079"
-         x="656.25"
-         y="318.125">DSPBSERCLK</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
@@ -1092,24 +1071,18 @@
          y="365">DSPBSERDR</tspan></text>
     <path
        style="fill:none;fill-opacity:1;stroke:black;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 562.5,252.5 L 609.375,252.5 L 609.375,221.25 L 656.25,221.25"
-       id="path2093" />
-    <path
-       style="fill:none;fill-opacity:1;stroke:black;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 656.25,315 L 609.375,315 L 609.375,252.5"
-       id="path2095" />
-    <path
-       style="fill:none;fill-opacity:1;stroke:black;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="M 562.5,268.125 L 606.25,268.125"
        id="path2097" />
     <path
        style="fill:none;fill-opacity:1;stroke:black;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 612.5,268.125 L 621.875,268.125 L 621.875,236.875 L 656.25,236.875"
-       id="path2099" />
+       d="M 606.25,268.125 L 621.875,268.125 L 621.875,236.875 L 656.25,236.875"
+       id="path2099"
+       sodipodi:nodetypes="cccc" />
     <path
        style="fill:none;fill-opacity:1;stroke:black;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 621.875,268.125 L 621.875,311.875"
-       id="path2101" />
+       d="M 621.875,268.125 L 621.875,321.25"
+       id="path2101"
+       sodipodi:nodetypes="cc" />
     <path
        style="fill:none;fill-opacity:1;stroke:black;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="M 656.25,330.625 L 621.875,330.625 L 621.875,321.25 L 621.875,318.125"
@@ -1120,16 +1093,18 @@
        id="path2105" />
     <path
        style="fill:none;fill-opacity:1;stroke:black;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 612.5,286.875 L 618.75,286.875"
-       id="path2107" />
+       d="M 606.25,286.875 L 618.75,286.875"
+       id="path2107"
+       sodipodi:nodetypes="cc" />
     <path
        style="fill:none;fill-opacity:1;stroke:black;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="M 625,286.875 L 634.375,286.875 L 634.375,249.375 L 656.25,249.375"
        id="path2109" />
     <path
        style="fill:none;fill-opacity:1;stroke:black;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 634.375,286.875 L 634.375,311.875"
-       id="path2111" />
+       d="M 634.375,286.875 L 634.375,321.25"
+       id="path2111"
+       sodipodi:nodetypes="cc" />
     <path
        style="fill:none;fill-opacity:1;stroke:black;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="M 634.375,318.125 L 634.375,327.5"
@@ -1144,8 +1119,9 @@
        id="path2117" />
     <path
        style="fill:none;fill-opacity:1;stroke:black;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 612.5,302.5 L 618.75,302.5"
-       id="path2119" />
+       d="M 606.25,302.5 L 618.75,302.5"
+       id="path2119"
+       sodipodi:nodetypes="cc" />
     <path
        style="fill:none;fill-opacity:1;stroke:black;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="M 625,302.5 L 631.25,302.5"
@@ -1160,15 +1136,15 @@
        id="path2125" />
     <text
        xml:space="preserve"
-       style="font-size:7px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
-       x="568.75"
-       y="249.375"
+       style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="615.625"
+       y="427.5"
        id="text2127"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan2129"
-         x="568.75"
-         y="249.375">SERCLK</tspan></text>
+         x="615.625"
+         y="427.5">SERCLK</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:7px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
@@ -1329,5 +1305,9 @@
        d="M 437.5,252.5 L 330.6975,252.5"
        id="path3022"
        sodipodi:nodetypes="cc" />
+    <path
+       style="opacity:1;color:#000000;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.25;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:url(#TriangleOutM);stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="M 609.375,424.375 L 565.625,424.375"
+       id="path2401" />
   </g>
 </svg>

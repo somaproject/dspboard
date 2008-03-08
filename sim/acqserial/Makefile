@@ -33,37 +33,37 @@ $(WORKDIR)/acqserial/behavioral.dat: $(WORKDIR)/touched ../../vhdl/fiberrx.vhd .
 
 hw: $(WORKDIR)/fiberrx/behavioral.dat $(WORKDIR)/framedis/behavioral.dat $(WORKDIR)/sportacqser/behavioral.dat $(WORKDIR)/regfile/behavioral.dat $(WORKDIR)/acqcmdmux/behavioral.dat $(WORKDIR)/fibertx/behavioral.dat $(WORKDIR)/acqserial/behavioral.dat 
 
-$(WORKDIR)/decode8b10b/decode8b10b_a.dat: $(WORKDIR)/touched decode8b10b.vhd
+$(WORKDIR)/fiberdecode8b10b/fiberdecode8b10b_a.dat: $(WORKDIR)/touched fiberdecode8b10b.vhd
 	mkdir -p $(WORKDIR)
-	$(VHDLC) decode8b10b.vhd
+	$(VHDLC) fiberdecode8b10b.vhd
 
-$(WORKDIR)/encode8b10b/encode8b10b_a.dat: $(WORKDIR)/touched decode8b10b.vhd encode8b10b.vhd
+$(WORKDIR)/fiberencode8b10b/fiberencode8b10b_a.dat: $(WORKDIR)/touched fiberdecode8b10b.vhd fiberencode8b10b.vhd
 	mkdir -p $(WORKDIR)
-	$(VHDLC) encode8b10b.vhd
+	$(VHDLC) fiberencode8b10b.vhd
 
-$(WORKDIR)/acqclocks/behavioral.dat: $(WORKDIR)/touched decode8b10b.vhd encode8b10b.vhd ../components/acqboard/acqclocks.vhd
+$(WORKDIR)/acqclocks/behavioral.dat: $(WORKDIR)/touched fiberdecode8b10b.vhd fiberencode8b10b.vhd ../components/acqboard/acqclocks.vhd
 	mkdir -p $(WORKDIR)
 	$(VHDLC) ../components/acqboard/acqclocks.vhd
 
-$(WORKDIR)/Acqfiberrx/behavioral.dat: $(WORKDIR)/touched decode8b10b.vhd encode8b10b.vhd ../components/acqboard/acqclocks.vhd ../components/acqboard/acqfiberrx.vhd
+$(WORKDIR)/Acqfiberrx/behavioral.dat: $(WORKDIR)/touched fiberdecode8b10b.vhd fiberencode8b10b.vhd ../components/acqboard/acqclocks.vhd ../components/acqboard/acqfiberrx.vhd
 	mkdir -p $(WORKDIR)
 	$(VHDLC) ../components/acqboard/acqfiberrx.vhd
 
-$(WORKDIR)/acqfibertx/behavioral.dat: $(WORKDIR)/touched decode8b10b.vhd encode8b10b.vhd ../components/acqboard/acqclocks.vhd ../components/acqboard/acqfiberrx.vhd ../components/acqboard/acqfibertx.vhd
+$(WORKDIR)/acqfibertx/behavioral.dat: $(WORKDIR)/touched fiberdecode8b10b.vhd fiberencode8b10b.vhd ../components/acqboard/acqclocks.vhd ../components/acqboard/acqfiberrx.vhd ../components/acqboard/acqfibertx.vhd
 	mkdir -p $(WORKDIR)
 	$(VHDLC) ../components/acqboard/acqfibertx.vhd
 
-$(WORKDIR)/acqdecoder/behavioral.dat: $(WORKDIR)/touched decode8b10b.vhd encode8b10b.vhd ../components/acqboard/acqclocks.vhd ../components/acqboard/acqfiberrx.vhd ../components/acqboard/acqfibertx.vhd ../components/acqboard/acqdecoder.vhd
+$(WORKDIR)/acqdecoder/behavioral.dat: $(WORKDIR)/touched fiberdecode8b10b.vhd fiberencode8b10b.vhd ../components/acqboard/acqclocks.vhd ../components/acqboard/acqfiberrx.vhd ../components/acqboard/acqfibertx.vhd ../components/acqboard/acqdecoder.vhd
 	mkdir -p $(WORKDIR)
 	$(VHDLC) ../components/acqboard/acqdecoder.vhd
 
-$(WORKDIR)/acqboard/behavioral.dat: $(WORKDIR)/touched decode8b10b.vhd encode8b10b.vhd ../components/acqboard/acqclocks.vhd ../components/acqboard/acqfiberrx.vhd ../components/acqboard/acqfibertx.vhd ../components/acqboard/acqdecoder.vhd ../components/acqboard/acqboard.vhd
+$(WORKDIR)/acqboard/behavioral.dat: $(WORKDIR)/touched fiberdecode8b10b.vhd fiberencode8b10b.vhd ../components/acqboard/acqclocks.vhd ../components/acqboard/acqfiberrx.vhd ../components/acqboard/acqfibertx.vhd ../components/acqboard/acqdecoder.vhd ../components/acqboard/acqboard.vhd
 	mkdir -p $(WORKDIR)
 	$(VHDLC) ../components/acqboard/acqboard.vhd
 
-comp: $(WORKDIR)/decode8b10b/decode8b10b_a.dat $(WORKDIR)/encode8b10b/encode8b10b_a.dat $(WORKDIR)/acqclocks/behavioral.dat $(WORKDIR)/Acqfiberrx/behavioral.dat $(WORKDIR)/acqfibertx/behavioral.dat $(WORKDIR)/acqdecoder/behavioral.dat $(WORKDIR)/acqboard/behavioral.dat 
+comp: $(WORKDIR)/fiberdecode8b10b/fiberdecode8b10b_a.dat $(WORKDIR)/fiberencode8b10b/fiberencode8b10b_a.dat $(WORKDIR)/acqclocks/behavioral.dat $(WORKDIR)/Acqfiberrx/behavioral.dat $(WORKDIR)/acqfibertx/behavioral.dat $(WORKDIR)/acqdecoder/behavioral.dat $(WORKDIR)/acqboard/behavioral.dat 
 
-$(WORKDIR)/acqserialtest/behavioral.dat: $(WORKDIR)/touched decode8b10b.vhd encode8b10b.vhd ../components/acqboard/acqclocks.vhd ../components/acqboard/acqfiberrx.vhd ../components/acqboard/acqfibertx.vhd ../components/acqboard/acqdecoder.vhd ../components/acqboard/acqboard.vhd acqserialtest.vhd
+$(WORKDIR)/acqserialtest/behavioral.dat: $(WORKDIR)/touched fiberdecode8b10b.vhd fiberencode8b10b.vhd ../components/acqboard/acqclocks.vhd ../components/acqboard/acqfiberrx.vhd ../components/acqboard/acqfibertx.vhd ../components/acqboard/acqdecoder.vhd ../components/acqboard/acqboard.vhd acqserialtest.vhd
 	mkdir -p $(WORKDIR)
 	$(VHDLC) acqserialtest.vhd
 

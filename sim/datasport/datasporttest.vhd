@@ -1,7 +1,5 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
-use IEEE.STD_LOGIC_ARITH.all;
-use IEEE.STD_LOGIC_UNSIGNED.all;
 use IEEE.numeric_std.all;
 
 entity datasporttest is
@@ -12,192 +10,154 @@ architecture Behavioral of datasporttest is
 
   component datasport
     port (
-      CLK      : in  std_logic;
-      RESET    : in  std_logic;
+      CLK    : in  std_logic;
+      RESET  : in  std_logic;
       -- serial IO
-      SDIN     : in  std_logic;
-      STFS     : in  std_logic;
-      SCLK     : in  std_logic;
+      SERCLK : in  std_logic;
+      SERDT  : in  std_logic;
+      SERTFS : in  std_logic;
+      FULL   : out std_logic;
       -- FiFO interface
-      VALID    : out std_logic;
-      DOUT     : out std_logic_vector(7 downto 0);
-      ADDRIN   : in  std_logic_vector(9 downto 0);
-      FIFONEXT : in  std_logic);
+      REQ    : out std_logic;
+      GRANT  : in  std_logic;
+      DOUT   : out std_logic_vector(7 downto 0);
+      DONE   : out std_logic);
   end component;
 
-  signal CLK      : std_logic                    := '0';
-  signal RESET    : std_logic                    := '1';
+  signal CLK    : std_logic := '0';
+  signal RESET  : std_logic := '0';
   -- serial IO
-  signal SDIN     : std_logic                    := '0';
-  signal STFS     : std_logic                    := '0';
-  signal SCLK     : std_logic                    := '0';
+  signal SERCLK : std_logic := '0';
+  signal SERDT  : std_logic := '0';
+  signal SERTFS : std_logic := '0';
+  signal FULL   : std_logic := '0';
+
   -- FiFO interface
-  signal VALID    : std_logic                    := '0';
-  signal DOUT     : std_logic_vector(7 downto 0) := (others => '0');
-  signal ADDRIN   : std_logic_vector(9 downto 0) := (others => '0');
-  signal FIFONEXT : std_logic                    := '0';
+  signal REQ   : std_logic                    := '0';
+  signal GRANT : std_logic                    := '0';
+  signal DOUT  : std_logic_vector(7 downto 0) := (others => '0');
 
+  signal DONE : std_logic := '0';
 
-  signal doutbyte : std_logic_vector(7 downto 0) := (others => '0');
+  type databuffer_t is array (0 to 1023) of std_logic_vector(7 downto 0);
+  signal databuffer : databuffer_t := (others => (others => '0'));
 
 
 begin
 
+  datasport_uut : datasport
+    port map (
+      CLK    => CLK,
+      RESET  => RESET,
+      SERCLK => SERCLK,
+      SERDT  => SERDT,
+      SERTFS => SERTFS,
+      FULL   => FULL,
+      REQ    => REQ,
+      GRANT  => GRANT,
+      DOUT   => DOUT,
+      DONE => DONE);
+
   CLK   <= not CLK after 10 ns;
   RESET <= '0'     after 100 ns;
 
-  datasport_uut : datasport
-    port map (
-      CLK      => CLK,
-      RESET    => RESET,
-      SDIN     => SDIN,
-      STFS     => STFS,
-      SCLK     => SCLK,
-      VALID    => VALID,
-      DOUT     => DOUT,
-      ADDRIN   => ADDRIN,
-      FIFONEXT => FIFONEXT);
-
-  -- input
-  process
+  process(CLK)
+    variable bpos : integer range 0 to 2 := 0;
   begin
+    if rising_edge(CLK) then
+      if bpos = 2 then
+        bpos                             := 0;
+      else
+        bpos                             := bpos + 1;
+      end if;
 
-    wait for 1 us;
-    wait until rising_edge(CLK);
-    SCLK <= '0';
-    STFS <= '0';
+      if bpos = 2 then
+        SERCLK <= '1';
+      else
+        SERCLK <= '0';
+      end if;
+    end if;
 
-    wait until rising_edge(CLK);
-    SCLK <= '1';
-    STFS <= '0';
+  end process;
+  process
+    variable tmpword, tmpwordLE : std_logic_vector(15 downto 0) := X"0000";
+    variable pktlen, pktlenLE  : std_logic_vector(15 downto 0) := X"0000";
+  begin
+    wait for 10 us;
 
-    wait until rising_edge(CLK);
-    SCLK <= '0';
-    STFS <= '1';
-
-    wait until rising_edge(CLK);
-    SCLK     <= '1';
-    STFS     <= '1';
-    for i in 0 to 599 loop
-      for j in 0 to 7 loop
-        wait until rising_edge(CLK);
-        SCLK <= '0';
-        STFS <= '0';
-        SDIN <= doutbyte(j);
-
-        wait until rising_edge(CLK);
-        SCLK   <= '1';
-      end loop;  -- j
-      doutbyte <= doutbyte +1;
-
-    end loop;  -- i
-
-    wait for 1 us;
-
-    wait until rising_edge(CLK) and VALID = '1';
-    -- attempt readout
-    addrin <= (others => '0');
-    for i in 0 to 599 loop
+    for bufnum in 0 to 19 loop
       wait until rising_edge(CLK);
-      wait for 1 ns;
-
-      assert DOUT = addrin(7 downto 0)
-        report "Error in byte read-back" severity error;
-      wait for 3 ns;
-
-      addrin <= addrin + 1;
-
-    end loop;  -- i
-    -- be done with the fifo
-    wait until rising_edge(CLK);
-    FIFONEXT <= '1';
-    wait until rising_edge(CLK);
-    FIFONEXT <= '0';
-    
-
-    -----------------------------------------------------------------------
-    -- 3 buffer write
-    -----------------------------------------------------------------------
-    doutbyte <= (others => '0');
-
-    for k in 0 to 2 loop
-
-
-      wait for 1 us;
       wait until rising_edge(CLK);
-      SCLK <= '0';
-      STFS <= '0';
-
       wait until rising_edge(CLK);
-      SCLK <= '1';
-      STFS <= '0';
+      wait until rising_edge(CLK) and FULL = '0';
 
-      wait until rising_edge(CLK);
-      SCLK <= '0';
-      STFS <= '1';
+      wait until falling_edge(SERCLK);
+      SERTFS <= '1';
+      wait until falling_edge(SERCLK);
+      SERTFS <= '0';
 
-      wait until rising_edge(CLK);
-      SCLK                 <= '1';
-      STFS                 <= '1';
-      doutbyte(5 downto 0) <= (others => '0');
-      doutbyte(7 downto 6) <= doutbyte(7 downto 6) + 1;
+      -- send the length
+      pktlen := std_logic_vector(TO_UNSIGNED(bufnum*20 + 172, 16 ));
+      pktlenLE := pktlen(7 downto 0) & pktlen(15 downto 8); 
+      for bpos in 0 to 15 loop
+        SERDT <= pktlenLE(bpos);
+        wait until falling_edge(SERCLK);
+      end loop;  -- bpos
 
-      for i in 0 to 800 loop
-        for j in 0 to 7 loop
-          wait until rising_edge(CLK);
-          SCLK <= '0';
-          STFS <= '0';
-          SDIN <= doutbyte(j);
+      -- then the body
+      for bufpos in 0 to 510 loop
+        tmpword := std_logic_vector(TO_UNSIGNED(bufnum * 256 + bufpos, 16));
+        tmpwordLE := tmpword(7 downto 0) & tmpword(15 downto 8); 
+        for bpos in 0 to 15 loop
+          SERDT <= tmpwordLE(bpos);
+          wait until falling_edge(SERCLK);
+        end loop;
+      end loop;
 
-          wait until rising_edge(CLK);
-          SCLK               <= '1';
-        end loop;  -- j
-        doutbyte(5 downto 0) <= doutbyte(5 downto 0) +1;
-
-      end loop;  -- i
-
-      wait for 1 us;
-    end loop;  -- k
-
-    -------------------------------------------------------------------------
-    --  3 packet read-out
-    -------------------------------------------------------------------------
-    doutbyte <= X"01";
-
-
-    for k in 0 to 2 loop
-
-      wait until rising_edge(CLK) and VALID = '1';
-      -- attempt readout
-      addrin <= (others => '0');
-      for i in 0 to 599 loop
-        wait until rising_edge(CLK);
-        wait for 1 ns;
-
-        assert DOUT(5 downto 0) = addrin(5 downto 0)
-        report "Error in low-bits byte read-back" severity error;
-        
-        assert DOUT(7 downto 6) = doutbyte(1 downto 0)
-        report "Error in high-bits byte read-back" severity error;
-
-        wait for 3 ns;
-
-        addrin <= addrin + 1;
-
-      
-      end loop;  -- i
-      doutbyte <= doutbyte +1;
-      wait until rising_edge(CLK);
-      FIFONEXT <= '1';
-      wait until rising_edge(CLK);
-      FIFONEXT <= '0';
-      
-    end loop;  -- k
-
-    report "End of Simulation" severity Failure;
-    
-      
+    end loop;  -- bufnum
   end process;
 
 
+  -- output read
+  process
+    variable bufpos : integer := 0;
+    variable lenword, dataword : std_logic_vector(15 downto 0) := (others => '0');
+    
+  begin
+    for bufnum in 0 to 19 loop
+
+      wait until rising_edge(CLK) and REQ = '1';
+      wait for 10 us;
+      wait until rising_edge(CLK);
+      GRANT <= '1';
+      bufpos := 0;
+      wait until rising_edge(CLK);
+
+      GRANT                <= '0';
+      wait until rising_edge(CLK);
+      while DONE /= '1' loop
+        databuffer(bufpos) <= DOUT;
+        wait until rising_edge(CLK);
+        bufpos := bufpos + 1;
+      end loop;
+
+      -- validate packet
+      lenword := databuffer(0) & databuffer(1);
+      assert TO_INTEGER(UNSIGNED(lenword)) = bufnum * 20 + 172
+        report "Error reading buflen" severity Error;
+
+      assert bufpos = bufnum * 20 + 172 report "Incorrect recovered pkt len" severity Error;
+
+      for i in 0 to (bufpos - 4)/2 loop
+        dataword := databuffer(i*2 + 2 ) & databuffer(i*2+1 + 2);
+        assert dataword = std_logic_vector(TO_UNSIGNED(bufnum * 256 + i, 16))
+          report "Error reading data word " & integer'image(i) severity Error;
+                                           
+      end loop;  -- i
+      
+      report "received packet";
+    end loop;  -- bufnum
+    report "End of Simulation" severity Failure;
+    
+  end process;
 end Behavioral;

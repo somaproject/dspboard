@@ -36,9 +36,11 @@ entity dspboard is
     DSPFLAG4A     : out   std_logic;
     DSPSPORTSCLKA : out   std_logic;
     DSPSPORT0RFSA : out   std_logic;
-    DSPSPORT0DRA  : in    std_logic;
+    DSPSPORT0DRA  : out   std_logic;
     DSPSPORT0TFSA : in    std_logic;
-    DSPSPORT0DTA  : out   std_logic;
+    DSPSPORT0DTA  : in    std_logic;
+    DSPSPORT1TFSA : in    std_logic;
+    DSPSPORT1DTA  : in    std_logic;
 
     -- DSP B
     DSPRESETB     : out   std_logic;
@@ -52,9 +54,11 @@ entity dspboard is
     DSPFLAG4B     : out   std_logic;
     DSPSPORTSCLKB : out   std_logic;
     DSPSPORT0RFSB : out   std_logic;
-    DSPSPORT0DRB  : in    std_logic;
+    DSPSPORT0DRB  : out   std_logic;
     DSPSPORT0TFSB : in    std_logic;
-    DSPSPORT0DTB  : out   std_logic;
+    DSPSPORT0DTB  : in    std_logic;
+    DSPSPORT1TFSB : in    std_logic;
+    DSPSPORT1DTB  : in    std_logic;
 
     -- DSP C
     DSPRESETC     : out   std_logic;
@@ -68,10 +72,11 @@ entity dspboard is
     DSPFLAG4C     : out   std_logic;
     DSPSPORTSCLKC : out   std_logic;
     DSPSPORT0RFSC : out   std_logic;
-    DSPSPORT0DRC  : in    std_logic;
+    DSPSPORT0DRC  : out   std_logic;
     DSPSPORT0TFSC : in    std_logic;
-    DSPSPORT0DTC  : out   std_logic;
-
+    DSPSPORT0DTC  : in    std_logic;
+    DSPSPORT1TFSC : in    std_logic;
+    DSPSPORT1DTC  : in    std_logic;
 
     -- DSP D
     DSPRESETD     : out   std_logic;
@@ -85,10 +90,11 @@ entity dspboard is
     DSPFLAG4D     : out   std_logic;
     DSPSPORTSCLKD : out   std_logic;
     DSPSPORT0RFSD : out   std_logic;
-    DSPSPORT0DRD  : in    std_logic;
+    DSPSPORT0DRD  : out   std_logic;
     DSPSPORT0TFSD : in    std_logic;
-    DSPSPORT0DTD  : out   std_logic;
-
+    DSPSPORT0DTD  : in    std_logic;
+    DSPSPORT1TFSD : in    std_logic;
+    DSPSPORT1DTD  : in    std_logic;
 
     -- FIBER INTERFACE
     FIBEROUTAB : out std_logic;
@@ -188,14 +194,14 @@ architecture Behavioral of dspboard is
   signal EDATA  : std_logic_vector(7 downto 0) := (others => '0');
 
   -- decodemux signals interface
-  signal DGRANTA : std_logic                     := '0';
-  signal EARXA   : std_logic_vector(79 downto 0) := (others => '0');
-  signal DGRANTB : std_logic                     := '0';
-  signal EARXB   : std_logic_vector(79 downto 0) := (others => '0');
-  signal DGRANTC : std_logic                     := '0';
-  signal EARXC   : std_logic_vector(79 downto 0) := (others => '0');
-  signal DGRANTD : std_logic                     := '0';
-  signal EARXD   : std_logic_vector(79 downto 0) := (others => '0');
+  signal dgrantina : std_logic                     := '0';
+  signal earxa   : std_logic_vector(79 downto 0) := (others => '0');
+  signal dgrantinb : std_logic                     := '0';
+  signal earxb   : std_logic_vector(79 downto 0) := (others => '0');
+  signal dgrantinc : std_logic                     := '0';
+  signal earxc   : std_logic_vector(79 downto 0) := (others => '0');
+  signal dgrantind : std_logic                     := '0';
+  signal earxd   : std_logic_vector(79 downto 0) := (others => '0');
 
   component dspcontproc
     generic (
@@ -337,7 +343,9 @@ architecture Behavioral of dspboard is
       SPISCLKS    : out   std_logic;
       SPIMOSIS    : out   std_logic;
       SPIMISOS    : in    std_logic;
-      EVTFIFOFULL : in    std_logic
+      EVTFIFOFULL : in    std_logic;
+      -- DATA SPORT IF interface
+      DATAFULL    : in    std_logic
       );
   end component;
 
@@ -349,23 +357,35 @@ architecture Behavioral of dspboard is
       FIBERIN     : in  std_logic;
       FIBEROUT    : out std_logic;
       NEWCMDDEBUG : out std_logic;
+      SERCLK      : in  std_logic;
       -- SPORT outputs
-      DSPASERCLK  : out std_logic;
       DSPASERDT   : out std_logic;
       DSPASERFS   : out std_logic;
       DSPASERDR   : in  std_logic;
-
-      DSPBSERCLK : out std_logic;
-      DSPBSERDT  : out std_logic;
-      DSPBSERFS  : out std_logic;
-      DSPBSERDR  : in  std_logic;
-
+      DSPBSERDT   : out std_logic;
+      DSPBSERFS   : out std_logic;
+      DSPBSERDR   : in  std_logic;
       -- link status
-      DSPALINKUP : out std_logic;
-      DSPBLINKUP : out std_logic
+      DSPALINKUP  : out std_logic;
+      DSPBLINKUP  : out std_logic
       );
   end component;
 
+  component datasport
+    port (
+      CLK    : in  std_logic;
+      RESET  : in  std_logic;
+      -- serial IO
+      SERCLK : in  std_logic;
+      SERDT  : in  std_logic;
+      SERTFS : in  std_logic;
+      FULL   : out std_logic;
+      -- FiFO interface
+      REQ    : out std_logic;
+      GRANT  : in  std_logic;
+      DOUT   : out std_logic_vector(7 downto 0);
+      DONE   : out std_logic);
+  end component;
 
   signal dreq   : std_logic := '0';
   signal dgrant : std_logic := '0';
@@ -403,6 +423,12 @@ architecture Behavioral of dspboard is
   signal dspspiholda   : std_logic := '0';
   signal devtfifofulla : std_logic := '0';
 
+  signal dreqa : std_logic := '0';
+
+  signal ddataa : std_logic_vector(7 downto 0) := (others => '0');
+  signal ddonea : std_logic                    := '0';
+  signal dgranta : std_logic := '0';
+  signal datafulla : std_logic := '0';
 
   signal deviceb         : std_logic_vector(7 downto 0) := X"09";
   signal procdspspienb   : std_logic                    := '0';
@@ -416,6 +442,12 @@ architecture Behavioral of dspboard is
   signal dspiclkb        : std_logic                    := '0';
   signal dspspiholdb     : std_logic                    := '0';
   signal devtfifofullb   : std_logic                    := '0';
+  signal dreqb           : std_logic                    := '0';
+  signal ddatab          : std_logic_vector(7 downto 0) := (others => '0');
+  signal ddoneb          : std_logic                    := '0';
+  signal dgrantb : std_logic := '0';
+
+  signal datafullb : std_logic := '0';
 
   signal devicec         : std_logic_vector(7 downto 0) := X"0A";
   signal procdspspienc   : std_logic                    := '0';
@@ -429,6 +461,11 @@ architecture Behavioral of dspboard is
   signal dspiclkc        : std_logic                    := '0';
   signal dspspiholdc     : std_logic                    := '0';
   signal devtfifofullc   : std_logic                    := '0';
+  signal dreqc           : std_logic                    := '0';
+  signal ddatac          : std_logic_vector(7 downto 0) := (others => '0');
+  signal ddonec          : std_logic                    := '0';
+  signal dgrantc : std_logic := '0';
+  signal datafullc : std_logic := '0';
 
   signal deviced         : std_logic_vector(7 downto 0) := X"0B";
   signal procdspspiend   : std_logic                    := '0';
@@ -442,7 +479,13 @@ architecture Behavioral of dspboard is
   signal dspiclkd        : std_logic                    := '0';
   signal dspspiholdd     : std_logic                    := '0';
   signal devtfifofulld   : std_logic                    := '0';
+  signal dreqd           : std_logic                    := '0';
+  signal ddatad          : std_logic_vector(7 downto 0) := (others => '0');
+  signal ddoned          : std_logic                    := '0';
+  signal dgrantd : std_logic := '0';
+  signal datafulld : std_logic := '0';
 
+  signal sportsclk : std_logic := '0';
 
   signal ddata : std_logic_vector(7 downto 0) := (others => '0');
 
@@ -509,13 +552,15 @@ begin  -- Behavioral
     O => clk2,
     I => clk2int);
 
-  clk2x_bufg : BUFG port map (
-    O => clk2x,
-    I => clk2xint);
+  clk2x_bufg : BUFG
+    port map (
+      O => clk2x,
+      I => clk2xint);
 
-  clkacq_bufg : BUFG port map (
-    O => clkacq,
-    I => clkacqint);
+  clkacq_bufg : BUFG
+    port map (
+      O => clkacq,
+      I => clkacqint);
 
   REFCLKOUT <= REFCLKIN;
   linkup    <= not RESET;
@@ -534,13 +579,13 @@ begin  -- Behavioral
       LOCKED  => linkup,
       ECYCLE  => ecycle,
       EDATA   => edata,
-      DGRANTA => dgranta,
+      DGRANTA => dgrantina,
       EARXA   => earxa,
-      DGRANTB => dgrantb,
+      DGRANTB => dgrantinb,
       EARXB   => earxb,
-      DGRANTC => dgrantc,
+      DGRANTC => dgrantinc,
       EARXC   => earxc,
-      DGRANTD => dgrantd,
+      DGRANTD => dgrantind,
       EARXD   => earxd);
 
   dspcontproc_a : dspcontproc
@@ -588,7 +633,9 @@ begin  -- Behavioral
       SPISCLKS    => dspiclka,
       SPIMOSIS    => dspimosia,
       SPIMISOS    => dspimisoa,
-      EVTFIFOFULL => devtfifofulla
+      EVTFIFOFULL => devtfifofulla,
+      -- DATA SPORT IF interface
+      DATAFULL    => datafulla
       );
 
   eventrx_a : eventrx
@@ -602,6 +649,19 @@ begin  -- Behavioral
       DOUT     => edspdataa,
       REQ      => edspreq(0),
       GRANT    => edspgrant(0));
+
+  datasport_a : datasport
+    port map (
+      CLK    => CLK,
+      RESET  => reset,
+      SERCLK => sportsclk,
+      SERDT  => DSPSPORT1DTA,
+      SERTFS => DSPSPORT1TFSA,
+      FULL   => datafulla,
+      REQ    => dreqa,
+      GRANT  => dgranta,
+      DOUT   => ddataa,
+      DONE   => ddonea);
 
 
   dspcontproc_b : dspcontproc
@@ -662,8 +722,23 @@ begin  -- Behavioral
       SPISCLKS    => dspiclkb,
       SPIMOSIS    => dspimosib,
       SPIMISOS    => dspimisob,
-      EVTFIFOFULL => devtfifofullb
+      EVTFIFOFULL => devtfifofullb,
+      -- DATA SPORT IF interface
+      DATAFULL    => datafullb
       );
+
+  datasport_b : datasport
+    port map (
+      CLK    => CLK,
+      RESET  => reset,
+      SERCLK => sportsclk,
+      SERDT  => DSPSPORT1DTB,
+      SERTFS => DSPSPORT1TFSB,
+      FULL   => datafullb,
+      REQ    => dreqb,
+      GRANT  => dgrantb,
+      DOUT   => ddatab,
+      DONE   => ddoneb);
 
 
   dspcontproc_c : dspcontproc
@@ -711,7 +786,9 @@ begin  -- Behavioral
       SPISCLKS    => dspiclkc,
       SPIMOSIS    => dspimosic,
       SPIMISOS    => dspimisoc,
-      EVTFIFOFULL => devtfifofullc
+      EVTFIFOFULL => devtfifofullc,
+      -- DATA SPORT IF interface
+      DATAFULL    => datafullc
       );
 
   eventrx_c : eventrx
@@ -725,6 +802,19 @@ begin  -- Behavioral
       DOUT     => edspdatac,
       REQ      => edspreq(2),
       GRANT    => edspgrant(2));
+
+  datasport_c : datasport
+    port map (
+      CLK    => CLK,
+      RESET  => reset,
+      SERCLK => sportsclk,
+      SERDT  => DSPSPORT1DTC,
+      SERTFS => DSPSPORT1TFSC,
+      FULL   => datafullc,
+      REQ    => dreqc,
+      GRANT  => dgrantc,
+      DOUT   => ddatac,
+      DONE   => ddonec);
 
 
 
@@ -775,7 +865,9 @@ begin  -- Behavioral
       SPISCLKS    => dspiclkd,
       SPIMOSIS    => dspimosid,
       SPIMISOS    => dspimisod,
-      EVTFIFOFULL => devtfifofulld
+      EVTFIFOFULL => devtfifofulld,
+      -- DATA SPORT IF interface
+      DATAFULL    => datafulld
       );
 
   eventrx_d : eventrx
@@ -789,6 +881,19 @@ begin  -- Behavioral
       DOUT     => edspdatad,
       REQ      => edspreq(3),
       GRANT    => edspgrant(3));
+
+  datasport_d : datasport
+    port map (
+      CLK    => CLK,
+      RESET  => reset,
+      SERCLK => sportsclk,
+      SERDT  => DSPSPORT1DTD,
+      SERTFS => DSPSPORT1TFSD,
+      FULL   => datafulld,
+      REQ    => dreqd,
+      GRANT  => dgrantd,
+      DOUT   => ddatad,
+      DONE   => ddoned);
 
 
   encodemux_inst : encodemux
@@ -824,14 +929,13 @@ begin  -- Behavioral
       FIBERIN     => FIBERINAB,
       FIBEROUT    => FIBEROUTAB,
       NEWCMDDEBUG => open,
-      DSPASERCLK  => DSPSPORTSCLKA,
-      DSPASERDT   => DSPSPORT0DTA,
+      SERCLK      => SPORTSCLK,
+      DSPASERDT   => DSPSPORT0DRA,
       DSPASERFS   => DSPSPORT0RFSA,
-      DSPASERDR   => DSPSPORT0DRA,
-      DSPBSERCLK  => DSPSPORTSCLKB,
-      DSPBSERDT   => DSPSPORT0DTB,
+      DSPASERDR   => DSPSPORT0DTA,
+      DSPBSERDT   => DSPSPORT0DRB,
       DSPBSERFS   => DSPSPORT0RFSB,
-      DSPBSERDR   => DSPSPORT0DRB,
+      DSPBSERDR   => DSPSPORT0DTB,
       DSPALINKUP  => fiberlinkupa,
       DSPBLINKUP  => fiberlinkupb);
 
@@ -843,20 +947,15 @@ begin  -- Behavioral
       FIBERIN     => FIBERINCD,
       FIBEROUT    => FIBEROUTCD,
       NEWCMDDEBUG => open,
-      DSPASERCLK  => DSPSPORTSCLKC,
-      DSPASERDT   => DSPSPORT0DTC,
+      SERCLK      => SPORTSCLK,
+      DSPASERDT   => DSPSPORT0DRC,
       DSPASERFS   => DSPSPORT0RFSC,
-      DSPASERDR   => DSPSPORT0DRC,
-      DSPBSERCLK  => DSPSPORTSCLKD,
-      DSPBSERDT   => DSPSPORT0DTD,
+      DSPASERDR   => DSPSPORT0DTC,
+      DSPBSERDT   => DSPSPORT0DRD,
       DSPBSERFS   => DSPSPORT0RFSD,
-      DSPBSERDR   => DSPSPORT0DRD,
+      DSPBSERDR   => DSPSPORT0DTD,
       DSPALINKUP  => fiberlinkupc,
       DSPBLINKUP  => fiberlinkupd);
-
-
-
-
 
 
   process(jtagDRCK1, clk)
@@ -874,24 +973,29 @@ begin  -- Behavioral
 
   BSCAN_SPARTAN3_inst : BSCAN_SPARTAN3
     port map (
-      CAPTURE                                                   => jtagcapture,  -- CAPTURE output from TAP controller
-      DRCK1                                                     => jtagdrck1,  -- Data register output for USER1 functions
-      DRCK2                                                     => jtagDRCK2,  -- Data register output for USER2 functions
-      SEL1                                                      => jtagSEL1,  -- USER1 active output
-      SEL2                                                      => jtagSEL2,  -- USER2 active output
-      SHIFT                                                     => jtagSHIFT,  -- SHIFT output from TAP controller
-      TDI                                                       => jtagTDI,  -- TDI output from TAP controller
-      UPDATE                                                    => jtagUPDATE,  -- UPDATE output from TAP controller
-      TDO1                                                      => jtagtdo1,  -- Data input for USER1 function
-      TDO2                                                      => jtagtdo2  -- Data input for USER2 function
+      CAPTURE => jtagcapture,
+      DRCK1   => jtagdrck1,
+      DRCK2   => jtagDRCK2,
+      SEL1    => jtagSEL1,
+      SEL2    => jtagSEL2,
+      SHIFT   => jtagSHIFT,
+      TDI     => jtagTDI,
+      UPDATE  => jtagUPDATE,
+      TDO1    => jtagtdo1,
+      TDO2    => jtagtdo2
       );
-  process(CLK)
-    variable txacnt   : std_logic_vector(7 downto 0) := (others => '0');
-    variable txbcnt   : std_logic_vector(7 downto 0) := (others => '0');
-    variable txccnt   : std_logic_vector(7 downto 0) := (others => '0');
-    variable txdcnt   : std_logic_vector(7 downto 0) := (others => '0');
 
+
+  ddata <= ddataa when dgrantina = '1' else
+           ddatab when dgrantinb = '1' else
+           ddatac when dgrantinc = '1' else
+           ddatad;
+             
+           
+  process(CLK)
+    variable scnt : integer range 0 to 2 := 0;
   begin
+
     if rising_edge(clk) then
       rxdatal <= rxdata;
       rxkl    <= rxk;
@@ -907,28 +1011,21 @@ begin  -- Behavioral
         jtagwordout(7 downto 0) <= edata;
       end if;
 
+      if scnt = 2 then
+        scnt := 0;
+      else
+        scnt := scnt + 1;
+      end if;
 
-
--- if txdata = X"1C" and txk = '1' then
--- txacnt := txacnt + 1;
--- end if;
-
--- if txdata = X"3C" and txk = '1' then
--- txbcnt := txbcnt + 1;
--- end if;
-
--- if txdata = X"5C" and txk = '1' then
--- txccnt := txccnt + 1;
--- end if;
-
--- if txdata = X"7C" and txk = '1' then
--- txdcnt := txdcnt + 1;
--- end if;
-
--- jtagwordout(15 downto 8) <= txacnt;
--- jtagwordout(23 downto 16) <= txbcnt;
--- jtagwordout(31 downto 24) <= txccnt;
--- jtagwordout(39 downto 32) <= txdcnt;
+      if scnt = 1 then
+        sportsclk   <= '1';
+      else
+        sportsclk   <= '0';
+      end if;
+      DSPSPORTSCLKA <= sportsclk;
+      DSPSPORTSCLKB <= sportsclk;
+      DSPSPORTSCLKC <= sportsclk;
+      DSPSPORTSCLKD <= sportsclk;
 
 
     end if;
