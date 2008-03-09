@@ -39,7 +39,8 @@ architecture Behavioral of datasporttest is
       REQ    : out std_logic;
       GRANT  : in  std_logic;
       DOUT   : out std_logic_vector(7 downto 0);
-      DONE   : out std_logic);
+      DONE   : out std_logic;
+      DEBUG : out std_logic_vector(15 downto 0));
   end component;
 
 
@@ -52,7 +53,8 @@ architecture Behavioral of datasporttest is
   signal dout  : std_logic_vector(7 downto 0) := (others => '0');
   signal done  : std_logic                    := '0';
 
-  signal addra, addrb : std_logic_vector(10 downto 0) := (others => '0');
+  signal addra : std_logic_vector(10 downto 0) := (others => '1');
+  signal addrb : std_logic_vector(10 downto 0) := (others => '0');
   signal wea          : std_logic                     := '0';
   signal dob          : std_logic_vector(7 downto 0)  := (others => '0');
 
@@ -67,12 +69,15 @@ architecture Behavioral of datasporttest is
   signal jtagtdo2    : std_logic := '0';
   signal jtagupdate  : std_logic := '0';
 
-  signal jtagout : std_logic_vector(7 downto 0) := (others => '0');
+  signal jtagout : std_logic_vector(63 downto 0) := (others => '0');
 
   signal inword, inwordl : std_logic_vector(15 downto 0) := (others => '0');
   signal inwordll        : std_logic_vector(15 downto 0) := (others => '0');
 
+  signal debug : std_logic_vector(15 downto 0) := (others => '0');
 
+  signal fullint : std_logic := '0';
+  
 begin  -- Behavioral
 
   DSPRESET <= '1'; 
@@ -89,12 +94,15 @@ begin  -- Behavioral
       SERCLK => lserclk,
       SERDT  => SERDT,
       SERTFS => SERTFS,
-      FULL   => FULL,
+      FULL   => fullint,
       REQ    => req,
       GRANT  => grant,
       DOUT   => dout,
-      DONE   => DONE);
+      DONE   => DONE,
+      DEBUG => debug);
 
+  FULL <= fullint;
+  
 
   RAM1 : RAMB16_S9_S9
     generic map (
@@ -110,7 +118,8 @@ begin  -- Behavioral
       CLKA                => CLK,
       CLKB                => CLK,
       DIB                 => X"00",
-      DIA                 => dout,
+      DIA                 => dout, 
+      DIPA                => "0",
       DIPB                => "0",
       ENA                 => '1',
       ENB                 => '1',
@@ -141,18 +150,22 @@ begin  -- Behavioral
 
       if grant = '1' then
         addra   <= (others => '0');
+        wea <= '1'; 
       else
         if addra /= "11111111111" then
-          addra <= addrb + 1;
+          wea <= '1'; 
+          addra <= addra + 1;
+        else
+          wea <= '0'; 
         end if;
       end if;
 
       inwordll <= inwordl;
 
       if inwordll(15) = '0' and inwordl(15) = '1' then
-        req <= '1';
+        grant <= '1';
       else
-        req <= '0'; 
+        grant <= '0'; 
       end if;
 
       addrb <= inwordl(10 downto 0);
@@ -164,10 +177,10 @@ begin  -- Behavioral
   begin
 
     if jtagupdate = '1' then
-      jtagout    <= dob;
+      jtagout    <= X"ABCD" & req & "000" & fullint & "000"  & X"00" & debug & X"00" & dob;
     else
       if rising_edge(jtagDRCK1) then
-        jtagout  <= '0' & jtagout(7 downto 1);
+        jtagout  <= '0' & jtagout(63 downto 1);
         jtagtdo1 <= jtagout(0);
       end if;
 

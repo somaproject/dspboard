@@ -7,3 +7,14 @@ We then can send the buffer via SPORT1. Ideally we can set things
 up in a loop waiting on the fifofull signal
 
 
+To check: 
+[jonas@shannon XC3Sprog]$ ./xc3sprog 1 0x02 "00 00 00 00 00 00 00 00" 
+0 0 0 0 0 80 cd ab 
+
+At the moment, to manually trigger a GRANT, 
+
+[jonas@shannon XC3Sprog]$ ./xc3sprog 1 0x03 "00 80"
+0 0 
+[jonas@shannon XC3Sprog]$ ./xc3sprog 1 0x03 "00 00"
+0 0 
+

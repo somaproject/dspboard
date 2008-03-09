@@ -16,12 +16,13 @@ entity datasport is
     SERCLK : in  std_logic;
     SERDT  : in  std_logic;
     SERTFS : in  std_logic;
-    FULL : out std_logic; 
+    FULL   : out std_logic;
     -- FiFO interface
     REQ    : out std_logic;
     GRANT  : in  std_logic;
     DOUT   : out std_logic_vector(7 downto 0);
-    DONE : out std_logic);
+    DONE   : out std_logic;
+    DEBUG : out std_logic_vector(15 downto 0));
 end datasport;
 
 architecture Behavioral of datasport is
@@ -36,10 +37,10 @@ architecture Behavioral of datasport is
   signal seren : std_logic := '0';
 
   signal bufcnt : std_logic_vector(1 downto 0)  := (others => '0');
-  signal addrb   : std_logic_vector(10 downto 0) := (others => '0');
-  signal len     : std_logic_vector(15 downto 0) := (others => '0');
+  signal addrb  : std_logic_vector(10 downto 0) := (others => '0');
+  signal len    : std_logic_vector(15 downto 0) := (others => '0');
 
-  type instates is (none, low, high, bufdone);
+  type instates is (none, instart, low, high, bufdone);
   signal ics, ins : instates := none;
 
   type outstates is (none, reqs, len1, len2, dwait, ddone);
@@ -49,14 +50,15 @@ architecture Behavioral of datasport is
 
   signal outsel : std_logic := '0';
   signal ocnten : std_logic := '0';
-  
 
+  signal debugcnt : std_logic_vector(15 downto 0) := (others => '0');
+  
 begin  -- Behavioral
   dinint(0) <= SERDT;
 
-  FULL <= '1' when BUFCNT = "10" else '0';
-  DONE <= '1' when ocs = ddone else '0';
-    
+  FULL <= '1' when BUFCNT(1) = '1' else '0';
+  DONE <= '1' when ocs = ddone   else '0';
+
   RAM1 : RAMB16_S1_S9
     generic map (
       WRITE_MODE_A        => "WRITE_FIRST",  --  WRITE_FIRST, READ_FIRST or NO_CHANGE
@@ -80,14 +82,16 @@ begin  -- Behavioral
       WEA                 => seren,
       WEB                 => '0' );
 
-  DOUT <= dob;
-  addra(13) <= insel;
-  addra(12 downto 0) <= incnt; 
-        
-  seren <= SERCLK; 
+  DOUT               <= dob;
+  addra(13)          <= insel;
+  addra(12 downto 0) <= incnt;
+
+  seren     <= SERCLK;
   addrb(10) <= outsel;
 
-  REQ <= '1' when ocs = REQS else '0'; 
+  REQ     <= '1' when ocs = REQS else '0';
+
+  
   main : process(CLK)
   begin
     if rising_edge(CLK) then
@@ -124,9 +128,9 @@ begin  -- Behavioral
 
       if ics = bufdone and ocs = ddone then
         null;
-      elsif ics = bufdone and ocs /= ddone then
+      elsif ics = instart and ocs /= ddone then
         bufcnt <= bufcnt + 1;
-      elsif ics /= bufdone and ocs = ddone then
+      elsif ics /= instart and ocs = ddone then
         bufcnt <= bufcnt - 1;
       end if;
 
@@ -134,7 +138,11 @@ begin  -- Behavioral
         outsel <= not outsel;
       end if;
 
-
+      if seren = '1' and sertfs = '1'  then
+        debugcnt <= debugcnt + 1; 
+      end if;
+      DEBUG <= debugcnt;
+      
     end if;
   end process main;
 
@@ -145,11 +153,13 @@ begin  -- Behavioral
     case ics is
       when none =>
         if seren = '1' and SERTFS = '1' then
-          ins <= low;
+          ins <= instart;
         else
           ins <= none;
         end if;
 
+      when instart =>
+        ins <= low; 
       when low =>
         if seren = '1' then
           ins <= high;
@@ -203,10 +213,10 @@ begin  -- Behavioral
       when dwait =>
         ocnten <= '1';
         if addrb(9 downto 0) = len(9 downto 0) then
+        --if addrb(9 downto 0) = "1000000000" then
           ons  <= ddone;
         else
           ons  <= dwait;
-
         end if;
 
       when ddone =>

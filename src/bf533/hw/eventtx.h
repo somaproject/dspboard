@@ -22,7 +22,7 @@ public:
   //static const unsigned short DMA_DONE = 0x0001; 
 
   //static uint16_t buffer_[EVTBUFLEN][BUFSIZE]; 
-  static uint16_t buffer_[10][16]; 
+  static uint16_t buffer_[EVTBUFLEN][BUFSIZE]; 
   int nextFreeEvent_; 
   int nextSendEvent_; 
   void eventToDMABuffer(const EventTX_t & etx, uint16_t * tgtbuff); 

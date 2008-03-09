@@ -1,0 +1,6 @@
+The DATA Sport interface takes in some sort of data object, serializes
+it into an internal buffer, and then sends out the buffer. 
+
+We must periodically call the sendPending() method to check if the
+FPGA's fifo is not full, and if not, push a datagram into there
+
