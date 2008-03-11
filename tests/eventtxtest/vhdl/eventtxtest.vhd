@@ -16,7 +16,7 @@ entity eventtxtest is
 -- DIN : in std_logic_vector(7 downto 0);
 -- KIN : in std_logic;
 -- INTGEN : in std_logic;
-    PFLAG0 : in std_logic; 
+    PFLAG0    : in  std_logic;
     EVENTCLK  : out std_logic;
     EVENTENA  : out std_logic;
     EVENTTXD  : out std_logic_vector(7 downto 0)
@@ -72,39 +72,32 @@ begin  -- Behavioral
   begin
     if rising_edge(CLK) then
       if pos = 11 then
-        pos <= 0;
+        pos      <= 0;
       else
-        pos <= pos + 1;
+        pos      <= pos + 1;
       end if;
-      pflag0l <= PFLAG0; 
-      if pos = 10 then
-        --EVENTENA <= pflag0l; 
-        EVENTENA <= '0'; 
+      pflag0l    <= PFLAG0;
+      if pos = 0 then
+        EVENTENA <= '1';
       else
         EVENTENA <= '0';
       end if;
 
--- if pos = 11 then
--- cnt <= cnt + 1;
--- end if;
       if pos = 11 then
         cnt <= (others => '0');
       else
         cnt <= cnt + 1;
       end if;
 
-      DOUT <= CNT;
--- if pos = 0 or pos = 2 or pos = 4 or pos = 6 or pos = 8 or pos = 10 then
--- DOUT <= cnt;
--- else
--- DOUT <= cnt;
--- end if;
+      if pos = 0 or pos = 2 or pos = 4 or pos = 6 or pos = 8 or pos = 10 then
+        DOUT <= cnt;
+      else
+        DOUT <= word;
+      end if;
 
--- if pos = 1 or pos = 3 or pos = 5 or pos = 7 or pos = 9 then
--- word <= word + 1;
--- elsif pos = 11 then
--- word <= (others => '0');
--- end if;
+      if pos = 11 then
+        word <= word + 1; 
+      end if;
 
       if rstcnt /= X"0000" then
         rstcnt   <= rstcnt -1;
@@ -253,6 +246,6 @@ begin  -- Behavioral
 --       DIP        => "0",             -- 1-bit parity Input
 --       EN         => '1',             -- RAM Enable Input
 --       SSR        => '0',             -- Synchronous Set/Reset Input
---       WE         => '0'              -- Write Enable Input
+-- WE => '0'                            -- Write Enable Input
 --       );
 end Behavioral;

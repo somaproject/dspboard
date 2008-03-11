@@ -1,4 +1,4 @@
 Simple attempt to generate fake events for the DSPboard. We use the
-JTAG interface to drive PPI_FS1 with some series of back-to-back events. 
-
+JTAG interface to drive PPI_FS1 with some series of back-to-back
+events.
 
