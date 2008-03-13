@@ -63,3 +63,9 @@ examine_crtbegin:
 
 examine_crtend:
 	bfin-elf-objdump -d $(BFROOT)/lib/gcc/bfin-elf/$(BFROOTVER)/crtend.o
+
+ldr: simpletest.ldr
+
+simpletest.ldr: simpletest.elf
+	rm -f simpletest.ldr
+	bfin-elf-ldr -T BF533 -c -p f --gpio=1  simpletest.ldr simpletest.elf

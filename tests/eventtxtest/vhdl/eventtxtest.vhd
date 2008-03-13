@@ -49,14 +49,18 @@ architecture Behavioral of eventtxtest is
 
   signal pos : integer range 0 to 1023 := 0;
 
-  signal cnt  : std_logic_vector(7 downto 0) := (others => '0');
-  signal word : std_logic_vector(7 downto 0) := (others => '0');
+  signal cnt,  dout  : std_logic_vector(7 downto 0) := (others => '0');
+  signal bpos : std_logic_vector(15 downto 0) := (others => '0');
 
-  signal dout : std_logic_vector(7 downto 0) := (others => '0');
-
+  signal word : std_logic_vector(15 downto 0) := (others => '0');
+  
   signal rstcnt : std_logic_vector(15 downto 0) := (others => '1');
 
   signal pflag0l : std_logic := '0';
+
+signal cyclecnt : std_logic_vector(15 downto 0) := (others => '0');
+  
+  
 begin  -- Behavioral
 
   EVENTCLK <= clk;
@@ -71,34 +75,34 @@ begin  -- Behavioral
   main : process(CLK)
   begin
     if rising_edge(CLK) then
-      if pos = 11 then
+      if pos = 999 then
+        
         pos      <= 0;
       else
         pos      <= pos + 1;
       end if;
       pflag0l    <= PFLAG0;
+      
       if pos = 0 then
         EVENTENA <= '1';
       else
         EVENTENA <= '0';
       end if;
 
-      if pos = 11 then
-        cnt <= (others => '0');
+      if pos = 999 then
+        cyclecnt <= cyclecnt + 1;
+        word <= (others => '0');
+     else
+       word <= word + 1; 
+      end if;
+
+      if pos = 0 then
+        DOUT <= cyclecnt(15 downto 8);
+      elsif pos = 1 then
+        DOUT <= cyclecnt(7 downto 0);
       else
-        cnt <= cnt + 1;
+        DOUT <= word(7 downto 0);
       end if;
-
-      if pos = 0 or pos = 2 or pos = 4 or pos = 6 or pos = 8 or pos = 10 then
-        DOUT <= cnt;
-      else
-        DOUT <= word;
-      end if;
-
-      if pos = 11 then
-        word <= word + 1; 
-      end if;
-
       if rstcnt /= X"0000" then
         rstcnt   <= rstcnt -1;
         DSPRESET <= '0';
