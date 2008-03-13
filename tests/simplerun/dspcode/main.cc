@@ -9,33 +9,35 @@
 //#include <bf533/acqserial.h> 
 #include <hw/memory.h> 
 
-class TestObject
-{
- public: 
-  TestObject() : 
-  x(0x1234),
-  y(0x5678){
-  }
+// class TestObject
+// {
+//  public: 
+//   TestObject() : 
+//   x(0x1234),
+//   y(0x5678){
+//   }
 
-  int x; 
-  int y; 
+//   int x; 
+//   int y; 
   
 
-}; 
+// }; 
+
+void do_blink(void); 
 
 int main()
 {
   //ctor_call();
   int i = 0; 
   int k = 0; 
-  TestObject * t2 = new TestObject(); 
-  TestObject * t3 = new TestObject(); 
-  TestObject * t4 = new TestObject(); 
+//   TestObject * t2 = new TestObject(); 
+//   TestObject * t3 = new TestObject(); 
+//   TestObject * t4 = new TestObject(); 
   
   char s[10]; 
   
   while(1){ 
-    i = t2->x; 
+    do_blink(); 
 
   } 
 

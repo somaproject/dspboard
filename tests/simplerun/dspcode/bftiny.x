@@ -19,8 +19,6 @@ MEMORY
 {
 	l1code(x)     : ORIGIN = 0xffa00000, LENGTH = 0x14000
 	l1dataA(rw)   : ORIGIN = 0xff800000, LENGTH = 0x8000
-	l1dataB(rw)   : ORIGIN = 0xff900000, LENGTH = 0x8000
-
 }
 
 

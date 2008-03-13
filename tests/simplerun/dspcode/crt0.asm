@@ -34,7 +34,6 @@ start:
 	sp.h = 0xFFB0;		//Set up supervisor stack in scratch pad
 	sp.l = 0x0400;
 	fp = sp;
-	
 ////////////////////////////////////////////////////////////////////////////
 // PLL and clock setups
 //
@@ -189,7 +188,7 @@ call_main:
 	
 	[--sp] = reti;  // pushing RETI allows interrupts to occur inside all main routines
 	
-	p0.l = _main;
+ 	p0.l = _main; 
 	p0.h = _main;
 
 	r0.l = end;

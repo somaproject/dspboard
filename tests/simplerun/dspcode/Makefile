@@ -20,10 +20,11 @@ BFROOTVER = 4.1.2
 
 
 LDFLAGS =   -g -T bftiny.x  -L$(BFROOT)lib/ -L$(BFROOT)/lib/gcc/bfin-elf/4.1.2/ \
-	 -lsupc++ -lc -lgcc -lnosys
+	#	 -lsupc++ -lc -lgcc -lnosys
 
 
-OBJS = $(CCSRCS:%.cc=%.o)  $(ASMSRCS:%.asm=%.o)  memory.o
+#OBJS = $(CCSRCS:%.cc=%.o)  $(ASMSRCS:%.asm=%.o) # memory.o
+OBJS = $(ASMSRCS:%.asm=%.o)  $(CCSRCS:%.cc=%.o) memory.o
 
 AS = bfin-elf-as
 CC = bfin-elf-gcc-4.1.2	
