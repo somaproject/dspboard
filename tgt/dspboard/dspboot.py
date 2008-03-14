@@ -19,7 +19,9 @@ class Block(object):
     def __init__(self, fid):
         self.header = fid.read(10)    
         (self.addr, self.cnt, self.flag) = struct.unpack("<IIH", self.header)
-
+        self.updateHeader()
+        (self.addr, self.cnt, self.flag) = struct.unpack("<IIH", self.header)
+        
         if self.flag & 0x01 > 0:
             self.ZEROFILL = True
             self.block = "" 
@@ -43,12 +45,8 @@ class Block(object):
 
         
     def updateHeader(self):
-        if self.flag == 0x8002:
-            self.newflag = 0x8022
-        elif self.flag == 0x0002:
-            self.newflag = 0x0022
-        else:
-            self.newflag = self.flag
+
+        self.newflag = self.flag | 0x0020
         self.header = self.header[:8] + struct.pack("<H", self.newflag)
 
             
@@ -68,7 +66,7 @@ def loadfiles():
 
     res = []
     for b in binobjs:
-        print "Block addr: %8.8X cnt: %8.8X INIT=%d, pflag=%d" % (b.addr, b.cnt, b.INIT, b.pflag)
+        print "Block addr: %8.8X cnt: %8.8X INIT=%d, pflag=%d, zerofill=%d" % (b.addr, b.cnt, b.INIT, b.pflag, b.ZEROFILL)
         for i in range(min(len(b.block) , 20)):
             print "%2.2X" % ord(b.block[i]), 
         print
@@ -192,7 +190,18 @@ e.data[0] = 0xFFFF
 ea = eaddr.TXDest()
 ea[DSPBOARDADDR] = 1
 eio.sendEvent(ea, e)
+
     
+# Give DSP control of SPI interface
+e = Event()
+e.src = eaddr.NETWORK
+e.cmd =  EVENTRXCMD_DSPSPIEN
+e.data[0] = 0x0000
+
+ea = eaddr.TXDest()
+ea[DSPBOARDADDR] = 1
+eio.sendEvent(ea, e)
+
 eio.stop()
 
 
