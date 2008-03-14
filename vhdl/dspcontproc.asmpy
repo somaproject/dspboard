@@ -30,9 +30,11 @@ EVENTRXCMD_DATABUF = 0x32
 EVENTRXCMD_DATABUFTX = 0x33
 EVENTRXCMD_DSPSPISS = 0x34
 EVENTRXCMD_DSPSPIEN = 0x35
+EVENTRXCMD_DSPRESET = 0x36
 
 env = createEnvironment()
 counter = env.createVariable("counter")
+buftxcounter = env.createVariable("buftxcounter")
 pendingDataBufTXSrc = env.createVariable("pendingDataBufTXSrc")
 
 # state variables are used for persistence across ECYCLEs
@@ -41,10 +43,17 @@ def createEventCycleProc():
   proc = env.createECycleProc()
   tmp = proc.createVariable("tmp")
   tmp2 = proc.createVariable("tmp2")
-  proc.load(tmp2, 0)
-  proc.add(tmp, tmp2)
+  proc.input(INPUT_BOOTSERDONE, tmp)
+  proc.add(tmp, tmp)
   proc.jz("ecycleproc_notx")
-  proc.output(EVENTOUT_DEST, env.pendingDataBufTXSrc)
+
+  # if it's zero, jump over
+  proc.load(tmp, 0)
+  proc.add(tmp, env.pendingDataBufTXSrc)
+  proc.jz("ecycleproc_notx") 
+  proc.load(tmp2, 0x03)
+  #proc.output(EVENTOUT_DEST, env.pendingDataBufTXSrc)
+  proc.output(EVENTOUT_DEST, tmp2)
   proc.load(tmp, EVENTRXCMD_DATABUFTX)
   proc.output(EVENTOUT_CMD, tmp)
   
@@ -75,6 +84,8 @@ def pingResponseEvent():
   proc.load(tmp, 1)
   proc.add(env.counter, tmp)
   
+  proc.output(EVENTOUT_DATA2, env.buftxcounter)
+
   proc.move(tmp, ereg.edata[0])
   proc.output(EVENTOUT_DATA0, tmp)
 
@@ -97,20 +108,15 @@ def proc_bootserwe():
   proc.move(tmp, ereg.edata[0])
   proc.output(OUTPUT_BOOTSERWE, tmp)
   
-  proc.move(tmp, ereg.edata[1])
-  proc.output(OUTPUT_BOOTSERWE, tmp)
-  
-  proc.move(tmp, ereg.edata[2])
-  proc.output(OUTPUT_BOOTSERWE, tmp)
-  
-  proc.move(tmp, ereg.edata[3])
-  proc.output(OUTPUT_BOOTSERWE, tmp)
-
 def proc_databuftx():
   proc = env.createEProc((EVENTRXCMD_DATABUFTX, EVENTRXCMD_DATABUFTX), (0, 255))
   tmp = proc.createVariable("tmp")
+  proc.move(env.pendingDataBufTXSrc, ereg.src)
+  
   proc.move(tmp, ereg.edata[0])
-  proc.output(OUTPUT_SPISS, tmp)
+  proc.output(OUTPUT_BOOTSTART, tmp)
+  proc.load(tmp, 1)
+  proc.add(env.buftxcounter, tmp)
   
 def proc_spiss():
   proc = env.createEProc((EVENTRXCMD_DSPSPISS, EVENTRXCMD_DSPSPISS), (0, 255))
@@ -121,8 +127,15 @@ def proc_spiss():
 def proc_spien():
   proc = env.createEProc((EVENTRXCMD_DSPSPIEN, EVENTRXCMD_DSPSPIEN), (0, 255))
   tmp = proc.createVariable("tmp")
-  proc.move(env.pendingDataBufTXSrc, ereg.src)
-  proc.output(OUTPUT_BOOTSTART, tmp)
+  proc.move(tmp, ereg.edata[0])
+  proc.output(OUTPUT_SPIEN, tmp)
+
+def proc_dspreset():
+  proc = env.createEProc((EVENTRXCMD_DSPRESET, EVENTRXCMD_DSPRESET), (0, 255))
+  tmp = proc.createVariable("tmp")
+  proc.move(tmp, ereg.edata[0])
+  proc.output(OUTPUT_DSPRESET, tmp)
+  
 
 
 createEnableEventCycleProc()
@@ -134,3 +147,4 @@ proc_bootserwe()
 proc_spiss()
 proc_spien()
 proc_databuftx()
+proc_dspreset()

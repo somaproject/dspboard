@@ -26,7 +26,7 @@ architecture Behavioral of bootser is
 
   signal dib : std_logic_vector(15 downto 0) := (others => '0');
   
-  signal doa   : std_logic_vector(7 downto 0)  := (others => '0');
+  signal doa, doainv   : std_logic_vector(7 downto 0)  := (others => '0');
   signal addra : std_logic_vector(10 downto 0) := (others => '0');
 
   signal doabit : std_logic := '0';
@@ -37,7 +37,7 @@ architecture Behavioral of bootser is
   signal holdl, lsclk : std_logic := '0';
 
   type states is (none, rstcnt,
-                  clkl1, clkh1, clkh2, clkl2, cntrinc,
+                  clkl1, clkh1, clkh2, clkl2, clkl3,  cntrinc,
                   holdchk, cntrcomp, dones);
 
   signal cs, ns : states := none;
@@ -70,7 +70,16 @@ begin  -- Behavioral
 
   dib <= DIN(7 downto 0) & DIN(15 downto 8); 
 
-  doabit <= doa(doasel);
+  doainv(7) <= doa(0);
+  doainv(6) <= doa(1);
+  doainv(5) <= doa(2);
+  doainv(4) <= doa(3);
+  doainv(3) <= doa(4);
+  doainv(2) <= doa(5);
+  doainv(1) <= doa(6);
+  doainv(0) <= doa(7);
+  
+  doabit <= doainv(doasel);
 
   main : process(CLK)
   begin
@@ -156,10 +165,19 @@ begin  -- Behavioral
       when clkh1 =>
         lsclk <= '1';
         if clkcnt = 63 then
-          ns <= clkl2;
+          ns <= clkl3;
         else
           ns <= clkh1; 
         end if;
+
+      when clkl3 =>
+        lsclk <= '0';
+        if clkcnt = 63 then
+          ns <= clkl2;
+        else
+          ns <= clkl3; 
+        end if;
+
 
       when clkl2 =>
         lsclk <= '0';

@@ -1,14 +1,10 @@
 Event transmission to the DSPs takes place via the shared 8-bit wide
 parallel port (PPI) interface.
 
-We use the eventtx-Filter module to extract out the headers from the
-event stream and then selectively assert a DEN during the relevant
-event in the ECYCLE data stream (with a two cycle latency)
+We blit each event frame directly into the DSP, and the 
+DSP knows whether it's an A, B, C, or D dsp, and reads the 
+event mask and then dispatches the events. 
 
-This DEN selectively enables and disables events that are targeted for
-the device whose header begins at ESEL.
-
-This interface is somewhat ugly and a bit of a hack; I'm not entirely
-sure I'm happy with it.
-
+This interface is very small on the FPGA side, and there's not too
+much overhead on the DSP side...
 

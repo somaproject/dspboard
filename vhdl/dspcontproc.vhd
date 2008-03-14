@@ -103,11 +103,11 @@ entity dspcontproc is
     ESENDDATA    : out std_logic_vector(7 downto 0);
     -- DSP interface
     DSPRESET     : out std_logic;
-    DSPSPIEN     : out std_logic;
-    DSPSPISS     : out std_logic;
+    DSPSPIEN     : out std_logic            := '1';
+    DSPSPISS     : out std_logic            := '1';
     DSPSPIMISO   : in  std_logic;
     DSPSPIMOSI   : out std_logic;
-    DSPSPICLK    : out std_logic;
+    DSPSPICLK    : out std_logic            := '0';
     DSPSPIHOLD   : in  std_logic;
     -- STATUS
     LEDEVENT     : out std_logic
@@ -148,9 +148,11 @@ architecture Behavioral of dspcontproc is
            );
   end component;
 
-  signal bootserwe    : std_logic := '0';
-  signal bootserstart : std_logic := '0';
-  signal bootserdone  : std_logic := '0';
+  signal bootserwe      : std_logic := '0';
+  signal bootserstart   : std_logic := '0';
+  signal bootserstartl  : std_logic := '0';
+  signal bootserstartll : std_logic := '0';
+  signal bootserdone    : std_logic := '0';
 
 begin  -- Behavioral
 
@@ -180,7 +182,7 @@ begin  -- Behavioral
       CLK       => CLK,
       EVENTIN   => edout,
       EADDRIN   => eaout,
-      NEWEVENT  => enewoutd,
+      NEWEVENT  => enewout,
       ECYCLE    => ECYCLE,
       SENDREQ   => ESENDREQ,
       SENDGRANT => ESENDGRANT,
@@ -189,7 +191,7 @@ begin  -- Behavioral
 
   bootser_inst : bootser
     port map (
-      CLK   => CLK,
+      CLK   => clkhi,
       DIN   => oportdata,
       WE    => bootserwe,
       START => bootserstart,
@@ -299,8 +301,8 @@ begin  -- Behavioral
       SSRB  => RESET);
 
   bootserwe <= '1' when oportaddr = X"02" and oportstrobe = '1' else '0';
-  bootserstart <= '1' when oportaddr = X"03" and oportstrobe = '1' else '0';
-    
+
+  bootserstart <= '1' when oportaddr = X"03" and oportstrobe = '1' else '0'; 
 
   main : process(CLKHI)
   begin
@@ -310,25 +312,22 @@ begin  -- Behavioral
       elsif oportaddr = X"01" and OPORTSTROBE = '1' then
         lledevent <= oportdata(0);
       elsif oportaddr = X"04" and OPORTSTROBE = '1' then
-        DSPSPISS <= oportdata(0);
+        DSPSPISS  <= oportdata(0);
       elsif oportaddr = X"05" and OPORTSTROBE = '1' then
-        DSPSPIEN <= oportdata(0);
+        DSPSPIEN  <= oportdata(0);
       end if;
 
-      if iportstrobe = '1'  then
+      if iportstrobe = '1' then
         if iportaddr = X"03" then
-          iportdata(0) <= bootserdone; 
+          iportdata <=  X"000" & "000" & bootserdone;
         end if;
       end if;
-            
-      LEDEVENT    <= lledevent;
-      
-      enewoutl    <= enewout;
-      enewoutd  <= enewoutl or enewout;       
---        if enewout = '1' then
---          edoutl    <= edout;
---          eaoutl    <= eaout;
---        end if;
+
+      LEDEVENT <= lledevent;
+
+      enewoutl <= enewout;
+      enewoutd <= enewoutl or enewout;
+
 
     end if;
 

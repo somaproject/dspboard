@@ -65,11 +65,12 @@ bool EventTX::sendEvent()
 {
   
   if(txPending_) {
-    if ( (*pDMA5_IRQ_STATUS & DMA_RUN) or !(*pDMA5_IRQ_STATUS & DMA_DONE) ) {
+    if ( !(*pDMA5_IRQ_STATUS & DMA_DONE) ) {
       // not done yet, just return
       return false; 
     } else {
       // done! 
+      *pDMA5_IRQ_STATUS = 0x01; // clear IRQ status
       txPending_ = false; 
     }
     
@@ -138,7 +139,8 @@ void EventTX::setupDMA()
   *pDMA5_Y_COUNT = 0; 
   *pDMA5_Y_MODIFY = 0; 
 
-  *pDMA5_CONFIG = 0x0024; 
+  //*pDMA5_CONFIG = 0x0024; 
+  *pDMA5_CONFIG = 0x00A4; 
 
 }
 

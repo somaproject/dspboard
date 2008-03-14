@@ -1,2 +1,36 @@
-We boot the DSP using BMODE=01, SPI Slive Mode Boot. 
+We boot the DSP using BMODE=01, SPI Slive Mode Boot.
+
+
+http://download.analog.com/27516/frsrelease/3/5/7/3579/ADSP-BF533-ROM-V03.asm
+
+Boot code can be found here
+http://docs.blackfin.uclinux.org/doku.php?id=bootloaders:bootrom
+
+TO setup:
+display/i $pc
+
+SPI_SLAVE_BOOT: 0xef000366
+DMA_HEADER: 0xef000226
+SPI_DMA: 0xef000242
+
+DMA5_X_COUNT : 0xFFC00D50
+
+DMA5_CURR_X_COUNT : 0xFFC00D70
+DMA5_IRQ_STATUS :  0xffc00d68
+
+
+(bfin-jtag-gdb) x/h 0xFFC00D50
+0xffc00d50:     0x000a
+
+x/h 0xFFC00D70
+
+
+
+MSB firstinit
+
+to copy the output of ldrdump 
+
+
+cbfin-elf-objcopy --input-target binary --binary-architecture bfin --add-section .text=test.ldr-0.dxe-1.block --output-target elf32-bfin test.elf
+
 

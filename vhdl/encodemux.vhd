@@ -29,7 +29,8 @@ entity encodemux is
     EPROCDATAA : in  std_logic_vector(7 downto 0);
     EPROCDATAB : in  std_logic_vector(7 downto 0);
     EPROCDATAC : in  std_logic_vector(7 downto 0);
-    EPROCDATAD : in  std_logic_vector(7 downto 0));
+    EPROCDATAD : in  std_logic_vector(7 downto 0);
+    DEBUG : out std_logic_vector(15 downto 0));
 end encodemux;
 
 architecture Behavioral of encodemux is
@@ -122,6 +123,7 @@ begin  -- Behavioral
   EPROCGRANT(2) <= '1' when cs = esendc and esel(2) ='0' else '0';
   EPROCGRANT(3) <= '1' when cs = esendd and esel(3) ='0' else '0';
 
+  DEBUG <= esel & edspreq & sentthiscycle & X"A";
   
   main : process(CLK)
   begin

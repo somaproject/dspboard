@@ -17,9 +17,10 @@ entity eventrx is
     SCS      : in  std_logic;
     FIFOFULL : out std_logic;
     DOUT     : out std_logic_vector(7 downto 0);
-    REQ      : out  std_logic;
+    REQ      : out std_logic;
     GRANT    : in  std_logic;
-    DEBUG : out std_logic_vector(15 downto 0));
+    DONE     : out std_logic;
+    DEBUG    : out std_logic_vector(15 downto 0));
 end eventrx;
 
 architecture Behavioral of eventrx is
@@ -79,7 +80,7 @@ architecture Behavioral of eventrx is
 
 begin  -- Behavioral
 
-  biten <= '1' when sclkl ='0' and sclkll = '1' else '0';
+  biten <= '1' when sclkl = '0' and sclkll = '1' else '0';
 
   wea <= '1' when we = '1' and isel = '0' else '0';
   web <= '1' when we = '1' and isel = '1' else '0';
@@ -91,14 +92,14 @@ begin  -- Behavioral
 
   REQ <= '1' when ocs = armareq or ocs = armbreq else '0';
 
---  FIFOFULL <= armeda and armedb;      -- causes race conditions
+-- FIFOFULL <= armeda and armedb;       -- causes race conditions
   FIFOFULL <= '1' when (armeda = '1' and armedb = '1' ) or
-                       (armeda='1' and ics = wordw) or
-                       (armedb ='1' and ics = wordw) else
+              (armeda = '1' and ics = wordw) or
+              (armedb = '1' and ics = wordw) else
               '0';
 
   DEBUG <= din;
-  
+
   regfile_a : regfile
     generic map (
       BITS  => 16)
@@ -190,7 +191,13 @@ begin  -- Behavioral
         end if;
 
         if ics = nextisel then
-          isel <= not isel; 
+          isel <= not isel;
+        end if;
+
+        if ocs = donea or ocs = doneb then
+          DONE <= '1';
+        else
+          DONE <= '0'; 
         end if;
 
 
