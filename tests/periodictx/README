@@ -1,0 +1,3 @@
+Once every few hundred cycles send a fake event and fake data. Useful
+for debugging the relevant interfaces.
+

@@ -10,7 +10,7 @@ directory. However we recommend that complex tests have a structure as
 follows:
 
 vhdl: synthesizable vhdl code that runs on the FPGA
-code: dsp-running code, and similar files
+dspcode: dsp-running code, and similar files
 sim: any simulation files for testing the VHDL module. 
 
 --------------------------------------------------------------------
@@ -23,5 +23,10 @@ associated pins
 
 simplerun: simple FPGA basic code to bring the DSP out of reset and
 give it a clock so that we may develop via the JTAG pod. Does not make
-any attempt to boot the FPGA.
+any attempt to boot the FPGA, but we do create a ldr file
+that we can use once we have the main target booted
+
+periodictx: use the eventtx and datasport interfaces to periodically
+send event and data packets to everyone for the purposes of debugging
+those interfaces
 
