@@ -32,10 +32,10 @@ int eventtx_object_main()
 
   while (1) {
 
-    for (int j = 0; j < 10000000; j++) {
-      // wait for a looong time
+//     for (int j = 0; j < 10000000; j++) {
+//       // wait for a looong time
 
-    }
+//     }
 
     int read = *pFIO_FLAG_D; 
 
@@ -58,9 +58,14 @@ int eventtx_object_main()
       iteration++; 
     }
     int i = *pDMA5_IRQ_STATUS; 
-    
+
+
     etx->sendEvent(); 
+    
   }
+
+
+
 }
 
 int main()

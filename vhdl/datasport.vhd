@@ -56,7 +56,7 @@ architecture Behavioral of datasport is
 begin  -- Behavioral
   dinint(0) <= SERDT;
 
-  FULL <= '1' when BUFCNT(1) = '1' else '0';
+  FULL <= '1' when BUFCNT /= "00" and ics /=none  else '0';
   DONE <= '1' when ocs = ddone   else '0';
 
   RAM1 : RAMB16_S1_S9
@@ -128,9 +128,9 @@ begin  -- Behavioral
 
       if ics = bufdone and ocs = ddone then
         null;
-      elsif ics = instart and ocs /= ddone then
+      elsif ics = bufdone and ocs /= ddone then
         bufcnt <= bufcnt + 1;
-      elsif ics /= instart and ocs = ddone then
+      elsif ics /= bufdone and ocs = ddone then
         bufcnt <= bufcnt - 1;
       end if;
 
@@ -159,7 +159,8 @@ begin  -- Behavioral
         end if;
 
       when instart =>
-        ins <= low; 
+        ins <= low;
+        
       when low =>
         if seren = '1' then
           ins <= high;

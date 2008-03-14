@@ -80,8 +80,10 @@ begin
 
   end process;
   process
-    variable tmpword, tmpwordLE : std_logic_vector(15 downto 0) := X"0000";
-    variable pktlen, pktlenLE  : std_logic_vector(15 downto 0) := X"0000";
+    -- we need the BEswap variables because we must seend each byte
+    -- LSB first, but we need to send the high-byte first
+    variable tmpword, tmpwordBEswap : std_logic_vector(15 downto 0) := X"0000";
+    variable pktlen, pktlenBEswap : std_logic_vector(15 downto 0) := X"0000";
   begin
     wait for 10 us;
 
@@ -90,7 +92,6 @@ begin
       wait until rising_edge(CLK);
       wait until rising_edge(CLK);
       wait until rising_edge(CLK) and FULL = '0';
-
       wait until falling_edge(SERCLK);
       SERTFS <= '1';
       wait until falling_edge(SERCLK);
@@ -98,18 +99,18 @@ begin
 
       -- send the length
       pktlen := std_logic_vector(TO_UNSIGNED(bufnum*20 + 172, 16 ));
-      pktlenLE := pktlen(7 downto 0) & pktlen(15 downto 8); 
+      pktlenBEswap := pktlen(7 downto 0) & pktlen(15 downto 8); 
       for bpos in 0 to 15 loop
-        SERDT <= pktlenLE(bpos);
+        SERDT <= pktlenBEswap(bpos);
         wait until falling_edge(SERCLK);
       end loop;  -- bpos
 
       -- then the body
       for bufpos in 0 to 510 loop
         tmpword := std_logic_vector(TO_UNSIGNED(bufnum * 256 + bufpos, 16));
-        tmpwordLE := tmpword(7 downto 0) & tmpword(15 downto 8); 
+        tmpwordBEswap := tmpword(7 downto 0) & tmpword(15 downto 8); 
         for bpos in 0 to 15 loop
-          SERDT <= tmpwordLE(bpos);
+          SERDT <= tmpwordBEswap(bpos);
           wait until falling_edge(SERCLK);
         end loop;
       end loop;
@@ -127,7 +128,7 @@ begin
     for bufnum in 0 to 19 loop
 
       wait until rising_edge(CLK) and REQ = '1';
-      wait for 10 us;
+      wait for 100 us;
       wait until rising_edge(CLK);
       GRANT <= '1';
       bufpos := 0;

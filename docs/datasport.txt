@@ -15,3 +15,14 @@ the 1024-byte frame.
 
 We can store two packets in here; we need to be careful about our FIFO
 FULL signal. We could always use a 2-bit up-down counter or something. 
+
+Format: 
+
+The 16-bit data is transmitted big-endian, as:
+
+LEN[15:8]
+LEN[7:0]
+TYP
+SRC
+...
+
