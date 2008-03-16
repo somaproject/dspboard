@@ -47,6 +47,7 @@ void DataSPORT::sendPending()
   if (txPending_) {
     if (isDMADone()) {
       txPending_ = false; 
+
     } else {
       return;  // DMA still pending
     } 
@@ -114,9 +115,11 @@ void DataSPORT::setupFPGAFIFOFlag()
 
 bool DataSPORT::isDMADone()
 {
-  if ((*pDMA4_IRQ_STATUS & DMA_RUN) or  !(*pDMA4_IRQ_STATUS & DMA_DONE) ) {
+  if ( !(*pDMA4_IRQ_STATUS & DMA_DONE) ) {
     return false;
   } else {
+    *pDMA4_IRQ_STATUS = 0x01; // clear IRQ status
+
     return true; 
   }
 

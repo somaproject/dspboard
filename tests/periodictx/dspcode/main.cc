@@ -7,6 +7,7 @@
 #include <cdefBF533.h>
 #include <event.h>
 #include <bf533/hw/eventtx.h>
+#include <bf533/hw/datasport.h>
 
 uint16_t htons(uint16_t x) {
 
@@ -21,21 +22,48 @@ uint16_t htons_dma(uint16_t x) {
 
 uint16_t  global_irq_status_read; 
 
-int eventtx_object_main()
+class TestData : public Data_t
+{
+public:
+  TestData(int num) : 
+    num_(num) {}
+  int num_; 
+
+  void toBuffer(unsigned char *c) {
+    // let's say our length is 128 bytes
+    *c = 0x00; 
+    c++; 
+    *c = 128; 
+    c++; 
+    // now we copy
+    for (int i = 0; i < 126; i++) {
+      *c = num_; 
+      c++; 
+    }
+
+  } 
+}; 
+
+int main_loop()
 {
 
   //etx.setup(); 
   EventTX * etx = new EventTX; 
   
   etx->setup(); 
+
+  DataSPORT * pDataSPORT = new DataSPORT(); 
+  pDataSPORT->setup(); 
+
   int iteration = 0; 
+  int datatxcnt = 0; 
 
   while (1) {
 
-//     for (int j = 0; j < 10000000; j++) {
-//       // wait for a looong time
+    for (int j = 0; j < 10000000; j++) {
+      // wait for a looong time
 
-//     }
+    }
 
     int read = *pFIO_FLAG_D; 
 
@@ -48,7 +76,7 @@ int eventtx_object_main()
       et.event.cmd = 0xFF;  
       et.event.src = 0xAB; 
       et.event.data[0] = iteration; 
-      et.event.data[1] = 0x3344;
+      et.event.data[1] = datatxcnt; 
       et.event.data[2] = 0x5566;
       et.event.data[3] = 0x7788;
       et.event.data[4] = 0x99AA;
@@ -57,13 +85,16 @@ int eventtx_object_main()
       etx->newEvent(et); 
       iteration++; 
     }
-    int i = *pDMA5_IRQ_STATUS; 
 
-
-    etx->sendEvent(); 
+    if(! pDataSPORT->txBufferFull()) {
+      TestData td(0); 
+      pDataSPORT->sendData(td); 
+      datatxcnt++; 
+    }
     
+    etx->sendEvent(); 
+    pDataSPORT->sendPending();     
   }
-
 
 
 }
@@ -71,7 +102,7 @@ int eventtx_object_main()
 int main()
 {
 
-  eventtx_object_main(); 
+  main_loop(); 
   
 }
 

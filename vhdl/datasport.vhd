@@ -43,7 +43,7 @@ architecture Behavioral of datasport is
   type instates is (none, instart, low, high, bufdone);
   signal ics, ins : instates := none;
 
-  type outstates is (none, reqs, len1, len2, dwait, ddone);
+  type outstates is (none, reqs, len0, len1, len2, dwait, ddone);
   signal ocs, ons : outstates := none;
 
   signal dob : std_logic_vector(7 downto 0) := (others => '0');
@@ -190,31 +190,35 @@ begin  -- Behavioral
       when none =>
         ocnten <= '0';
         if bufcnt /= "00" then
-          ons  <= reqs;
+          ons  <= len0;
         else
           ons  <= none;
         end if;
 
-      when reqs =>
-        ocnten <= '0';
-        if GRANT = '1' then
-          ons  <= len1;
-        else
-          ons  <= reqs;
-        end if;
+      when len0 =>
+        ocnten <= '1';
+        ons    <= len1;
 
       when len1 =>
         ocnten <= '1';
         ons    <= len2;
 
       when len2 =>
-        ocnten <= '1';
-        ons    <= dwait;
+        ocnten <= '0';
+        ons    <= reqs;
+
+
+      when reqs =>
+        ocnten <= '0';
+        if GRANT = '1' then
+          ons  <= dwait;
+        else
+          ons  <= reqs;
+        end if;
 
       when dwait =>
         ocnten <= '1';
         if addrb(9 downto 0) = len(9 downto 0) then
-        --if addrb(9 downto 0) = "1000000000" then
           ons  <= ddone;
         else
           ons  <= dwait;

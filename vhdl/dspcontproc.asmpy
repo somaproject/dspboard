@@ -36,6 +36,7 @@ env = createEnvironment()
 counter = env.createVariable("counter")
 buftxcounter = env.createVariable("buftxcounter")
 pendingDataBufTXSrc = env.createVariable("pendingDataBufTXSrc")
+pendingDataBufTXNonce = env.createVariable("pendingDataBufTXNonce")
 
 # state variables are used for persistence across ECYCLEs
 
@@ -51,9 +52,8 @@ def createEventCycleProc():
   proc.load(tmp, 0)
   proc.add(tmp, env.pendingDataBufTXSrc)
   proc.jz("ecycleproc_notx") 
-  proc.load(tmp2, 0x03)
-  #proc.output(EVENTOUT_DEST, env.pendingDataBufTXSrc)
-  proc.output(EVENTOUT_DEST, tmp2)
+  proc.output(EVENTOUT_DEST, env.pendingDataBufTXSrc)
+  proc.output(EVENTOUT_DATA0, env.pendingDataBufTXNonce)
   proc.load(tmp, EVENTRXCMD_DATABUFTX)
   proc.output(EVENTOUT_CMD, tmp)
   
@@ -112,6 +112,7 @@ def proc_databuftx():
   proc = env.createEProc((EVENTRXCMD_DATABUFTX, EVENTRXCMD_DATABUFTX), (0, 255))
   tmp = proc.createVariable("tmp")
   proc.move(env.pendingDataBufTXSrc, ereg.src)
+  proc.move(env.pendingDataBufTXNonce, ereg.edata[0])
   
   proc.move(tmp, ereg.edata[0])
   proc.output(OUTPUT_BOOTSTART, tmp)

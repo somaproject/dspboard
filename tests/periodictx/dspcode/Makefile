@@ -21,7 +21,7 @@ LDFLAGS =  -g -T bftiny.x  -L$(BFROOT)lib/ -L$(BFROOT)/lib/gcc/bfin-elf/$(BFROOT
 	 -lsupc++ -lc -lgcc -lnosys
 
 
-OBJS = $(ASMSRCS:%.asm=%.o)  $(CCSRCS:%.cc=%.o) eventtx.o memory.o
+OBJS = $(ASMSRCS:%.asm=%.o)  $(CCSRCS:%.cc=%.o) eventtx.o datasport.o memory.o
 
 
 AS = bfin-elf-as
@@ -41,6 +41,9 @@ memory.o: $(SRCDIR)/bf533/hw/memory.cc
 
 eventtx.o: $(SRCDIR)bf533/hw/eventtx.cc
 	$(CXX) $(CFLAGS) -c $(SRCDIR)bf533/hw/eventtx.cc -o eventtx.o
+
+datasport.o: $(SRCDIR)bf533/hw/datasport.cc
+	$(CXX) $(CFLAGS) -c $(SRCDIR)bf533/hw/datasport.cc -o datasport.o
 
 %.o: %.asm
 	$(CC) $(ASMFLAGS) -c -o $@ $<

@@ -37,7 +37,7 @@ architecture Behavioral of datasporttest is
   signal GRANT : std_logic                    := '0';
   signal DOUT  : std_logic_vector(7 downto 0) := (others => '0');
 
-  signal DONE : std_logic := '0';
+  signal DONE, donel : std_logic := '0';
 
   type databuffer_t is array (0 to 1023) of std_logic_vector(7 downto 0);
   signal databuffer : databuffer_t := (others => (others => '0'));
@@ -119,11 +119,18 @@ begin
   end process;
 
 
+  process(clk)
+    begin
+      if rising_edge(clk) then
+        donel <= done; 
+      end if;
+
+    end process;
+    
   -- output read
   process
     variable bufpos : integer := 0;
     variable lenword, dataword : std_logic_vector(15 downto 0) := (others => '0');
-    
   begin
     for bufnum in 0 to 19 loop
 
@@ -136,21 +143,18 @@ begin
 
       GRANT                <= '0';
       wait until rising_edge(CLK);
-      while DONE /= '1' loop
+      while donel /= '1' loop
         databuffer(bufpos) <= DOUT;
         wait until rising_edge(CLK);
         bufpos := bufpos + 1;
       end loop;
 
       -- validate packet
-      lenword := databuffer(0) & databuffer(1);
-      assert TO_INTEGER(UNSIGNED(lenword)) = bufnum * 20 + 172
-        report "Error reading buflen" severity Error;
 
-      assert bufpos = bufnum * 20 + 172 report "Incorrect recovered pkt len" severity Error;
+      assert bufpos = bufnum * 20 + 172 -1 report "Incorrect recovered pkt len" severity Error;
 
-      for i in 0 to (bufpos - 4)/2 loop
-        dataword := databuffer(i*2 + 2 ) & databuffer(i*2+1 + 2);
+      for i in 0 to (bufpos-2)/2 loop
+        dataword := databuffer(i*2 ) & databuffer(i*2+1 );
         assert dataword = std_logic_vector(TO_UNSIGNED(bufnum * 256 + i, 16))
           report "Error reading data word " & integer'image(i) severity Error;
                                            

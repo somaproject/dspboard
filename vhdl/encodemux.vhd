@@ -10,9 +10,9 @@ entity encodemux is
     DOUT       : out std_logic_vector(7 downto 0);
     KOUT      : out std_logic;
     -- data interface
-    DREQ       : in  std_logic;
-    DGRANT     : out std_logic;
-    DDONE      : in  std_logic;
+    DREQ       : in  std_logic; 
+    DGRANT     : out std_logic; 
+    DDONE      : in  std_logic; 
     DDATA      : in  std_logic_vector(7 downto 0);
     -- event interface for DSPs
     EDSPREQ    : in  std_logic_vector(3 downto 0);
@@ -200,7 +200,7 @@ begin  -- Behavioral
         osel <= 0;
         ken <= '0';
         kdsel <= '0';
-        if ECYCLE = '1' then
+        if epos = 49 then
           ns <= dcheck;
         else
           ns <= none; 
