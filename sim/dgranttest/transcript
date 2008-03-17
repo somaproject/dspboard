@@ -1,0 +1,147 @@
+# //  ModelSim SE-64 6.3d Nov 26 2007 Linux 2.6.22-14-generic
+# //
+# //  Copyright 1991-2007 Mentor Graphics Corporation
+# //              All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND 
+# //  PROPRIETARY INFORMATION WHICH IS THE PROPERTY
+# //  OF MENTOR GRAPHICS CORPORATION OR ITS LICENSORS
+# //  AND IS SUBJECT TO LICENSE TERMS.
+# //
+# vsim dgranttest 
+# Loading std.standard
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading ieee.std_logic_arith(body)
+# Loading ieee.std_logic_unsigned(body)
+# Loading work.dgranttest(behavioral)#1
+# Loading work.fakesport(behavioral)
+# Loading unisim.vcomponents
+# Loading work.datasport(behavioral)#1
+# Loading std.textio(body)
+# Loading ieee.vital_timing(body)
+# Loading ieee.vital_primitives(body)
+# Loading unisim.vpkg(body)
+# Loading unisim.ramb16_s1_s9(ramb16_s1_s9_v)#1
+# Loading soma.somabackplane(body)
+# Loading work.fakebackplane(behavioral)#1
+# Loading soma.datarouter(behavioral)
+# Loading work.devicemux(behavioral)#1
+# Loading work.devicemuxtx(behavioral)
+# Loading work.devicemuxrx(behavioral)#1
+# Loading work.devicemuxeventrx2(behavioral)#1
+# Loading work.regfile(behavioral)#1
+# Loading unisim.ram16x1d(ram16x1d_v)
+# Loading work.decodemux(behavioral)
+# Loading work.encodemux(behavioral)
+# Loading work.datamux(behavioral)
+add wave * 
+run 1 ms
+make
+# make[1]: Entering directory `/home/jonas/soma/dspboard/sim/dgranttest'
+# mkdir -p work
+# vcom dgranttest.vhd
+# Model Technology ModelSim SE-64 vcom 6.3d Compiler 2007.11 Nov 26 2007
+# -- Loading package standard
+# -- Loading package std_logic_1164
+# -- Loading package numeric_std
+# -- Loading package std_logic_arith
+# -- Loading package std_logic_unsigned
+# -- Compiling entity dgranttest
+# -- Compiling architecture behavioral of dgranttest
+# make[1]: Leaving directory `/home/jonas/soma/dspboard/sim/dgranttest'
+restart
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# Loading std.standard
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading ieee.std_logic_arith(body)
+# Loading ieee.std_logic_unsigned(body)
+# Loading work.dgranttest(behavioral)#1
+# Loading work.fakesport(behavioral)
+# Loading unisim.vcomponents
+# Loading work.datasport(behavioral)#1
+# Loading std.textio(body)
+# Loading ieee.vital_timing(body)
+# Loading ieee.vital_primitives(body)
+# Loading unisim.vpkg(body)
+# Loading unisim.ramb16_s1_s9(ramb16_s1_s9_v)#1
+# Loading soma.somabackplane(body)
+# Loading work.fakebackplane(behavioral)#1
+# Loading soma.datarouter(behavioral)
+# Loading work.devicemux(behavioral)#1
+# Loading work.devicemuxtx(behavioral)
+# Loading work.devicemuxrx(behavioral)#1
+# Loading work.devicemuxeventrx2(behavioral)#1
+# Loading work.regfile(behavioral)#1
+# Loading unisim.ram16x1d(ram16x1d_v)
+# Loading work.decodemux(behavioral)
+# Loading work.encodemux(behavioral)
+# Loading work.datamux(behavioral)
+run 1000 us
+run 1000 us
+restart
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+run 1000 us
+# Loading std.standard
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading ieee.std_logic_arith(body)
+# Loading ieee.std_logic_unsigned(body)
+# Loading work.dgranttest(behavioral)#1
+# Loading work.fakesport(behavioral)
+# Loading unisim.vcomponents
+# Loading work.datasport(behavioral)#1
+# Loading std.textio(body)
+# Loading ieee.vital_timing(body)
+# Loading ieee.vital_primitives(body)
+# Loading unisim.vpkg(body)
+# Loading unisim.ramb16_s1_s9(ramb16_s1_s9_v)#1
+# Loading soma.somabackplane(body)
+# Loading work.fakebackplane(behavioral)#1
+# Loading soma.datarouter(behavioral)
+# Loading work.devicemux(behavioral)#1
+# Loading work.devicemuxtx(behavioral)
+# Loading work.devicemuxrx(behavioral)#1
+# Loading work.devicemuxeventrx2(behavioral)#1
+# Loading work.regfile(behavioral)#1
+# Loading unisim.ram16x1d(ram16x1d_v)
+# Loading work.decodemux(behavioral)
+# Loading work.encodemux(behavioral)
+# Loading work.datamux(behavioral)
+mak
+# ambiguous command name "mak": make_button_box make_check_box make_entry_box make_entry_box_group make_file_entry_box make_file_entry_box2 make_radio_box make_rpc_server make_stdbutton_box make_var_stdbutton_box
+make
+# make[1]: Entering directory `/home/jonas/soma/dspboard/sim/dgranttest'
+# make[1]: Nothing to be done for `all'.
+# make[1]: Leaving directory `/home/jonas/soma/dspboard/sim/dgranttest'
+restart
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# Loading std.standard
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading ieee.std_logic_arith(body)
+# Loading ieee.std_logic_unsigned(body)
+# Loading work.dgranttest(behavioral)#1
+# Loading work.fakesport(behavioral)
+# Loading unisim.vcomponents
+# Loading work.datasport(behavioral)#1
+# Loading std.textio(body)
+# Loading ieee.vital_timing(body)
+# Loading ieee.vital_primitives(body)
+# Loading unisim.vpkg(body)
+# Loading unisim.ramb16_s1_s9(ramb16_s1_s9_v)#1
+# Loading soma.somabackplane(body)
+# Loading work.fakebackplane(behavioral)#1
+# Loading soma.datarouter(behavioral)
+# Loading work.devicemux(behavioral)#1
+# Loading work.devicemuxtx(behavioral)
+# Loading work.devicemuxrx(behavioral)#1
+# Loading work.devicemuxeventrx2(behavioral)#1
+# Loading work.regfile(behavioral)#1
+# Loading unisim.ram16x1d(ram16x1d_v)
+# Loading work.decodemux(behavioral)
+# Loading work.encodemux(behavioral)
+# Loading work.datamux(behavioral)
+run 1000 us
+quit

@@ -1,0 +1,14 @@
+This is a test of the integration between: 
+
+datamux
+decodemux
+encodemux
+datasport
+
+and then maybe even some backplane components including
+
+datarouter
+devicemux
+
+there's a lot of infrastructure duplication here to just get the testing working
+

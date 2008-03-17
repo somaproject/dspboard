@@ -22,7 +22,7 @@ entity datasport is
     GRANT  : in  std_logic;
     DOUT   : out std_logic_vector(7 downto 0);
     DONE   : out std_logic;
-    DEBUG : out std_logic_vector(15 downto 0));
+    DEBUG  : out std_logic_vector(15 downto 0));
 end datasport;
 
 architecture Behavioral of datasport is
@@ -52,12 +52,12 @@ architecture Behavioral of datasport is
   signal ocnten : std_logic := '0';
 
   signal debugcnt : std_logic_vector(15 downto 0) := (others => '0');
-  
+
 begin  -- Behavioral
   dinint(0) <= SERDT;
 
-  FULL <= '1' when BUFCNT /= "00" and ics /=none  else '0';
-  DONE <= '1' when ocs = ddone   else '0';
+  FULL <= '1' when BUFCNT /= "00" and ics /=none else '0';
+  DONE <= '1' when ocs = ddone                   else '0';
 
   RAM1 : RAMB16_S1_S9
     generic map (
@@ -89,61 +89,69 @@ begin  -- Behavioral
   seren     <= SERCLK;
   addrb(10) <= outsel;
 
-  REQ     <= '1' when ocs = REQS else '0';
+  REQ <= '1' when ocs = REQS else '0';
 
-  
+
   main : process(CLK)
   begin
-    if rising_edge(CLK) then
-      ics <= ins;
-      ocs <= ons;
+    if RESET = '1' then
+      ics    <= none;
+      ocs    <= none;
+      incnt  <= (others => '0');
+      bufcnt <= "00";
+    else
+      if rising_edge(CLK) then
+        ics <= ins;
+        ocs <= ons;
 
-      if ics = none then
-        incnt   <= (others => '0');
-      else
-        if seren = '1' then
-          incnt <= incnt + 1;
+        if ics = none then
+          incnt   <= (others => '0');
+        else
+          if seren = '1' then
+            incnt <= incnt + 1;
+          end if;
         end if;
-      end if;
 
-      if ics = bufdone then
-        insel <= not insel;
-      end if;
-
-      if ocs = len1 then
-        len(15 downto 8) <= dob;
-      end if;
-
-      if ocs = len2 then
-        len(7 downto 0) <= dob;
-      end if;
-
-      if ocs = none then
-        addrb(9 downto 0)   <= (others => '0');
-      else
-        if ocnten = '1' or GRANT = '1' then
-          addrb(9 downto 0) <= addrb(9 downto 0) + 1;
+        if ics = bufdone then
+          insel <= not insel;
         end if;
-      end if;
 
-      if ics = bufdone and ocs = ddone then
-        null;
-      elsif ics = bufdone and ocs /= ddone then
-        bufcnt <= bufcnt + 1;
-      elsif ics /= bufdone and ocs = ddone then
-        bufcnt <= bufcnt - 1;
-      end if;
+        if ocs = len1 then
+          len(15 downto 8) <= dob;
+        end if;
 
-      if ocs = ddone then
-        outsel <= not outsel;
-      end if;
+        if ocs = len2 then
+          len(7 downto 0) <= dob;
+        end if;
 
-      if seren = '1' and sertfs = '1'  then
-        debugcnt <= debugcnt + 1; 
+        if ocs = none then
+          addrb(9 downto 0)   <= (others => '0');
+        else
+          if ocnten = '1' or GRANT = '1' then
+            addrb(9 downto 0) <= addrb(9 downto 0) + 1;
+          end if;
+        end if;
+
+        if ics = bufdone and ocs = ddone then
+          null;
+        elsif ics = bufdone and ocs /= ddone then
+          bufcnt <= bufcnt + 1;
+        elsif ics /= bufdone and ocs = ddone then
+          bufcnt <= bufcnt - 1;
+        end if;
+
+        if ocs = ddone then
+          outsel <= not outsel;
+        end if;
+
+        if seren = '1' and sertfs = '1' then
+          debugcnt <= debugcnt + 1;
+        end if;
+        DEBUG      <= debugcnt;
+
       end if;
-      DEBUG <= debugcnt;
-      
     end if;
+
   end process main;
 
 
@@ -160,7 +168,7 @@ begin  -- Behavioral
 
       when instart =>
         ins <= low;
-        
+
       when low =>
         if seren = '1' then
           ins <= high;

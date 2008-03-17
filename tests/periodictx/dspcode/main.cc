@@ -36,8 +36,16 @@ public:
     *c = 128; 
     c++; 
     // now we copy
-    for (int i = 0; i < 126; i++) {
-      *c = num_; 
+    
+    // type
+    *c = 0; 
+    c++; 
+    // source
+    *c = 10; 
+    c++
+
+    for (int i = 0; i < 124; i++) {
+      *c = i; 
       c++; 
     }
 

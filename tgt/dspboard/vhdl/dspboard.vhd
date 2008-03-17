@@ -137,8 +137,9 @@ architecture Behavioral of dspboard is
   signal rxdata, rxdatal : std_logic_vector(7 downto 0) := (others => '0');
   signal rxk, rxkl       : std_logic                    := '0';
 
-  signal clk   : std_logic := '0';
-  signal RESET : std_logic := '0';
+  signal clk            : std_logic := '0';
+  signal reset, dlreset : std_logic := '1';
+  signal dcmlocked      : std_logic := '0';
 
   signal pcnt         : std_logic_vector(21 downto 0) := (others => '0');
   signal decodeerrint : std_logic                     := '0';
@@ -547,10 +548,18 @@ architecture Behavioral of dspboard is
   signal wordset        : std_logic_vector(31 downto 0) := (others => '0');
   signal wordpos        : integer range 0 to 4          := 0;
 
-  signal dspresetaint : std_logic := '1';
+  signal dspresetaint  : std_logic := '0';
   signal dspresetaintn : std_logic := '0';
 
-  
+  signal dspresetbint  : std_logic := '0';
+  signal dspresetbintn : std_logic := '0';
+
+  signal dspresetcint  : std_logic := '0';
+  signal dspresetcintn : std_logic := '0';
+
+  signal dspresetdint  : std_logic := '0';
+  signal dspresetdintn : std_logic := '0';
+
 begin  -- Behavioral
 
 
@@ -562,13 +571,17 @@ begin  -- Behavioral
       TXDOUT    => rxdata,
       TXKOUT    => rxk,
       CLK       => clk,
-      CLK2X     => open,
-      RESET     => reset,
+      CLK2X     => clk2xint,
+      RESET     => dlreset,
       RXDIN     => txdata,
       RXKIN     => txk,
       RXIO_P    => TXIO_P,
       RXIO_N    => TXIO_N,
       DECODEERR => decodeerrint);
+
+  -- we need a second DCM because the first one is
+  -- using DLL_FREQUENCY_MODE = HIGH and port CLK2X is unavailable in
+  -- this mode
 
   maindcm : dcm
     generic map (
@@ -579,10 +592,14 @@ begin  -- Behavioral
     port map (
       CLKIN          => clk,
       CLKFB          => clk2,
-      RST            => '0',
+      RST            => dlreset,
       CLK0           => clk2int,
-      CLK2x          => clk2xint,
-      CLKFX          => clkacqint);
+-- CLK2x => clk2xint,
+      CLKFX          => clkacqint,
+      LOCKED         => dcmlocked);
+
+  reset <= dlreset;
+
 
   clk2_bufg : BUFG port map (
     O => clk2,
@@ -647,10 +664,10 @@ begin  -- Behavioral
       DSPSPICLK  => procdspspiclka,
       DSPSPIHOLD => dspspiholda,
       LEDEVENT   => LEDEVENTA);
-  
-  DSPRESETA <= dspresetaint;
+
+  DSPRESETA     <= dspresetaint;
   dspresetaintn <= not dspresetaint;
-  
+
 
   dspiomux_a : dspiomux
     port map (
@@ -722,7 +739,7 @@ begin  -- Behavioral
       ESENDDONE  => eprocdone(1),
       ESENDDATA  => eprocdatab,
       -- dsp interface
-      DSPRESET   => DSPRESETB,
+      DSPRESET   => dspresetbint,
       DSPSPIEN   => procdspspienb,
       DSPSPISS   => procdspspissb,
       DSPSPIMISO => procdspspimisob,
@@ -730,6 +747,10 @@ begin  -- Behavioral
       DSPSPICLK  => procdspspiclkb,
       DSPSPIHOLD => dspspiholdb,
       LEDEVENT   => LEDEVENTB);
+
+  DSPRESETb     <= dspresetbint;
+  dspresetbintn <= not dspresetbint;
+
 
   eventr_b : eventrx
     port map (
@@ -776,7 +797,7 @@ begin  -- Behavioral
   datasport_b : datasport
     port map (
       CLK    => CLK,
-      RESET  => reset,
+      RESET  => dspresetbintn,
       SERCLK => sportsclk,
       SERDT  => DSPSPORT1DTB,
       SERTFS => DSPSPORT1TFSB,
@@ -801,7 +822,7 @@ begin  -- Behavioral
       ESENDDONE  => eprocdone(2),
       ESENDDATA  => eprocdatac,
       -- dsp interface
-      DSPRESET   => DSPRESETC,
+      DSPRESET   => DSPRESETCint,
       DSPSPIEN   => procdspspienc,
       DSPSPISS   => procdspspissc,
       DSPSPIMISO => procdspspimisoc,
@@ -809,6 +830,9 @@ begin  -- Behavioral
       DSPSPICLK  => procdspspiclkc,
       DSPSPIHOLD => DSPSPIHOLDC,
       LEDEVENT   => LEDEVENTC);
+
+  DSPRESETC     <= dspresetcint;
+  dspresetcintn <= not dspresetcint;
 
   dspiomux_c : dspiomux
     port map (
@@ -855,7 +879,7 @@ begin  -- Behavioral
   datasport_c : datasport
     port map (
       CLK    => CLK,
-      RESET  => reset,
+      RESET  => dspresetcintn,
       SERCLK => sportsclk,
       SERDT  => DSPSPORT1DTC,
       SERTFS => DSPSPORT1TFSC,
@@ -882,7 +906,7 @@ begin  -- Behavioral
       ESENDDONE  => eprocdone(3),
       ESENDDATA  => eprocdatad,
       -- dsp interface
-      DSPRESET   => DSPRESETD,
+      DSPRESET   => DSPRESETDint,
       DSPSPIEN   => procdspspiend,
       DSPSPISS   => procdspspissd,
       DSPSPIMISO => procdspspimisod,
@@ -890,6 +914,9 @@ begin  -- Behavioral
       DSPSPICLK  => procdspspiclkd,
       DSPSPIHOLD => DSPSPIHOLDD,
       LEDEVENT   => LEDEVENTD);
+
+  DSPRESETd     <= dspresetdint;
+  dspresetdintn <= not dspresetdint;
 
 
   dspiomux_d : dspiomux
@@ -936,7 +963,7 @@ begin  -- Behavioral
   datasport_d : datasport
     port map (
       CLK    => CLK,
-      RESET  => reset,
+      RESET  => dspresetdintn,
       SERCLK => sportsclk,
       SERDT  => DSPSPORT1DTD,
       SERTFS => DSPSPORT1TFSD,
@@ -1059,67 +1086,91 @@ begin  -- Behavioral
 
   jtagwordout(47 downto 24) <= jtagdatatxcnt_req & jtagdatatxcnt_grant &
                                jtagdatatxcnt_done;
-  jtagwordout(23 downto 16) <= dspresetaint & "000" & dreq; 
+  jtagwordout(23 downto 16) <= dspresetaint & "000" & dreq;
   LEDPOWER                  <= linkup;
 
   process(CLK)
-    variable scnt     : integer range 0 to 2 := 0;
-    variable dreqal   : std_logic            := '0';
-    variable dgrantal : std_logic            := '0';
+    variable scnt      : integer range 0 to 2 := 0;
+    variable dreqal    : std_logic            := '0';
+    variable dgrantal  : std_logic            := '0';
+    variable ddonetest : std_logic            := '0';
+    variable indata    : std_logic            := '0';
 
   begin
+    if RESET = '1' then
+    else
 
-    if rising_edge(clk) then
-      rxdatal <= rxdata;
-      rxkl    <= rxk;
+      if rising_edge(clk) then
+        rxdatal <= rxdata;
+        rxkl    <= rxk;
 
-      if ecycle = '1' then
-        pos <= "0000000001";
-      else
-        pos <= pos + 1;
-      end if;
+        if ecycle = '1' then
+          pos <= "0000000001";
+        else
+          pos <= pos + 1;
+        end if;
 
 --  -- count cycles of input req
-      if dreq(0) = '1' and dreqal = '0' then
-        jtagdatatxcnt_req <= jtagdatatxcnt_req + 1;
-      end if;
-      dreqal := dreq(0);
+        if dreq(0) = '1' and dreqal = '0' then
+          jtagdatatxcnt_req <= jtagdatatxcnt_req + 1;
+        end if;
+        dreqal := dreq(0);
 
 --  -- count input grants
-      if dgrant(0) = '1' and dgrantal = '0' then
-        jtagdatatxcnt_grant <= jtagdatatxcnt_grant + 1;
+        if dgrant(0) = '1' and dgrantal = '0' then
+          jtagdatatxcnt_grant <= jtagdatatxcnt_grant + 1;
+        end if;
+        dgrantal := dgrant(0);
+
+        if ddone(0) = '1' then
+          jtagdatatxcnt_done <= jtagdatatxcnt_done + 1;
+        end if;
+
+        if scnt = 2 then
+          scnt := 0;
+        else
+          scnt := scnt + 1;
+        end if;
+
+        if scnt = 1 then
+          sportsclk <= '1';
+        else
+          sportsclk <= '0';
+        end if;
+
+        if jtagsel2 = '1' then
+          jtagwordout(15 downto 0) <= (others => '0');
+          ddonetest     := '0';
+        else
+          if dgrant(0) = '1' and ddonetest = '0' then
+            indata      := '1';
+            ddonetest := '1';
+          else
+            if ddone(0) = '1' then
+              indata    := '0';
+            end if;
+          end if;
+
+        end if;
+
+
+        if indata = '1' then
+          jtagwordout(15 downto 0) <= jtagwordout(15 downto 0) + 1;
+        end if;
+
+
+        DSPSPORTSCLKA <= sportsclk;
+        DSPSPORTSCLKB <= sportsclk;
+        DSPSPORTSCLKC <= sportsclk;
+        DSPSPORTSCLKD <= sportsclk;
+
+        DSPPPIDOUT <= edata;
+        DSPPPIFS1A <= ecycle and linkup;
+        DSPPPIFS1B <= ecycle and linkup;
+        DSPPPIFS1C <= ecycle and linkup;
+        DSPPPIFS1D <= ecycle and linkup;
+
       end if;
-      dgrantal := dgrant(0);
-
-      if ddone(0) = '1' then
-        jtagdatatxcnt_done <= jtagdatatxcnt_done + 1;
-      end if;
-
-      if scnt = 2 then
-        scnt := 0;
-      else
-        scnt := scnt + 1;
-      end if;
-
-      if scnt = 1 then
-        sportsclk <= '1';
-      else
-        sportsclk <= '0';
-      end if;
-
-      jtagwordout(15 downto 0) <= jtagwordout(15 downto 0) + 1;
-
-      DSPSPORTSCLKA <= sportsclk;
-      DSPSPORTSCLKB <= sportsclk;
-      DSPSPORTSCLKC <= sportsclk;
-      DSPSPORTSCLKD <= sportsclk;
-
-      DSPPPIDOUT <= edata;
-      DSPPPIFS1A <= ecycle and linkup;
-      DSPPPIFS1B <= ecycle and linkup;
-      DSPPPIFS1C <= ecycle and linkup;
-      DSPPPIFS1D <= ecycle and linkup;
-
     end if;
   end process;
 

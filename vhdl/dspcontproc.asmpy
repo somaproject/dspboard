@@ -60,7 +60,12 @@ def createEventCycleProc():
   proc.load(env.pendingDataBufTXSrc, 0)
   
   proc.label("ecycleproc_notx")
-  proc.load(tmp, 10)
+##   proc.load(tmp, 1)
+##   proc.output(OUTPUT_EVENTLED,  tmp)
+
+##   proc.load(tmp, 0)
+##   proc.output(OUTPUT_EVENTLED,  tmp)
+
   proc.foreverLoop()
 
 

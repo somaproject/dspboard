@@ -102,7 +102,7 @@ entity dspcontproc is
     ESENDDONE    : out std_logic;
     ESENDDATA    : out std_logic_vector(7 downto 0);
     -- DSP interface
-    DSPRESET     : out std_logic;
+    DSPRESET     : out std_logic := '0'; 
     DSPSPIEN     : out std_logic            := '1';
     DSPSPISS     : out std_logic            := '1';
     DSPSPIMISO   : in  std_logic;
