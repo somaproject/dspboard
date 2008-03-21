@@ -144,6 +144,9 @@ architecture Behavioral of dspboard is
   signal pcnt         : std_logic_vector(21 downto 0) := (others => '0');
   signal decodeerrint : std_logic                     := '0';
 
+  signal ppiedata : std_logic_vector(7 downto 0) := (others => '0');
+  signal ppifs1 : std_logic := '0';
+  
   component decodemux
     port (
       CLK    : in std_logic;
@@ -417,6 +420,16 @@ architecture Behavioral of dspboard is
       );
   end component;
 
+  component evtendianrev
+    port (
+      CLK    : in  std_logic;
+      DIN    : in  std_logic_vector(7 downto 0);
+      DINEN  : in  std_logic;
+      DOUT   : out std_logic_vector(7 downto 0);
+      DOUTEN : out std_logic);
+  end component;
+
+
   signal dreq   : std_logic_vector(3 downto 0) := (others => '0');
   signal dgrant : std_logic_vector(3 downto 0) := (others => '0');
   signal ddone  : std_logic_vector(3 downto 0) := (others => '0');
@@ -623,7 +636,7 @@ begin  -- Behavioral
   DSPCLKC <= CLK;
   DSPCLKD <= CLK;
 
-  DSPPPICLK <= clk;
+  DSPPPICLK <= not clk;
 
   decodemux_inst : decodemux
     port map (
@@ -1053,6 +1066,14 @@ begin  -- Behavioral
       DSPALINKUP  => fiberlinkupc,
       DSPBLINKUP  => fiberlinkupd);
 
+    evtendianrev_inst: evtendianrev
+      port map (
+        CLK    => CLK,
+        DIN    => edata,
+        DINEN  => ecycle,
+        DOUT   => ppiedata,
+        DOUTEN => ppifs1);
+  
 
   process(jtagDRCK1, clk)
   begin
@@ -1140,14 +1161,14 @@ begin  -- Behavioral
 
         if jtagsel2 = '1' then
           jtagwordout(15 downto 0) <= (others => '0');
-          ddonetest     := '0';
+          ddonetest   := '0';
         else
           if dgrant(0) = '1' and ddonetest = '0' then
-            indata      := '1';
+            indata    := '1';
             ddonetest := '1';
           else
             if ddone(0) = '1' then
-              indata    := '0';
+              indata  := '0';
             end if;
           end if;
 
@@ -1164,11 +1185,11 @@ begin  -- Behavioral
         DSPSPORTSCLKC <= sportsclk;
         DSPSPORTSCLKD <= sportsclk;
 
-        DSPPPIDOUT <= edata;
-        DSPPPIFS1A <= ecycle and linkup;
-        DSPPPIFS1B <= ecycle and linkup;
-        DSPPPIFS1C <= ecycle and linkup;
-        DSPPPIFS1D <= ecycle and linkup;
+        DSPPPIDOUT <= ppiedata;
+        DSPPPIFS1A <= ppifs1 and linkup;
+        DSPPPIFS1B <= ppifs1 and linkup;
+        DSPPPIFS1C <= ppifs1 and linkup;
+        DSPPPIFS1D <= ppifs1 and linkup;
 
       end if;
     end if;

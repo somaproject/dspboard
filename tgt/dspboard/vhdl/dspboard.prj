@@ -18,6 +18,8 @@ vhdl work "../../../vhdl/acqcmdmux.vhd"
 vhdl work "../../../vhdl/sportacqser.vhd"
 vhdl work "../../../vhdl/acqserial.vhd"
 
+
+vhdl work "../../../vhdl/evtendianrev.vhd"
 vhdl work "../../../vhdl/datasport.vhd"
 
 vhdl work "../../../vhdl/deviceio/devicelink.vhd"
