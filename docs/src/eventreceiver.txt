@@ -5,9 +5,17 @@ and then parse the resulting 1000-byte buffer. We tried doing more
 complex things, but PPI timing is tricky and we're low on FPGA
 real-estate.
 
+---------------------------------------------------------------------------
+EventRX 
+---------------------------------------------------------------------------
 At the moment we DMA in a full word based on ECYCLE using 2-d dma
-which is autobuffered. When that's done, we trigger
-an interrupt which advances the "nextBufferToProcess" pointer. 
+which is autobuffered. 
+
+Definitions: 
+
+currentReadBuffer: the # of buffer that we're currently reading from
+currentWriteBuffer: the # of buffer that we're currently writing to; this
+   is the pointer that's incremeneted on every sweep of the autodma
 
 We process events via
 
@@ -15,27 +23,55 @@ processEvents():
   Check if mostRecentProcessedBuffer != nextBufferToProcess and if so, 
   process the buffer by:
 
-  processEvent() processes and dispatches a single event
+  getBuffer() : returns the buffer
+  doneBuffer() : says we're done with this buffer
 
-
-so ProcessEvent() will 
-   if needed, get a new buffer
-   then iterate through the bit-set-field, calling the relevant
-   event processors with the decoded 
-
-   We use a constant-time dispatch via a two-tier table of lookups, first on the CMD
-   and then on the source. 
 
 
 ----------------------------------------------------------------------------
+EventDispatch
+---------------------------------------------------------------------------
+EventDispatch takes in a properly-formatted (read off PPI) 512-word
+data buffer and converts it to events, and calls events
+based on the CMD of the event. 
 
-if we're the A DSP, B DSP, C DSP, or D dsp, pick the right set of data
-to dispatch on... this is slightly more difficult than I'd like, but
-whatever.
+We use FastDelegate from The Code Project to give us very fast
+function-pointer-like performance. 
+
+To register to receive a particular event, create a member
+function with signature void (Event_t *) (i.e. "processEvent" below) 
+and register it (with your target CMD) as:
+  
+  EventDispatch.registerCallback(CMD, 
+      fastdelegate::MakeDelegate(&eh, &EventHandler::processEvent)); 
+Where eh is your EventHandler instance and &EventHandler::processEvent) is
+your main function. 
 
 
-parseECYCLE(uint16_t array[512])
+When we get a new EventBuffer, we call
+parseEcycle(Buffer) 
 
-dispatchEvent(): dispatch a single event
+which will reset the relevant pointers; Then to process
+events we loop, calling dispatchEvents() until it returns false, 
+indicating the end of an event cycle buffer; 
 
+Note that dispatchEvents() will dispatch events in sets of 8, 
+returning quickly if there are no set events. 
+
+
+HEre is an example dump of an event buffer from memory; in this 
+example device[0] has broadcast an event to all devices. 
+
+0xff900000:     0xbc00  0x0100  0x0000  0x0000  0x0000  0x0000  0x0001  0x0000
+0xff900010:     0x0000  0x0000  0x0000  0x0000  0x0100  0x0000  0x0000  0x0000
+0xff900020:     0x0000  0x0001  0x0000  0x0000  0x0000  0x0000  0x0000  0x0000
+0xff900030:     0x1000  0x0000  0xde8e  0x8ce6  0x0000  0x0000  0xa201  0x0100
+0xff900040:     0x0003  0x3df8  0x0000  0x0008  0x9402  0x0000  0x0000  0x0000
+0xff900050:     0x0000  0x0000  0x0000  0x0000  0x0000  0x0000  0x0000  0x0000
+0xff900060:     0x0000  0x0000  0x0000  0x0000  0x0000  0x0000  0x0000  0x0000
+0xff900070:     0x0000  0x0000  0x0000  0x0000  0x0000  0x0000  0x0000  0x0000
+0xff900080:     0x0000  0x0000  0x0000  0x0000  0x0000  0x0000  0x0000  0x0000
+0xff900090:     0x3308  0x030e  0x0000  0x0000  0x0000  0x0000  0x0000  0x0000
+0xff9000a0:     0x0000  0x0000  0x0000  0x0000  0x0000  0x0000  0x0000  0x0000
+0xff9000b0:     0x0000  0x0000  0x0000  0x0000  0x0000  0x0000  0x0000  0x0000
 

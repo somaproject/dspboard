@@ -1,0 +1,12 @@
+We echo back all events to 0xF0 to their source
+with:
+
+response.cmd = 0xF0
+response.data[0] = request.data[0]
+response.data[1] = echo request iteration
+response.data[2] = dtime[high]
+response.data[3] = dtime[med]
+response.data[4] = dtime[low]
+
+
+

@@ -29,8 +29,9 @@ class Event_t
 
 class EventTX_t
 {
-  static const int ADDRSIZE = 10; 
  public: 
+  static const int ADDRSIZE = 10; 
+
   char addr[ADDRSIZE]; 
   Event_t event; 
   

@@ -30,3 +30,5 @@ periodictx: use the eventtx and datasport interfaces to periodically
 send event and data packets to everyone for the purposes of debugging
 those interfaces
 
+dspecho: use the eventtx and eventrx to set up a simple echo server
+that will receive events and ping back a response

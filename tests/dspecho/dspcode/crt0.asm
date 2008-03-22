@@ -42,7 +42,6 @@ start:
 //
 
 
-	
 
 setupPLL:
 	// we have to enter the idle state after changes applied to the
@@ -117,15 +116,15 @@ setupPLL:
 	r0.h = _RTCHANDLER; // IVG7 Handler
 	[p0++] = r0;
 	
-    r0.l = _I8HANDLER;
-	r0.h = _I8HANDLER; 	// IVG8 Handler
+	//    r0.l = _rxisr;
+	//	r0.h = _rxisr;  	// IVG8 Handler
   	[p0++] = r0;
   	
-  	r0.l = _I9HANDLER;
-	r0.h = _I9HANDLER; 	// IVG9 Handler
+	//     r0.l = _txisr;
+	//r0.h = _txisr;  	// IVG9 Handler
  	[p0++] = r0;
- 	
-    r0.l = _ppirxisr;  
+
+    r0.l = _ppirxisr;     // PPI RX Handler
 	r0.h = _ppirxisr;  
  	[p0++] = r0;
  	
@@ -189,6 +188,7 @@ call_main:
 	
 	[--sp] = reti;  // pushing RETI allows interrupts to occur inside all main routines
 
+	
 	p0.l = _main;
 	p0.h = _main;
 
@@ -238,6 +238,9 @@ display_fail:
 
 
 _HWHANDLER:           // HW Error Handler 5
+	nop			;
+	nop			;
+	nop			;  
 rti;
 
 _NHANDLER:
@@ -263,14 +266,16 @@ _THANDLER:            // Timer Handler 6
 _RTCHANDLER:          // IVG 7 Handler  
 	r0.l = 7;
 	jump display_fail;
-
+	rti			;
+	
 _I8HANDLER:           // IVG 8 Handler
-	r0.l = 8;
-	jump display_fail;
+	nop
+	rti;  
 
 _I9HANDLER:           // IVG 9 Handler
-	r0.l = 9;
-	jump display_fail;
+	nop;
+	rti;  
+
 
 _I10HANDLER:          // IVG 10 Handler
 	r0.l = 10;
