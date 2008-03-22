@@ -17,11 +17,17 @@ import time
 
 class Block(object):
     def __init__(self, fid):
-        self.header = fid.read(10)    
-        (self.addr, self.cnt, self.flag) = struct.unpack("<IIH", self.header)
-        self.updateHeader()
-        (self.addr, self.cnt, self.flag) = struct.unpack("<IIH", self.header)
+
+        self.flag = 0
+        self.cnt = 0
+        self.addr = 0
         
+        self.header = fid.read(10)    
+        self.updateHeader()
+
+        self.fixHeader()
+        
+        self.updateHeader()
         if self.flag & 0x01 > 0:
             self.ZEROFILL = True
             self.block = "" 
@@ -30,6 +36,10 @@ class Block(object):
             self.block = fid.read(self.cnt)
 
 
+        self.pflag = (self.flag >> 5) & 0xF
+
+    def updateHeader(self):
+        (self.addr, self.cnt, self.flag) = struct.unpack("<IIH", self.header)
         if self.flag & 0x8 > 0:
             self.INIT = True
         else:
@@ -40,16 +50,21 @@ class Block(object):
         else:
             self.FINAL = False
 
-        self.pflag = (self.flag >> 5) & 0xF
-
-
         
-    def updateHeader(self):
+    def fixHeader(self):
 
-        self.newflag = self.flag | 0x0020
+        self.newflag = self.flag | 0x0020 # set PFLAG = 1
+        
+        self.newflag = self.flag & 0x7FFF # remove final
+        self.header = self.header[:8] + struct.pack("<H", self.newflag)
+    
+            
+    def setFinal(self):
+        self.newflag = self.flag | 0x8000 # set FINAL
         self.header = self.header[:8] + struct.pack("<H", self.newflag)
 
-            
+        self.updateHeader()
+        
         
 def loadfiles():
     filename = sys.argv[1]    
@@ -62,11 +77,11 @@ def loadfiles():
         block = Block(fid)
         binobjs.append(block)
         
-
+    binobjs[-1].setFinal()
 
     res = []
     for b in binobjs:
-        print "Block addr: %8.8X cnt: %8.8X INIT=%d, pflag=%d, zerofill=%d" % (b.addr, b.cnt, b.INIT, b.pflag, b.ZEROFILL)
+        print "Block addr: %8.8X cnt: %8.8X INIT=%d, pflag=%d, zerofill=%d, final=%d" % (b.addr, b.cnt, b.INIT, b.pflag, b.ZEROFILL, b.FINAL)
         for i in range(min(len(b.block) , 20)):
             print "%2.2X" % ord(b.block[i]), 
         print
@@ -75,6 +90,20 @@ def loadfiles():
 
     return res
 
+def chunk(string, maxlen):
+    """
+    return a string as a list of substrings of
+    no more than maxlen bytes
+
+    """
+    l = len(string)
+    chunkcnt  = l / maxlen + 1
+
+    chunks = []
+    for i in xrange(chunkcnt):
+        chunks.append(string[i*maxlen:((i+1)*maxlen)])
+    assert "".join(chunks) == string
+    return chunks
     
 eio = NetEventIO("10.0.0.2")
 
@@ -144,44 +173,45 @@ time.sleep(1)
 # load up the blocks and send
 
 blocks = loadfiles()
+blockpos = 0
 
-for b in blocks:
+for byteblock in blocks:
+    MAXLEN = 512
+    chunks = chunk(byteblock, MAXLEN)
+    print "byteblock, len = ", len(byteblock), len(chunks), "chunks"
+    cpos = 0
+    for b in chunks:
+        pos = 0
+        while pos < len(b):
+            bytes = b[pos:pos+2]
 
-    newb = struct.pack("BBBBBBBBBB",
-                    0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF, 0x11, 0x22, 0, 0)
-    pos = 0
-    b = b
+            words = struct.unpack(">H", bytes)
 
-    while pos < len(b):
-        bytes = b[pos:pos+2]
+            e = Event()
+            e.src = eaddr.NETWORK
+            e.cmd =  EVENTRXCMD_DATABUF
+            e.data[0] = words[0]
 
-        words = struct.unpack(">H", bytes)
+            ea = eaddr.TXDest()
+            ea[DSPBOARDADDR] = 1
+            eio.sendEvent(ea, e)
 
+            pos += 2
         e = Event()
         e.src = eaddr.NETWORK
-        e.cmd =  EVENTRXCMD_DATABUF
-        e.data[0] = words[0]
-        
+        e.cmd =  EVENTRXCMD_DATABUFTX
+        e.data[0] = blockpos * 256 + cpos
         ea = eaddr.TXDest()
+        
         ea[DSPBOARDADDR] = 1
         eio.sendEvent(ea, e)
-        
-        pos += 2
-    print "about to send databuftx event. block len = %d" % (len(b), )        
-    e = Event()
-    e.src = eaddr.NETWORK
-    e.cmd =  EVENTRXCMD_DATABUFTX
-    
-    ea = eaddr.TXDest()
-    ea[DSPBOARDADDR] = 1
-    eio.sendEvent(ea, e)
-    print "sent databuftx event. block len = %d" % (len(b), )
-    
-    erx = eio.getEvents()
-    for q in erx:
-        print q
+        print "sent databuftx event, blockpos =%d,  block len = %d, chunk number %d" % (blockpos, len(b), cpos)
+        erx = eio.getEvents()
+        for q in erx:
+            print q
 
-
+        cpos += 1
+    blockpos += 1
 e = Event()
 e.src = eaddr.NETWORK
 e.cmd =  EVENTRXCMD_DSPSPISS

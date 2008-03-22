@@ -12,6 +12,7 @@ import time
 eio = NetEventIO("10.0.0.2")
 
 DSPBOARDADDR = 0x08
+
 eio.addRXMask(xrange(256), DSPBOARDADDR)
 
 eio.start()
@@ -25,6 +26,7 @@ e.data[1] = 0x5678
 
 ea = eaddr.TXDest()
 ea[DSPBOARDADDR] = 1
+
 eio.sendEvent(ea, e)
 
 erx = eio.getEvents()
