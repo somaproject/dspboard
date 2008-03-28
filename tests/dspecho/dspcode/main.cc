@@ -61,7 +61,6 @@ public:
 int main_loop()
 {
 
-  //etx.setup(); 
   EventTX * etx = new EventTX; 
   
   etx->setup(); 

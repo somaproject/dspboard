@@ -115,8 +115,6 @@ setupPLL:
     r0.l = _RTCHANDLER;
 	r0.h = _RTCHANDLER; // IVG7 Handler
 	[p0++] = r0;
-	
-	//    r0.l = _rxisr;
 	//	r0.h = _rxisr;  	// IVG8 Handler
   	[p0++] = r0;
   	

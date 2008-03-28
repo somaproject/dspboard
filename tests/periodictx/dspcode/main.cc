@@ -42,7 +42,7 @@ public:
     c++; 
     // source
     *c = 10; 
-    c++
+    c++;
 
     for (int i = 0; i < 124; i++) {
       *c = i; 
