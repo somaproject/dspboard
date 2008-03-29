@@ -765,7 +765,7 @@ begin  -- Behavioral
   dspresetbintn <= not dspresetbint;
 
 
-  eventr_b : eventrx
+  eventrx_b : eventrx
     port map (
       CLK      => CLK,
       RESET    => '0',
@@ -1075,39 +1075,39 @@ begin  -- Behavioral
         DOUTEN => ppifs1);
   
 
-  process(jtagDRCK1, clk)
-  begin
-    if jtagupdate = '1' then
-      jtagout    <= X"1234" & jtagwordout;
-    else
-      if rising_edge(jtagDRCK1) then
-        jtagout  <= '0' & jtagout(63 downto 1);
-        jtagtdo1 <= jtagout(0);
-      end if;
+--   process(jtagDRCK1, clk)
+--   begin
+--     if jtagupdate = '1' then
+--       jtagout    <= X"1234" & jtagwordout;
+--     else
+--       if rising_edge(jtagDRCK1) then
+--         jtagout  <= '0' & jtagout(63 downto 1);
+--         jtagtdo1 <= jtagout(0);
+--       end if;
 
-    end if;
-  end process;
+--     end if;
+--   end process;
 
-  BSCAN_SPARTAN3_inst : BSCAN_SPARTAN3
-    port map (
-      CAPTURE => jtagcapture,
-      DRCK1   => jtagdrck1,
-      DRCK2   => jtagDRCK2,
-      SEL1    => jtagSEL1,
-      SEL2    => jtagSEL2,
-      SHIFT   => jtagSHIFT,
-      TDI     => jtagTDI,
-      UPDATE  => jtagUPDATE,
-      TDO1    => jtagtdo1,
-      TDO2    => jtagtdo2
-      );
-
-
+--   BSCAN_SPARTAN3_inst : BSCAN_SPARTAN3
+--     port map (
+--       CAPTURE => jtagcapture,
+--       DRCK1   => jtagdrck1,
+--       DRCK2   => jtagDRCK2,
+--       SEL1    => jtagSEL1,
+--       SEL2    => jtagSEL2,
+--       SHIFT   => jtagSHIFT,
+--       TDI     => jtagTDI,
+--       UPDATE  => jtagUPDATE,
+--       TDO1    => jtagtdo1,
+--       TDO2    => jtagtdo2
+--       );
 
 
-  jtagwordout(47 downto 24) <= jtagdatatxcnt_req & jtagdatatxcnt_grant &
-                               jtagdatatxcnt_done;
-  jtagwordout(23 downto 16) <= dspresetaint & "000" & dreq;
+
+
+--   jtagwordout(47 downto 24) <= jtagdatatxcnt_req & jtagdatatxcnt_grant &
+--                                jtagdatatxcnt_done;
+--   jtagwordout(23 downto 16) <= dspresetaint & "000" & dreq;
   LEDPOWER                  <= linkup;
 
   process(CLK)
@@ -1125,27 +1125,27 @@ begin  -- Behavioral
         rxdatal <= rxdata;
         rxkl    <= rxk;
 
-        if ecycle = '1' then
-          pos <= "0000000001";
-        else
-          pos <= pos + 1;
-        end if;
+--         if ecycle = '1' then
+--           pos <= "0000000001";
+--         else
+--           pos <= pos + 1;
+--         end if;
 
 --  -- count cycles of input req
-        if dreq(0) = '1' and dreqal = '0' then
-          jtagdatatxcnt_req <= jtagdatatxcnt_req + 1;
-        end if;
-        dreqal := dreq(0);
+--         if dreq(0) = '1' and dreqal = '0' then
+--           jtagdatatxcnt_req <= jtagdatatxcnt_req + 1;
+--         end if;
+--         dreqal := dreq(0);
 
---  -- count input grants
-        if dgrant(0) = '1' and dgrantal = '0' then
-          jtagdatatxcnt_grant <= jtagdatatxcnt_grant + 1;
-        end if;
-        dgrantal := dgrant(0);
+-- --  -- count input grants
+--         if dgrant(0) = '1' and dgrantal = '0' then
+--           jtagdatatxcnt_grant <= jtagdatatxcnt_grant + 1;
+--         end if;
+--         dgrantal := dgrant(0);
 
-        if ddone(0) = '1' then
-          jtagdatatxcnt_done <= jtagdatatxcnt_done + 1;
-        end if;
+--         if ddone(0) = '1' then
+--           jtagdatatxcnt_done <= jtagdatatxcnt_done + 1;
+--         end if;
 
         if scnt = 2 then
           scnt := 0;
@@ -1159,25 +1159,25 @@ begin  -- Behavioral
           sportsclk <= '0';
         end if;
 
-        if jtagsel2 = '1' then
-          jtagwordout(15 downto 0) <= (others => '0');
-          ddonetest   := '0';
-        else
-          if dgrant(0) = '1' and ddonetest = '0' then
-            indata    := '1';
-            ddonetest := '1';
-          else
-            if ddone(0) = '1' then
-              indata  := '0';
-            end if;
-          end if;
+--         if jtagsel2 = '1' then
+--           jtagwordout(15 downto 0) <= (others => '0');
+--           ddonetest   := '0';
+--         else
+--           if dgrant(0) = '1' and ddonetest = '0' then
+--             indata    := '1';
+--             ddonetest := '1';
+--           else
+--             if ddone(0) = '1' then
+--               indata  := '0';
+--             end if;
+--           end if;
 
-        end if;
+--         end if;
 
 
-        if indata = '1' then
-          jtagwordout(15 downto 0) <= jtagwordout(15 downto 0) + 1;
-        end if;
+--         if indata = '1' then
+--           jtagwordout(15 downto 0) <= jtagwordout(15 downto 0) + 1;
+--         end if;
 
 
         DSPSPORTSCLKA <= sportsclk;

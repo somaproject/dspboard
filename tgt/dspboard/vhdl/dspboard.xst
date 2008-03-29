@@ -7,7 +7,7 @@ run
 -ofmt NGC
 -p xc3s400-4-ft256
 -top dspboard
--opt_mode Speed
+-opt_mode Area
 -opt_level 2
 -iuc NO
 -keep_hierarchy YES

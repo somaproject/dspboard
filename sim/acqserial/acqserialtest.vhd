@@ -240,7 +240,6 @@ begin  -- Behavioral
       dspadata0out <= X"FE";
       wait until rising_edge(clk) and dspabitpos = 0;
       wait until rising_edge(clk) and dspabitpos = 256;
-      dspacmdout   <= X"0";
 
       wait until rising_edge(clk) and dspabitpos = 256 and
         dspadatain(11 downto 8) = std_logic_vector(TO_UNSIGNED(i*2+1, 4));
@@ -297,8 +296,6 @@ begin  -- Behavioral
       dspbdata0out <= X"FE";
       wait until rising_edge(clk) and dspbbitpos = 0;
       wait until rising_edge(clk) and dspbbitpos = 256;
-      dspbcmdout   <= X"0";
-
       wait until rising_edge(clk) and dspbbitpos = 256 and
         dspbdatain(11 downto 8) = std_logic_vector(TO_UNSIGNED(i*2+2, 4));
       report "Successful read a B event";

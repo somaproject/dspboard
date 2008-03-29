@@ -25,12 +25,13 @@ private:
   static const int RXBUFLEN_ = 10; 
   
   unsigned short RXbuffer_[RXBUFLEN_ * 16]; 
-  unsigned short EmptyTXBuffer_[16]; 
-  unsigned short CommandTXBuffer_[16]; 
+  unsigned short TXBufferA_[16]; 
+  unsigned short TXBufferB_[16]; 
   
   int curRXpos_; 
   int curReadPos_; 
-  bool txPending_; 
+  bool sendingTXBufferA_;
+  bool txSwapBuffers_;
   bool linkUp() { return true;}
 
 }; 

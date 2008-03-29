@@ -1,22 +1,22 @@
-ADDRESS_BLOCK dspcontproca RAMB18 [0x00000000 : 0x0000007ff]
+	ADDRESS_BLOCK dspcontproca RAMB18 [0x00000000 : 0x0000008ff]
 BUS_BLOCK
 dspcontproc_a/instruction_ram [17:0];
 END_BUS_BLOCK;
 END_ADDRESS_BLOCK; 
 
-ADDRESS_BLOCK dspcontprocb RAMB18 [0x10000000 : 0x100007ff]
+ADDRESS_BLOCK dspcontprocb RAMB18 [0x10000000 : 0x100008ff]
 BUS_BLOCK
 dspcontproc_b/instruction_ram [17:0];
 END_BUS_BLOCK;
 END_ADDRESS_BLOCK; 
 
-ADDRESS_BLOCK dspcontprocc RAMB18 [0x20000000 : 0x200007ff]
+ADDRESS_BLOCK dspcontprocc RAMB18 [0x20000000 : 0x200008ff]
 BUS_BLOCK
 dspcontproc_c/instruction_ram [17:0];
 END_BUS_BLOCK;
 END_ADDRESS_BLOCK; 
 
-ADDRESS_BLOCK dspcontprocd RAMB18 [0x30000000 : 0x300007ff]
+ADDRESS_BLOCK dspcontprocd RAMB18 [0x30000000 : 0x300008ff]
 BUS_BLOCK
 dspcontproc_d/instruction_ram [17:0];
 END_BUS_BLOCK;

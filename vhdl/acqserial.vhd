@@ -98,9 +98,9 @@ architecture Behavioral of acqserial is
   component acqcmdmux
     port (
       CLK     : in  std_logic;
-      CMDID   : in  std_logic_vector(3 downto 0);
-      CMDINA  : in  std_logic_vector(47 downto 0);
-      CMDINB  : in  std_logic_vector(47 downto 0);
+      CMDIDRX   : in  std_logic_vector(3 downto 0);
+      CMDINTXA  : in  std_logic_vector(47 downto 0);
+      CMDINTXB  : in  std_logic_vector(47 downto 0);
       NEWCMDS : in  std_logic;
       LINKUP  : in  std_logic;
       CMDOUT  : out std_logic_vector(47 downto 0);
@@ -186,9 +186,9 @@ begin  -- Behavioral
   acqcmdmux_inst : acqcmdmux
     port map (
       CLK     => clk,
-      cmdid   => cmdid,
-      cmdina  => cmdina(63 downto 16),
-      CMDINB  => cmdinb(63 downto 16),
+      CMDIDRX   => cmdid,
+      CMDINTXA  => cmdina(63 downto 16),
+      CMDINTXB  => cmdinb(63 downto 16),
       NEWCMDS => newcmds,
       LINKUP  => linkup,
       CMDOUT  => cmdout,

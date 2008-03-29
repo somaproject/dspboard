@@ -89,7 +89,7 @@ begin  -- Behavioral
       serdral <= SERDRA;
       serdrbl <= SERDRB;
 
-      if inenll = '1' and bitpos(7 downto 4) <= X"3" then
+      if inenll = '0' and inenl = '1' and bitpos(7 downto 4) <= X"3" then
         dataoutaint                          <= serdral & dataoutaint(63 downto 1);
         dataoutbint                          <= serdrbl & dataoutbint(63 downto 1);
       end if;

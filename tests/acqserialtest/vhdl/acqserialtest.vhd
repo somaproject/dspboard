@@ -49,29 +49,28 @@ architecture Behavioral of acqserialtest is
   signal RESET             : std_logic := '0';
 
 
-  component acqserial
-    port (
-      CLK         : in  std_logic;
-      CLKHI       : in  std_logic;
-      RESET       : in  std_logic;
-      FIBERIN     : in  std_logic;
-      FIBEROUT    : out std_logic;
-      NEWCMDDEBUG : out std_logic;
-      -- SPORT outputs
-      DSPASERCLK  : out std_logic;
-      DSPASERDT   : out std_logic;
-      DSPASERFS   : out std_logic;
-      DSPASERDR   : in  std_logic;
+  component acqserial 
+  port (
+    CLK         : in  std_logic;
+    CLKHI       : in  std_logic;
+    RESET       : in  std_logic;
+    FIBERIN     : in  std_logic;
+    FIBEROUT    : out std_logic;
+    NEWCMDDEBUG : out std_logic;
+    SERCLK      : in  std_logic;
+    -- SPORT outputs
+    DSPASERDT   : out std_logic;
+    DSPASERFS   : out std_logic;
+    DSPASERDR   : in  std_logic;
+    DSPBSERDT   : out std_logic;
+    DSPBSERFS   : out std_logic;
+    DSPBSERDR   : in  std_logic;
+    -- link status
+    DSPALINKUP  : out std_logic;
+    DSPBLINKUP  : out std_logic
+    );
+end component; 
 
-      DSPBSERCLK : out std_logic;
-      DSPBSERDT  : out std_logic;
-      DSPBSERFS  : out std_logic;
-      DSPBSERDR  : in  std_logic;
-      -- link status
-      DSPALINKUP : out std_logic;
-      DSPBLINKUP : out std_logic
-      );
-  end component;
 
   component acqboard
     port (
@@ -106,6 +105,9 @@ architecture Behavioral of acqserialtest is
   signal inword, inwordl : std_logic_vector(15 downto 0) := (others => '0');
 
   signal dspalinkupint, dspblinkupint : std_logic := '0';
+
+  signal serclkpos : integer range 0 to 2 := 0;
+  signal serclkint : std_logic := '0';
   
 begin  -- Behavioral
 
@@ -177,36 +179,57 @@ begin  -- Behavioral
       FIBERIN     => DSPFIBERIN,
       FIBEROUT    => DSPFIBEROUT,
       NEWCMDDEBUG => NEWCMDDEBUG,
-      DSPASERCLK  => DSPARSCLK,
+      SERCLK => serclkint, 
+
       DSPASERDT   => DSPADR,
       DSPASERFS   => DSPARFS,
       DSPASERDR   => DSPADT,
       DSPALINKUP  => DSPALINKUPint,
 
-      DSPBSERCLK => DSPBRSCLK,
       DSPBSERDT  => DSPBDR,
       DSPBSERFS  => DSPBRFS,
       DSPBSERDR  => DSPBDT,
       DSPBLINKUP => DSPBLINKUPint);
 
---   acqboard_inst : acqboard
---     port map (
---       CLKIN        => clkacq,
---       RXDATA       => open,
---       RXCMD        => rxcmd,
---       RXCMDID      => rxcmdid,
---       RXCHKSUM     => open,
---       FIBEROUT     => ACQFIBEROUT,
---       FIBERIN      => ACQFIBERIN,
---       TXCMDSTS     => "0110",
---       TXCMDSUCCESS => '1',
---       TXCHKSUM     => X"AB");
+   acqboard_inst : acqboard
+     port map (
+       CLKIN        => clkacq,
+       RXDATA       => open,
+       RXCMD        => rxcmd,
+       RXCMDID      => rxcmdid,
+       RXCHKSUM     => open,
+       FIBEROUT     => ACQFIBEROUT,
+       FIBERIN      => ACQFIBERIN,
+       TXCMDSTS     => "0110",
+       TXCMDSUCCESS => '1',
+       TXCHKSUM     => X"AB");
 
-  ACQFIBEROUT <= '1';                   -- DEBUGGING; 
+--   ACQFIBEROUT <= '1';                   -- DEBUGGING; 
 
   LEDPOWER <= '1';
   DSPRESET <= '1';
 
+  process(CLK)
+    begin
+      if rising_edge(CLK) then
+        if serclkpos = 2 then
+          serclkpos <= 0;
+        else
+          serclkpos <= serclkpos + 1; 
+        end if;
+
+        if serclkpos = 2 then
+          serclkint <= '1';
+        else
+          serclkint <= '0'; 
+        end if;
+
+        DSPARSCLK <= serclkint;
+        DSPBRSCLK <= serclkint;
+        
+      end if;
+
+    end process; 
   process(jtagDRCK1, clk)
   begin
 

@@ -1,7 +1,7 @@
 ##############################################################
 #
-# Xilinx Core Generator version J.37
-# Date: Thu Mar  6 05:57:59 2008
+# Xilinx Core Generator version K.31
+# Date: Fri Mar 28 19:40:56 2008
 #
 ##############################################################
 #
@@ -19,7 +19,7 @@ SET busformat = BusFormatAngleBracketNotRipped
 SET createndf = False
 SET designentry = VHDL
 SET device = xc3s400
-SET devicefamily = Spartan3
+SET devicefamily = spartan3
 SET flowvendor = Foundation_iSE
 SET formalverification = False
 SET foundationsym = False
@@ -54,5 +54,5 @@ CSET new_data=false
 CSET secondary_encoder=false
 # END Parameters
 GENERATE
-# CRC: 5a4322ce
+# CRC: 41d2b5c2
 

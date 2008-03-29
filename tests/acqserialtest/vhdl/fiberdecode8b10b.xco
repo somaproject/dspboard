@@ -1,7 +1,7 @@
 ##############################################################
 #
-# Xilinx Core Generator version J.37
-# Date: Thu Mar  6 05:57:45 2008
+# Xilinx Core Generator version K.31
+# Date: Fri Mar 28 19:40:35 2008
 #
 ##############################################################
 #
@@ -19,7 +19,7 @@ SET busformat = BusFormatAngleBracketNotRipped
 SET createndf = False
 SET designentry = VHDL
 SET device = xc3s400
-SET devicefamily = Spartan3
+SET devicefamily = spartan3
 SET flowvendor = Foundation_iSE
 SET formalverification = False
 SET foundationsym = False
@@ -58,5 +58,5 @@ CSET synchronous_reset=false
 CSET synchronous_reset_value=D_0_0_pos
 # END Parameters
 GENERATE
-# CRC: 4894b388
+# CRC:  2bdc7c0
 
