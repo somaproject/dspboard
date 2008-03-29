@@ -94,7 +94,8 @@ entity dspcontproc is
     DEVICE       : in  std_logic_vector(7 downto 0);
     -- Event input
     ECYCLE       : in  std_logic;
-    EARX         : in  std_logic_vector(79 downto 0);
+    EARXBYTE     : in  std_logic_vector(7 downto 0);
+    EARXBYTESEL  : out std_logic_vector(3 downto 0);
     EDRX         : in  std_logic_vector(7 downto 0);
     -- Event output 
     ESENDREQ     : out std_logic;
@@ -102,7 +103,7 @@ entity dspcontproc is
     ESENDDONE    : out std_logic;
     ESENDDATA    : out std_logic_vector(7 downto 0);
     -- DSP interface
-    DSPRESET     : out std_logic := '0'; 
+    DSPRESET     : out std_logic            := '0';
     DSPSPIEN     : out std_logic            := '1';
     DSPSPISS     : out std_logic            := '1';
     DSPSPIMISO   : in  std_logic;
@@ -157,12 +158,16 @@ architecture Behavioral of dspcontproc is
 begin  -- Behavioral
 
   eproc_inst : entity eproc.eproc
+    generic map (
+      EATXMUX     => true)
     port map (
       CLK         => CLK,
       CLKHI       => CLKHI,
       RESET       => RESET,
       EDTX        => EDRX,
-      EATX        => earx(77 downto 0),
+-- EATX => X
+      EATXBYTE    => EARXBYTE,
+      EATXBYTESEL => EARXBYTESEL,
       EAOUT       => eaout,
       EDOUT       => edout,
       ENEWOUT     => enewout,
@@ -302,7 +307,7 @@ begin  -- Behavioral
 
   bootserwe <= '1' when oportaddr = X"02" and oportstrobe = '1' else '0';
 
-  bootserstart <= '1' when oportaddr = X"03" and oportstrobe = '1' else '0'; 
+  bootserstart <= '1' when oportaddr = X"03" and oportstrobe = '1' else '0';
 
   main : process(CLKHI)
   begin
@@ -319,7 +324,7 @@ begin  -- Behavioral
 
       if iportstrobe = '1' then
         if iportaddr = X"03" then
-          iportdata <=  X"000" & "000" & bootserdone;
+          iportdata <= X"000" & "000" & bootserdone;
         end if;
       end if;
 

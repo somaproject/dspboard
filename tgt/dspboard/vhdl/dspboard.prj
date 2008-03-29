@@ -29,6 +29,7 @@ vhdl work "../../../vhdl/dspiomux.vhd"
 
 vhdl work "../../../vhdl/eventrx.vhd"
 vhdl work "../../../vhdl/regfile.vhd"
+vhdl work "../../../vhdl/regfilesingle.vhd"
 
 vhdl work "../../../vhdl/decodemux.vhd"
 vhdl work "../../../vhdl/datamux.vhd"

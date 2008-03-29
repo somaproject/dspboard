@@ -129,7 +129,6 @@ architecture Behavioral of dspboard is
 
   end component;
 
-  signal valid : std_logic := '0';
 
   signal txdata : std_logic_vector(7 downto 0) := (others => '0');
   signal txk    : std_logic                    := '0';
@@ -141,12 +140,11 @@ architecture Behavioral of dspboard is
   signal reset, dlreset : std_logic := '1';
   signal dcmlocked      : std_logic := '0';
 
-  signal pcnt         : std_logic_vector(21 downto 0) := (others => '0');
   signal decodeerrint : std_logic                     := '0';
 
   signal ppiedata : std_logic_vector(7 downto 0) := (others => '0');
-  signal ppifs1 : std_logic := '0';
-  
+  signal ppifs1   : std_logic                    := '0';
+
   component decodemux
     port (
       CLK    : in std_logic;
@@ -158,14 +156,22 @@ architecture Behavioral of dspboard is
       EDATA  : out std_logic_vector(7 downto 0);
 
       -- data interface
-      DGRANTA : out std_logic;
-      EARXA   : out std_logic_vector(79 downto 0);
-      DGRANTB : out std_logic;
-      EARXB   : out std_logic_vector(79 downto 0);
-      DGRANTC : out std_logic;
-      EARXC   : out std_logic_vector(79 downto 0);
-      DGRANTD : out std_logic;
-      EARXD   : out std_logic_vector(79 downto 0)
+      DGRANTA      : out std_logic;
+      EARXBYTEA    : out std_logic_vector(7 downto 0) := (others => '0');
+      EARXBYTESELA : in  std_logic_vector(3 downto 0) := (others => '0');
+
+      DGRANTB      : out std_logic;
+      EARXBYTEB    : out std_logic_vector(7 downto 0) := (others => '0');
+      EARXBYTESELB : in  std_logic_vector(3 downto 0) := (others => '0');
+
+      DGRANTC      : out std_logic;
+      EARXBYTEC    : out std_logic_vector(7 downto 0) := (others => '0');
+      EARXBYTESELC : in  std_logic_vector(3 downto 0) := (others => '0');
+
+      DGRANTD      : out std_logic;
+      EARXBYTED    : out std_logic_vector(7 downto 0) := (others => '0');
+      EARXBYTESELD : in  std_logic_vector(3 downto 0) := (others => '0')
+
       );
   end component;
 
@@ -244,11 +250,15 @@ architecture Behavioral of dspboard is
   signal EDATA  : std_logic_vector(7 downto 0) := (others => '0');
 
   -- decodemux signals interface
-  signal dgrantin : std_logic_vector(3 downto 0)  := (others => '0');
-  signal earxa    : std_logic_vector(79 downto 0) := (others => '0');
-  signal earxb    : std_logic_vector(79 downto 0) := (others => '0');
-  signal earxc    : std_logic_vector(79 downto 0) := (others => '0');
-  signal earxd    : std_logic_vector(79 downto 0) := (others => '0');
+  signal dgrantin     : std_logic_vector(3 downto 0) := (others => '0');
+  signal earxbytea    : std_logic_vector(7 downto 0) := (others => '0');
+  signal earxbytesela : std_logic_vector(3 downto 0) := (others => '0');
+  signal earxbyteb    : std_logic_vector(7 downto 0) := (others => '0');
+  signal earxbyteselb : std_logic_vector(3 downto 0) := (others => '0');
+  signal earxbytec    : std_logic_vector(7 downto 0) := (others => '0');
+  signal earxbyteselc : std_logic_vector(3 downto 0) := (others => '0');
+  signal earxbyted    : std_logic_vector(7 downto 0) := (others => '0');
+  signal earxbyteseld : std_logic_vector(3 downto 0) := (others => '0');
 
   component dspcontproc
     generic (
@@ -335,7 +345,8 @@ architecture Behavioral of dspboard is
       RESET        : in  std_logic;
       -- Event input
       ECYCLE       : in  std_logic;
-      EARX         : in  std_logic_vector(79 downto 0);
+      EARXBYTE     : in  std_logic_vector(7 downto 0);
+      EARXBYTESEL  : out std_logic_vector(3 downto 0);
       EDRX         : in  std_logic_vector(7 downto 0);
       -- Event output 
       ESENDREQ     : out std_logic;
@@ -464,7 +475,6 @@ architecture Behavioral of dspboard is
   signal procdspspimisoa : std_logic                    := '0';
   signal procdspspimosia : std_logic                    := '0';
   signal procdspspiclka  : std_logic                    := '0';
-  signal procdspspiclkal : std_logic                    := '0';
 
   signal dspissa       : std_logic := '0';
   signal dspimisoa     : std_logic := '0';
@@ -523,8 +533,6 @@ architecture Behavioral of dspboard is
 
   signal sportsclk : std_logic := '0';
 
-  signal ddata : std_logic_vector(7 downto 0) := (others => '0');
-
   signal linkup : std_logic := '0';
 
   signal fiberlinkupa, fiberlinkupb, fiberlinkupc, fiberlinkupd : std_logic := '0';
@@ -535,31 +543,6 @@ architecture Behavioral of dspboard is
 
   signal clkacqint, clkacq : std_logic := '0';
 
-  signal pos : std_logic_vector(9 downto 0) := (others => '0');
-
-  signal jtagcapture : std_logic := '0';
-  signal jtagdrck1   : std_logic := '0';
-  signal jtagdrck2   : std_logic := '0';
-  signal jtagsel1    : std_logic := '0';
-  signal jtagsel2    : std_logic := '0';
-  signal jtagshift   : std_logic := '0';
-  signal jtagtdi     : std_logic := '0';
-  signal jtagtdo1    : std_logic := '0';
-  signal jtagtdo2    : std_logic := '0';
-  signal jtagupdate  : std_logic := '0';
-
-  signal jtagout     : std_logic_vector(63 downto 0) := (others => '0');
-  signal jtagwordout : std_logic_vector(47 downto 0) := (others => '0');
-
-  signal jtagdatatxcnt_req   : std_logic_vector(7 downto 0) := (others => '0');
-  signal jtagdatatxcnt_grant : std_logic_vector(7 downto 0) := (others => '0');
-  signal jtagdatatxcnt_done  : std_logic_vector(7 downto 0) := (others => '0');
-
-  signal procdspspiclkcnta : std_logic_vector(15 downto 0) := (others => '0');
-
-  signal datasportdebug : std_logic_vector(15 downto 0) := (others => '0');
-  signal wordset        : std_logic_vector(31 downto 0) := (others => '0');
-  signal wordpos        : integer range 0 to 4          := 0;
 
   signal dspresetaint  : std_logic := '0';
   signal dspresetaintn : std_logic := '0';
@@ -640,20 +623,24 @@ begin  -- Behavioral
 
   decodemux_inst : decodemux
     port map (
-      CLK     => CLK,
-      DIN     => rxdatal,
-      KIN     => rxkl,
-      LOCKED  => linkup,
-      ECYCLE  => ecycle,
-      EDATA   => edata,
-      DGRANTA => dgrantin(0),
-      EARXA   => earxa,
-      DGRANTB => dgrantin(1),
-      EARXB   => earxb,
-      DGRANTC => dgrantin(2),
-      EARXC   => earxc,
-      DGRANTD => dgrantin(3),
-      EARXD   => earxd);
+      CLK          => CLK,
+      DIN          => rxdatal,
+      KIN          => rxkl,
+      LOCKED       => linkup,
+      ECYCLE       => ecycle,
+      EDATA        => edata,
+      DGRANTA      => dgrantin(0),
+      EARXBYTEA    => earxbytea,
+      EARXBYTESELA => earxbytesela,
+      DGRANTB      => dgrantin(1),
+      EARXBYTEB    => earxbyteb,
+      EARXBYTESELB => earxbyteselb,
+      DGRANTC      => dgrantin(2),
+      EARXBYTEC    => earxbytec,
+      EARXBYTESELC => earxbyteselc,
+      DGRANTD      => dgrantin(3),
+      EARXBYTED    => earxbyted,
+      EARXBYTESELD => earxbyteseld );
 
   dspcontproc_a : dspcontproc
     port map (
@@ -662,7 +649,8 @@ begin  -- Behavioral
       RESET      => reset,
       DEVICE     => devicea,
       ECYCLE     => ecycle,
-      EARX       => earxa,
+      EARXBYTE       => earxbytea,
+      EARXBYTESEL => earxbytesela, 
       EDRX       => edata,
       ESENDREQ   => eprocreq(0),
       ESENDGRANT => eprocgrant(0),
@@ -745,7 +733,8 @@ begin  -- Behavioral
       RESET      => reset,
       DEVICE     => deviceb,
       ECYCLE     => ecycle,
-      EARX       => earxb,
+      EARXBYTE       => earxbyteb,
+      EARXBYTESEL => earxbyteselb, 
       EDRX       => edata,
       ESENDREQ   => eprocreq(1),
       ESENDGRANT => eprocgrant(1),
@@ -828,7 +817,8 @@ begin  -- Behavioral
       RESET      => reset,
       DEVICE     => devicec,
       ECYCLE     => ecycle,
-      EARX       => earxc,
+      EARXBYTE       => earxbytec,
+      EARXBYTESEL => earxbyteselc, 
       EDRX       => edata,
       ESENDREQ   => eprocreq(2),
       ESENDGRANT => eprocgrant(2),
@@ -912,7 +902,8 @@ begin  -- Behavioral
       RESET      => reset,
       DEVICE     => deviced,
       ECYCLE     => ecycle,
-      EARX       => earxd,
+      EARXBYTE       => earxbyted,
+      EARXBYTESEL => earxbyteseld,
       EDRX       => edata,
       ESENDREQ   => eprocreq(3),
       ESENDGRANT => eprocgrant(3),
@@ -1066,49 +1057,49 @@ begin  -- Behavioral
       DSPALINKUP  => fiberlinkupc,
       DSPBLINKUP  => fiberlinkupd);
 
-    evtendianrev_inst: evtendianrev
-      port map (
-        CLK    => CLK,
-        DIN    => edata,
-        DINEN  => ecycle,
-        DOUT   => ppiedata,
-        DOUTEN => ppifs1);
-  
-
---   process(jtagDRCK1, clk)
---   begin
---     if jtagupdate = '1' then
---       jtagout    <= X"1234" & jtagwordout;
---     else
---       if rising_edge(jtagDRCK1) then
---         jtagout  <= '0' & jtagout(63 downto 1);
---         jtagtdo1 <= jtagout(0);
---       end if;
-
---     end if;
---   end process;
-
---   BSCAN_SPARTAN3_inst : BSCAN_SPARTAN3
---     port map (
---       CAPTURE => jtagcapture,
---       DRCK1   => jtagdrck1,
---       DRCK2   => jtagDRCK2,
---       SEL1    => jtagSEL1,
---       SEL2    => jtagSEL2,
---       SHIFT   => jtagSHIFT,
---       TDI     => jtagTDI,
---       UPDATE  => jtagUPDATE,
---       TDO1    => jtagtdo1,
---       TDO2    => jtagtdo2
---       );
+  evtendianrev_inst : evtendianrev
+    port map (
+      CLK    => CLK,
+      DIN    => edata,
+      DINEN  => ecycle,
+      DOUT   => ppiedata,
+      DOUTEN => ppifs1);
 
 
+-- process(jtagDRCK1, clk)
+-- begin
+-- if jtagupdate = '1' then
+-- jtagout <= X"1234" & jtagwordout;
+-- else
+-- if rising_edge(jtagDRCK1) then
+-- jtagout <= '0' & jtagout(63 downto 1);
+-- jtagtdo1 <= jtagout(0);
+-- end if;
+
+-- end if;
+-- end process;
+
+-- BSCAN_SPARTAN3_inst : BSCAN_SPARTAN3
+-- port map (
+-- CAPTURE => jtagcapture,
+-- DRCK1 => jtagdrck1,
+-- DRCK2 => jtagDRCK2,
+-- SEL1 => jtagSEL1,
+-- SEL2 => jtagSEL2,
+-- SHIFT => jtagSHIFT,
+-- TDI => jtagTDI,
+-- UPDATE => jtagUPDATE,
+-- TDO1 => jtagtdo1,
+-- TDO2 => jtagtdo2
+-- );
 
 
---   jtagwordout(47 downto 24) <= jtagdatatxcnt_req & jtagdatatxcnt_grant &
---                                jtagdatatxcnt_done;
---   jtagwordout(23 downto 16) <= dspresetaint & "000" & dreq;
-  LEDPOWER                  <= linkup;
+
+
+-- jtagwordout(47 downto 24) <= jtagdatatxcnt_req & jtagdatatxcnt_grant &
+-- jtagdatatxcnt_done;
+-- jtagwordout(23 downto 16) <= dspresetaint & "000" & dreq;
+  LEDPOWER <= linkup;
 
   process(CLK)
     variable scnt      : integer range 0 to 2 := 0;
@@ -1125,11 +1116,11 @@ begin  -- Behavioral
         rxdatal <= rxdata;
         rxkl    <= rxk;
 
---         if ecycle = '1' then
---           pos <= "0000000001";
---         else
---           pos <= pos + 1;
---         end if;
+-- if ecycle = '1' then
+-- pos <= "0000000001";
+-- else
+-- pos <= pos + 1;
+-- end if;
 
 --  -- count cycles of input req
 --         if dreq(0) = '1' and dreqal = '0' then
@@ -1137,15 +1128,15 @@ begin  -- Behavioral
 --         end if;
 --         dreqal := dreq(0);
 
--- --  -- count input grants
+--  --  -- count input grants
 --         if dgrant(0) = '1' and dgrantal = '0' then
 --           jtagdatatxcnt_grant <= jtagdatatxcnt_grant + 1;
 --         end if;
 --         dgrantal := dgrant(0);
 
---         if ddone(0) = '1' then
---           jtagdatatxcnt_done <= jtagdatatxcnt_done + 1;
---         end if;
+-- if ddone(0) = '1' then
+-- jtagdatatxcnt_done <= jtagdatatxcnt_done + 1;
+-- end if;
 
         if scnt = 2 then
           scnt := 0;
@@ -1159,25 +1150,25 @@ begin  -- Behavioral
           sportsclk <= '0';
         end if;
 
---         if jtagsel2 = '1' then
---           jtagwordout(15 downto 0) <= (others => '0');
---           ddonetest   := '0';
---         else
---           if dgrant(0) = '1' and ddonetest = '0' then
---             indata    := '1';
---             ddonetest := '1';
---           else
---             if ddone(0) = '1' then
---               indata  := '0';
---             end if;
---           end if;
+-- if jtagsel2 = '1' then
+-- jtagwordout(15 downto 0) <= (others => '0');
+-- ddonetest := '0';
+-- else
+-- if dgrant(0) = '1' and ddonetest = '0' then
+-- indata := '1';
+-- ddonetest := '1';
+-- else
+-- if ddone(0) = '1' then
+-- indata := '0';
+-- end if;
+-- end if;
 
---         end if;
+-- end if;
 
 
---         if indata = '1' then
---           jtagwordout(15 downto 0) <= jtagwordout(15 downto 0) + 1;
---         end if;
+-- if indata = '1' then
+-- jtagwordout(15 downto 0) <= jtagwordout(15 downto 0) + 1;
+-- end if;
 
 
         DSPSPORTSCLKA <= sportsclk;

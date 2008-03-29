@@ -1,7 +1,7 @@
 ##############################################################
 #
-# Xilinx Core Generator version J.37
-# Date: Fri Mar  7 12:53:35 2008
+# Xilinx Core Generator version K.31
+# Date: Sat Mar 29 19:33:17 2008
 #
 ##############################################################
 #
@@ -19,7 +19,7 @@ SET busformat = BusFormatAngleBracketNotRipped
 SET createndf = False
 SET designentry = VHDL
 SET device = xc3s400
-SET devicefamily = Spartan3
+SET devicefamily = spartan3
 SET flowvendor = Foundation_iSE
 SET formalverification = False
 SET foundationsym = False
@@ -48,7 +48,7 @@ CSET clock_enable=true
 CSET code_violation_out=true
 CSET component_name=fiberdecode8b10b
 CSET disparity_violation_out=true
-CSET implementation=Block_Ram_Based
+CSET implementation=LUT_Based
 CSET new_data=false
 CSET running_disparity_in=false
 CSET running_disparity_out=false
@@ -58,5 +58,5 @@ CSET synchronous_reset=false
 CSET synchronous_reset_value=D_0_0_pos
 # END Parameters
 GENERATE
-# CRC: 78422372
+# CRC:  2bdc7c0
 

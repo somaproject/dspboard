@@ -1,7 +1,7 @@
 ##############################################################
 #
-# Xilinx Core Generator version J.37
-# Date: Fri Mar  7 12:53:27 2008
+# Xilinx Core Generator version K.31
+# Date: Sat Mar 29 19:30:40 2008
 #
 ##############################################################
 #
@@ -19,7 +19,7 @@ SET busformat = BusFormatAngleBracketNotRipped
 SET createndf = False
 SET designentry = VHDL
 SET device = xc3s400
-SET devicefamily = Spartan3
+SET devicefamily = spartan3
 SET flowvendor = Foundation_iSE
 SET formalverification = False
 SET foundationsym = False
@@ -49,10 +49,10 @@ CSET disparity_output=false
 CSET force_code=false
 CSET force_code_symbol=D_10_2_pos
 CSET force_disparity=false
-CSET implementation=Block_Ram_Based
+CSET implementation=LUT_Based
 CSET new_data=false
 CSET secondary_encoder=false
 # END Parameters
 GENERATE
-# CRC: 47993767
+# CRC: 41d2b5c2
 

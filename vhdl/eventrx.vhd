@@ -197,7 +197,7 @@ begin  -- Behavioral
         if ocs = donea or ocs = doneb then
           DONE <= '1';
         else
-          DONE <= '0'; 
+          DONE <= '0';
         end if;
 
 
