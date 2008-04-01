@@ -76,13 +76,13 @@ begin
     DOUT => dout,
     CLK  => CLK);
 
---  cmdinlll <= cmdinll;
 
   clock : process( CLK) is
   begin
     if rising_edge(CLK) then
       cs <= ns;
-      cmdinlll <= CMDIN;
+      cmdinl <= CMDIN;
+      cmdinlll <= cmdinl; 
 
       sendcmdl <= sendcmd;
 

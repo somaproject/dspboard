@@ -34,8 +34,6 @@ start:
 	sp.h = 0xFFB0;		//Set up supervisor stack in scratch pad
 	sp.l = 0x0400;
 	fp = sp;
-
-
 ////////////////////////////////////////////////////////////////////////////
 // PLL and clock setups
 //
@@ -116,12 +114,12 @@ setupPLL:
 	r0.h = _RTCHANDLER; // IVG7 Handler
 	[p0++] = r0;
 	
-    r0.l = _rxisr;
-	r0.h = _rxisr;  	// IVG8 Handler
+	//    r0.l = _rxisr;
+	//	r0.h = _rxisr;  	// IVG8 Handler
   	[p0++] = r0;
   	
-     r0.l = _I9HANDLER;
-	r0.h = _I9HANDLER;  	// IVG9 Handler
+	//     r0.l = _txisr;
+	//r0.h = _txisr;  	// IVG9 Handler
  	[p0++] = r0;
  	
     r0.l = _I10HANDLER;
@@ -178,6 +176,7 @@ wait:
 
 call_main:
 
+	
 	// enable the cycle counter
 	r2 = 0;
 	cycles = r2;
@@ -185,11 +184,11 @@ call_main:
 	r2 = syscfg;
 	bitset(r2, 1);
 	syscfg = r2;
-	
-	[--sp] = reti;  // pushing RETI allows interrupts to occur inside all main routines
 
 	
-	p0.l = _main;
+	[--sp] = reti;  // pushing RETI allows interrupts to occur inside all main routines
+	
+ 	p0.l = _main; 
 	p0.h = _main;
 
 	r0.l = end;

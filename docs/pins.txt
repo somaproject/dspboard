@@ -5,7 +5,8 @@ SPISS / PFLAG0 : used as SPISS during boot,
 but then used as EVENT FIFO FULL signal during regular operation
 
 PFLAG1 : Holdoff for boot / SPISEL1 for DSP-based SPI Master 
-PFLAG2 : Data FIFO full ? 
-PFLAG4 : DATA out framing? 
+PFLAG2 : Data FIFO full 
+PFLAG4 : DATA LINK UP
+
 
 

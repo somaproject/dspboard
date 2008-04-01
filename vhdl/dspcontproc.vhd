@@ -137,6 +137,8 @@ architecture Behavioral of dspcontproc is
 
   signal lledevent : std_logic := '0';
 
+  signal eventtxwe : std_logic := '0';
+
   component bootser
     port ( CLK   : in  std_logic;
            DIN   : in  std_logic_vector(15 downto 0);
@@ -159,7 +161,8 @@ begin  -- Behavioral
 
   eproc_inst : entity eproc.eproc
     generic map (
-      EATXMUX     => true)
+      EATXMUX     => true,
+      DEMUXEOUT   => false)
     port map (
       CLK         => CLK,
       CLKHI       => CLKHI,
@@ -182,17 +185,33 @@ begin  -- Behavioral
       IPORTSTROBE => iportstrobe,
       DEVICE      => DEVICE);
 
-  eprocbuf_inst : entity eproc.txreqeventbuffer
+  eprocbuf_inst : entity eproc.txreqbrambuffer
     port map (
-      CLK       => CLK,
-      EVENTIN   => edout,
-      EADDRIN   => eaout,
-      NEWEVENT  => enewout,
-      ECYCLE    => ECYCLE,
+      CLK       => CLKHI,
+      SRC       => DEVICE,
+      ADDRIN    => oportaddr(2 downto 0),
+      WEIN      => eventtxwe,
+      DIN       => oportdata,
+      OUTCLK    => CLK,
       SENDREQ   => ESENDREQ,
       SENDGRANT => ESENDGRANT,
       SENDDONE  => ESENDDONE,
       DOUT      => ESENDDATA);
+
+  eventtxwe <= '1' when oportstrobe = '1' and oportaddr(7 downto 4) = X"8" else '0';
+
+
+-- eprocbuf_inst : entity eproc.txreqeventbuffer
+-- port map (
+-- CLK => CLK,
+-- EVENTIN => edout,
+-- EADDRIN => eaout,
+-- NEWEVENT => enewout,
+-- ECYCLE => ECYCLE,
+-- SENDREQ => ESENDREQ,
+-- SENDGRANT => ESENDGRANT,
+-- SENDDONE => ESENDDONE,
+-- DOUT => ESENDDATA);
 
   bootser_inst : bootser
     port map (

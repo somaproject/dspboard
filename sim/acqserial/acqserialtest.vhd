@@ -12,21 +12,22 @@ architecture Behavioral of acqserialtest is
 
   component acqserial
     port (
-      CLK       : in  std_logic;
-      CLKHI     : in  std_logic;
-      RESET     : in  std_logic;
-      FIBERIN   : in  std_logic;
-      FIBEROUT  : out std_logic;
-      SERCLK    : in  std_logic;
+      CLK        : in  std_logic;
+      CLKHI      : in  std_logic;
+      RESET      : in  std_logic;
+      FIBERIN    : in  std_logic;
+      FIBEROUT   : out std_logic;
+      SERCLK     : in  std_logic;
       -- SPORT outputs
-      DSPASERDT : out std_logic;
-      DSPASERFS : out std_logic;
-      DSPASERDR : in  std_logic;
+      DSPASERDT  : out std_logic;
+      DSPASERTFS : out std_logic;
+      DSPASERDR  : in  std_logic;
+      DSPASERRFS : in  std_logic;
 
-      DSPBSERDT : out std_logic;
-      DSPBSERFS : out std_logic;
-      DSPBSERDR : in  std_logic;
-
+      DSPBSERDT  : out std_logic;
+      DSPBSERTFS : out std_logic;
+      DSPBSERDR  : in  std_logic;
+      DSPBSERRFS : in  std_logic;
       -- link status
       DSPALINKUP : out std_logic;
       DSPBLINKUP : out std_logic
@@ -41,22 +42,27 @@ architecture Behavioral of acqserialtest is
   signal SERCLK   : std_logic := '0';
 
   -- SPORT outputs
-  signal DSPASERDT : std_logic := '0';
-  signal DSPASERFS : std_logic := '0';
-  signal DSPASERDR : std_logic := '0';
+  signal DSPASERDT  : std_logic := '0';
+  signal DSPASERTFS : std_logic := '0';
+  signal DSPASERDR  : std_logic := '0';
+  signal DSPASERRFS : std_logic := '0';
 
-  signal DSPBSERDT : std_logic := '0';
-  signal DSPBSERFS : std_logic := '0';
-  signal DSPBSERDR : std_logic := '0';
+  signal DSPBSERDT  : std_logic := '0';
+  signal DSPBSERTFS : std_logic := '0';
+  signal DSPBSERDR  : std_logic := '0';
+  signal DSPBSERRFS : std_logic := '0';
 
   -- link status
   signal DSPALINKUP : std_logic := '0';
   signal DSPBLINKUP : std_logic := '0';
 
   signal dspadatain  : std_logic_vector(255 downto 0) := (others => '0');
-  signal dspadataout : std_logic_vector(255 downto 0) := (others => '0');
+
+  -- dspadataout : data the DSP sends to the FPGA
+  signal dspadataout : std_logic_vector(63 downto 0) := (others => '0');
   signal dspadone    : std_logic                      := '0';
-  signal dspabitpos  : integer                        := 257;
+  signal dspabitposTx  : integer                        := 257;
+  signal dspabitposrx  : integer                        := 257;
 
   signal dspacmdout   : std_logic_vector(3 downto 0) := (others => '0');
   signal dspacmdidout : std_logic_vector(3 downto 0) := (others => '0');
@@ -67,9 +73,10 @@ architecture Behavioral of acqserialtest is
 
 
   signal dspbdatain  : std_logic_vector(255 downto 0) := (others => '0');
-  signal dspbdataout : std_logic_vector(255 downto 0) := (others => '0');
+  signal dspbdataout : std_logic_vector(63 downto 0) := (others => '0');
   signal dspbdone    : std_logic                      := '0';
-  signal dspbbitpos  : integer                        := 257;
+  signal dspbbitposrx  : integer                        := 257;
+  signal dspbbitpostx  : integer                        := 257;
 
   signal dspbcmdout   : std_logic_vector(3 downto 0) := (others => '0');
   signal dspbcmdidout : std_logic_vector(3 downto 0) := (others => '0');
@@ -105,6 +112,9 @@ architecture Behavioral of acqserialtest is
   signal RXCMDID  : std_logic_vector(3 downto 0);
   signal RXCHKSUM : std_logic_vector(7 downto 0);
 
+  signal dspasend, dsbsend : std_logic := '0';
+
+  
 begin  -- Behavioral
 
   acqboard_inst : acqboard
@@ -135,11 +145,13 @@ begin  -- Behavioral
       FIBEROUT   => FIBEROUT,
       SERCLK     => SERCLK,
       DSPASERDT  => DSPASERDT,
-      DSPASERFS  => DSPASERFS,
+      DSPASERTFS => DSPASERTFS,
       DSPASERDR  => DSPASERDR,
+      DSPASERRFS => DSPASERRFS,
       DSPBSERDT  => DSPBSERDT,
-      DSPBSERFS  => DSPBSERFS,
+      DSPBSERTFS => DSPBSERTFS,
       DSPBSERDR  => DSPBSERDR,
+      DSPBSERRFS => DSPBSERRFS,
       DSPALINKUP => DSPALINKUP,
       DSPBLINKUP => DSPBLINKUP
       );
@@ -167,63 +179,65 @@ begin  -- Behavioral
     end if;
   end process;
   -----------------------------------------------------------------------------
-  -- DSP A 
+  -- DSP A MODEL 
   -----------------------------------------------------------------------------
   process(DSPASERCLK)
   begin
     if rising_edge(DSPASERCLK) then
-      if DSPASERFS = '1' then
-        dspabitpos               <= 0;
+      if DSPASERTFS = '1' then
+        dspabitposrx               <= 0;
       else
-        if dspabitpos < 256 then
-          dspabitpos             <= dspabitpos + 1;
-          dspadatain(dspabitpos) <= DSPASERDT;
+        if dspabitposrx < 256 then
+          dspabitposrx             <= dspabitposrx + 1;
+          dspadatain(dspabitposrx) <= DSPASERDT;
         end if;
 
       end if;
 
       -- bit rx
     end if;
-    if falling_edge(DSPASERCLK) then
-      if dspabitpos < 256 then
-        DSPASERDR <= dspadataout(dspabitpos);
-      end if;
-    end if;
   end process;
+
+  process
+    begin
+      wait until rising_edge(DSPASEND);
+      wait until falling_edge(DSPASERCLK);
+      DSPASERRFS <= '1';
+      wait until falling_edge(DSPASERCLK);
+      DSPASERRFS <= '0'; 
+      for i in 0 to 63 loop
+        DSPASERDR <= dspadataout(i);
+        wait until falling_edge(DSPASERCLK);
+        
+      end loop;  -- i
+    end process; 
 
   -- dspa transmit test
   dspadataout(19 downto 16) <= dspacmdout;
   dspadataout(23 downto 20) <= dspacmdidout;
   dspadataout(39 downto 32) <= dspadata0out;
 
-  -----------------------------------------------------------------------------
-  -- DSP B
-  -----------------------------------------------------------------------------
-  process(DSPBSERCLK)
-  begin
-    if rising_edge(DSPBSERCLK) then
-      if DSPBSERFS = '1' then
-        dspbbitpos               <= 0;
-      else
-        if dspbbitpos < 256 then
-          dspbbitpos             <= dspbbitpos + 1;
-          dspbdatain(dspbbitpos) <= DSPBSERDT;
-        end if;
-      end if;
+--   -----------------------------------------------------------------------------
+--   -- DSP B MODEL
+--   -----------------------------------------------------------------------------
+--   process(DSPBSERCLK)
+--   begin
+--     if rising_edge(DSPBSERCLK) then
+--       if DSPBSERTFS = '1' then
+--         dspbbitpos               <= 0;
+--       else
+--         if dspbbitpos < 256 then
+--           dspbbitpos             <= dspbbitpos + 1;
+--           dspbdatain(dspbbitposrx) <= DSPBSERDT;
+--         end if;
+--       end if;
+--     end if;
+--   end process;
 
-      -- bit rx
-    end if;
-    if falling_edge(DSPBSERCLK) then
-      if dspbbitpos < 256 then
-        DSPBSERDR <= dspbdataout(dspbbitpos);
-      end if;
-    end if;
-  end process;
-
-  -- dspb transmit test
-  dspbdataout(19 downto 16) <= dspbcmdout;
-  dspbdataout(23 downto 20) <= dspbcmdidout;
-  dspbdataout(39 downto 32) <= dspbdata0out;
+--   -- dspb transmit test
+--   dspbdataout(19 downto 16) <= dspbcmdout;
+--   dspbdataout(23 downto 20) <= dspbcmdidout;
+--   dspbdataout(39 downto 32) <= dspbdata0out;
 
   -------------------------------------------------------------------------------
   --  A test
@@ -233,15 +247,19 @@ begin  -- Behavioral
 
   begin
     for i in 0 to 7 loop
-      wait until rising_edge(clk) and dspabitpos = 256;
+      wait until rising_edge(clk) and dspabitposrx = 256;
       dspacmdout <= X"1";
 
       dspacmdidout <= std_logic_vector(TO_UNSIGNED(i*2+1, 4));
       dspadata0out <= X"FE";
-      wait until rising_edge(clk) and dspabitpos = 0;
-      wait until rising_edge(clk) and dspabitpos = 256;
+      DSPASEND <= '1';
+      wait until rising_edge(CLK);
+      DSPASEND <= '0'; 
+      wait until rising_edge(clk) and dspabitposrx = 256;
+      wait until rising_edge(clk) and dspabitposrx = 256;
+      wait until rising_edge(clk) and dspabitposrx = 256;
 
-      wait until rising_edge(clk) and dspabitpos = 256 and
+      wait until rising_edge(clk) and dspabitposrx = 256 and
         dspadatain(11 downto 8) = std_logic_vector(TO_UNSIGNED(i*2+1, 4));
       report "Successful read of A cmdid";
     end loop;  -- i
@@ -254,11 +272,11 @@ begin  -- Behavioral
   a_data_read        : process
     variable datacnt : integer := 0;
   begin
-    wait until rising_edge(CLK) and dspabitpos = 256;
-    wait until rising_edge(CLK) and dspabitpos = 0;
+    wait until rising_edge(CLK) and dspabitposrx = 256;
+    wait until rising_edge(CLK) and dspabitposrx = 0;
 
     for datacnt in 0 to 15 loop
-      wait until rising_edge(CLK) and dspabitpos = 256;
+      wait until rising_edge(CLK) and dspabitposrx = 256;
       for i in 0 to 9 loop
         assert dspadatain(i*16 + 19 downto i*16 + 16) =
           std_logic_vector(TO_UNSIGNED(i, 4))
@@ -274,7 +292,7 @@ begin  -- Behavioral
 
 
       report "Done Reading data for A";
-      wait until rising_edge(CLK) and dspabitpos = 0;
+      wait until rising_edge(CLK) and dspabitposrx = 0;
     end loop;  -- datacnt
 
     wait;
@@ -289,14 +307,14 @@ begin  -- Behavioral
 
   begin
     for i in 0 to 6 loop
-      wait until rising_edge(clk) and dspbbitpos = 256;
+      wait until rising_edge(clk) and dspbbitposrx = 256;
       dspbcmdout <= X"1";
 
       dspbcmdidout <= std_logic_vector(TO_UNSIGNED(i*2+2, 4));
       dspbdata0out <= X"FE";
-      wait until rising_edge(clk) and dspbbitpos = 0;
-      wait until rising_edge(clk) and dspbbitpos = 256;
-      wait until rising_edge(clk) and dspbbitpos = 256 and
+      wait until rising_edge(clk) and dspbbitposrx = 0;
+      wait until rising_edge(clk) and dspbbitposrx = 256;
+      wait until rising_edge(clk) and dspbbitposrx = 256 and
         dspbdatain(11 downto 8) = std_logic_vector(TO_UNSIGNED(i*2+2, 4));
       report "Successful read a B event";
       wait for 3 us;

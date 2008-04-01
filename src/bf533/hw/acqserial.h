@@ -17,21 +17,20 @@ public:
   void setupDMA(); 
   void start();
   void stop(); 
+  bool sendCommandDone();
 
   void RXDMAdoneISR(void); 
-  void TXDMAdoneISR(void);   
 private:
   
   static const int RXBUFLEN_ = 10; 
   
   unsigned short RXbuffer_[RXBUFLEN_ * 16]; 
-  unsigned short TXBufferA_[16]; 
-  unsigned short TXBufferB_[16]; 
+  unsigned short TXBuffer_[4]; 
   
   int curRXpos_; 
   int curReadPos_; 
-  bool sendingTXBufferA_;
-  bool txSwapBuffers_;
+  bool sendingTXBuffer_;
+  int totalRXBufCnt_;
   bool linkUp() { return true;}
 
 }; 

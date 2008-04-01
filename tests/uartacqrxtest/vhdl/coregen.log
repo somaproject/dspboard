@@ -1,0 +1,7 @@
+Regenerating IP...
+WARNING:sim:89 - A core named <fiberencode8b10b> already exists in the output
+   directory. Output products for this core may be overwritten.
+Generating Implementation files.
+Generating ISE symbol file...
+Finished Regenerating.
+Successfully generated fiberencode8b10b.

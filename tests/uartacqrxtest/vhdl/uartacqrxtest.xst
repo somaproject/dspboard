@@ -1,12 +1,12 @@
 set -tmpdir build
 set -xsthdpdir ./xst
 run
--ifn acqserialtest.prj
+-ifn uartacqrxtest.prj
 -ifmt mixed
--ofn acqserialtest
+-ofn uartacqrxtest
 -ofmt NGC
 -p xc3s400-4-ft256
--top acqserialtest
+-top uartacqrxtest
 -opt_mode Area
 -opt_level 2
 -iuc NO

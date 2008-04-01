@@ -18,7 +18,7 @@ SEARCH_DIR("/opt/uClinux/bfin-elf/lib");
 MEMORY
 {
 	l1code(x)     : ORIGIN = 0xffa00000, LENGTH = 0x14000
-	l1data(rw)    : ORIGIN = 0xff800000, LENGTH = 0x4000
+	l1data(rw)    : ORIGIN = 0xff800000, LENGTH = 0x8000
 }
 
 

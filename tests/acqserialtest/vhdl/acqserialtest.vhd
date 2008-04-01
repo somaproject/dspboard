@@ -19,12 +19,14 @@ entity acqserialtest is
     DSPADR     : out std_logic;
     DSPARFS    : out std_logic;
     DSPADT     : in  std_logic;
+    DSPATFS    : in  std_logic;
     DSPALINKUP : out std_logic;
 
     DSPBRSCLK  : out std_logic;
     DSPBDR     : out std_logic;
     DSPBRFS    : out std_logic;
     DSPBDT     : in  std_logic;
+    DSPBTFS    : in  std_logic;
     DSPBLINKUP : out std_logic;
 
     -- fiber IO, we actually take this off-chip
@@ -49,27 +51,31 @@ architecture Behavioral of acqserialtest is
   signal RESET             : std_logic := '0';
 
 
-  component acqserial 
-  port (
-    CLK         : in  std_logic;
-    CLKHI       : in  std_logic;
-    RESET       : in  std_logic;
-    FIBERIN     : in  std_logic;
-    FIBEROUT    : out std_logic;
-    NEWCMDDEBUG : out std_logic;
-    SERCLK      : in  std_logic;
-    -- SPORT outputs
-    DSPASERDT   : out std_logic;
-    DSPASERFS   : out std_logic;
-    DSPASERDR   : in  std_logic;
-    DSPBSERDT   : out std_logic;
-    DSPBSERFS   : out std_logic;
-    DSPBSERDR   : in  std_logic;
-    -- link status
-    DSPALINKUP  : out std_logic;
-    DSPBLINKUP  : out std_logic
-    );
-end component; 
+  component acqserial
+    port (
+      CLK         : in  std_logic;
+      CLKHI       : in  std_logic;
+      RESET       : in  std_logic;
+      FIBERIN     : in  std_logic;
+      FIBEROUT    : out std_logic;
+      NEWCMDDEBUG : out std_logic;
+      SERCLK      : in  std_logic;
+      -- SPORT outputs
+      DSPASERDT   : out std_logic;
+      DSPASERTFS  : out std_logic;
+      DSPASERDR   : in  std_logic;
+      DSPASERRFS  : in  std_logic;
+
+      DSPBSERDT  : out std_logic;
+      DSPBSERTFS : out std_logic;
+      DSPBSERDR  : in  std_logic;
+      DSPBSERRFS : in  std_logic;
+      -- link status
+      DSPALINKUP : out std_logic;
+      DSPBLINKUP : out std_logic;
+      DEBUG      : out std_logic_vector(31 downto 0)
+      );
+  end component;
 
 
   component acqboard
@@ -87,7 +93,7 @@ end component;
   end component;
 
   signal rxcmd, rxcmdid : std_logic_vector(3 downto 0) := (others => '0');
-  
+
 
   signal jtagcapture : std_logic := '0';
   signal jtagdrck1   : std_logic := '0';
@@ -107,8 +113,12 @@ end component;
   signal dspalinkupint, dspblinkupint : std_logic := '0';
 
   signal serclkpos : integer range 0 to 2 := 0;
-  signal serclkint : std_logic := '0';
-  
+  signal serclkint : std_logic            := '0';
+
+  signal reset2, reset3 : std_logic := '1';
+
+  signal debug : std_logic_vector(31 downto 0) := (others => '0');
+
 begin  -- Behavioral
 
   mainclksrc : DCM
@@ -125,6 +135,8 @@ begin  -- Behavioral
       RST            => RESET,
       LOCKED         => base_lock
       );
+
+  reset2 <= not base_lock;
 
   clk_bufg : BUFG
     port map (
@@ -151,11 +163,11 @@ begin  -- Behavioral
       CLK0               => clk2int,
       CLKFB              => clk2,
       CLKFX              => clkacqint,
-      RST                => RESET,
+      RST                => reset2,
       LOCKED             => base_lock2
       );
 
-
+  reset3 <= not base_lock2;
 
   clk2_bufg : BUFG
     port map (
@@ -169,73 +181,75 @@ begin  -- Behavioral
 
   DSPALINKUP <= dspalinkupint;
   DSPBLINKUP <= dspblinkupint;
-  
+
 
   acqserial_inst : acqserial
     port map (
       CLK         => clk,
-      RESET       => reset,
+      RESET       => reset3,
       CLKHI       => clkhi,
       FIBERIN     => DSPFIBERIN,
       FIBEROUT    => DSPFIBEROUT,
       NEWCMDDEBUG => NEWCMDDEBUG,
-      SERCLK => serclkint, 
+      SERCLK      => serclkint,
 
-      DSPASERDT   => DSPADR,
-      DSPASERFS   => DSPARFS,
-      DSPASERDR   => DSPADT,
-      DSPALINKUP  => DSPALINKUPint,
+      DSPASERDT  => DSPADR,
+      DSPASERTFS  => DSPARFS,
+      DSPASERDR  => DSPADT,
+      DSPASERRFS => DSPATFS, 
+      DSPALINKUP => DSPALINKUPint,
 
       DSPBSERDT  => DSPBDR,
-      DSPBSERFS  => DSPBRFS,
+      DSPBSERTFS  => DSPBRFS,
       DSPBSERDR  => DSPBDT,
-      DSPBLINKUP => DSPBLINKUPint);
+      DSPBSERRFS => DSPBTFS, 
+      DSPBLINKUP => DSPBLINKUPint,
+      DEBUG      => debug);
 
-   acqboard_inst : acqboard
-     port map (
-       CLKIN        => clkacq,
-       RXDATA       => open,
-       RXCMD        => rxcmd,
-       RXCMDID      => rxcmdid,
-       RXCHKSUM     => open,
-       FIBEROUT     => ACQFIBEROUT,
-       FIBERIN      => ACQFIBERIN,
-       TXCMDSTS     => "0110",
-       TXCMDSUCCESS => '1',
-       TXCHKSUM     => X"AB");
+  acqboard_inst : acqboard
+    port map (
+      CLKIN        => clkacq,
+      RXDATA       => open,
+      RXCMD        => rxcmd,
+      RXCMDID      => rxcmdid,
+      RXCHKSUM     => open,
+      FIBEROUT     => ACQFIBEROUT,
+      FIBERIN      => ACQFIBERIN,
+      TXCMDSTS     => "0110",
+      TXCMDSUCCESS => '1',
+      TXCHKSUM     => X"AB");
 
---   ACQFIBEROUT <= '1';                   -- DEBUGGING; 
+-- ACQFIBEROUT <= '1';                  -- DEBUGGING; 
 
   LEDPOWER <= '1';
-  DSPRESET <= '1';
+  DSPRESET <= not reset3;
 
   process(CLK)
-    begin
-      if rising_edge(CLK) then
-        if serclkpos = 2 then
-          serclkpos <= 0;
-        else
-          serclkpos <= serclkpos + 1; 
-        end if;
-
-        if serclkpos = 2 then
-          serclkint <= '1';
-        else
-          serclkint <= '0'; 
-        end if;
-
-        DSPARSCLK <= serclkint;
-        DSPBRSCLK <= serclkint;
-        
+  begin
+    if rising_edge(CLK) then
+      if serclkpos = 2 then
+        serclkpos <= 0;
+      else
+        serclkpos <= serclkpos + 1;
       end if;
 
-    end process; 
+      if serclkpos = 2 then
+        serclkint <= '1';
+      else
+        serclkint <= '0';
+      end if;
+
+      DSPARSCLK <= serclkint;
+      DSPBRSCLK <= serclkint;
+
+    end if;
+
+  end process;
   process(jtagDRCK1, clk)
   begin
 
     if jtagupdate = '1' then
-      jtagout    <= X"12345678" & X"000000" & "000000" & DSPALINKUPint
-                  & DSPBLINKUPint; 
+      jtagout    <= X"1234" & X"0" &rxcmd & X"0" & rxcmdid & DEBUG;
     else
       if rising_edge(jtagDRCK1) then
         jtagout  <= '0' & jtagout(63 downto 1);

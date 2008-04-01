@@ -4,22 +4,17 @@ use IEEE.STD_LOGIC_ARITH.all;
 use IEEE.STD_LOGIC_UNSIGNED.all;
 
 entity sportacqser is
-
   port (
-    CLK       : in  std_logic;
-    SERCLK    : in  std_logic;
-    SERFS     : out std_logic;
-    SERDT     : out std_logic;
-    SERDRA    : in  std_logic;
-    SERDRB    : in  std_logic;
-    START     : in  std_logic;
-    DONE      : out std_logic;
-    SAMPLEIN  : in  std_logic_vector(15 downto 0);
-    SAMPLESEL : out std_logic_vector(3 downto 0);
-    CMDSTS    : in  std_logic_vector(3 downto 0);
-    CMDID     : in  std_logic_vector(3 downto 0);
-    DATAOUTA  : out std_logic_vector(63 downto 0);
-    DATAOUTB  : out std_logic_vector(63 downto 0)
+    CLK         : in  std_logic;
+    SERCLK      : in  std_logic;
+    SERTFS      : out std_logic;
+    SERDT       : out std_logic;
+    START       : in  std_logic;
+    DONE        : out std_logic;
+    SAMPLEIN    : in  std_logic_vector(15 downto 0);
+    SAMPLESEL   : out std_logic_vector(3 downto 0);
+    CMDSTS      : in  std_logic_vector(3 downto 0);
+    CMDID       : in  std_logic_vector(3 downto 0)
     );
 
 end sportacqser;
@@ -27,21 +22,19 @@ end sportacqser;
 architecture Behavioral of sportacqser is
 
   signal dinsreg          : std_logic_vector(255 downto 0) := (others => '0');
-  signal lsclk, lfs       : std_logic                      := '0';
+  signal lsclk, lfs, fsl  : std_logic                      := '0';
   signal serdral, serdrbl : std_logic                      := '0';
+
+  signal serclkl : std_logic := '0';
+
 
   signal inenl, inenll : std_logic := '0';
 
   signal bitpos : std_logic_vector(7 downto 0) := (others => '0');
 
-  type states is (none, tfs1, tfs2, clkl, clkh, dones);
+  type states is (none, serclksync, extralow,
+                  tfs1, tfs2, tfs3, clkl, clkh, clkl2, dones);
   signal cs, ns : states := none;
-
-  signal dataoutaint, dataoutbint : std_logic_vector(63 downto 0) :=
-    (others => '0');
-
--- signal dataoutaint, dataoutbint : std_logic_vector(255 downto 0) :=
--- (others => '0');
 
 
   signal ldone : std_logic := '0';
@@ -51,30 +44,28 @@ architecture Behavioral of sportacqser is
   signal doutbit, ldoutbit : std_logic                     := '0';
   signal doutword          : std_logic_vector(15 downto 0) := (others => '0');
 
-begin  -- Behavioral
 
-  DATAOUTA <= dataoutaint(63 downto 0);
-  DATAOUTB <= dataoutbint(63 downto 0);
+begin  -- Behavioral
 
   doutword <= "0000" & cmdidl & "0000" & cmdstsl when bitpos(7 downto 4) = "0000"
               else SAMPLEIN;
 
-  ldoutbit  <= doutword(0) when bitpos(3 downto 0) = "0000" else
-              doutword(1)  when bitpos(3 downto 0) = "0001" else
-              doutword(2)  when bitpos(3 downto 0) = "0010" else
-              doutword(3)  when bitpos(3 downto 0) = "0011" else
-              doutword(4)  when bitpos(3 downto 0) = "0100" else
-              doutword(5)  when bitpos(3 downto 0) = "0101" else
-              doutword(6)  when bitpos(3 downto 0) = "0110" else
-              doutword(7)  when bitpos(3 downto 0) = "0111" else
-              doutword(8)  when bitpos(3 downto 0) = "1000" else
-              doutword(9)  when bitpos(3 downto 0) = "1001" else
-              doutword(10) when bitpos(3 downto 0) = "1010" else
-              doutword(11) when bitpos(3 downto 0) = "1011" else
-              doutword(12) when bitpos(3 downto 0) = "1100" else
-              doutword(13) when bitpos(3 downto 0) = "1101" else
-              doutword(14) when bitpos(3 downto 0) = "1110" else
-              doutword(15);
+  ldoutbit  <= doutword(0)  when bitpos(3 downto 0) = "0000" else
+               doutword(1)  when bitpos(3 downto 0) = "0001" else
+               doutword(2)  when bitpos(3 downto 0) = "0010" else
+               doutword(3)  when bitpos(3 downto 0) = "0011" else
+               doutword(4)  when bitpos(3 downto 0) = "0100" else
+               doutword(5)  when bitpos(3 downto 0) = "0101" else
+               doutword(6)  when bitpos(3 downto 0) = "0110" else
+               doutword(7)  when bitpos(3 downto 0) = "0111" else
+               doutword(8)  when bitpos(3 downto 0) = "1000" else
+               doutword(9)  when bitpos(3 downto 0) = "1001" else
+               doutword(10) when bitpos(3 downto 0) = "1010" else
+               doutword(11) when bitpos(3 downto 0) = "1011" else
+               doutword(12) when bitpos(3 downto 0) = "1100" else
+               doutword(13) when bitpos(3 downto 0) = "1101" else
+               doutword(14) when bitpos(3 downto 0) = "1110" else
+               doutword(15);
   samplesel <= bitpos(7 downto 4) - 1;
 
   main : process(CLK)
@@ -83,20 +74,17 @@ begin  -- Behavioral
       cs <= ns;
 
       -- outputs
+      serclkl <= SERCLK;
+
       SERDT <= ldoutbit;
-      SERFS <= lfs;
+      SERTFS <= lfs;
 
       serdral <= SERDRA;
       serdrbl <= SERDRB;
 
-      if inenll = '0' and inenl = '1' and bitpos(7 downto 4) <= X"3" then
-        dataoutaint                          <= serdral & dataoutaint(63 downto 1);
-        dataoutbint                          <= serdrbl & dataoutbint(63 downto 1);
-      end if;
-
 -- if inenll = '1'then
 -- dataoutaint <= serdral & dataoutaint(255 downto 1);
--- dataoutbint <= serdrbl & dataoutbint(255 downto 1);
+-- dataoutbint <= serdrbl h& dataoutbint(255 downto 1);
 -- end if;
 
       if cs = none and START = '1' then
@@ -115,7 +103,7 @@ begin  -- Behavioral
       end if;
       DONE    <= ldone;
 
-      if cs = clkh and SERCLK = '1' then
+      if cs = clkl2 then                --  and SERCLK = '1' then
         bitpos <= bitpos + 1;
       end if;
 
@@ -130,15 +118,23 @@ begin  -- Behavioral
     end if;
   end process main;
 
-  fsm : process(cs, SERCLK, START, bitpos)
+  fsm : process(cs, SERCLKl, START, bitpos)
   begin
     case cs is
       when none =>
         lfs  <= '0';
         if START = '1' then
-          ns <= tfs1;
+          ns <= serclksync;
         else
           ns <= none;
+        end if;
+
+      when serclksync =>                -- syncrhonized to external clk
+        lfs  <= '0';
+        if serclkl = '0' then
+          ns <= serclksync;
+        else
+          ns <= tfs1;
         end if;
 
       when tfs1 =>
@@ -146,34 +142,38 @@ begin  -- Behavioral
         ns  <= tfs2;
 
       when tfs2 =>
-        lfs  <= '1';
-        if SERCLK = '1' then
-          ns <= clkl;
-        else
-          ns <= tfs2;
-        end if;
+        lfs <= '1';
 
+        ns <= tfs3;
+
+      when tfs3 =>
+        lfs <= '1';
+
+        ns <= clkl;
 
       when clkl =>
         lfs <= '0';
         ns  <= clkh;
 
-      when clkh  =>
-        lfs    <= '0';
-        if SERCLK = '1' then
-          if bitpos = X"FF" then
-            ns <= dones;
-          else
-            ns <= clkl;
-          end if;
+      when clkh =>
+        lfs <= '0';
+        ns  <= clkl2;
+
+
+      when clkl2 =>
+        lfs  <= '0';
+        if bitpos = X"FF" then
+          ns <= dones;
         else
-          ns   <= clkh;
+          ns <= clkl;
         end if;
-        
+
+
+
       when dones =>
-        lsclk  <= '0';
-        lfs    <= '0';
-        ns     <= none;
+        lsclk <= '0';
+        lfs   <= '0';
+        ns    <= none;
 
       when others =>
         lsclk <= '0';

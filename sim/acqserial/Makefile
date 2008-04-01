@@ -15,31 +15,35 @@ $(WORKDIR)/sportacqser/behavioral.dat: $(WORKDIR)/touched ../../vhdl/fiberrx.vhd
 	mkdir -p $(WORKDIR)
 	$(VHDLC) ../../vhdl/sportacqser.vhd
 
-$(WORKDIR)/regfile/behavioral.dat: $(WORKDIR)/touched ../../vhdl/fiberrx.vhd ../../vhdl/fiberrx.vhd ../../vhdl/framedis.vhd ../../vhdl/framedis.vhd ../../vhdl/sportacqser.vhd ../../vhdl/sportacqser.vhd ../../vhdl/regfile.vhd
+$(WORKDIR)/sportacqrx/behavioral.dat: $(WORKDIR)/touched ../../vhdl/fiberrx.vhd ../../vhdl/fiberrx.vhd ../../vhdl/framedis.vhd ../../vhdl/framedis.vhd ../../vhdl/sportacqser.vhd ../../vhdl/sportacqser.vhd ../../vhdl/sportacqrx.vhd
+	mkdir -p $(WORKDIR)
+	$(VHDLC) ../../vhdl/sportacqrx.vhd
+
+$(WORKDIR)/regfile/behavioral.dat: $(WORKDIR)/touched ../../vhdl/fiberrx.vhd ../../vhdl/fiberrx.vhd ../../vhdl/framedis.vhd ../../vhdl/framedis.vhd ../../vhdl/sportacqser.vhd ../../vhdl/sportacqser.vhd ../../vhdl/sportacqrx.vhd ../../vhdl/sportacqrx.vhd ../../vhdl/regfile.vhd
 	mkdir -p $(WORKDIR)
 	$(VHDLC) ../../vhdl/regfile.vhd
 
-$(WORKDIR)/acqcmdmux/behavioral.dat: $(WORKDIR)/touched ../../vhdl/fiberrx.vhd ../../vhdl/fiberrx.vhd ../../vhdl/framedis.vhd ../../vhdl/framedis.vhd ../../vhdl/sportacqser.vhd ../../vhdl/sportacqser.vhd ../../vhdl/regfile.vhd ../../vhdl/regfile.vhd ../../vhdl/acqcmdmux.vhd
+$(WORKDIR)/acqcmdmux/behavioral.dat: $(WORKDIR)/touched ../../vhdl/fiberrx.vhd ../../vhdl/fiberrx.vhd ../../vhdl/framedis.vhd ../../vhdl/framedis.vhd ../../vhdl/sportacqser.vhd ../../vhdl/sportacqser.vhd ../../vhdl/sportacqrx.vhd ../../vhdl/sportacqrx.vhd ../../vhdl/regfile.vhd ../../vhdl/regfile.vhd ../../vhdl/acqcmdmux.vhd
 	mkdir -p $(WORKDIR)
 	$(VHDLC) ../../vhdl/acqcmdmux.vhd
 
-$(WORKDIR)/fibertx/behavioral.dat: $(WORKDIR)/touched ../../vhdl/fiberrx.vhd ../../vhdl/fiberrx.vhd ../../vhdl/framedis.vhd ../../vhdl/framedis.vhd ../../vhdl/sportacqser.vhd ../../vhdl/sportacqser.vhd ../../vhdl/regfile.vhd ../../vhdl/regfile.vhd ../../vhdl/acqcmdmux.vhd ../../vhdl/acqcmdmux.vhd ../../vhdl/fibertx.vhd
+$(WORKDIR)/fibertx/behavioral.dat: $(WORKDIR)/touched ../../vhdl/fiberrx.vhd ../../vhdl/fiberrx.vhd ../../vhdl/framedis.vhd ../../vhdl/framedis.vhd ../../vhdl/sportacqser.vhd ../../vhdl/sportacqser.vhd ../../vhdl/sportacqrx.vhd ../../vhdl/sportacqrx.vhd ../../vhdl/regfile.vhd ../../vhdl/regfile.vhd ../../vhdl/acqcmdmux.vhd ../../vhdl/acqcmdmux.vhd ../../vhdl/fibertx.vhd
 	mkdir -p $(WORKDIR)
 	$(VHDLC) ../../vhdl/fibertx.vhd
 
-$(WORKDIR)/acqserial/behavioral.dat: $(WORKDIR)/touched ../../vhdl/fiberrx.vhd ../../vhdl/fiberrx.vhd ../../vhdl/framedis.vhd ../../vhdl/framedis.vhd ../../vhdl/sportacqser.vhd ../../vhdl/sportacqser.vhd ../../vhdl/regfile.vhd ../../vhdl/regfile.vhd ../../vhdl/acqcmdmux.vhd ../../vhdl/acqcmdmux.vhd ../../vhdl/fibertx.vhd ../../vhdl/fibertx.vhd ../../vhdl/acqserial.vhd
+$(WORKDIR)/acqserial/behavioral.dat: $(WORKDIR)/touched ../../vhdl/fiberrx.vhd ../../vhdl/fiberrx.vhd ../../vhdl/framedis.vhd ../../vhdl/framedis.vhd ../../vhdl/sportacqser.vhd ../../vhdl/sportacqser.vhd ../../vhdl/sportacqrx.vhd ../../vhdl/sportacqrx.vhd ../../vhdl/regfile.vhd ../../vhdl/regfile.vhd ../../vhdl/acqcmdmux.vhd ../../vhdl/acqcmdmux.vhd ../../vhdl/fibertx.vhd ../../vhdl/fibertx.vhd ../../vhdl/acqserial.vhd
 	mkdir -p $(WORKDIR)
 	$(VHDLC) ../../vhdl/acqserial.vhd
 
-$(WORKDIR)/fiberdecode8b10b/fiberdecode8b10b_a.dat: $(WORKDIR)/touched ../../vhdl/fiberrx.vhd ../../vhdl/fiberrx.vhd ../../vhdl/framedis.vhd ../../vhdl/framedis.vhd ../../vhdl/sportacqser.vhd ../../vhdl/sportacqser.vhd ../../vhdl/regfile.vhd ../../vhdl/regfile.vhd ../../vhdl/acqcmdmux.vhd ../../vhdl/acqcmdmux.vhd ../../vhdl/fibertx.vhd ../../vhdl/fibertx.vhd ../../vhdl/acqserial.vhd ../../vhdl/acqserial.vhd fiberdecode8b10b.vhd
+$(WORKDIR)/fiberdecode8b10b/fiberdecode8b10b_a.dat: $(WORKDIR)/touched ../../vhdl/fiberrx.vhd ../../vhdl/fiberrx.vhd ../../vhdl/framedis.vhd ../../vhdl/framedis.vhd ../../vhdl/sportacqser.vhd ../../vhdl/sportacqser.vhd ../../vhdl/sportacqrx.vhd ../../vhdl/sportacqrx.vhd ../../vhdl/regfile.vhd ../../vhdl/regfile.vhd ../../vhdl/acqcmdmux.vhd ../../vhdl/acqcmdmux.vhd ../../vhdl/fibertx.vhd ../../vhdl/fibertx.vhd ../../vhdl/acqserial.vhd ../../vhdl/acqserial.vhd fiberdecode8b10b.vhd
 	mkdir -p $(WORKDIR)
 	$(VHDLC) fiberdecode8b10b.vhd
 
-$(WORKDIR)/fiberencode8b10b/fiberencode8b10b_a.dat: $(WORKDIR)/touched ../../vhdl/fiberrx.vhd ../../vhdl/fiberrx.vhd ../../vhdl/framedis.vhd ../../vhdl/framedis.vhd ../../vhdl/sportacqser.vhd ../../vhdl/sportacqser.vhd ../../vhdl/regfile.vhd ../../vhdl/regfile.vhd ../../vhdl/acqcmdmux.vhd ../../vhdl/acqcmdmux.vhd ../../vhdl/fibertx.vhd ../../vhdl/fibertx.vhd ../../vhdl/acqserial.vhd ../../vhdl/acqserial.vhd fiberdecode8b10b.vhd fiberdecode8b10b.vhd fiberencode8b10b.vhd
+$(WORKDIR)/fiberencode8b10b/fiberencode8b10b_a.dat: $(WORKDIR)/touched ../../vhdl/fiberrx.vhd ../../vhdl/fiberrx.vhd ../../vhdl/framedis.vhd ../../vhdl/framedis.vhd ../../vhdl/sportacqser.vhd ../../vhdl/sportacqser.vhd ../../vhdl/sportacqrx.vhd ../../vhdl/sportacqrx.vhd ../../vhdl/regfile.vhd ../../vhdl/regfile.vhd ../../vhdl/acqcmdmux.vhd ../../vhdl/acqcmdmux.vhd ../../vhdl/fibertx.vhd ../../vhdl/fibertx.vhd ../../vhdl/acqserial.vhd ../../vhdl/acqserial.vhd fiberdecode8b10b.vhd fiberdecode8b10b.vhd fiberencode8b10b.vhd
 	mkdir -p $(WORKDIR)
 	$(VHDLC) fiberencode8b10b.vhd
 
-hw: $(WORKDIR)/fiberrx/behavioral.dat $(WORKDIR)/framedis/behavioral.dat $(WORKDIR)/sportacqser/behavioral.dat $(WORKDIR)/regfile/behavioral.dat $(WORKDIR)/acqcmdmux/behavioral.dat $(WORKDIR)/fibertx/behavioral.dat $(WORKDIR)/acqserial/behavioral.dat $(WORKDIR)/fiberdecode8b10b/fiberdecode8b10b_a.dat $(WORKDIR)/fiberencode8b10b/fiberencode8b10b_a.dat 
+hw: $(WORKDIR)/fiberrx/behavioral.dat $(WORKDIR)/framedis/behavioral.dat $(WORKDIR)/sportacqser/behavioral.dat $(WORKDIR)/sportacqrx/behavioral.dat $(WORKDIR)/regfile/behavioral.dat $(WORKDIR)/acqcmdmux/behavioral.dat $(WORKDIR)/fibertx/behavioral.dat $(WORKDIR)/acqserial/behavioral.dat $(WORKDIR)/fiberdecode8b10b/fiberdecode8b10b_a.dat $(WORKDIR)/fiberencode8b10b/fiberencode8b10b_a.dat 
 
 $(WORKDIR)/encode8b10b/encode8b10b_a.dat: $(WORKDIR)/touched encode8b10b.vhd
 	mkdir -p $(WORKDIR)

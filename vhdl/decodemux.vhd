@@ -131,7 +131,8 @@ begin  -- Behavioral
     end if;
   end process main;
 
-  regfileaddr  <= std_logic_vector(TO_UNSIGNED(hdrpos-1, 4));
+  regfileaddr  <= "1111" when hdrpos = 0 else
+                  std_logic_vector(TO_UNSIGNED(hdrpos-1, 4));
 --   regfileaddra    <= EARXBYTESELA when hdrnum = 4 else regfileinaddr;
 --   regfileaddrb    <= EARXBYTESELB when hdrnum = 4 else regfileinaddr;
 --   regfileaddrc    <= EARXBYTESELC when hdrnum = 4 else regfileinaddr;

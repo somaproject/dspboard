@@ -5,14 +5,12 @@
 AcqSerial::AcqSerial() :
   curRXpos_(0), 
   curReadPos_(0),
-  sendingTXBufferA_(false), 
-  txSwapBuffers_(false)
+  totalRXBufCnt_(0)
 {
   curRXpos_ = 0; 
   curReadPos_ = 0; 
   for (int i = 0; i < 16; i++) {
-    TXBufferA_[i] = 0; 
-    TXBufferB_[i] = 0; 
+    TXBuffer_[i] = 0; 
   }
 }
 
@@ -51,14 +49,14 @@ void AcqSerial::setupDMA()
    *pDMA1_CURR_DESC_PTR = 0x00;
 
     // configure SPORT DMA output channel
-   *pDMA2_PERIPHERAL_MAP = 0x2000;
+//    *pDMA2_PERIPHERAL_MAP = 0x2000;
 
-   *pDMA2_START_ADDR = &TXBufferA_[0]; 
-   *pDMA2_X_COUNT = 16;
-   *pDMA2_X_MODIFY = 0x02; // two byte stride
-   *pDMA2_Y_COUNT = 0;  //
-   *pDMA2_Y_MODIFY = 0; //
-   *pDMA2_CURR_DESC_PTR = 0x00;
+//    *pDMA2_START_ADDR = &TXBuffer_[0]; 
+//    *pDMA2_X_COUNT = 4;
+//    *pDMA2_X_MODIFY = 0x02; // two byte stride
+//    *pDMA2_Y_COUNT = 0;  //
+//    *pDMA2_Y_MODIFY = 0; //
+//    *pDMA2_CURR_DESC_PTR = 0x00;
    
 }
 
@@ -70,11 +68,10 @@ void AcqSerial::start()
   // to avoid triggering a hardware interrupt
 
   *pDMA1_CONFIG = 0x10F7;  // start input dma, 2D, autobufferin
-  *pDMA2_CONFIG = 0x00E5;  // start output DMA
 
   *pSPORT0_RCR1 = 0x4011; // enable sport RX
-  *pSPORT0_TCR1 = 0x4011; // enable sport TX
-  sendingTXBufferA_ = true; 
+  *pSPORT0_TCR1 = 0x0000; // enable sport TX
+
 }
 
 void AcqSerial::stop()
@@ -93,25 +90,7 @@ bool AcqSerial::checkLinkUp()
 void AcqSerial::RXDMAdoneISR(void)
 {
   curRXpos_ = (curRXpos_ +1) % RXBUFLEN_; 
-  
-}
-
-void AcqSerial::TXDMAdoneISR(void)
-{
-  if (txSwapBuffers_) {
-    if (sendingTXBufferA_) {
-      *pDMA2_START_ADDR = &TXBufferB_[0];
-      sendingTXBufferA_ = false; 
-    } else {
-      *pDMA2_START_ADDR = &TXBufferA_[0]; 
-      sendingTXBufferA_ = true;
-    }
-    txSwapBuffers_ = false; 
-  }
-
-  short dmaval = 0x0085; 
-  *pDMA2_CONFIG = dmaval;  // start output DMA
-  
+  totalRXBufCnt_++; 
 }
 
 bool AcqSerial::checkRxEmpty()
@@ -142,35 +121,27 @@ void AcqSerial::getNextFrame(AcqFrame * af)
 
 void AcqSerial::sendCommand(AcqCommand * ac)
 {
-  uint16_t * commandBuffer; 
-  if (sendingTXBufferA_) {
-    commandBuffer = TXBufferB_; 
-  } else {
-    commandBuffer = TXBufferA_; 
-  }
+  *pDMA2_IRQ_STATUS = 0x1; // clear done bit
+
+
 
   // the LSB of the first word sent is: 
-  commandBuffer[0] = 0x00; // major hack !!
+  TXBuffer_[0] = 0x00; // major hack !!
   // it appears that the BF SPORT wants to send (TX) the first word one-bit-shift
   // too early. So we just don't send that word. 
-  commandBuffer[1] = 0xAB00 | ((ac->cmdid & 0xF) << 4) | (ac->cmd & 0xF); 
+  TXBuffer_[1] = 0xAB00 | ((ac->cmdid & 0xF) << 4) | (ac->cmd & 0xF); 
   
-  commandBuffer[2] =  (ac->data >> 16) & 0xFFFF; 
-  commandBuffer[3] =  (ac->data) & 0xFFFF; 
-  commandBuffer[4] = 0; 
-  commandBuffer[5] = 0; 
-  commandBuffer[6] = 0; 
-  commandBuffer[7] = 0; 
-  commandBuffer[8] = 0; 
-  commandBuffer[9] = 0; 
-  commandBuffer[10] = 0; 
-  commandBuffer[11] = 0; 
-  commandBuffer[12] = 0; 
-  commandBuffer[13] = 0; 
-  commandBuffer[14] = 0; 
-  commandBuffer[15] = 0; 
+  TXBuffer_[2] =  (ac->data >> 16) & 0xFFFF; 
+  TXBuffer_[3] =  (ac->data) & 0xFFFF; 
 
-  txSwapBuffers_ = true; 
+  // start the DMA
+  //*pDMA2_CONFIG = 0x00E5;  // start output DMA
   
+  
+}
+
+bool AcqSerial::sendCommandDone()
+{
+  return *pDMA2_IRQ_STATUS & 0x01; 
   
 }

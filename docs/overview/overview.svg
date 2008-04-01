@@ -1108,11 +1108,6 @@
        style="fill:none;fill-opacity:1;stroke:black;stroke-width:1.25;marker-end:url(#TriangleOutM);stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        d="M 156.8025,140 L 216.1775,140"
        id="path5493" />
-    <path
-       style="opacity:1;color:black;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.25;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:url(#TriangleInM);marker-mid:none;marker-end:url(#TriangleOutM);stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible"
-       d="M 216.1775,183.75 L 191.1775,183.75 C 191.1775,183.75 184.9275,183.75 184.9275,177.5 C 184.9275,168.125 184.9275,165 184.9275,165 C 184.9275,165 184.9275,158.75 178.6775,158.75 C 169.3025,158.75 159.9275,158.75 159.9275,158.75"
-       id="path5495"
-       sodipodi:nodetypes="ccscsc" />
     <rect
        style="fill:#f3f3f3;fill-opacity:1;stroke:black;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect5497"
@@ -1291,5 +1286,13 @@
          id="tspan5559"
          x="484.375"
          y="365">FPGA</tspan></text>
+    <path
+       style="fill:none;fill-opacity:1;stroke:black;stroke-width:1.25;marker-end:url(#TriangleOutM);stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 156.25,130.625 L 215.625,130.625"
+       id="path2087" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:black;stroke-width:1.25;marker-end:url(#TriangleOutM);stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 218.75,171.25 L 159.375,171.25"
+       id="path2089" />
   </g>
 </svg>

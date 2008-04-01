@@ -1,0 +1,2 @@
+Simple attempt to TX out data via the UART, both simply by 
+force-writing the bits and with our nice interface

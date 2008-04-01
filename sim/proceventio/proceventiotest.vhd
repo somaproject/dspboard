@@ -32,6 +32,7 @@ architecture Behavioral of proceventiotest is
 
   signal epos, lepos : integer range 0 to 999 := 800;
 
+
   component decodemux
     port (
       CLK    : in std_logic;
@@ -43,14 +44,22 @@ architecture Behavioral of proceventiotest is
       EDATA  : out std_logic_vector(7 downto 0);
 
       -- data interface
-      DGRANTA : out std_logic;
-      EARXA   : out std_logic_vector(79 downto 0);
-      DGRANTB : out std_logic;
-      EARXB   : out std_logic_vector(79 downto 0);
-      DGRANTC : out std_logic;
-      EARXC   : out std_logic_vector(79 downto 0);
-      DGRANTD : out std_logic;
-      EARXD   : out std_logic_vector(79 downto 0)
+      DGRANTA      : out std_logic;
+      EARXBYTEA    : out std_logic_vector(7 downto 0) := (others => '0');
+      EARXBYTESELA : in  std_logic_vector(3 downto 0) := (others => '0');
+
+      DGRANTB      : out std_logic;
+      EARXBYTEB    : out std_logic_vector(7 downto 0) := (others => '0');
+      EARXBYTESELB : in  std_logic_vector(3 downto 0) := (others => '0');
+
+      DGRANTC      : out std_logic;
+      EARXBYTEC    : out std_logic_vector(7 downto 0) := (others => '0');
+      EARXBYTESELC : in  std_logic_vector(3 downto 0) := (others => '0');
+
+      DGRANTD      : out std_logic;
+      EARXBYTED    : out std_logic_vector(7 downto 0) := (others => '0');
+      EARXBYTESELD : in  std_logic_vector(3 downto 0) := (others => '0')
+
       );
   end component;
 
@@ -90,14 +99,23 @@ architecture Behavioral of proceventiotest is
   signal EDATA  : std_logic_vector(7 downto 0) := (others => '0');
 
   -- decodemux signals interface
-  signal DGRANTA : std_logic                     := '0';
-  signal EARXA   : std_logic_vector(79 downto 0) := (others => '0');
-  signal DGRANTB : std_logic                     := '0';
-  signal EARXB   : std_logic_vector(79 downto 0) := (others => '0');
-  signal DGRANTC : std_logic                     := '0';
-  signal EARXC   : std_logic_vector(79 downto 0) := (others => '0');
-  signal DGRANTD : std_logic                     := '0';
-  signal EARXD   : std_logic_vector(79 downto 0) := (others => '0');
+  signal DGRANTA      : std_logic                    := '0';
+  signal EARXBYTEA    : std_logic_vector(7 downto 0) := (others => '0');
+  signal EARXBYTESELA : std_logic_vector(3 downto 0) := (others => '0');
+
+
+  signal DGRANTB      : std_logic                    := '0';
+  signal EARXBYTEB    : std_logic_vector(7 downto 0) := (others => '0');
+  signal EARXBYTESELB : std_logic_vector(3 downto 0) := (others => '0');
+
+  signal DGRANTC      : std_logic                    := '0';
+  signal EARXBYTEC    : std_logic_vector(7 downto 0) := (others => '0');
+  signal EARXBYTESELC : std_logic_vector(3 downto 0) := (others => '0');
+
+  signal DGRANTD      : std_logic                    := '0';
+  signal EARXBYTED    : std_logic_vector(7 downto 0) := (others => '0');
+  signal EARXBYTESELD : std_logic_vector(3 downto 0) := (others => '0');
+
 
   component dspcontproc
     generic (
@@ -184,7 +202,8 @@ architecture Behavioral of proceventiotest is
       DEVICE       : in  std_logic_vector(7 downto 0);
       -- Event input
       ECYCLE       : in  std_logic;
-      EARX         : in  std_logic_vector(79 downto 0);
+      EARXBYTE     : in  std_logic_vector(7 downto 0);
+      EARXBYTESEL  : out std_logic_vector(3 downto 0);
       EDRX         : in  std_logic_vector(7 downto 0);
       -- Event output 
       ESENDREQ     : out std_logic;
@@ -355,20 +374,24 @@ begin  -- Behavioral
 
   decodemux_inst : decodemux
     port map (
-      CLK     => CLK,
-      DIN     => rxdata,
-      KIN     => rxk,
-      LOCKED  => linkup,
-      ECYCLE  => ecycle,
-      EDATA   => edata,
-      DGRANTA => dgranta,
-      EARXA   => earxa,
-      DGRANTB => dgrantb,
-      EARXB   => earxb,
-      DGRANTC => dgrantc,
-      EARXC   => earxc,
-      DGRANTD => dgrantd,
-      EARXD   => earxd);
+      CLK          => CLK,
+      DIN          => rxdata,
+      KIN          => rxk,
+      LOCKED       => linkup,
+      ECYCLE       => ecycle,
+      EDATA        => edata,
+      DGRANTA      => dgranta,
+      EARXBYTEA    => EARXBYTEA,
+      EARXBYTESELA => EARXBYTESELA,
+      DGRANTB      => dgrantb,
+      EARXBYTEB    => EARXBYTEB,
+      EARXBYTESELB => EARXBYTESELB,
+      DGRANTC      => dgrantc,
+      EARXBYTEC    => EARXBYTEC,
+      EARXBYTESELC => EARXBYTESELC,
+      DGRANTD      => dgrantd,
+      EARXBYTED    => EARXBYTED,
+      EARXBYTESELD => EARXBYTESELD);
 
   dspcontproc_a : dspcontproc
     generic map (
@@ -454,7 +477,8 @@ begin  -- Behavioral
       CLKHI        => clk2x,
       DEVICE       => devicea,
       ECYCLE       => ecycle,
-      EARX         => earxa,
+      EARXBYTE     => EARXBYTEA,
+      EARXBYTESEL  => EARXBYTESELA,
       EDRX         => edata,
       ESENDREQ     => eprocreq(0),
       ESENDGRANT   => eprocgrant(0),
@@ -553,7 +577,8 @@ begin  -- Behavioral
       CLKHI        => clk2x,
       DEVICE       => deviceb,
       ECYCLE       => ecycle,
-      EARX         => earxb,
+      EARXBYTE     => EARXBYTEB,
+      EARXBYTESEL  => EARXBYTESELb,
       EDRX         => edata,
       ESENDREQ     => eprocreq(1),
       ESENDGRANT   => eprocgrant(1),
@@ -652,7 +677,8 @@ begin  -- Behavioral
       CLKHI        => clk2x,
       DEVICE       => devicec,
       ECYCLE       => ecycle,
-      EARX         => earxc,
+      EARXBYTE     => EARXBYTEC,
+      EARXBYTESEL  => EARXBYTESELC,
       EDRX         => edata,
       ESENDREQ     => eprocreq(2),
       ESENDGRANT   => eprocgrant(2),
@@ -751,7 +777,8 @@ begin  -- Behavioral
       CLKHI        => clk2x,
       DEVICE       => deviced,
       ECYCLE       => ecycle,
-      EARX         => earxd,
+      EARXBYTE     => EARXBYTED,
+      EARXBYTESEL  => EARXBYTESELD,
       EDRX         => edata,
       ESENDREQ     => eprocreq(3),
       ESENDGRANT   => eprocgrant(3),
@@ -886,6 +913,7 @@ begin  -- Behavioral
     wait until rising_edge(CLK) and epos = 0;
 
     wait until rising_edge(CLK) and epos = 0;
+    wait until rising_edge(CLK) and epos = 0;
     -- try and get initial event TX
     assert event_data_a(0) = X"0800" report "errror with event_data_a" severity error;
     assert event_data_a(1) = X"1111" report "errror with event_data_a" severity error;
@@ -924,16 +952,16 @@ begin  -- Behavioral
     dlEATXc(0)          <= '1';
     dlEATXd(0)          <= '0';
     wait until rising_edge(CLK) and epos = 0;
-    dleventinputs(0)(0) <= (others => '0'); 
+    dleventinputs(0)(0) <= (others => '0');
     dleventinputs(0)(1) <= (others => '0');
-    dleventinputs(0)(2) <= (others => '0'); 
-    
-    dlEATXa             <= (others => '0');
-    dlEATXb             <= (others => '0');
-    dlEATXc             <= (others => '0');
-    dlEATXd             <= (others => '0');
+    dleventinputs(0)(2) <= (others => '0');
 
-    report "End of Simulation" severity Failure;
-    
+    dlEATXa <= (others => '0');
+    dlEATXb <= (others => '0');
+    dlEATXc <= (others => '0');
+    dlEATXd <= (others => '0');
+
+    report "End of Simulation" severity failure;
+
   end process event_transmission;
 end Behavioral;

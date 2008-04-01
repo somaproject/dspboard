@@ -26,19 +26,6 @@ extern "C" {
 
   }
   
-
-  void  __attribute__((interrupt_handler))  txisr()
-  {
-
-
-    as->TXDMAdoneISR();
-
-    short q = *pDMA2_IRQ_STATUS; 
-    *pDMA2_IRQ_STATUS = 0x1; 
-    q = *pDMA2_IRQ_STATUS; 
-
-  }
-  
 } 
 
 void acqSpinWait(AcqSerial * as, char cmdid)
@@ -69,7 +56,7 @@ int main()
   // first, we configure the System Interrupt Controller
   
   // System interrupt Mask Register
-  *pSIC_IMASK = 0x00000600;  
+  *pSIC_IMASK = 0x00000200;  
   // "DMA 1 Interrupt (SPORT0 RX)" and "DMA 2 Interrupt (SPORT0 TX)" enabled
   // note that this is simply DMA channel 1 or 2, and  could be associated
   // with any peripheral
@@ -78,10 +65,9 @@ int main()
   // System Interrupt Assignment Registers
   // This maps the System INterrupts to general-purpose interrupts. 
 
-  // We map all to IVG7 except for DMA1, which we map to IVG8, 
-  // and DMA2, which we map to IVG9
+  // We map all to IVG7 except for DMA1, which we map to IVG8
   *pSIC_IAR0 = 0x00000000; 
-  *pSIC_IAR1 = 0x00000210; 
+  *pSIC_IAR1 = 0x00000010; 
   *pSIC_IAR2 = 0x00000000; 
 
   // Core Event Controller Registers
@@ -89,21 +75,28 @@ int main()
   
   
   
-  as->start(); 
+
   
   short x = 0; 
   int correctsamples = 0; 
   int errorsamples = 0; 
-  AcqFrame af[10]; 
-   
-  AcqCommand acqcmd; 
-  acqcmd.cmd = 3; 
-  acqcmd.cmdid = 6; 
-  acqcmd.data = 0xAABBCCDD; 
-  as->sendCommand(&acqcmd); 
+  const int AFNUM = 10; 
+  AcqFrame *  af = new AcqFrame[AFNUM]; 
+  for (int i = 0; i < AFNUM; i++)
+    {
+      for (int j = 0; j < 10; j++) {
+	af[i].cmdid = 0; 
+	af[i].cmdsts = 0; 
+	af[i].samples[j] = 0x00; 
+      }
+    }
 
+
+  // reset acqframe
+
+  as->start(); 
   
-  for (int i = 0; i < 10; i++)
+  for (int i = 0; i < AFNUM; i++)
     { 
       while (as->checkRxEmpty())
 	{
@@ -114,9 +107,31 @@ int main()
 
      
     }
-  
+
+
+     
+  AcqCommand acqcmd; 
+  acqcmd.cmd = 0; 
+  acqcmd.data = 0xAABBCCDD; 
+  for (int i = 0; i < 4; i++) {
+    for(int j = 0; j < 20000000; j++) {
+      acqcmd.cmdid = i; 
+     
+    }
+    as->sendCommand(&acqcmd); 
+    while(! as->sendCommandDone() ) {
+      int j = 10; 
+      int k = 10; 
+    }
+  }
+
+  while(1){ 
+    int i = 0; 
+  } 
+
+
 // verify samples
-  for (int i = 1; i < 10; i++)
+  for (int i = 1; i < AFNUM; i++)
     {
       unsigned char x1 = (af[i-1].samples[0] >> 8); 
       unsigned char x2 = (af[i].samples[0] >> 8); 
@@ -130,16 +145,22 @@ int main()
     int j = 0; 
   }
 
-  acqSpinWait(as, 6); 
+  acqSpinWait(as, 3); 
 
-  for (int i = 0; i < 15; i++) {
-    acqcmd.cmd = i / 4 + 1; 
-    acqcmd.cmdid = i; 
-    acqcmd.data = 0xAABBCCDD; 
-    as->sendCommand(&acqcmd); 
+   for (int i = 0; i < 15; i++) {
+     acqcmd.cmd = 0; 
+     acqcmd.cmdid = i; 
+     acqcmd.data = 0xAABBCCDD; 
+     as->sendCommand(&acqcmd); 
 
-    acqSpinWait(as, i); 
-  }
+     acqSpinWait(as, i); 
+     for(int j = 0; j < 100000000; j++) {
+       acqcmd.cmdid = i; 
+       
+     }
+
+     
+   }
   while(1){ 
     int i = 0; 
   } 

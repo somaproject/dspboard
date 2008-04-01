@@ -1,0 +1,2 @@
+vhdl work "../../../vhdl/uartacqrx.vhd"
+vhdl work "uartacqrxtest.vhd"
