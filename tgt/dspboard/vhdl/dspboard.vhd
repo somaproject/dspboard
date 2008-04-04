@@ -44,6 +44,8 @@ entity dspboard is
     DSPSPORT1TFSA : in    std_logic;
     DSPSPORT1DTA  : in    std_logic;
     DSPPPIFS1A    : out   std_logic;
+    DSPUARTRXA    : in    std_logic;
+
     -- DSP B
     DSPRESETB     : out   std_logic;
     DSPCLKB       : out   std_logic;
@@ -62,6 +64,7 @@ entity dspboard is
     DSPSPORT1TFSB : in    std_logic;
     DSPSPORT1DTB  : in    std_logic;
     DSPPPIFS1B    : out   std_logic;
+    DSPUARTRXB    : in    std_logic;
 
     -- DSP C
     DSPRESETC     : out   std_logic;
@@ -81,6 +84,7 @@ entity dspboard is
     DSPSPORT1TFSC : in    std_logic;
     DSPSPORT1DTC  : in    std_logic;
     DSPPPIFS1C    : out   std_logic;
+    DSPUARTRXC    : in    std_logic;
 
     -- DSP D
     DSPRESETD     : out   std_logic;
@@ -100,6 +104,7 @@ entity dspboard is
     DSPSPORT1TFSD : in    std_logic;
     DSPSPORT1DTD  : in    std_logic;
     DSPPPIFS1D    : out   std_logic;
+    DSPUARTRXD    : in    std_logic;
 
     -- FIBER INTERFACE
     FIBEROUTAB : out std_logic;
@@ -140,7 +145,7 @@ architecture Behavioral of dspboard is
   signal reset, dlreset : std_logic := '1';
   signal dcmlocked      : std_logic := '0';
 
-  signal decodeerrint : std_logic                     := '0';
+  signal decodeerrint : std_logic := '0';
 
   signal ppiedata : std_logic_vector(7 downto 0) := (others => '0');
   signal ppifs1   : std_logic                    := '0';
@@ -405,7 +410,8 @@ architecture Behavioral of dspboard is
       SPIMISOS    : in    std_logic;
       EVTFIFOFULL : in    std_logic;
       -- DATA SPORT IF interface
-      DATAFULL    : in    std_logic
+      DATAFULL    : in    std_logic;
+      FIBERLINKUP : in    std_logic
       );
   end component;
 
@@ -420,14 +426,16 @@ architecture Behavioral of dspboard is
       SERCLK      : in  std_logic;
       -- SPORT outputs
       DSPASERDT   : out std_logic;
-      DSPASERFS   : out std_logic;
-      DSPASERDR   : in  std_logic;
+      DSPASERTFS  : out std_logic;
       DSPBSERDT   : out std_logic;
-      DSPBSERFS   : out std_logic;
-      DSPBSERDR   : in  std_logic;
+      DSPBSERTFS  : out std_logic;
+      -- uart interfaces
+      DSPAUARTRX  : in  std_logic;
+      DSPBUARTRX  : in  std_logic;
       -- link status
       DSPALINKUP  : out std_logic;
-      DSPBLINKUP  : out std_logic
+      DSPBLINKUP  : out std_logic;
+      DEBUG       : out std_logic_vector(47 downto 0)
       );
   end component;
 
@@ -644,27 +652,27 @@ begin  -- Behavioral
 
   dspcontproc_a : dspcontproc
     port map (
-      CLK        => clk,
-      CLKHI      => clk2x,
-      RESET      => reset,
-      DEVICE     => devicea,
-      ECYCLE     => ecycle,
-      EARXBYTE       => earxbytea,
-      EARXBYTESEL => earxbytesela, 
-      EDRX       => edata,
-      ESENDREQ   => eprocreq(0),
-      ESENDGRANT => eprocgrant(0),
-      ESENDDONE  => eprocdone(0),
-      ESENDDATA  => eprocdataa,
+      CLK         => clk,
+      CLKHI       => clk2x,
+      RESET       => reset,
+      DEVICE      => devicea,
+      ECYCLE      => ecycle,
+      EARXBYTE    => earxbytea,
+      EARXBYTESEL => earxbytesela,
+      EDRX        => edata,
+      ESENDREQ    => eprocreq(0),
+      ESENDGRANT  => eprocgrant(0),
+      ESENDDONE   => eprocdone(0),
+      ESENDDATA   => eprocdataa,
       -- dsp interface
-      DSPRESET   => dspresetaint,
-      DSPSPIEN   => procdspspiena,
-      DSPSPISS   => procdspspissa,
-      DSPSPIMISO => procdspspimisoa,
-      DSPSPIMOSI => procdspspimosia,
-      DSPSPICLK  => procdspspiclka,
-      DSPSPIHOLD => dspspiholda,
-      LEDEVENT   => LEDEVENTA);
+      DSPRESET    => dspresetaint,
+      DSPSPIEN    => procdspspiena,
+      DSPSPISS    => procdspspissa,
+      DSPSPIMISO  => procdspspimisoa,
+      DSPSPIMOSI  => procdspspimosia,
+      DSPSPICLK   => procdspspiclka,
+      DSPSPIHOLD  => dspspiholda,
+      LEDEVENT    => LEDEVENTA);
 
   DSPRESETA     <= dspresetaint;
   dspresetaintn <= not dspresetaint;
@@ -695,7 +703,9 @@ begin  -- Behavioral
       SPIMISOS    => dspimisoa,
       EVTFIFOFULL => devtfifofulla,
       -- DATA SPORT IF interface
-      DATAFULL    => datafulla
+      DATAFULL    => datafulla,
+      -- FIBER IF
+      FIBERLINKUP => fiberlinkupa
       );
 
   eventrx_a : eventrx
@@ -728,27 +738,27 @@ begin  -- Behavioral
 
   dspcontproc_b : dspcontproc
     port map (
-      CLK        => clk,
-      CLKHI      => clk2x,
-      RESET      => reset,
-      DEVICE     => deviceb,
-      ECYCLE     => ecycle,
-      EARXBYTE       => earxbyteb,
-      EARXBYTESEL => earxbyteselb, 
-      EDRX       => edata,
-      ESENDREQ   => eprocreq(1),
-      ESENDGRANT => eprocgrant(1),
-      ESENDDONE  => eprocdone(1),
-      ESENDDATA  => eprocdatab,
+      CLK         => clk,
+      CLKHI       => clk2x,
+      RESET       => reset,
+      DEVICE      => deviceb,
+      ECYCLE      => ecycle,
+      EARXBYTE    => earxbyteb,
+      EARXBYTESEL => earxbyteselb,
+      EDRX        => edata,
+      ESENDREQ    => eprocreq(1),
+      ESENDGRANT  => eprocgrant(1),
+      ESENDDONE   => eprocdone(1),
+      ESENDDATA   => eprocdatab,
       -- dsp interface
-      DSPRESET   => dspresetbint,
-      DSPSPIEN   => procdspspienb,
-      DSPSPISS   => procdspspissb,
-      DSPSPIMISO => procdspspimisob,
-      DSPSPIMOSI => procdspspimosib,
-      DSPSPICLK  => procdspspiclkb,
-      DSPSPIHOLD => dspspiholdb,
-      LEDEVENT   => LEDEVENTB);
+      DSPRESET    => dspresetbint,
+      DSPSPIEN    => procdspspienb,
+      DSPSPISS    => procdspspissb,
+      DSPSPIMISO  => procdspspimisob,
+      DSPSPIMOSI  => procdspspimosib,
+      DSPSPICLK   => procdspspiclkb,
+      DSPSPIHOLD  => dspspiholdb,
+      LEDEVENT    => LEDEVENTB);
 
   DSPRESETb     <= dspresetbint;
   dspresetbintn <= not dspresetbint;
@@ -793,7 +803,10 @@ begin  -- Behavioral
       SPIMISOS    => dspimisob,
       EVTFIFOFULL => devtfifofullb,
       -- DATA SPORT IF interface
-      DATAFULL    => datafullb
+      DATAFULL    => datafullb,
+      -- FIBER IF
+      FIBERLINKUP => fiberlinkupb
+
       );
 
   datasport_b : datasport
@@ -812,27 +825,27 @@ begin  -- Behavioral
 
   dspcontproc_c : dspcontproc
     port map (
-      CLK        => clk,
-      CLKHI      => clk2x,
-      RESET      => reset,
-      DEVICE     => devicec,
-      ECYCLE     => ecycle,
-      EARXBYTE       => earxbytec,
-      EARXBYTESEL => earxbyteselc, 
-      EDRX       => edata,
-      ESENDREQ   => eprocreq(2),
-      ESENDGRANT => eprocgrant(2),
-      ESENDDONE  => eprocdone(2),
-      ESENDDATA  => eprocdatac,
+      CLK         => clk,
+      CLKHI       => clk2x,
+      RESET       => reset,
+      DEVICE      => devicec,
+      ECYCLE      => ecycle,
+      EARXBYTE    => earxbytec,
+      EARXBYTESEL => earxbyteselc,
+      EDRX        => edata,
+      ESENDREQ    => eprocreq(2),
+      ESENDGRANT  => eprocgrant(2),
+      ESENDDONE   => eprocdone(2),
+      ESENDDATA   => eprocdatac,
       -- dsp interface
-      DSPRESET   => DSPRESETCint,
-      DSPSPIEN   => procdspspienc,
-      DSPSPISS   => procdspspissc,
-      DSPSPIMISO => procdspspimisoc,
-      DSPSPIMOSI => procdspspimosic,
-      DSPSPICLK  => procdspspiclkc,
-      DSPSPIHOLD => DSPSPIHOLDC,
-      LEDEVENT   => LEDEVENTC);
+      DSPRESET    => DSPRESETCint,
+      DSPSPIEN    => procdspspienc,
+      DSPSPISS    => procdspspissc,
+      DSPSPIMISO  => procdspspimisoc,
+      DSPSPIMOSI  => procdspspimosic,
+      DSPSPICLK   => procdspspiclkc,
+      DSPSPIHOLD  => DSPSPIHOLDC,
+      LEDEVENT    => LEDEVENTC);
 
   DSPRESETC     <= dspresetcint;
   dspresetcintn <= not dspresetcint;
@@ -862,7 +875,9 @@ begin  -- Behavioral
       SPIMISOS    => dspimisoc,
       EVTFIFOFULL => devtfifofullc,
       -- DATA SPORT IF interface
-      DATAFULL    => datafullc
+      DATAFULL    => datafullc,
+      -- FIBER IF
+      FIBERLINKUP => fiberlinkupc
       );
 
   eventrx_c : eventrx
@@ -897,27 +912,27 @@ begin  -- Behavioral
 
   dspcontproc_d : dspcontproc
     port map (
-      CLK        => clk,
-      CLKHI      => clk2x,
-      RESET      => reset,
-      DEVICE     => deviced,
-      ECYCLE     => ecycle,
-      EARXBYTE       => earxbyted,
+      CLK         => clk,
+      CLKHI       => clk2x,
+      RESET       => reset,
+      DEVICE      => deviced,
+      ECYCLE      => ecycle,
+      EARXBYTE    => earxbyted,
       EARXBYTESEL => earxbyteseld,
-      EDRX       => edata,
-      ESENDREQ   => eprocreq(3),
-      ESENDGRANT => eprocgrant(3),
-      ESENDDONE  => eprocdone(3),
-      ESENDDATA  => eprocdatad,
+      EDRX        => edata,
+      ESENDREQ    => eprocreq(3),
+      ESENDGRANT  => eprocgrant(3),
+      ESENDDONE   => eprocdone(3),
+      ESENDDATA   => eprocdatad,
       -- dsp interface
-      DSPRESET   => DSPRESETDint,
-      DSPSPIEN   => procdspspiend,
-      DSPSPISS   => procdspspissd,
-      DSPSPIMISO => procdspspimisod,
-      DSPSPIMOSI => procdspspimosid,
-      DSPSPICLK  => procdspspiclkd,
-      DSPSPIHOLD => DSPSPIHOLDD,
-      LEDEVENT   => LEDEVENTD);
+      DSPRESET    => DSPRESETDint,
+      DSPSPIEN    => procdspspiend,
+      DSPSPISS    => procdspspissd,
+      DSPSPIMISO  => procdspspimisod,
+      DSPSPIMOSI  => procdspspimosid,
+      DSPSPICLK   => procdspspiclkd,
+      DSPSPIHOLD  => DSPSPIHOLDD,
+      LEDEVENT    => LEDEVENTD);
 
   DSPRESETd     <= dspresetdint;
   dspresetdintn <= not dspresetdint;
@@ -948,8 +963,9 @@ begin  -- Behavioral
       SPIMISOS    => dspimisod,
       EVTFIFOFULL => devtfifofulld,
       -- DATA SPORT IF interface
-      DATAFULL    => datafulld
-      );
+      DATAFULL    => datafulld,
+      -- FIBER IF
+      FIBERLINKUP => fiberlinkupd );
 
   eventrx_d : eventrx
     port map (
@@ -1031,11 +1047,11 @@ begin  -- Behavioral
       NEWCMDDEBUG => open,
       SERCLK      => SPORTSCLK,
       DSPASERDT   => DSPSPORT0DRA,
-      DSPASERFS   => DSPSPORT0RFSA,
-      DSPASERDR   => DSPSPORT0DTA,
+      DSPASERTFS  => DSPSPORT0RFSA,
       DSPBSERDT   => DSPSPORT0DRB,
-      DSPBSERFS   => DSPSPORT0RFSB,
-      DSPBSERDR   => DSPSPORT0DTB,
+      DSPBSERTFS  => DSPSPORT0RFSB,
+      DSPAUARTRX  => DSPUARTRXA,
+      DSPBUARTRX  => DSPUARTRXB,
       DSPALINKUP  => fiberlinkupa,
       DSPBLINKUP  => fiberlinkupb);
 
@@ -1049,11 +1065,11 @@ begin  -- Behavioral
       NEWCMDDEBUG => open,
       SERCLK      => SPORTSCLK,
       DSPASERDT   => DSPSPORT0DRC,
-      DSPASERFS   => DSPSPORT0RFSC,
-      DSPASERDR   => DSPSPORT0DTC,
+      DSPASERTFS  => DSPSPORT0RFSC,
       DSPBSERDT   => DSPSPORT0DRD,
-      DSPBSERFS   => DSPSPORT0RFSD,
-      DSPBSERDR   => DSPSPORT0DTD,
+      DSPBSERTFS  => DSPSPORT0RFSD,
+      DSPAUARTRX  => DSPUARTRXC,
+      DSPBUARTRX  => DSPUARTRXD,
       DSPALINKUP  => fiberlinkupc,
       DSPBLINKUP  => fiberlinkupd);
 

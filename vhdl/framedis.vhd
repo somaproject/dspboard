@@ -20,7 +20,8 @@ entity framedis is
          SAMPLE     : out std_logic_vector(15 downto 0);
          SAMPLESEL  : in  std_logic_vector(3 downto 0);
          CMDID      : out std_logic_vector(3 downto 0);
-         CMDST      : out std_logic_vector(3 downto 0));
+         CMDST      : out std_logic_vector(3 downto 0);
+         SUCCESS : out std_logic);
 end framedis;
 
 architecture Behavioral of framedis is
@@ -35,7 +36,7 @@ architecture Behavioral of framedis is
 
   --command status
   signal lcmdst, lcmdid : std_logic_vector(3 downto 0) := (others => '0');
-
+  signal lsuccess : std_logic := '0';
   signal donef : std_logic := '0';
 
   -- tiny fsm!
@@ -150,6 +151,7 @@ begin
         -- COMMAND-STATUS related registers
         if incnt = 21 and inwe = '1' then
           lcmdid <= DIN(4 downto 1);
+          lsuccess <= DIN(0); 
         end if;
 
         if incnt = 0 and inwe = '1' then
@@ -162,6 +164,7 @@ begin
           bufsel <= not bufsel;
 
           CMDID <= lcmdid(3 downto 0);
+          SUCCESS <= lsuccess; 
 
           CMDST <= lcmdst;
         end if;

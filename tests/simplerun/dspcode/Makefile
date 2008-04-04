@@ -11,8 +11,9 @@ CPUDEFINES = -D__ADSPBF561__ -D__ADSPLPBLACKFIN__
 INCLUDES = -I$(SRCDIR)/bf533 -I. -I$(SRCDIR)
 ASMFLAGS = -x assembler-with-cpp $(CPUDEFINES) $(INCLUDES)
 ASMFLAGS += -DUSE_LIBC
-CFLAGS = $(INCLUDES)  -g -DBOARD_$(BOARD) -mcpu=bf533
-CFLAGS += $(CPUDEFINES)  -fno-rtti --no-exceptions
+CFLAGS = $(INCLUDES)  -g -O2 -DBOARD_$(BOARD) -mcpu=bf533
+CFLAGS += $(CPUDEFINES)  -fno-rtti --no-exceptions -mfast-fp -ffast-math
+
 BOARD=STAMP_BF533
 
 BFROOT = /home/jonas/blackfin/out-elf/
@@ -20,7 +21,7 @@ BFROOTVER = 4.1.2
 
 
 LDFLAGS =   -g -T bftiny.x  -L$(BFROOT)lib/ -L$(BFROOT)/lib/gcc/bfin-elf/4.1.2/ \
-	#	 -lsupc++ -lc -lgcc -lnosys
+	 -lsupc++ -lc -lgcc -lnosys
 
 
 #OBJS = $(CCSRCS:%.cc=%.o)  $(ASMSRCS:%.asm=%.o) # memory.o

@@ -4,10 +4,12 @@
 class AcqFrame
 {
  public: 
-  unsigned char cmdsts; 
+  unsigned char mode; 
   unsigned char cmdid; 
-  unsigned char success; 
-  unsigned short samples[10]; 
+  bool success; 
+  bool loading; 
+  unsigned char chksum; 
+  short samples[10]; 
 }; 
 
 class AcqCommand
@@ -22,6 +24,18 @@ class AcqCommand
     data(0) {
   }
 
+}; 
+
+class AcqState
+{
+public:
+  static const int CHANNUM = 5; 
+
+  unsigned char mode; 
+  bool linkUp; 
+  int gain[CHANNUM]; 
+  bool hpfen[CHANNUM]; 
+  char inputSel; 
 }; 
 
 class AcqSerialBase

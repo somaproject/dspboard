@@ -62,8 +62,11 @@ void do_blink(void)
   *pFIO_FLAG_D = 0x0100;
   *pFIO_INEN   = 0x0000; // enable input for buttons
   
+  float x = float(i); 
+  uint64_t longx = i; 
+  
   i = 0;
-  while (i < 10000) {
+  while (i < x) {
     *pFIO_FLAG_T = 0x0100;
     
     delay();

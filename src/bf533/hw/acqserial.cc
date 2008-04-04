@@ -1,19 +1,27 @@
 #include <hw/acqserial.h>
+#include <hw/memory.h>
 #include <types.h>
 #include <cdefBF533.h>
 
 AcqSerial::AcqSerial() :
   curRXpos_(0), 
   curReadPos_(0),
-  totalRXBufCnt_(0)
+  totalRXBufCnt_(0), 
+  pUARTTX_(new UARTTX())
 {
   curRXpos_ = 0; 
   curReadPos_ = 0; 
-  for (int i = 0; i < 16; i++) {
-    TXBuffer_[i] = 0; 
-  }
+
 }
 
+void AcqSerial::setup()
+{
+  setupLink(); 
+  setupSPORT(); 
+  setupDMA(); 
+  pUARTTX_->setup(); 
+
+}
 void AcqSerial::setupSPORT()
 {
   // first, make sure we can modify the registers
@@ -70,7 +78,12 @@ void AcqSerial::start()
   *pDMA1_CONFIG = 0x10F7;  // start input dma, 2D, autobufferin
 
   *pSPORT0_RCR1 = 0x4011; // enable sport RX
-  *pSPORT0_TCR1 = 0x0000; // enable sport TX
+  *pSPORT0_TCR1 = 0x4011; // enable sport TX//   outbuf[0] = 0xAA; 
+//   outbuf[1] = 0xBB; 
+//   outbuf[2] = 0xCC; 
+//   outbuf[3] = 0xDD; 
+//   outbuf[4] = 0xEE; 
+//   outbuf[5] = 0xFF; 
 
 }
 
@@ -82,9 +95,8 @@ void AcqSerial::stop()
 }
 bool AcqSerial::checkLinkUp()
 {
-  // install interrupt handlers
+  return (*pFIO_FLAG_D & FIBERLINKUP_MASK); 
 
-  // 
 }
 
 void AcqSerial::RXDMAdoneISR(void)
@@ -105,10 +117,18 @@ bool AcqSerial::checkRxEmpty()
 void AcqSerial::getNextFrame(AcqFrame * af)
 {
   // perform the copy 
+  unsigned char cmdstsbyte = RXbuffer_[curReadPos_ * 16] & 0xFF; 
+  af->mode = cmdstsbyte >> 1; 
+  af->loading = cmdstsbyte & 0x1; 
   
-  af->cmdsts = RXbuffer_[curReadPos_ * 16] & 0xFF; 
-  af->cmdid = (RXbuffer_[curReadPos_ * 16] >> 8)  & 0xFF; 
-  af->success =0; // not implemented
+  unsigned char cmdidbyte =  (RXbuffer_[curReadPos_ * 16] >> 8)  & 0xFF; 
+  af->cmdid = cmdidbyte & 0xF; 
+
+  if (cmdidbyte & 0x80) {
+    af->success = true; 
+  } else {
+    af->success = false;
+  }
   
   for(short i = 0; i <10; i++){
     af->samples[i] = RXbuffer_[curReadPos_ * 16 + i +1]; 
@@ -121,27 +141,29 @@ void AcqSerial::getNextFrame(AcqFrame * af)
 
 void AcqSerial::sendCommand(AcqCommand * ac)
 {
-  *pDMA2_IRQ_STATUS = 0x1; // clear done bit
-
-
-
-  // the LSB of the first word sent is: 
-  TXBuffer_[0] = 0x00; // major hack !!
-  // it appears that the BF SPORT wants to send (TX) the first word one-bit-shift
-  // too early. So we just don't send that word. 
-  TXBuffer_[1] = 0xAB00 | ((ac->cmdid & 0xF) << 4) | (ac->cmd & 0xF); 
   
-  TXBuffer_[2] =  (ac->data >> 16) & 0xFFFF; 
-  TXBuffer_[3] =  (ac->data) & 0xFFFF; 
+  char outbuf[6]; 
 
-  // start the DMA
-  //*pDMA2_CONFIG = 0x00E5;  // start output DMA
-  
-  
+
+  outbuf[0] =  ((ac->cmdid & 0xF) << 4) | (ac->cmd & 0xF); 
+  outbuf[1] = (ac->data >> 24) & 0xFF; 
+  outbuf[2] = (ac->data >> 16) & 0xFF; 
+  outbuf[3] = (ac->data >> 8) & 0xFF; 
+  outbuf[4] = (ac->data >> 0) & 0xFF; 
+
+  pUARTTX_->sendWords(outbuf); 
+
 }
 
 bool AcqSerial::sendCommandDone()
 {
-  return *pDMA2_IRQ_STATUS & 0x01; 
-  
+  return pUARTTX_->checkSendDone(); 
+}
+
+void AcqSerial::setupLink()
+{
+
+  *pFIO_DIR    &= ~FIBERLINKUP_MASK; 
+  *pFIO_INEN   |= FIBERLINKUP_MASK; 
+
 }

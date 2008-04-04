@@ -24,9 +24,11 @@ public:
   std::vector<int> gains_; 
   std::vector<bool> hpfs_; 
   int recentCMDID_; 
-  
+  int mode_; 
+
   AcqCommand acPending_; 
   int acDelaycnt_; 
+  
   
   short fpos_; 
 }; 

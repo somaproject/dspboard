@@ -1,53 +1,28 @@
 #ifndef DATAOUT_H
 #define DATAOUT_H
 
-#include <vector>
-#include <list>
-#include <hw/dspdataout.h>
+#include <types.h>
 
-
-const int BUFSIZE = 600; 
-const int BUFNUM = 10; 
-
-enum dobstat { DOB_NONE, DOB_WRITING, DOB_TXREADY, DOB_SENDING}; 
-
-class DataOutFifo; 
-
-class DataOutBuffer
-{
-  friend class DataOutFifo; 
+class Data_t {
 
 public:
-  DataOutBuffer(DataOutFifo* dof) :
-    pDataOutFifo_(dof), 
-    state_(DOB_NONE) {}; 
-  char buffer[BUFSIZE]; 
-  void commit(); 
+  virtual void toBuffer(unsigned char * c) = 0; 
+  // toBuffer NEEDS to put the type first, i.e. if
+  // len(desired data ) = 100 bytes (i.e. 0x64); 
+  // then 
+  // uint16_t lendata = len(desired data)
+  // c[0] = lendata>> 8; 
+  // c[1] = lendata & 0xFF; 
+};
 
-private:
-  dobstat state_; 
-  DataOutFifo * pDataOutFifo_; 
-  
-}; 
 
-class DataOutFifo 
-{
-public: 
-  DataOutFifo(DSPDataOut* ddo); 
-  DataOutBuffer* request(); 
-  void commit(DataOutBuffer *); 
-  void sendBuffer(); 
-
-private:
-  std::vector<DataOutBuffer> buffers_; 
-  std::list<DataOutBuffer*> sendList_; 
-  int nextNew_; 
-  DataOutBuffer* currentTX_; 
-  DSPDataOut * pddo_; 
+class DataOut {
+public:
+  virtual void sendData(Data_t &) = 0; 
+  virtual void sendPending() = 0; 
+  virtual bool txBufferFull() = 0; 
 
 }; 
 
+#endif
 
-
-
-#endif // DATAOUT_H

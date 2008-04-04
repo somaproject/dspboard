@@ -7,6 +7,7 @@ AcqSerial::AcqSerial() :
   hpfs_(10),
   recentCMDID_ (0), 
   fpos_ (0), 
+  mode_(0), 
   linkUpState_(false), 
   acDelaycnt_( -1)
 {
@@ -29,13 +30,14 @@ bool AcqSerial::linkUp(){
 
 bool AcqSerial::checkRxEmpty(){
   // we always have sim packets to send
-
+  
   return false; 
 
 }
 
 void AcqSerial::sendCommand(AcqCommand * ac)
 {
+
   if (acDelaycnt_ >= 0) {
     throw std::runtime_error("command sent before previous had completed"); 
   } else {
@@ -46,19 +48,22 @@ void AcqSerial::sendCommand(AcqCommand * ac)
 }
 
 void AcqSerial::getNextFrame(AcqFrame * af) {
+
+  af->mode = mode_; 
   
   if (acDelaycnt_ == 0) {
-
+    af->mode = mode_; 
     af->cmdid = acPending_.cmdid; 
     
     if (acPending_.cmd == 0x01) {
       // set gain
       char chan = acPending_.data >> 24; 
       char val = (acPending_.data >> 16) & 0xFF; 
-
+      std::cout << "AcqSerial setting gain[" << (int)chan << "] = " 
+		<< (int) val << std::endl ; 
       gains_[chan] = val; 
     } else  if (acPending_.cmd == 0x02) {
-      // set gain
+      // set hpf
       char chan = acPending_.data >> 24; 
       bool val = (acPending_.data >> 16) & 0xFF; 
 
@@ -67,7 +72,8 @@ void AcqSerial::getNextFrame(AcqFrame * af) {
     }
   }
 
-  af->cmdsts = 0x01; // we should figure out what this means
+  af->success = true; 
+  
   
   // populate data
   for (int i = 0; i < 10; i++)

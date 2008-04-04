@@ -14,7 +14,8 @@ entity sportacqser is
     SAMPLEIN    : in  std_logic_vector(15 downto 0);
     SAMPLESEL   : out std_logic_vector(3 downto 0);
     CMDSTS      : in  std_logic_vector(3 downto 0);
-    CMDID       : in  std_logic_vector(3 downto 0)
+    CMDID       : in  std_logic_vector(3 downto 0);
+    SUCCESS : in std_logic
     );
 
 end sportacqser;
@@ -41,13 +42,15 @@ architecture Behavioral of sportacqser is
 
   signal cmdstsl, cmdidl : std_logic_vector(3 downto 0) := (others => '0');
 
+  signal successl : std_logic := '0';
+  
   signal doutbit, ldoutbit : std_logic                     := '0';
   signal doutword          : std_logic_vector(15 downto 0) := (others => '0');
 
 
 begin  -- Behavioral
 
-  doutword <= "0000" & cmdidl & "0000" & cmdstsl when bitpos(7 downto 4) = "0000"
+  doutword <= successl & "000" & cmdidl & "0000" & cmdstsl when bitpos(7 downto 4) = "0000"
               else SAMPLEIN;
 
   ldoutbit  <= doutword(0)  when bitpos(3 downto 0) = "0000" else
@@ -79,8 +82,8 @@ begin  -- Behavioral
       SERDT <= ldoutbit;
       SERTFS <= lfs;
 
-      serdral <= SERDRA;
-      serdrbl <= SERDRB;
+--       serdral <= SERDRA;
+--       serdrbl <= SERDRB;
 
 -- if inenll = '1'then
 -- dataoutaint <= serdral & dataoutaint(255 downto 1);
@@ -90,6 +93,7 @@ begin  -- Behavioral
       if cs = none and START = '1' then
         cmdstsl <= CMDSTS;
         cmdidl  <= CMDID;
+        successl <= SUCCESS; 
       else
         --if cs = clkh then
         --doutbit <= ldoutbit; 

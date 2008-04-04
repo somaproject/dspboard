@@ -1,4 +1,4 @@
-	ADDRESS_BLOCK dspcontproca RAMB18 [0x00000000 : 0x0000008ff]
+ADDRESS_BLOCK dspcontproca RAMB18 [0x00000000 : 0x0000008ff]
 BUS_BLOCK
 dspcontproc_a/instruction_ram [17:0];
 END_BUS_BLOCK;

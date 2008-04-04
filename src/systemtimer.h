@@ -2,20 +2,30 @@
 #define SYSTEMTIMER_H
 
 #include <stdint.h>
+#include <FastDelegate.h>
 
+typedef uint64_t somatime_t; 
 class SystemTimer
 {
   
  public: 
   SystemTimer(); 
+
+  typedef fastdelegate::FastDelegate1<somatime_t>  timeUpdateDelegate_t; 
   
-  uint64_t getTime(); 
-  void setTime(uint64_t); 
+  somatime_t getTime(); 
+  void setTime(somatime_t); 
+  void connect(timeUpdateDelegate_t update); 
 
  private:
-  uint64_t time_; 
 
+  static const int MAXCONN = 6; 
+  
+  timeUpdateDelegate_t connectedUpdates_[MAXCONN]; 
 
+  somatime_t time_; 
+  
+  
 }; 
 
 

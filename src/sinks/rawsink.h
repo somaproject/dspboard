@@ -2,38 +2,55 @@
 #define RAWSINK_H
 
 #include <systemtimer.h>
-#include <filterlinkmanager.h>
+#include <samplebuffer.hpp>
+#include <filterio.h>
 #include <dataout.h>
-#include <eventout.h>
-#include <datasinkbase.h>
+
+class RawData_t : public Data_t {
+public:
+  void toBuffer(unsigned char * c ) {
+    const short len = BUFSIZE * sizeof(uint32_t) + 2; 
+    *c = len >> 8; 
+    c++; 
+    *c = len & 0xFF; 
+    c++; 
+    // now the data, big-endian-style
+
+    for (short i = 0; i < BUFSIZE; i++) {
+      sample_t buf =  buffer[i]; 
+      *(c+3) = buf & 0xFF; 
+      buf = buf >> 8; 
+      *(c+2) = buf & 0xFF; 
+      buf = buf >> 8; 
+      *(c+1) = buf & 0xFF; 
+      buf = buf >> 8; 
+      *c = buf & 0xFF; 
+    }
+  }
+  static const short BUFSIZE = 128; 
+  uint32_t buffer[BUFSIZE]; 
+
+}; 
 
 
-class RawSink : public DataSinkBase
+class RawSink 
 {
   static const unsigned char DATATYPE = 3; 
   
  public:
-  RawSink(int ID, FilterLinkManager * flm, 
-	  SystemTimer * st, DataOutFifo * dof, 
-	  EventOutFifo* eof); 
-  void sampleProcess(void); 
-  void onEvent(const Event&); 
-  void newFilterLink(unsigned int type, int channel);   
+  RawSink(SystemTimer * st, DataOut * dout); 
+  
+    
  private: 
-  FilterLinkManager * pFilterLinkManager_; 
   SystemTimer * pSystemTimer_; 
-  DataOutFifo * pDataOutFifo_; 
-  EventOutFifo * pEventOutFifo_; 
-  int ID_; 
-  
+  DataOut * pDataOut_; 
+public:
+  FilterLinkSink<sample_t> sink; 
+private:
 
-  FilterLink* fl_; 
-  int samplePos_; 
-  
-  DataOutBuffer* pOutBuffer_; 
-  
-  void sendBuffer(void); 
-  unsigned char datasrc_; 
+  void processSample(sample_t); 
+  RawData_t pendingRawData_; 
+  short pendingPos_; 
   
 }; 
 

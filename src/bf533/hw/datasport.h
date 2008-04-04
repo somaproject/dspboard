@@ -2,15 +2,10 @@
 #define DATASPORT_H
 
 #include <types.h>
+#include <dataout.h>
 
-class Data_t {
 
-public:
-  virtual void toBuffer(unsigned char * ) = 0; 
-
-};
-
-class DataSPORT
+class DataSPORT : public 
 {
 
  public:
@@ -21,7 +16,7 @@ class DataSPORT
   bool txBufferFull(); 
 
  private:
-  static const int DATABUFLEN = 4; 
+  static const int DATABUFLEN = 6; 
   static const int BUFSIZE = 1024; 
   static const int DATAFIFOFULL_MASK = 0x0010; 
 

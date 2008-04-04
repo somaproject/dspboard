@@ -11,3 +11,8 @@ Basic infrastructure provided by the top-level VHDL module includes:
 
 clkhi: 80 MHz serial tx clock
 clkacq: 36 MHz input-like clock
+
+
+-------------------------------------------------------------------------
+
+We also test the acqstatecontrol interface

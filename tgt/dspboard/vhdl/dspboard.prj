@@ -16,6 +16,7 @@ vhdl work "../../../vhdl/fibertx.vhd"
 vhdl work "../../../vhdl/framedis.vhd"
 vhdl work "../../../vhdl/framedis.vhd"
 vhdl work "../../../vhdl/acqcmdmux.vhd"
+vhdl work "../../../vhdl/uartacqrx.vhd"
 vhdl work "../../../vhdl/sportacqser.vhd"
 vhdl work "../../../vhdl/acqserial.vhd"
 

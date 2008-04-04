@@ -1,0 +1,11 @@
+An attempt to create the AcqStateControl and then manipulate
+it via the host AcqStateControl. 
+
+
+Tests: 
+   1. Can we change the link status and get a link status update? 
+   2. can we set the gains
+   3. can we set the HPFs
+   4. can we take the link down in the middle and correctly abort? 
+
+	

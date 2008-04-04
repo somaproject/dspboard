@@ -32,7 +32,9 @@ entity dspiomux is
     SPIMISOS    : in    std_logic;
     EVTFIFOFULL : in    std_logic;
     -- DATA SPORT IF interface
-    DATAFULL : in std_logic
+    DATAFULL : in std_logic; 
+    -- LINK interface
+    FIBERLINKUP : in std_logic
     );
 end dspiomux;
 
@@ -53,7 +55,7 @@ begin  -- Behavioral
   BOOTHOLDOFF <= FLAG1;
   SPISSS      <= FLAG1  when PSEL = '0' else '1';
 
-  FLAG2 <= '0';
+  FLAG2 <= FIBERLINKUP; 
   FLAG4 <= DATAFULL; 
 
   

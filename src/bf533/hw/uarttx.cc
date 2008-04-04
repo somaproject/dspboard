@@ -28,10 +28,11 @@ void UARTTX::setupUART()
 
 void UARTTX::setupDMA()
 {
+  *pDMA7_CONFIG = 0; 
+
   *pDMA7_PERIPHERAL_MAP = 0x7000; 
 
-
-  // Set up the DMA channel, by default, channel 5 is SPI
+  // Set up the DMA channel, by default, channel 7 is UART TX
   *pDMA7_NEXT_DESC_PTR = 0; 
   *pDMA7_CURR_DESC_PTR = 0; 
 
@@ -44,7 +45,7 @@ void UARTTX::setupDMA()
   *pDMA7_CONFIG = 0x00A0; 
 
   // now set the pointer 
-  *pDMA7_START_ADDR = txBuffer_; 
+  *pDMA7_START_ADDR = &txBuffer_[0]; 
 
   *pUART_IER = 2; 
 

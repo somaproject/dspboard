@@ -72,7 +72,7 @@ build/$(PROJECT).pcf: build/$(PROJECT)_map.ncd
 # forth stage: par
 
 build/$(PROJECT).ncd: build/$(PROJECT).pcf
-	par -w -ol $(OPTIMIZE) -xe n -t 1  build/$(PROJECT)_map.ncd build/$(PROJECT).ncd build/$(PROJECT).pcf
+	par -w -ol $(OPTIMIZE) -xe n -t 2  build/$(PROJECT)_map.ncd build/$(PROJECT).ncd build/$(PROJECT).pcf
 
 build/$(PROJECT).bit: build/$(PROJECT).pcf build/$(PROJECT).ncd
 	bitgen -g LCK_cycle:5 -w build/$(PROJECT).ncd build/$(PROJECT).bit build/$(PROJECT).pcf

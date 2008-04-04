@@ -18,16 +18,16 @@ entity acqserialtest is
     DSPARSCLK  : out std_logic;
     DSPADR     : out std_logic;
     DSPARFS    : out std_logic;
-    DSPADT     : in  std_logic;
-    DSPATFS    : in  std_logic;
     DSPALINKUP : out std_logic;
 
     DSPBRSCLK  : out std_logic;
     DSPBDR     : out std_logic;
     DSPBRFS    : out std_logic;
-    DSPBDT     : in  std_logic;
-    DSPBTFS    : in  std_logic;
     DSPBLINKUP : out std_logic;
+
+    -- uart interfaces
+    DSPAUARTRX : in std_logic;
+    DSPBUARTRX : in std_logic; 
 
     -- fiber IO, we actually take this off-chip
     DSPFIBEROUT : out std_logic;
@@ -63,17 +63,17 @@ architecture Behavioral of acqserialtest is
       -- SPORT outputs
       DSPASERDT   : out std_logic;
       DSPASERTFS  : out std_logic;
-      DSPASERDR   : in  std_logic;
-      DSPASERRFS  : in  std_logic;
 
       DSPBSERDT  : out std_logic;
       DSPBSERTFS : out std_logic;
-      DSPBSERDR  : in  std_logic;
-      DSPBSERRFS : in  std_logic;
+    -- uart interfaces
+    DSPAUARTRX : in std_logic;
+    DSPBUARTRX : in std_logic; 
+
       -- link status
       DSPALINKUP : out std_logic;
       DSPBLINKUP : out std_logic;
-      DEBUG      : out std_logic_vector(31 downto 0)
+      DEBUG      : out std_logic_vector(47 downto 0)
       );
   end component;
 
@@ -117,7 +117,7 @@ architecture Behavioral of acqserialtest is
 
   signal reset2, reset3 : std_logic := '1';
 
-  signal debug : std_logic_vector(31 downto 0) := (others => '0');
+  signal debug : std_logic_vector(47 downto 0) := (others => '0');
 
 begin  -- Behavioral
 
@@ -192,18 +192,14 @@ begin  -- Behavioral
       FIBEROUT    => DSPFIBEROUT,
       NEWCMDDEBUG => NEWCMDDEBUG,
       SERCLK      => serclkint,
-
       DSPASERDT  => DSPADR,
       DSPASERTFS  => DSPARFS,
-      DSPASERDR  => DSPADT,
-      DSPASERRFS => DSPATFS, 
       DSPALINKUP => DSPALINKUPint,
-
       DSPBSERDT  => DSPBDR,
       DSPBSERTFS  => DSPBRFS,
-      DSPBSERDR  => DSPBDT,
-      DSPBSERRFS => DSPBTFS, 
       DSPBLINKUP => DSPBLINKUPint,
+      DSPAUARTRX => DSPAUARTRX,
+      DSPBUARTRX => DSPBUARTRX, 
       DEBUG      => debug);
 
   acqboard_inst : acqboard
@@ -249,7 +245,7 @@ begin  -- Behavioral
   begin
 
     if jtagupdate = '1' then
-      jtagout    <= X"1234" & X"0" &rxcmd & X"0" & rxcmdid & DEBUG;
+      jtagout    <= X"1234" & debug; 
     else
       if rising_edge(jtagDRCK1) then
         jtagout  <= '0' & jtagout(63 downto 1);

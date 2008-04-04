@@ -4,3 +4,8 @@ it into an internal buffer, and then sends out the buffer.
 We must periodically call the sendPending() method to check if the
 FPGA's fifo is not full, and if not, push a datagram into there
 
+Note that BUFSIZE and BUFLEN are not very large. 
+
+Also, the toBuffer(char *) method of the object takes care of copying
+the object into the buffer pointed to by the argument pointer. 
+

@@ -5,7 +5,7 @@
 
 
 ASMSRCS = crt0.asm 
-CCSRCS   = main.cc
+CCSRCS   = main.cc acqstatecontroltest.cc
 SRCDIR= ../../../src/
 CPUDEFINES = -D__ADSPBF561__ -D__ADSPLPBLACKFIN__
 INCLUDES = -I$(SRCDIR)/bf533 -I. -I$(SRCDIR)
@@ -21,7 +21,9 @@ LDFLAGS =  -g -T bftiny.x  -L$(BFROOT)lib/ -L$(BFROOT)/lib/gcc/bfin-elf/$(BFROOT
 	 -lsupc++ -lc -lgcc -lnosys
 
 
-OBJS = $(ASMSRCS:%.asm=%.o)  $(CCSRCS:%.cc=%.o) memory.o acqserial.o
+OBJS = $(ASMSRCS:%.asm=%.o)  $(CCSRCS:%.cc=%.o) memory.o acqserial.o \
+	uarttx.o acqstatecontrol.o 
+
 
 
 AS = bfin-elf-as
@@ -35,12 +37,21 @@ all: $(OBJS) acqserialtest.dxe
 main.o: main.cc
 	$(CXX) $(CFLAGS)  -c -o main.o main.cc
 
+acqstatecontroltest.o: acqstatecontroltest.cc
+	$(CXX) $(CFLAGS)  -c -o acqstatecontroltest.o acqstatecontroltest.cc
+
 memory.o: $(SRCDIR)/bf533/hw/memory.cc
 	$(CXX) $(CFLAGS)  -c  $(SRCDIR)/bf533/hw/memory.cc
+
+acqstatecontrol.o: $(SRCDIR)/acqstatecontrol.cc
+	$(CXX) $(CFLAGS)  -c  $(SRCDIR)/acqstatecontrol.cc
 
 
 acqserial.o: $(SRCDIR)bf533/hw/acqserial.cc
 	$(CXX) $(CFLAGS) -c $(SRCDIR)bf533/hw/acqserial.cc -o acqserial.o
+
+uarttx.o: $(SRCDIR)bf533/hw/uarttx.cc
+	$(CXX) $(CFLAGS) -c $(SRCDIR)bf533/hw/uarttx.cc -o uarttx.o
 
 %.o: %.asm
 	$(CC) $(ASMFLAGS) -c -o $@ $<

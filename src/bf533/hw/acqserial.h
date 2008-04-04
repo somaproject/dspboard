@@ -1,6 +1,7 @@
 #ifndef ACQSERIAL_H
 #define ACQSERIAL_H
 
+#include <hw/uarttx.h>
 #include <acqboardif.h>
 
 class AcqSerial : public AcqSerialBase
@@ -13,6 +14,8 @@ public:
   void sendCommand(AcqCommand *); 
   bool checkLinkUp(); 
 
+  void setup(); 
+  void setupLink(); 
   void setupSPORT(); 
   void setupDMA(); 
   void start();
@@ -23,6 +26,8 @@ public:
 private:
   
   static const int RXBUFLEN_ = 10; 
+  static const short FIBERLINKUP_MASK = 0x0004; 
+  
   
   unsigned short RXbuffer_[RXBUFLEN_ * 16]; 
   unsigned short TXBuffer_[4]; 
@@ -32,6 +37,7 @@ private:
   bool sendingTXBuffer_;
   int totalRXBufCnt_;
   bool linkUp() { return true;}
-
+  UARTTX * pUARTTX_; 
+  
 }; 
 #endif // ACQSERIAL_H
