@@ -21,6 +21,8 @@ OUTPUT_BOOTSERWE = 0x02
 OUTPUT_BOOTSTART = 0x03
 OUTPUT_SPISS = 0x04
 OUTPUT_SPIEN = 0x05
+OUTPUT_UARTTX = 0x06
+OUTPUT_DEVICE = 0xA0
 
 INPUT_BOOTSERDONE = 0x03
 
@@ -31,6 +33,9 @@ EVENTRXCMD_DATABUFTX = 0x33
 EVENTRXCMD_DSPSPISS = 0x34
 EVENTRXCMD_DSPSPIEN = 0x35
 EVENTRXCMD_DSPRESET = 0x36
+EVENTRXCMD_UARTTX = 0x37
+
+EVENTRXCMD_YOUARE = 0x01
 
 env = createEnvironment()
 counter = env.createVariable("counter")
@@ -143,6 +148,19 @@ def proc_dspreset():
   proc.output(OUTPUT_DSPRESET, tmp)
   
 
+def proc_youare():
+  proc = env.createEProc((EVENTRXCMD_YOUARE, EVENTRXCMD_YOUARE), (0, 255))
+  tmp = proc.createVariable("tmp")
+  proc.move(tmp, ereg.edata[0])
+  proc.output(OUTPUT_DEVICE, tmp)
+  
+def proc_uarttx():
+  proc = env.createEProc((EVENTRXCMD_UARTTX, EVENTRXCMD_UARTTX), (0, 255))
+  tmp = proc.createVariable("tmp")
+#  proc.move(tmp, ereg.edata[0])
+  proc.load(tmp, 0x08)
+  proc.output(OUTPUT_UARTTX, tmp)
+
 
 createEnableEventCycleProc()
 createEventCycleProc()
@@ -154,3 +172,5 @@ proc_spiss()
 proc_spien()
 proc_databuftx()
 proc_dspreset()
+proc_youare()
+proc_uarttx()

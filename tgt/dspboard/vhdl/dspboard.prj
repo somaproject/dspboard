@@ -36,6 +36,7 @@ vhdl work "../../../vhdl/regfilesingle.vhd"
 vhdl work "../../../vhdl/decodemux.vhd"
 vhdl work "../../../vhdl/datamux.vhd"
 vhdl work "../../../vhdl/encodemux.vhd"
+vhdl work "../../../vhdl/uartbyteout.vhd"
 vhdl work "../../../vhdl/dspcontproc.vhd"
 vhdl work "dspboard.vhd"
 

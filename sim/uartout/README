@@ -1,2 +1,1 @@
-Send a few words and verify that we get them back. Because 9600 bps is so slow,
-this will TAKE A VERY LONG TIME TO SIMULATE. 
+Test for our single-byte-at-a-time serial out. 

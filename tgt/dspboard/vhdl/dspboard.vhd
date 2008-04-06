@@ -45,6 +45,7 @@ entity dspboard is
     DSPSPORT1DTA  : in    std_logic;
     DSPPPIFS1A    : out   std_logic;
     DSPUARTRXA    : in    std_logic;
+    DSPUARTTXA    : out   std_logic;
 
     -- DSP B
     DSPRESETB     : out   std_logic;
@@ -65,6 +66,7 @@ entity dspboard is
     DSPSPORT1DTB  : in    std_logic;
     DSPPPIFS1B    : out   std_logic;
     DSPUARTRXB    : in    std_logic;
+    DSPUARTTXB    : out   std_logic;
 
     -- DSP C
     DSPRESETC     : out   std_logic;
@@ -85,6 +87,7 @@ entity dspboard is
     DSPSPORT1DTC  : in    std_logic;
     DSPPPIFS1C    : out   std_logic;
     DSPUARTRXC    : in    std_logic;
+    DSPUARTTXC    : out   std_logic;
 
     -- DSP D
     DSPRESETD     : out   std_logic;
@@ -105,6 +108,7 @@ entity dspboard is
     DSPSPORT1DTD  : in    std_logic;
     DSPPPIFS1D    : out   std_logic;
     DSPUARTRXD    : in    std_logic;
+    DSPUARTTXD    : out   std_logic;
 
     -- FIBER INTERFACE
     FIBEROUTAB : out std_logic;
@@ -346,7 +350,6 @@ architecture Behavioral of dspboard is
     port (
       CLK          : in  std_logic;
       CLKHI        : in  std_logic;
-      DEVICE       : in  std_logic_vector(7 downto 0);
       RESET        : in  std_logic;
       -- Event input
       ECYCLE       : in  std_logic;
@@ -366,6 +369,7 @@ architecture Behavioral of dspboard is
       DSPSPIMOSI   : out std_logic;
       DSPSPICLK    : out std_logic;
       DSPSPIHOLD   : in  std_logic;
+      DSPUARTTX    : out std_logic;
       LEDEVENT     : out std_logic
       );
   end component;
@@ -477,12 +481,11 @@ architecture Behavioral of dspboard is
   signal edspdatac : std_logic_vector(7 downto 0) := (others => '0');
   signal edspdatad : std_logic_vector(7 downto 0) := (others => '0');
 
-  signal devicea         : std_logic_vector(7 downto 0) := X"08";
-  signal procdspspiena   : std_logic                    := '0';
-  signal procdspspissa   : std_logic                    := '0';
-  signal procdspspimisoa : std_logic                    := '0';
-  signal procdspspimosia : std_logic                    := '0';
-  signal procdspspiclka  : std_logic                    := '0';
+  signal procdspspiena   : std_logic := '0';
+  signal procdspspissa   : std_logic := '0';
+  signal procdspspimisoa : std_logic := '0';
+  signal procdspspimosia : std_logic := '0';
+  signal procdspspiclka  : std_logic := '0';
 
   signal dspissa       : std_logic := '0';
   signal dspimisoa     : std_logic := '0';
@@ -494,7 +497,6 @@ architecture Behavioral of dspboard is
   signal ddataa    : std_logic_vector(7 downto 0) := (others => '0');
   signal datafulla : std_logic                    := '0';
 
-  signal deviceb         : std_logic_vector(7 downto 0) := X"09";
   signal procdspspienb   : std_logic                    := '0';
   signal procdspspissb   : std_logic                    := '0';
   signal procdspspimisob : std_logic                    := '0';
@@ -509,7 +511,6 @@ architecture Behavioral of dspboard is
   signal ddatab          : std_logic_vector(7 downto 0) := (others => '0');
   signal datafullb       : std_logic                    := '0';
 
-  signal devicec         : std_logic_vector(7 downto 0) := X"0A";
   signal procdspspienc   : std_logic                    := '0';
   signal procdspspissc   : std_logic                    := '0';
   signal procdspspimisoc : std_logic                    := '0';
@@ -524,7 +525,6 @@ architecture Behavioral of dspboard is
   signal ddatac          : std_logic_vector(7 downto 0) := (others => '0');
   signal datafullc       : std_logic                    := '0';
 
-  signal deviced         : std_logic_vector(7 downto 0) := X"0B";
   signal procdspspiend   : std_logic                    := '0';
   signal procdspspissd   : std_logic                    := '0';
   signal procdspspimisod : std_logic                    := '0';
@@ -563,6 +563,30 @@ architecture Behavioral of dspboard is
 
   signal dspresetdint  : std_logic := '0';
   signal dspresetdintn : std_logic := '0';
+
+
+  signal jtagcapture : std_logic := '0';
+  signal jtagdrck1   : std_logic := '0';
+  signal jtagdrck2   : std_logic := '0';
+  signal jtagsel1    : std_logic := '0';
+  signal jtagsel2    : std_logic := '0';
+  signal jtagshift   : std_logic := '0';
+  signal jtagtdi     : std_logic := '0';
+  signal jtagtdo1    : std_logic := '0';
+  signal jtagtdo2    : std_logic := '0';
+  signal jtagupdate  : std_logic := '0';
+
+  signal jtagwordout : std_logic_vector(47 downto 0) := (others => '0');
+  signal jtagout     : std_logic_vector(63 downto 0) := (others => '0');
+
+  signal inword, inwordl : std_logic_vector(15 downto 0) := (others => '0');
+  signal fifofullcnta    : std_logic_vector(7 downto 0)  := (others => '0');
+  signal procspienacnt   : std_logic_vector(7 downto 0)  := (others => '0');
+  signal devtfifofullal  : std_logic                     := '0';
+  signal procdspspienal  : std_logic                     := '0';
+  signal eventrxdebuga   : std_logic_vector(15 downto 0) := (others => '0');
+  signal eventrxreqcnt   : std_logic_vector(7 downto 0)  := (others => '0');
+  signal reql            : std_logic                     := '0';
 
 begin  -- Behavioral
 
@@ -655,7 +679,6 @@ begin  -- Behavioral
       CLK         => clk,
       CLKHI       => clk2x,
       RESET       => reset,
-      DEVICE      => devicea,
       ECYCLE      => ecycle,
       EARXBYTE    => earxbytea,
       EARXBYTESEL => earxbytesela,
@@ -672,6 +695,7 @@ begin  -- Behavioral
       DSPSPIMOSI  => procdspspimosia,
       DSPSPICLK   => procdspspiclka,
       DSPSPIHOLD  => dspspiholda,
+      DSPUARTTX   => DSPUARTTXA,
       LEDEVENT    => LEDEVENTA);
 
   DSPRESETA     <= dspresetaint;
@@ -711,7 +735,7 @@ begin  -- Behavioral
   eventrx_a : eventrx
     port map (
       CLK      => CLK,
-      RESET    => '0',
+      RESET    => procdspspiena, 
       SCLK     => dspiclka,
       MOSI     => dspimosia,
       SCS      => dspissa,
@@ -719,7 +743,8 @@ begin  -- Behavioral
       DOUT     => edspdataa,
       REQ      => edspreq(0),
       GRANT    => edspgrant(0),
-      DONE     => edspdone(0));
+      DONE     => edspdone(0),
+      DEBUG    => eventrxdebuga);
 
   datasport_a : datasport
     port map (
@@ -741,7 +766,6 @@ begin  -- Behavioral
       CLK         => clk,
       CLKHI       => clk2x,
       RESET       => reset,
-      DEVICE      => deviceb,
       ECYCLE      => ecycle,
       EARXBYTE    => earxbyteb,
       EARXBYTESEL => earxbyteselb,
@@ -758,7 +782,9 @@ begin  -- Behavioral
       DSPSPIMOSI  => procdspspimosib,
       DSPSPICLK   => procdspspiclkb,
       DSPSPIHOLD  => dspspiholdb,
-      LEDEVENT    => LEDEVENTB);
+      DSPUARTTX   => DSPUARTTXB,
+
+      LEDEVENT => LEDEVENTB);
 
   DSPRESETb     <= dspresetbint;
   dspresetbintn <= not dspresetbint;
@@ -767,7 +793,7 @@ begin  -- Behavioral
   eventrx_b : eventrx
     port map (
       CLK      => CLK,
-      RESET    => '0',
+      RESET    => dspresetbintn,
       SCLK     => dspiclkb,
       MOSI     => dspimosib,
       SCS      => dspissb,
@@ -828,7 +854,6 @@ begin  -- Behavioral
       CLK         => clk,
       CLKHI       => clk2x,
       RESET       => reset,
-      DEVICE      => devicec,
       ECYCLE      => ecycle,
       EARXBYTE    => earxbytec,
       EARXBYTESEL => earxbyteselc,
@@ -845,7 +870,9 @@ begin  -- Behavioral
       DSPSPIMOSI  => procdspspimosic,
       DSPSPICLK   => procdspspiclkc,
       DSPSPIHOLD  => DSPSPIHOLDC,
-      LEDEVENT    => LEDEVENTC);
+      DSPUARTTX   => DSPUARTTXC,
+
+      LEDEVENT => LEDEVENTC);
 
   DSPRESETC     <= dspresetcint;
   dspresetcintn <= not dspresetcint;
@@ -883,7 +910,7 @@ begin  -- Behavioral
   eventrx_c : eventrx
     port map (
       CLK      => CLK,
-      RESET    => '0',
+      RESET    => dspresetcintn,
       SCLK     => dspiclkc,
       MOSI     => dspimosic,
       SCS      => dspissc,
@@ -915,7 +942,6 @@ begin  -- Behavioral
       CLK         => clk,
       CLKHI       => clk2x,
       RESET       => reset,
-      DEVICE      => deviced,
       ECYCLE      => ecycle,
       EARXBYTE    => earxbyted,
       EARXBYTESEL => earxbyteseld,
@@ -932,7 +958,9 @@ begin  -- Behavioral
       DSPSPIMOSI  => procdspspimosid,
       DSPSPICLK   => procdspspiclkd,
       DSPSPIHOLD  => DSPSPIHOLDD,
-      LEDEVENT    => LEDEVENTD);
+      DSPUARTTX   => DSPUARTTXD,
+
+      LEDEVENT => LEDEVENTD);
 
   DSPRESETd     <= dspresetdint;
   dspresetdintn <= not dspresetdint;
@@ -970,7 +998,7 @@ begin  -- Behavioral
   eventrx_d : eventrx
     port map (
       CLK      => CLK,
-      RESET    => '0',
+      RESET    => dspresetdintn,
       SCLK     => dspiclkd,
       MOSI     => dspimosid,
       SCS      => dspissd,
@@ -1082,47 +1110,46 @@ begin  -- Behavioral
       DOUTEN => ppifs1);
 
 
--- process(jtagDRCK1, clk)
--- begin
--- if jtagupdate = '1' then
--- jtagout <= X"1234" & jtagwordout;
--- else
--- if rising_edge(jtagDRCK1) then
--- jtagout <= '0' & jtagout(63 downto 1);
--- jtagtdo1 <= jtagout(0);
--- end if;
+  process(jtagDRCK1, clk)
+  begin
+    if jtagupdate = '1' then
+      jtagout    <= X"1234" & jtagwordout;
+    else
+      if rising_edge(jtagDRCK1) then
+        jtagout  <= '0' & jtagout(63 downto 1);
+        jtagtdo1 <= jtagout(0);
+      end if;
 
--- end if;
--- end process;
+    end if;
+  end process;
 
--- BSCAN_SPARTAN3_inst : BSCAN_SPARTAN3
--- port map (
--- CAPTURE => jtagcapture,
--- DRCK1 => jtagdrck1,
--- DRCK2 => jtagDRCK2,
--- SEL1 => jtagSEL1,
--- SEL2 => jtagSEL2,
--- SHIFT => jtagSHIFT,
--- TDI => jtagTDI,
--- UPDATE => jtagUPDATE,
--- TDO1 => jtagtdo1,
--- TDO2 => jtagtdo2
--- );
-
-
+  BSCAN_SPARTAN3_inst : BSCAN_SPARTAN3
+    port map (
+      CAPTURE => jtagcapture,
+      DRCK1   => jtagdrck1,
+      DRCK2   => jtagDRCK2,
+      SEL1    => jtagSEL1,
+      SEL2    => jtagSEL2,
+      SHIFT   => jtagSHIFT,
+      TDI     => jtagTDI,
+      UPDATE  => jtagUPDATE,
+      TDO1    => jtagtdo1,
+      TDO2    => jtagtdo2
+      );
 
 
--- jtagwordout(47 downto 24) <= jtagdatatxcnt_req & jtagdatatxcnt_grant &
--- jtagdatatxcnt_done;
--- jtagwordout(23 downto 16) <= dspresetaint & "000" & dreq;
-  LEDPOWER <= linkup;
+
+
+  jtagwordout(7 downto 0)   <= fifofullcnta;
+  jtagwordout(15 downto 8)  <= eventrxreqcnt;
+  jtagwordout(23 downto 16) <= procspienacnt;
+  jtagwordout(31)           <= procdspspiena;
+  jtagwordout(47 downto 32) <= eventrxdebuga;
+  LEDPOWER                  <= linkup;
 
   process(CLK)
-    variable scnt      : integer range 0 to 2 := 0;
-    variable dreqal    : std_logic            := '0';
-    variable dgrantal  : std_logic            := '0';
-    variable ddonetest : std_logic            := '0';
-    variable indata    : std_logic            := '0';
+    variable scnt   : integer range 0 to 2 := 0;
+    variable dreqal : std_logic            := '0';
 
   begin
     if RESET = '1' then
@@ -1132,28 +1159,7 @@ begin  -- Behavioral
         rxdatal <= rxdata;
         rxkl    <= rxk;
 
--- if ecycle = '1' then
--- pos <= "0000000001";
--- else
--- pos <= pos + 1;
--- end if;
-
---  -- count cycles of input req
---         if dreq(0) = '1' and dreqal = '0' then
---           jtagdatatxcnt_req <= jtagdatatxcnt_req + 1;
---         end if;
---         dreqal := dreq(0);
-
---  --  -- count input grants
---         if dgrant(0) = '1' and dgrantal = '0' then
---           jtagdatatxcnt_grant <= jtagdatatxcnt_grant + 1;
---         end if;
---         dgrantal := dgrant(0);
-
--- if ddone(0) = '1' then
--- jtagdatatxcnt_done <= jtagdatatxcnt_done + 1;
--- end if;
-
+        jtagwordout(27) <= dspissa; 
         if scnt = 2 then
           scnt := 0;
         else
@@ -1166,27 +1172,6 @@ begin  -- Behavioral
           sportsclk <= '0';
         end if;
 
--- if jtagsel2 = '1' then
--- jtagwordout(15 downto 0) <= (others => '0');
--- ddonetest := '0';
--- else
--- if dgrant(0) = '1' and ddonetest = '0' then
--- indata := '1';
--- ddonetest := '1';
--- else
--- if ddone(0) = '1' then
--- indata := '0';
--- end if;
--- end if;
-
--- end if;
-
-
--- if indata = '1' then
--- jtagwordout(15 downto 0) <= jtagwordout(15 downto 0) + 1;
--- end if;
-
-
         DSPSPORTSCLKA <= sportsclk;
         DSPSPORTSCLKB <= sportsclk;
         DSPSPORTSCLKC <= sportsclk;
@@ -1197,6 +1182,22 @@ begin  -- Behavioral
         DSPPPIFS1B <= ppifs1 and linkup;
         DSPPPIFS1C <= ppifs1 and linkup;
         DSPPPIFS1D <= ppifs1 and linkup;
+
+        devtfifofullal <= devtfifofulla;
+        procdspspienal <= procdspspiena;
+
+        if devtfifofulla = '1' and devtfifofullal = '0' then
+          fifofullcnta <= fifofullcnta + 1;
+        end if;
+
+        if procdspspienal /= procdspspiena then
+          procspienacnt <= procspienacnt + 1;
+        end if;
+        --reql            <= edspreq(0);
+
+        if reql = '0' and edspreq(0) = '1' then
+          eventrxreqcnt <= eventrxreqcnt + 1;
+        end if;
 
       end if;
     end if;

@@ -45,7 +45,7 @@ architecture Behavioral of eventrx is
   signal armeda : std_logic := '0';
   signal armedb : std_logic := '0';
 
-  type instates is (none, wordw, wordchk, bufarm, nextisel);
+  type instates is (startup, none, wordw, wordchk, bufarm, nextisel);
   signal ics, ins : instates := none;
 
   -- OUTPUT SIGNALS
@@ -98,7 +98,6 @@ begin  -- Behavioral
               (armedb = '1' and ics = wordw) else
               '0';
 
-  DEBUG <= din;
 
   regfile_a : regfile
     generic map (
@@ -128,7 +127,7 @@ begin  -- Behavioral
   main : process(clk)
   begin
     if RESET = '1' then
-      ics   <= none;
+      ics   <= startup;
       ocs   <= armaw;
     else
       if rising_edge(CLK) then
@@ -212,7 +211,17 @@ begin  -- Behavioral
   input_fsm : process(ics, scsl, biten, bitcnt, wcntin)
   begin
     case ics is
+      when startup =>                   -- we wait for the dsp to bring the
+                                        -- scsl out of reset
+        DEBUG(3 downto 0) <= X"F";
+        if scsl = '1' then
+          ins <= none;
+        else
+          ins <= startup; 
+        end if;
+        
       when none =>
+        DEBUG(3 downto 0) <= X"0"; 
         if scsl = '0' then
           ins <= wordw;
         else
@@ -220,6 +229,7 @@ begin  -- Behavioral
         end if;
 
       when wordw =>
+        DEBUG(3 downto 0) <= X"1"; 
         if scsl = '1' then
           ins   <= none;
         else
@@ -231,6 +241,7 @@ begin  -- Behavioral
         end if;
 
       when wordchk =>
+        DEBUG(3 downto 0) <= X"2"; 
         if wcntin = "1010" then
           ins <= bufarm;
         else
@@ -238,11 +249,14 @@ begin  -- Behavioral
         end if;
 
       when bufarm =>
+        DEBUG(3 downto 0) <= X"3"; 
         ins <= nextisel;
 
       when nextisel =>
+        DEBUG(3 downto 0) <= X"4"; 
         ins <= none;
       when others   =>
+        DEBUG(3 downto 0) <= X"5"; 
         ins <= none;
     end case;
 

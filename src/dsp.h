@@ -1,8 +1,17 @@
 #ifndef DSP_H
 #define DSP_H
 
+enum DSP_POSITION { DSPA, DSPB, DSPC, DSPD, NONE}; 
 
-enum DSP_POSITION { DSPA, DSPB, DSPC, DSPD}; 
+
+class DSPConfig // ABC for all dsp configuration
+{
+  virtual DSP_POSITION getDSPPos() = 0; 
+  virtual unsigned char getDevice() = 0; 
+}; 
+
+
+
 
 inline char decodeGain(short gain)
 {

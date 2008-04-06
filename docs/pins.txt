@@ -5,8 +5,8 @@ SPISS / PFLAG0 : used as SPISS during boot,
 but then used as EVENT FIFO FULL signal during regular operation
 
 PFLAG1 : Holdoff for boot / SPISEL1 for DSP-based SPI Master 
-PFLAG2 : Fiber link up 
-PFLAG4 : Data FIFO FULL (confirmed from code, set via DATAFIFOFULL)
+PFLAG2 [INPUT] : Fiber link up / fiberlink status
+PFLAG4 [INPUT] : Data FIFO FULL (confirmed from code, set via DATAFIFOFULL)
 
 
 

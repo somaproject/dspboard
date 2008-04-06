@@ -25,7 +25,7 @@
 
 #define MASTER_CLOCK   50000000
 #define SCLK_DIVIDER   4
-#define VCO_MULTIPLIER 8
+#define VCO_MULTIPLIER 10
 #define CCLK_DIVIDER   1
 
 

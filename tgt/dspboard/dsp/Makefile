@@ -16,7 +16,8 @@ LDFLAGS =  -g -T bftiny.x  -L$(BFROOT)lib/ -L$(BFROOT)/lib/gcc/bfin-elf/$(BFROOT
 	 -lsupc++ -lc -lgcc -lnosys
 
 
-OBJS = $(ASMSRCS:%.asm=%.o) $(CCSRCS:%.cc=%.o) eventtx.o eventrx.o eventdispatch.o memory.o 
+OBJS = $(ASMSRCS:%.asm=%.o) $(CCSRCS:%.cc=%.o) eventtx.o eventrx.o \
+	eventdispatch.o memory.o dspuartconfig.o
 
 
 AS = bfin-elf-as
@@ -42,6 +43,9 @@ eventrx.o: $(SRCDIR)/bf533/hw/eventrx.cc
 
 eventdispatch.o: $(SRCDIR)/eventdispatch.cc	
 	$(CXX) $(CFLAGS)  -c  $(SRCDIR)/eventdispatch.cc
+
+dspuartconfig.o: $(SRCDIR)/bf533/hw/dspuartconfig.cc	
+	$(CXX) $(CFLAGS)  -c  $(SRCDIR)/bf533/hw/dspuartconfig.cc
 
 %.o: %.asm
 	$(CC) $(ASMFLAGS) -c -o $@ $<

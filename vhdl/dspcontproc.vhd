@@ -91,7 +91,6 @@ entity dspcontproc is
     CLK          : in  std_logic;
     CLKHI        : in  std_logic;
     RESET        : in  std_logic;
-    DEVICE       : in  std_logic_vector(7 downto 0);
     -- Event input
     ECYCLE       : in  std_logic;
     EARXBYTE     : in  std_logic_vector(7 downto 0);
@@ -110,6 +109,7 @@ entity dspcontproc is
     DSPSPIMOSI   : out std_logic;
     DSPSPICLK    : out std_logic            := '0';
     DSPSPIHOLD   : in  std_logic;
+    DSPUARTTX    : out std_logic;
     -- STATUS
     LEDEVENT     : out std_logic
     );
@@ -139,6 +139,8 @@ architecture Behavioral of dspcontproc is
 
   signal eventtxwe : std_logic := '0';
 
+  signal device : std_logic_vector(7 downto 0) := (others => '1');  -- not set
+
   component bootser
     port ( CLK   : in  std_logic;
            DIN   : in  std_logic_vector(15 downto 0);
@@ -157,6 +159,20 @@ architecture Behavioral of dspcontproc is
   signal bootserstartll : std_logic := '0';
   signal bootserdone    : std_logic := '0';
 
+
+  component uartbyteout
+    port (
+      CLK         : in  std_logic;      -- '0'
+      DIN         : in  std_logic_vector(7 downto 0);
+      SEND        : in  std_logic;
+      DONE        : out std_logic;
+      UARTTX      : out std_logic
+      );
+  end component;
+
+  signal uarttxsend : std_logic := '0';
+  signal uarttxdone, uarttxdonel : std_logic := '0';
+  
 begin  -- Behavioral
 
   eproc_inst : entity eproc.eproc
@@ -200,19 +216,6 @@ begin  -- Behavioral
 
   eventtxwe <= '1' when oportstrobe = '1' and oportaddr(7 downto 4) = X"8" else '0';
 
-
--- eprocbuf_inst : entity eproc.txreqeventbuffer
--- port map (
--- CLK => CLK,
--- EVENTIN => edout,
--- EADDRIN => eaout,
--- NEWEVENT => enewout,
--- ECYCLE => ECYCLE,
--- SENDREQ => ESENDREQ,
--- SENDGRANT => ESENDGRANT,
--- SENDDONE => ESENDDONE,
--- DOUT => ESENDDATA);
-
   bootser_inst : bootser
     port map (
       CLK   => clkhi,
@@ -225,7 +228,15 @@ begin  -- Behavioral
       HOLD  => DSPSPIHOLD,
       SCLK  => DSPSPICLK);
 
-  instruction_ram : RAMB16_S18_S18
+  uartbyteout_inst: uartbyteout
+    port map (
+      CLK    => clkhi,
+      DIN    => oportdata(7 downto 0),
+      SEND   => uarttxsend,
+      DONE   => uarttxdone,
+      UARTTX => DSPUARTTX); 
+
+  instruction_ram :     RAMB16_S18_S18
     generic map (
       INIT_00 => RAM_INIT_00,
       INIT_01 => RAM_INIT_01,
@@ -328,6 +339,8 @@ begin  -- Behavioral
 
   bootserstart <= '1' when oportaddr = X"03" and oportstrobe = '1' else '0';
 
+  uarttxsend <= '1' when oportaddr = X"06" and oportstrobe = '1' else '0';
+  
   main : process(CLKHI)
   begin
     if rising_edge(CLkHI) then
@@ -339,11 +352,23 @@ begin  -- Behavioral
         DSPSPISS  <= oportdata(0);
       elsif oportaddr = X"05" and OPORTSTROBE = '1' then
         DSPSPIEN  <= oportdata(0);
+      elsif oportaddr = X"A0" and OPORTSTROBE = '1' then
+        device    <= oportdata(7 downto 0);
       end if;
+
+      if oportaddr = X"06" and oportstrobe = '1' then
+        uarttxdonel <= '0';
+      else
+        if uarttxdone = '1'  then
+          uarttxdonel <= '1'; 
+        end if;
+      end if; 
 
       if iportstrobe = '1' then
         if iportaddr = X"03" then
           iportdata <= X"000" & "000" & bootserdone;
+        elsif iportaddr = X"07" then
+          iportdata <= X"000" & "000" & uarttxdonel;
         end if;
       end if;
 

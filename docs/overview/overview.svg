@@ -1013,54 +1013,35 @@
          y="141.25"
          id="tspan5440">BF533</tspan></text>
     <g
-       id="g5442"
-       transform="translate(-462.5,0)">
+       id="g2104"
+       transform="translate(0,31.25)">
       <rect
-         y="146.25"
-         x="609.375"
-         height="31.25"
+         y="118.125"
+         x="146.875"
+         height="28.125"
          width="9.375"
-         id="rect5444"
+         id="rect5450"
          style="fill:white;fill-opacity:1;stroke:black;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
       <text
          transform="matrix(0,-1,1,0,0,0)"
          sodipodi:linespacing="125%"
-         id="text5446"
-         y="616.17218"
-         x="-161.89996"
+         id="text5452"
+         y="153.82098"
+         x="-132.10693"
          style="font-size:6px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
          xml:space="preserve"><tspan
-           y="616.17218"
-           x="-161.89996"
-           id="tspan5448"
+           y="153.82098"
+           x="-132.10693"
+           id="tspan5454"
            sodipodi:role="line">SPORT0</tspan></text>
     </g>
-    <rect
-       style="fill:white;fill-opacity:1;stroke:black;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="rect5450"
-       width="9.375"
-       height="31.25"
-       x="146.875"
-       y="115" />
-    <text
-       xml:space="preserve"
-       style="font-size:6px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
-       x="-130.64996"
-       y="153.82098"
-       id="text5452"
-       sodipodi:linespacing="125%"
-       transform="matrix(0,-1,1,0,0,0)"><tspan
-         sodipodi:role="line"
-         id="tspan5454"
-         x="-130.64996"
-         y="153.82098">SPORT1</tspan></text>
     <g
-       id="g5456"
-       transform="translate(-462.5,-62.55579)">
+       id="g2120"
+       transform="translate(0,-12.44421)">
       <rect
-         y="146.30579"
-         x="609.375"
-         height="31.194214"
+         y="96.25"
+         x="146.875"
+         height="18.694206"
          width="9.375"
          id="rect5458"
          style="fill:white;fill-opacity:1;stroke:black;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
@@ -1068,12 +1049,12 @@
          transform="matrix(0,-1,1,0,0,0)"
          sodipodi:linespacing="125%"
          id="text5460"
-         y="616.17218"
-         x="-161.89996"
+         y="153.74658"
+         x="-105.50043"
          style="font-size:6px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
          xml:space="preserve"><tspan
-           y="616.17218"
-           x="-161.89996"
+           y="153.74658"
+           x="-105.50043"
            id="tspan5462"
            sodipodi:role="line">SPI</tspan></text>
     </g>
@@ -1100,14 +1081,6 @@
            id="tspan5470"
            sodipodi:role="line">Parallel Interface</tspan></text>
     </g>
-    <path
-       style="fill:none;fill-opacity:1;stroke:black;stroke-width:1.25;marker-end:url(#TriangleOutM);stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       d="M 156.8025,99.375 L 216.1775,99.375"
-       id="path5491" />
-    <path
-       style="fill:none;fill-opacity:1;stroke:black;stroke-width:1.25;marker-end:url(#TriangleOutM);stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       d="M 156.8025,140 L 216.1775,140"
-       id="path5493" />
     <rect
        style="fill:#f3f3f3;fill-opacity:1;stroke:black;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect5497"
@@ -1286,13 +1259,65 @@
          id="tspan5559"
          x="484.375"
          y="365">FPGA</tspan></text>
+    <g
+       id="g2109"
+       transform="translate(0,-15.625)">
+      <rect
+         y="118.125"
+         x="146.875"
+         height="28.125"
+         width="9.375"
+         id="rect2111"
+         style="fill:white;fill-opacity:1;stroke:black;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <text
+         transform="matrix(0,-1,1,0,0,0)"
+         sodipodi:linespacing="125%"
+         id="text2113"
+         y="153.82098"
+         x="-132.10693"
+         style="font-size:6px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           y="153.82098"
+           x="-132.10693"
+           id="tspan2115"
+           sodipodi:role="line">SPORT1</tspan></text>
+    </g>
+    <g
+       id="g2125"
+       transform="translate(0,34.375)">
+      <rect
+         y="96.25"
+         x="146.875"
+         height="18.694206"
+         width="9.375"
+         id="rect2127"
+         style="fill:white;fill-opacity:1;stroke:black;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <text
+         transform="matrix(0,-1,1,0,0,0)"
+         sodipodi:linespacing="125%"
+         id="text2129"
+         y="153.74658"
+         x="-105.50043"
+         style="font-size:6px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           y="153.74658"
+           x="-105.50043"
+           id="tspan2131"
+           sodipodi:role="line">UART</tspan></text>
+    </g>
     <path
-       style="fill:none;fill-opacity:1;stroke:black;stroke-width:1.25;marker-end:url(#TriangleOutM);stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       d="M 156.25,130.625 L 215.625,130.625"
-       id="path2087" />
+       style="opacity:1;color:black;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.25;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:url(#TriangleOutM);stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible"
+       d="M 156.25,93.125 L 187.5,93.125 C 187.5,93.125 190.625,93.125 190.625,96.25 C 190.625,99.375 193.75,99.375 193.75,99.375 L 215.625,99.375"
+       id="path2133" />
     <path
-       style="fill:none;fill-opacity:1;stroke:black;stroke-width:1.25;marker-end:url(#TriangleOutM);stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       d="M 218.75,171.25 L 159.375,171.25"
-       id="path2089" />
+       style="opacity:1;color:black;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.25;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:url(#TriangleOutM);stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible"
+       d="M 156.25,115 L 181.25,115 C 181.25,115 187.5,115 187.5,121.25 C 187.5,127.5 187.5,133.75 187.5,133.75 C 187.5,133.75 187.5,140 193.75,140 C 200,140 215.625,140 215.625,140"
+       id="path3025"
+       sodipodi:nodetypes="ccscsc" />
+    <path
+       style="opacity:1;color:black;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.25;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:url(#TriangleOutM);stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible"
+       d="M 218.1975,189.0625 L 193.1975,189.0625 C 193.1975,189.0625 186.9475,189.0625 186.9475,182.8125 C 186.9475,176.5625 186.9475,170.3125 186.9475,170.3125 C 186.9475,170.3125 186.9475,164.0625 180.6975,164.0625 C 174.4475,164.0625 158.8225,164.0625 158.8225,164.0625"
+       id="path3027"
+       sodipodi:nodetypes="ccscsc" />
   </g>
 </svg>

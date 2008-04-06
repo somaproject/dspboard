@@ -3,21 +3,21 @@ VHDLS=vsim
 WORKDIR=work
 all: hw comp sim
 
-$(WORKDIR)/uartacqrx/behavioral.dat: $(WORKDIR)/touched ../../vhdl/uartacqrx.vhd
+$(WORKDIR)/uartbyteout/behavioral.dat: $(WORKDIR)/touched ../../vhdl/uartbyteout.vhd
 	mkdir -p $(WORKDIR)
-	$(VHDLC) ../../vhdl/uartacqrx.vhd
+	$(VHDLC) ../../vhdl/uartbyteout.vhd
 
-hw: $(WORKDIR)/uartacqrx/behavioral.dat 
+hw: $(WORKDIR)/uartbyteout/behavioral.dat 
 
 comp: 
 
-$(WORKDIR)/uartacqrxtest/behavioral.dat: $(WORKDIR)/touched uartacqrxtest.vhd
+$(WORKDIR)/uartacqrxtest/behavioral.dat: $(WORKDIR)/touched uartouttest.vhd
 	mkdir -p $(WORKDIR)
-	$(VHDLC) uartacqrxtest.vhd
+	$(VHDLC) uartouttest.vhd
 
 sim: $(WORKDIR)/uartacqrxtest/behavioral.dat 
 runsim: all
-	$(VHDLS) uartacqrxtest
+	$(VHDLS) uartouttest
 
 
 clean:
