@@ -869,7 +869,8 @@ begin  -- Behavioral
       DSPSPIMISO  => procdspspimisoc,
       DSPSPIMOSI  => procdspspimosic,
       DSPSPICLK   => procdspspiclkc,
-      DSPSPIHOLD  => DSPSPIHOLDC,
+      DSPSPIHOLD  => DSPSPIHOLDC,      
+      --DSPSPIHOLD  => '0',      
       DSPUARTTX   => DSPUARTTXC,
 
       LEDEVENT => LEDEVENTC);
@@ -929,7 +930,7 @@ begin  -- Behavioral
       SERDT  => DSPSPORT1DTC,
       SERTFS => DSPSPORT1TFSC,
       FULL   => datafullc,
-      REQ    => dreq(2),
+      REQ    => dreq(2), 
       GRANT  => dgrant(2),
       DOUT   => ddatac,
       DONE   => ddone(2));
@@ -1016,7 +1017,7 @@ begin  -- Behavioral
       SERDT  => DSPSPORT1DTD,
       SERTFS => DSPSPORT1TFSD,
       FULL   => datafulld,
-      REQ    => dreq(3),
+      REQ    => dreq(3),    
       GRANT  => dgrant(3),
       DOUT   => ddatad,
       DONE   => ddone(3));

@@ -1,13 +1,14 @@
 
-CCSRCS   = main.cc
+CCSRCS   = main.cc echoproc.cc
 ASMSRCS = crt0.asm
 SRCDIR= ../../../src/
+HWDIR = $(SRCDIR)/bf533/
 CPUDEFINES = -D__ADSPBF561__ -D__ADSPLPBLACKFIN__
-INCLUDES = -I$(SRCDIR)/bf533 -I. -I$(SRCDIR)
+INCLUDES = -I$(HWDIR) -I. -I$(SRCDIR) 
 ASMFLAGS = -x assembler-with-cpp $(CPUDEFINES) $(INCLUDES)
 ASMFLAGS += -DBOARD_$(BOARD)
-CFLAGS = -mcpu=bf533 $(INCLUDES)  -g -DBOARD_$(BOARD) 
-CFLAGS += $(CPUDEFINES) -fno-rtti --no-exceptions -ffast-math -mfast-fp
+CXXFLAGS = -mcpu=bf533 $(INCLUDES) -O2  -g -DBOARD_$(BOARD) 
+CXXFLAGS += $(CPUDEFINES) -fno-rtti --no-exceptions -ffast-math -mfast-fp
 BOARD=SOMA_DSPBOARD4X
 
 BFROOT = /home/jonas/blackfin/out-elf/
@@ -17,7 +18,9 @@ LDFLAGS =  -g -T bftiny.x  -L$(BFROOT)lib/ -L$(BFROOT)/lib/gcc/bfin-elf/$(BFROOT
 
 
 OBJS = $(ASMSRCS:%.asm=%.o) $(CCSRCS:%.cc=%.o) eventtx.o eventrx.o \
-	eventdispatch.o memory.o dspuartconfig.o
+	eventdispatch.o memory.o dspuartconfig.o  acqserial.o \
+	uarttx.o acqstatecontrol.o systemtimer.o datasport.o \
+	fakesource.o rawsink.o
 
 
 AS = bfin-elf-as
@@ -29,23 +32,51 @@ LD = bfin-elf-ld
 all: $(OBJS) dspboard.dxe dspboard.ldr
 
 main.o: main.cc
-	$(CXX) $(CFLAGS)  -c -o main.o main.cc
+	$(CXX) $(CXXFLAGS)  -c -o main.o main.cc
 
-memory.o: $(SRCDIR)/bf533/hw/memory.cc
-	$(CXX) $(CFLAGS)  -c  $(SRCDIR)/bf533/hw/memory.cc
+memory.o: $(HWDIR)hw/memory.cc
+	$(CXX) $(CXXFLAGS)  -c  $(HWDIR)hw/memory.cc
 
 
-eventtx.o: $(SRCDIR)bf533/hw/eventtx.cc
-	$(CXX) $(CFLAGS) -c $(SRCDIR)bf533/hw/eventtx.cc -o eventtx.o
+eventtx.o: $(HWDIR)hw/eventtx.cc
+	$(CXX) $(CXXFLAGS) -c $(HWDIR)hw/eventtx.cc -o eventtx.o
 
-eventrx.o: $(SRCDIR)/bf533/hw/eventrx.cc	
-	$(CXX) $(CFLAGS)  -c  $(SRCDIR)/bf533/hw/eventrx.cc
+
+eventrx.o: $(HWDIR)hw/eventrx.cc	
+	$(CXX) $(CXXFLAGS)  -c  $(HWDIR)hw/eventrx.cc
+
+
+datasport.o: $(HWDIR)hw/datasport.cc	
+	$(CXX) $(CXXFLAGS)  -c  $(HWDIR)hw/datasport.cc
 
 eventdispatch.o: $(SRCDIR)/eventdispatch.cc	
-	$(CXX) $(CFLAGS)  -c  $(SRCDIR)/eventdispatch.cc
+	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/eventdispatch.cc
 
-dspuartconfig.o: $(SRCDIR)/bf533/hw/dspuartconfig.cc	
-	$(CXX) $(CFLAGS)  -c  $(SRCDIR)/bf533/hw/dspuartconfig.cc
+dspuartconfig.o: $(HWDIR)hw/dspuartconfig.cc	
+	$(CXX) $(CXXFLAGS)  -c  $(HWDIR)hw/dspuartconfig.cc
+
+acqstatecontrol.o: $(SRCDIR)/acqstatecontrol.cc
+	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/acqstatecontrol.cc
+
+systemtimer.o: $(SRCDIR)/systemtimer.cc
+	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/systemtimer.cc
+
+rawsink.o: $(SRCDIR)/sinks/rawsink.cc
+	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/sinks/rawsink.cc
+
+#acqdatasource.o: $(SRCDIR)/acqdatasource.cc
+#	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/acqdatasource.cc
+
+fakesource.o: $(SRCDIR)/fakesource.cc
+	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/fakesource.cc
+
+
+acqserial.o: $(HWDIR)hw/acqserial.cc
+	$(CXX) $(CXXFLAGS) -c $(HWDIR)hw/acqserial.cc -o acqserial.o
+
+uarttx.o: $(HWDIR)hw/uarttx.cc
+	$(CXX) $(CXXFLAGS) -c $(HWDIR)hw/uarttx.cc -o uarttx.o
+
 
 %.o: %.asm
 	$(CC) $(ASMFLAGS) -c -o $@ $<
