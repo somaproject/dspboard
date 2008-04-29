@@ -10,6 +10,9 @@ all: runner
 systemtimer.o: $(SRCDIR)/systemtimer.cc
 	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/systemtimer.cc -o systemtimer.o
 
+eventdispatch.o: $(SRCDIR)/eventdispatch.cc
+	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/eventdispatch.cc -o eventdispatch.o
+
 
 fakesource.o: $(SRCDIR)/fakesource.cc
 	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/fakesource.cc -o fakesource.o
@@ -29,8 +32,8 @@ clean:
 	rm *.o
 
 
-runner: runner.o filterlinktests.o systemtimer.o fakesource.o \
-	hostdataout.o rawsink.o
+runner: runner.o filterlinktests.o systemtimer.o eventdispatch.o fakesource.o \
+	hostdataout.o rawsink.o 
 
 
 

@@ -8,8 +8,34 @@ SystemTimer::SystemTimer() :
   }
 }
 
+SystemTimer::SystemTimer(EventDispatch * ed) :
+  time_(0)
+{
 
-void SystemTimer::setTime(uint64_t t)
+  for (int i = 0; i < MAXCONN; i++) {
+    connectedUpdates_[i] = 0; 
+  }
+  
+  ed->registerCallback(0x10, 
+		       fastdelegate::MakeDelegate(this, 
+						  &SystemTimer::eventSetTime)); 
+  
+
+}
+
+void SystemTimer::eventSetTime(Event_t * et)
+{
+  
+  if (et->src == EADDR_TIMER ) {
+    somatime_t time = et->data[0]; 
+    time = (time << 16) | et->data[1]; 
+    time = (time << 16) | et->data[2]; 
+    setTime(time); 
+  }
+
+
+}
+void SystemTimer::setTime(somatime_t t)
 {
   time_ = t;
   for (char i = 0; i < MAXCONN; i++) {

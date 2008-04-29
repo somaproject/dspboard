@@ -2,14 +2,18 @@
 #define SYSTEMTIMER_H
 
 #include <stdint.h>
+#include <eventdispatch.h>
+
 #include <FastDelegate.h>
 
 typedef uint64_t somatime_t; 
+
 class SystemTimer
 {
   
  public: 
   SystemTimer(); 
+  SystemTimer(EventDispatch * ed); 
 
   typedef fastdelegate::FastDelegate1<somatime_t>  timeUpdateDelegate_t; 
   
@@ -20,7 +24,9 @@ class SystemTimer
  private:
 
   static const int MAXCONN = 6; 
-  
+
+  void eventSetTime(Event_t * event); 
+
   timeUpdateDelegate_t connectedUpdates_[MAXCONN]; 
 
   somatime_t time_; 

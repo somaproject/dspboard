@@ -98,7 +98,7 @@ begin  -- Behavioral
               (armedb = '1' and ics = wordw) else
               '0';
 
-
+  
   regfile_a : regfile
     generic map (
       BITS  => 16)
@@ -122,17 +122,21 @@ begin  -- Behavioral
       WEA   => web,
       DOB   => doutb,
       ADDRB => wcntout);
-
-
+  
   main : process(clk)
   begin
     if RESET = '1' then
       ics   <= startup;
       ocs   <= armaw;
+      armeda <= '0';
+      armedb <= '0'; 
     else
       if rising_edge(CLK) then
         ics <= ins;
         ocs <= ons;
+        DEBUG(7 downto 4) <= wcntin; 
+        DEBUG(8) <= armeda;
+        DEBUG(9) <= armedb; 
 
         scsl   <= SCS;
         mosil  <= MOSI;

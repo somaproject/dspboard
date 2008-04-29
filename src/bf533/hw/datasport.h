@@ -5,7 +5,7 @@
 #include <dataout.h>
 
 
-class DataSPORT : public 
+class DataSPORT : public DataOut
 {
 
  public:

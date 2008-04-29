@@ -3,12 +3,13 @@
 #include "FastDelegate.h"
 #include <acqboardif.h>
 #include <dsp.h>
+#include <types.h>
 
 
 typedef fastdelegate::FastDelegate1<bool> LinkChangeProc_t; 
 typedef fastdelegate::FastDelegate1<char> ModeChangeProc_t; 
 
-typedef fastdelegate::FastDelegate2<short, bool> CommandDoneProc_t; 
+typedef fastdelegate::FastDelegate2<uint16_t, bool> CommandDoneProc_t; 
 
 enum OPS {NONE, SETGAIN, SETHPF, CHANGEMODE, 
 	  OFFSETWRITE, SAMPLEBUFFERWRITE, FILTERWRITE}; 
@@ -35,10 +36,10 @@ public:
   bool changeMode(char mode); 
   
   
+  AcqState * pAcqState_; 
 
  private:
   AcqSerialBase * pAcqSerial_; 
-  AcqState * pAcqState_; 
 
   DSP_POSITION dsppos_; 
   

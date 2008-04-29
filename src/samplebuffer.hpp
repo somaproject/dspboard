@@ -1,9 +1,7 @@
 #ifndef SAMPLEBUFFER_H
 #define SAMPLEBUFFER_H
 
-#include <iostream>
-
-typedef int32_t sample_t; 
+typedef int sample_t; 
 
 template <class T>
 class SampleBuffer

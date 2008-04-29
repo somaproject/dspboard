@@ -46,6 +46,12 @@ class EventTX_t
     }
     event.clear(); 
   }
+
+  inline void setall() {
+    for (int i = 0; i < ADDRSIZE; i++) {
+      addr[i] = 0xff; 
+    }
+  }
   
 }; 
 

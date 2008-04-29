@@ -13,7 +13,7 @@ public:
   bool sendEvent(); 
   void setup(); 
   bool txBufferFull(); 
-
+  char mysrc; 
   private:
   static const int EVTBUFLEN = 10; 
   static const int BUFSIZE = 16; 
@@ -28,11 +28,11 @@ public:
   void eventToDMABuffer(const EventTX_t & etx, uint16_t * tgtbuff); 
   
   bool txPending_; 
-
+  
   void setupSPI(); 
   void setupDMA(); 
   void setupFPGAFIFOFlag(); 
-
+  int fullcount_; 
   bool isFPGAFIFOFull(); 
 
 

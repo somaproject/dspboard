@@ -17,14 +17,14 @@ public:
     pSampleBuffer_(psb)
   {
     for (char i = 0; i < MAXSINKS; i++) {
-      connectedSinks_[i] = NULL; 
+      connectedSinks_[i] = 0; 
     }
 
   }
   
   void connect(FilterLinkSink<T> & psink) {
     for (char i = 0; i < MAXSINKS; i++) {
-      if (connectedSinks_[i] == NULL) {
+      if (connectedSinks_[i] == 0) {
 	connectedSinks_[i] = &psink; 
 	psink.setBuffer(pSampleBuffer_); 
 	break; 
@@ -37,7 +37,7 @@ public:
   
   void newSample(T sample) {
     for (char i = 0; i < MAXSINKS; i++) {
-      if (connectedSinks_[i] != NULL) {
+      if (connectedSinks_[i] != 0) {
 	connectedSinks_[i]->newSample(sample); 
       }
     }
@@ -59,7 +59,7 @@ class FilterLinkSink
 public:
   FilterLinkSink(newSampleDelegate_t nsd) :
     newSampleDelegate_(nsd), 
-    pSampleBuffer_(NULL)
+    pSampleBuffer_(0)
   {
     
   }

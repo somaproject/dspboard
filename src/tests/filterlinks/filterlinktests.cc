@@ -1,6 +1,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include <boost/test/auto_unit_test.hpp>
+#include <arpa/inet.h>
 
 #include <filterio.h>
 #include <systemtimer.h>
@@ -18,8 +19,10 @@ BOOST_AUTO_TEST_CASE(fakesource_rawsink_test)
   
   FakeSource fs(&timer); 
   HostDataOut dataout; 
+
+  const char SRC =  10; 
   
-  RawSink rawsink(&timer, &dataout); 
+  RawSink rawsink(&timer, &dataout, SRC); 
 
   fs.source.connect(rawsink.sink); 
   // now we run a loop of 12800 timestamps, which should give us 
@@ -33,6 +36,21 @@ BOOST_AUTO_TEST_CASE(fakesource_rawsink_test)
   int LEN = 128 * 4 + 2; 
   BOOST_CHECK_EQUAL(dataout.mostrecentbuffer[0], LEN >> 8); 
   BOOST_CHECK_EQUAL(dataout.mostrecentbuffer[1], LEN & 0xFF ); 
+  
+  // check SRC and TYP
+  const char TYP = 2; 
+  BOOST_CHECK_EQUAL(dataout.mostrecentbuffer[2], TYP); 
+  BOOST_CHECK_EQUAL(dataout.mostrecentbuffer[3], SRC); 
+  
+  // data check
+  for (int i = 0; i < RawData_t::BUFSIZE; i++) {
+    int32_t hostx, netx = 0 ; 
+    memcpy(&netx, &(dataout.mostrecentbuffer[i*4 + 4]), 4); 
+    hostx = ntohl(netx); 
+
+    BOOST_CHECK_EQUAL(hostx, i); 
+  }
+  
 
 }
 

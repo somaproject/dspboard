@@ -16,6 +16,7 @@
 #include <dataout.h>
 #include <acqstatecontrol.h>
 #include <acqdatasource.h>
+#include <acqdatasourcecontrol.h>
 #include <fakesource.h>
 #include <sinks/rawsink.h>
 
@@ -76,7 +77,7 @@ int main_loop()
   *pFIO_INEN   = 0x0000; 
 
   DSPUARTConfig config; 
-  *pFIO_FLAG_D |= 0x0100;
+  
   
 
 //   // System interrupt Mask Register
@@ -115,13 +116,13 @@ int main_loop()
 
   EventTX * etx = new EventTX; 
   etx->setup(); 
+  etx->mysrc = config.getEventDevice(); 
 
   
   eventrx = new EventRX(); 
   eventrx->setup(); 
 
-   EventDispatch * ed = new EventDispatch(config.getDSPPos()); 
-  //EventDispatch * ed = new EventDispatch(config.getDSP); 
+  EventDispatch * ed = new EventDispatch(config.getDSPPos()); 
   
   SystemTimer timer(ed); 
   EventEchoProc * eep = new EventEchoProc(ed, etx, &timer, config.getEventDevice()); 
@@ -134,17 +135,16 @@ int main_loop()
   AcqStateControl asc(acqserial, &acqstate); 
 
   // filterlink construction
-  //AcqDataSource * acqdatasource = new AcqDataSource(&acqstate); 
-  //acqdatasource->setDSP(config.getDSPPos()); 
+  AcqDataSource * acqdatasource = new AcqDataSource(&acqstate); 
+  acqdatasource->setDSP(config.getDSPPos()); 
 
   FakeSource * pFakeSource = new FakeSource(&timer); 
   RawSink * pRawSink = new RawSink(&timer, dataout, config.getDataSrc()); 
   pFakeSource->source.connect(pRawSink->sink); 
 
-  //AmpCallbackFuncs cfs; 
+  AcqDataSourceControl * adsc = new AcqDataSourceControl(ed, etx, &asc); 
 
   acqserial->start(); 
-
 
   uint16_t *  eventbuf = 0; 
   int framecount = 0; 
@@ -179,7 +179,7 @@ int main_loop()
     asc.setLinkStatus(acqserial->checkLinkUp()); 
     if (! acqserial->checkRxEmpty())
       {
-	*pFIO_FLAG_T = 0x0100;
+	//*pFIO_FLAG_T = 0x0100;
 
 	acqserial->getNextFrame(&af); 
 	asc.newAcqFrame(&af); 

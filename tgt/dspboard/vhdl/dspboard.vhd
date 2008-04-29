@@ -487,7 +487,7 @@ architecture Behavioral of dspboard is
   signal procdspspimosia : std_logic := '0';
   signal procdspspiclka  : std_logic := '0';
 
-  signal dspissa       : std_logic := '0';
+  signal dspissa , dspissal      : std_logic := '0';
   signal dspimisoa     : std_logic := '0';
   signal dspimosia     : std_logic := '0';
   signal dspiclka      : std_logic := '0';
@@ -585,7 +585,7 @@ architecture Behavioral of dspboard is
   signal devtfifofullal  : std_logic                     := '0';
   signal procdspspienal  : std_logic                     := '0';
   signal eventrxdebuga   : std_logic_vector(15 downto 0) := (others => '0');
-  signal eventrxreqcnt   : std_logic_vector(7 downto 0)  := (others => '0');
+  signal eventrxreqcnt   : std_logic_vector(15 downto 0)  := (others => '0');
   signal reql            : std_logic                     := '0';
 
 begin  -- Behavioral
@@ -1141,10 +1141,11 @@ begin  -- Behavioral
 
 
 
-  jtagwordout(7 downto 0)   <= fifofullcnta;
-  jtagwordout(15 downto 8)  <= eventrxreqcnt;
+  --jtagwordout(7 downto 0)   <= fifofullcnta;
+  jtagwordout(15 downto 0)  <= eventrxreqcnt;
   jtagwordout(23 downto 16) <= procspienacnt;
-  jtagwordout(31)           <= procdspspiena;
+  jtagwordout(24)           <= procdspspiena;
+  jtagwordout(31) <= reql; 
   jtagwordout(47 downto 32) <= eventrxdebuga;
   LEDPOWER                  <= linkup;
 
@@ -1194,9 +1195,10 @@ begin  -- Behavioral
         if procdspspienal /= procdspspiena then
           procspienacnt <= procspienacnt + 1;
         end if;
-        --reql            <= edspreq(0);
 
-        if reql = '0' and edspreq(0) = '1' then
+        reql            <= edspreq(0);
+        dspissal <= dspissa; 
+        if dspissal = '1' and dspissa = '0' then 
           eventrxreqcnt <= eventrxreqcnt + 1;
         end if;
 

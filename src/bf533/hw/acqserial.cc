@@ -6,8 +6,8 @@
 AcqSerial::AcqSerial() :
   curRXpos_(0), 
   curReadPos_(0),
-  totalRXBufCnt_(0), 
-  pUARTTX_(new UARTTX())
+		       totalRXBufCnt_(0)//,
+  //  pUARTTX_(new UARTTX)
 {
   curRXpos_ = 0; 
   curReadPos_ = 0; 
@@ -19,7 +19,8 @@ void AcqSerial::setup()
   setupLink(); 
   setupSPORT(); 
   setupDMA(); 
-  pUARTTX_->setup(); 
+  //  pUARTTX_->setup(); 
+  pUARTTX_.setup(); 
 
 }
 void AcqSerial::setupSPORT()
@@ -151,13 +152,13 @@ void AcqSerial::sendCommand(AcqCommand * ac)
   outbuf[3] = (ac->data >> 8) & 0xFF; 
   outbuf[4] = (ac->data >> 0) & 0xFF; 
 
-  pUARTTX_->sendWords(outbuf); 
+  pUARTTX_.sendWords(outbuf); 
 
 }
 
 bool AcqSerial::sendCommandDone()
 {
-  return pUARTTX_->checkSendDone(); 
+  return pUARTTX_.checkSendDone(); 
 }
 
 void AcqSerial::setupLink()

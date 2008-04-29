@@ -1,13 +1,14 @@
 #include <sinks/rawsink.h>
-#include <hw/byteswap.h>
 
-RawSink::RawSink(SystemTimer * st, DataOut * dout) : 
+RawSink::RawSink(SystemTimer * st, DataOut * dout, unsigned char datasrc) : 
   pSystemTimer_(st), 
   pDataOut_(dout), 
   sink(fastdelegate::MakeDelegate(this, &RawSink::processSample)), 
-  pendingPos_(0)
+  pendingPos_(0), 
+  dataSource_(datasrc), 
+  pendingRawData_(datasrc)
 {
-  // FIXME : Not really RAW-format compatible
+  // FIXME : Not really RAW-format compatible, but working on it
 
 
 }
@@ -15,7 +16,6 @@ RawSink::RawSink(SystemTimer * st, DataOut * dout) :
 void RawSink::processSample(sample_t samp)
 {
   pendingRawData_.buffer[pendingPos_] = samp; 
-
   if (pendingPos_ == RawData_t::BUFSIZE - 1) {
     // send the packet
     pDataOut_->sendData(pendingRawData_); 

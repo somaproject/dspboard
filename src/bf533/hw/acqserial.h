@@ -37,7 +37,7 @@ private:
   bool sendingTXBuffer_;
   int totalRXBufCnt_;
   bool linkUp() { return true;}
-  UARTTX * pUARTTX_; 
+  UARTTX pUARTTX_; 
   
 }; 
 #endif // ACQSERIAL_H

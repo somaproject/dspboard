@@ -124,7 +124,16 @@ void AcqStateControl::commandDone()
     break; 
 
   case SETGAIN: 
-    doneProc_(pendingHandle_, true); 
+    {
+      int gainrealvalue = encodeGain(currentVal_);
+      // update the state registers
+      for (int i = 0; i < 5; i++) {
+	if (currentMask_[i] != 0) {
+	  pAcqState_->gain[i] = gainrealvalue; 
+	}
+      }      
+      doneProc_(pendingHandle_, true); 
+    }
     break; 
 
   case SETHPF: 
@@ -246,7 +255,7 @@ bool AcqStateControl::setGain(char chanmask, int gainval, CommandDoneProc_t proc
     return false; 
   if (!pAcqState_->linkUp) 
     return false; 
-  
+
 
   // decode the gainval
   char gainsetting = decodeGain(gainval); 
@@ -254,7 +263,7 @@ bool AcqStateControl::setGain(char chanmask, int gainval, CommandDoneProc_t proc
   pendingCommand_ = true; 
   pendingHandle_ = donehandle; 
   doneProc_ = proc; 
-
+  
   
   // populate the mask
   currentMaskPos_ = -1; 

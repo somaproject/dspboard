@@ -7,7 +7,8 @@ uint16_t EventTX::buffer_[10][16];
 EventTX::EventTX() :
   nextFreeEvent_(0), 
   nextSendEvent_(0), 
-  txPending_(false)
+  txPending_(false), 
+  fullcount_(0)
 {
   
 
@@ -18,6 +19,7 @@ void EventTX::newEvent(const EventTX_t &evt)
   // copy to the next free buffer
   if (txBufferFull()) {
     // should throw event-output-fifo-error
+    return; 
   }
 
   eventToDMABuffer(evt, &buffer_[nextFreeEvent_][0]); 
@@ -81,6 +83,7 @@ bool EventTX::sendEvent()
   }
   // check if the fifo is full 
   if (isFPGAFIFOFull()){
+    fullcount_++; 
     return false; 
   }
   if (nextSendEvent_ != nextFreeEvent_) {
@@ -139,14 +142,15 @@ void EventTX::setupDMA()
   *pDMA5_Y_COUNT = 0; 
   *pDMA5_Y_MODIFY = 0; 
 
-  //*pDMA5_CONFIG = 0x0024; 
-  *pDMA5_CONFIG = 0x00A4; 
 
+  *pDMA5_CONFIG = 0x0084;
+ 
 }
 
 bool EventTX::isFPGAFIFOFull()
 {
   // read the relevant line 
   return (*pFIO_FLAG_D & FIFOFULL_MASK); 
+
 
 }

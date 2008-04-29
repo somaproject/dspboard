@@ -79,11 +79,9 @@ void EventRX::start()
   // System Interrupt Assignment Registers
   // This maps the System INterrupts to general-purpose interrupts. 
 
-  // We map all to IVG7 except for DMA1, which we map to IVG8, 
-  // and DMA2, which we map to IVG9
-  *pSIC_IAR0  = 0x00000000; 
+  // Map DMA0 (PPI) interrupt to IVG10 
+
   *pSIC_IAR1 |= 0x00000003; 
-  *pSIC_IAR2  = 0x00000000; 
 
   // Core Event Controller Registers
   *pIMASK |= 0x0000041F; // IVG10

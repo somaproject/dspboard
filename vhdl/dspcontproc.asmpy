@@ -26,7 +26,7 @@ OUTPUT_DEVICE = 0xA0
 
 INPUT_BOOTSERDONE = 0x03
 
-EVENTRXCMD_PING = 0x30
+EVENTRXCMD_PING = 0x08
 EVENTRXCMD_LEDSET = 0x31
 EVENTRXCMD_DATABUF = 0x32
 EVENTRXCMD_DATABUFTX = 0x33
@@ -157,8 +157,7 @@ def proc_youare():
 def proc_uarttx():
   proc = env.createEProc((EVENTRXCMD_UARTTX, EVENTRXCMD_UARTTX), (0, 255))
   tmp = proc.createVariable("tmp")
-#  proc.move(tmp, ereg.edata[0])
-  proc.load(tmp, 0x08)
+  proc.move(tmp, ereg.edata[0])
   proc.output(OUTPUT_UARTTX, tmp)
 
 

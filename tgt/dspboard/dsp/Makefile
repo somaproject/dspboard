@@ -20,7 +20,7 @@ LDFLAGS =  -g -T bftiny.x  -L$(BFROOT)lib/ -L$(BFROOT)/lib/gcc/bfin-elf/$(BFROOT
 OBJS = $(ASMSRCS:%.asm=%.o) $(CCSRCS:%.cc=%.o) eventtx.o eventrx.o \
 	eventdispatch.o memory.o dspuartconfig.o  acqserial.o \
 	uarttx.o acqstatecontrol.o systemtimer.o datasport.o \
-	fakesource.o rawsink.o
+	fakesource.o rawsink.o acqdatasourcecontrol.o acqdatasource.o
 
 
 AS = bfin-elf-as
@@ -51,6 +51,12 @@ datasport.o: $(HWDIR)hw/datasport.cc
 
 eventdispatch.o: $(SRCDIR)/eventdispatch.cc	
 	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/eventdispatch.cc
+
+acqdatasource.o: $(SRCDIR)/acqdatasource.cc	
+	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/acqdatasource.cc
+
+acqdatasourcecontrol.o: $(SRCDIR)/acqdatasourcecontrol.cc	
+	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/acqdatasourcecontrol.cc
 
 dspuartconfig.o: $(HWDIR)hw/dspuartconfig.cc	
 	$(CXX) $(CXXFLAGS)  -c  $(HWDIR)hw/dspuartconfig.cc
