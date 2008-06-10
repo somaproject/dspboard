@@ -12,7 +12,8 @@ AcqStateControl::AcqStateControl(AcqSerialBase * aserial, AcqState *astate) :
   pendingSerial_(false), 
   sequentialCMDID_(0), 
   lcp_(0), 
-  mcp_(0)
+  mcp_(0), 
+  waitForCMDID_(true)
 {
   
 
@@ -30,14 +31,14 @@ void AcqStateControl::setModeChangeCallback(ModeChangeProc_t mcp)
 
 bool AcqStateControl::setLinkStatus(bool linkup)
 {
-  
+  // called externally when the link status changes
   if (pAcqState_->linkUp != linkup) {
     pAcqState_->linkUp = linkup; 
     
     // we've changed
     if (linkup ) {
       // FIXME: We shoul really reinitalize all the relevant settings
-      
+      waitForCMDID_ = true;  // wait until we get our next cmdid
     } else {
       // link down FIXME: What to do here? Cancel all pending events? 
       cancelAllPending(); 
@@ -52,7 +53,15 @@ bool AcqStateControl::setLinkStatus(bool linkup)
 
 bool AcqStateControl::newAcqFrame(AcqFrame * af)
 {
-  // if the mode has changed, notify the mode change interface
+ 
+  if (waitForCMDID_) {
+    waitForCMDID_ = false; 
+    if (af->cmdid == sequentialCMDID_) {
+      getNextCMDID(); 
+    }
+    return true; 
+  }
+ // if the mode has changed, notify the mode change interface
   if (af->mode != pAcqState_->mode) {
 
     pAcqState_->mode = af->mode; 

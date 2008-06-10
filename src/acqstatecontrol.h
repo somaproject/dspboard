@@ -69,6 +69,8 @@ public:
 
   unsigned char sequentialCMDID_; 
   
+  bool waitForCMDID_; 
+
 }; 
 
 #endif // ACQSTATECONTROL_H

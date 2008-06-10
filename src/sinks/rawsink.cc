@@ -9,16 +9,21 @@ RawSink::RawSink(SystemTimer * st, DataOut * dout, unsigned char datasrc) :
   pendingRawData_(datasrc)
 {
   // FIXME : Not really RAW-format compatible, but working on it
-
+  
+  pos = 0; 
 
 }
 
 void RawSink::processSample(sample_t samp)
 {
   pendingRawData_.buffer[pendingPos_] = samp; 
+  
+
   if (pendingPos_ == RawData_t::BUFSIZE - 1) {
     // send the packet
     pDataOut_->sendData(pendingRawData_); 
+
+    pos++; 
 
     pendingPos_= 0; 
   } else {
@@ -26,4 +31,3 @@ void RawSink::processSample(sample_t samp)
   }
 
 }
-

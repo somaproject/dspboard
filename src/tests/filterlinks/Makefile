@@ -17,6 +17,9 @@ eventdispatch.o: $(SRCDIR)/eventdispatch.cc
 fakesource.o: $(SRCDIR)/fakesource.cc
 	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/fakesource.cc -o fakesource.o
 
+delta.o: $(SRCDIR)/filterlinks/delta.cc
+	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/filterlinks/delta.cc -o delta.o
+
 rawsink.o: $(SRCDIR)/sinks/rawsink.cc
 	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/sinks/rawsink.cc -o rawsink.o
 
@@ -32,8 +35,8 @@ clean:
 	rm *.o
 
 
-runner: runner.o filterlinktests.o systemtimer.o eventdispatch.o fakesource.o \
-	hostdataout.o rawsink.o 
+runner: runner.o filterlinktests.o deltatest.o systemtimer.o eventdispatch.o fakesource.o \
+	hostdataout.o rawsink.o delta.o
 
 
 

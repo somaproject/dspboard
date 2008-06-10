@@ -1,0 +1,162 @@
+#ifndef TSPIKESINK_H
+#define TSPIKESINK_H
+
+#include <systemtimer.h>
+#include <samplebuffer.hpp>
+#include <filterio.h>
+#include <dataout.h>
+#include <eventdispatch.h>
+#include <hw/eventtx.h>
+
+class TSpikeData_t : public Data_t {
+public:
+
+  static const unsigned char PRETRIGGER = 8; 
+  static const unsigned char POSTTRIGGER = 24;
+  static const unsigned char PENDINGDELAY = 24;  
+  static const unsigned char BUFSIZE = 64; 
+  
+  static const unsigned char CHANNUM = 4; 
+
+  int32_t buffer[CHANNUM][BUFSIZE]; 
+  
+  int32_t threshold[CHANNUM]; 
+  int32_t filterid[CHANNUM]; 
+  somatime_t time; 
+  short offset; 
+  char datasrc; 
+
+  TSpikeData_t (unsigned char src) :
+    datasrc(src)
+  {
+    // zero the relevant data
+    for(char chan = 0; chan < CHANNUM; chan++) {
+      for (short i = 0; i<BUFSIZE; i++) {
+	buffer[chan][i] = 0; 
+      }
+      threshold[chan] = 0; 
+    }
+    
+    
+  }
+  
+  void toBuffer(unsigned char *c) 
+  {
+    
+    const short len = CHANNUM * ((POSTTRIGGER + PRETRIGGER) * sizeof(int32_t) + 6) + 
+      8 + 4  +  2 ; 
+    *c = len >> 8; 
+    c++; 
+    *c = len & 0xFF; 
+    c++; 
+    // type
+    *c = TYPE; 
+    c++; 
+    // source
+    *c = datasrc; 
+    c++; 
+    // chanllen
+
+    c += 2; 
+    c = Memcopy::hton_int64(c, time); 
+
+    // offset points to the last sample, so to figure
+    // out where to start sampling from, we need to subtract 
+    // total buffer size
+    char pos = offset - (POSTTRIGGER + PRETRIGGER) + 1; 
+    bool twopass = false; 
+    if (pos < 0) {
+      twopass = true; 
+      pos += BUFSIZE; 
+    }
+    
+    // for each channel
+    for (short i = 0; i < CHANNUM; i++) {
+      // FIXME incorporate VALID field
+      c++; 
+      c++;
+      c = Memcopy::hton_int32(c, filterid[i]); 
+      c = Memcopy::hton_int32(c, threshold[i]); 
+      
+      if (!twopass) {
+	c = Memcopy::hton_int32array(c, &(buffer[i][pos]), 
+				     POSTTRIGGER+PRETRIGGER); 
+	
+      } else {
+	unsigned char * c1, *c2; 
+	c = Memcopy::hton_int32array(c, &(buffer[i][pos]), BUFSIZE - pos); 
+	c1 = c; 
+	c = Memcopy::hton_int32array(c, &(buffer[i][0]), offset + 1); 
+	c2 = c; 
+
+
+      }
+    }
+    
+  }
+
+  static const char TYPE = 0; 
+
+
+}; 
+
+
+class TSpikeSink 
+{
+  static const unsigned char DATATYPE = 0; 
+  
+ public:
+  TSpikeSink(SystemTimer * st, DataOut * dout, 
+	     EventDispatch * ed, EventTX* etx, 
+	     unsigned char DataSrc); 
+
+ private: 
+  SystemTimer * pSystemTimer_; 
+  DataOut * pDataOut_; 
+  EventDispatch * pEventDispatch_; 
+  EventTX * pEventTX_; 
+public:
+  FilterLinkSink<sample_t> sink1; 
+  FilterLinkSink<sample_t> sink2; 
+  FilterLinkSink<sample_t> sink3; 
+  FilterLinkSink<sample_t> sink4; 
+
+  FilterLinkSink<char> samplesink; 
+
+  void setThreshold(char chan, int32_t value); 
+  int32_t getThreshold(char chan); 
+private:
+  void processSample1(sample_t); 
+  void processSample2(sample_t); 
+  void processSample3(sample_t); 
+  void processSample4(sample_t); 
+
+  void processSampleCycle(char); 
+
+  TSpikeData_t pendingTSpikeData_; 
+  short pendingPos_; 
+  unsigned char dataSource_; 
+  
+  short pending_; 
+
+  void sendSpike(); 
+
+  // event processing
+  
+  static const char ECMD_QUERY = 0x43; 
+  static const char ECMD_SET = 0x44; 
+  static const char ECMD_RESPONSE = 0x45; 
+
+  static const char PARAM_THRESHOLD = 1; 
+
+  
+  void query(Event_t* et); 
+  void setstate(Event_t* et); 
+  void sendThresholdResponse(char chan); 
+  
+  EventTX_t bcastEventTX_; 
+
+}; 
+
+
+#endif // TSPIKESINK_H

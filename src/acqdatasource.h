@@ -32,6 +32,7 @@ private:
   SampleRingBuffer<sample_t> bufferC_; 
   SampleRingBuffer<sample_t> bufferD_; 
   SampleRingBuffer<sample_t> bufferCont_; 
+  SampleRingBuffer<char> bufferDummyCycle_; 
   
 public:
   FilterLinkSource<sample_t> sourceA; 
@@ -40,7 +41,7 @@ public:
   FilterLinkSource<sample_t> sourceD; 
 
   FilterLinkSource<sample_t> sourceCont; 
-  
+  FilterLinkSource<char> sourceSampleCycle; 
 
 }; 
 

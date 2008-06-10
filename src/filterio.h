@@ -2,6 +2,7 @@
 #define FILTERIO_H
 
 #include <samplebuffer.hpp>
+#include <types.h>
 #include <FastDelegate.h>
 
 template<class T> 
@@ -21,12 +22,14 @@ public:
     }
 
   }
-  
+  uint32_t samplerate; 
+  uint32_t id; 
+
   void connect(FilterLinkSink<T> & psink) {
     for (char i = 0; i < MAXSINKS; i++) {
       if (connectedSinks_[i] == 0) {
 	connectedSinks_[i] = &psink; 
-	psink.setBuffer(pSampleBuffer_); 
+	psink.setSource(this, pSampleBuffer_);
 	break; 
       }
     }
@@ -45,8 +48,7 @@ public:
 
 private:
   FilterLinkSink<T> * connectedSinks_[MAXSINKS]; 
-
-
+  
   
 
 }; 
@@ -65,9 +67,11 @@ public:
   }
 
   SampleBuffer<T> * pSampleBuffer_; 
+  FilterLinkSource<T> * pSource_; 
 
-  void setBuffer(SampleBuffer<T> * psb) {
+  void setSource(FilterLinkSource<T> * psrc, SampleBuffer<T> * psb) {
     pSampleBuffer_ = psb; 
+    pSource_ = psrc; 
   }
   
   void newSample(T sample) {

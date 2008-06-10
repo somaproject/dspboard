@@ -8,11 +8,13 @@ AcqDataSource::AcqDataSource(AcqState * as) :
   bufferC_(BUFSIZE), 
   bufferD_(BUFSIZE), 
   bufferCont_(BUFSIZE), 
+  bufferDummyCycle_(1), 
   sourceA(&bufferA_), 
   sourceB(&bufferB_), 
   sourceC(&bufferC_), 
   sourceD(&bufferD_), 
-  sourceCont(&bufferCont_)
+  sourceCont(&bufferCont_), 
+  sourceSampleCycle(&bufferDummyCycle_)
 {
   mainBuffers_[0] = &bufferA_; 
   mainBuffers_[1] = &bufferB_; 
@@ -39,6 +41,7 @@ void AcqDataSource::newAcqFrame(AcqFrame * af)
     } else {
       longsamp = ACQRANGE; 
       longsamp = longsamp *  af->samples[i+sampos] ; 
+      //longsamp = af->samples[i+sampos] ; 
       longsamp = longsamp / ACQBITRANGE; 
       longsamp = longsamp / pAcqState_->gain[i]; 
       
@@ -58,6 +61,7 @@ void AcqDataSource::newAcqFrame(AcqFrame * af)
   sourceD.newSample(samps[3]); 
   sourceCont.newSample(samps[4]); 
 
+  sourceSampleCycle.newSample(0); 
 
 }
 

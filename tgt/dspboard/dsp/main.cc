@@ -19,6 +19,7 @@
 #include <acqdatasourcecontrol.h>
 #include <fakesource.h>
 #include <sinks/rawsink.h>
+#include <sinks/tspikesink.h>
 
 #include "echoproc.h" 
 
@@ -137,12 +138,19 @@ int main_loop()
   // filterlink construction
   AcqDataSource * acqdatasource = new AcqDataSource(&acqstate); 
   acqdatasource->setDSP(config.getDSPPos()); 
-
-  FakeSource * pFakeSource = new FakeSource(&timer); 
-  RawSink * pRawSink = new RawSink(&timer, dataout, config.getDataSrc()); 
-  pFakeSource->source.connect(pRawSink->sink); 
-
   AcqDataSourceControl * adsc = new AcqDataSourceControl(ed, etx, &asc); 
+
+
+  RawSink * pRawSink = new RawSink(&timer, dataout, config.getDataSrc()); 
+  TSpikeSink * pTSpikeSink = new TSpikeSink(&timer, dataout, 
+					    ed, etx, config.getDataSrc()); 
+
+  //acqdatasource->sourceA.connect(pRawSink->sink);
+  acqdatasource->sourceA.connect(pTSpikeSink->sink1); 
+  acqdatasource->sourceB.connect(pTSpikeSink->sink2); 
+  acqdatasource->sourceC.connect(pTSpikeSink->sink3); 
+  acqdatasource->sourceD.connect(pTSpikeSink->sink4); 
+  acqdatasource->sourceSampleCycle.connect(pTSpikeSink->samplesink); 
 
   acqserial->start(); 
 
@@ -186,7 +194,7 @@ int main_loop()
 	
 
 	// trigger the set of filterlinks
-	//acqdatasource->newAcqFrame(&af); 
+	acqdatasource->newAcqFrame(&af); 
 
 // 	framecount++; 
 // 	if (framecount %  32000 == 1000) {

@@ -1,16 +1,25 @@
 #include <filterlinks/delta.h>
 
-Delta::Delta(SampleBuffer<sample_t> * sampleBuf)
+Delta::Delta() :
+  input(fastdelegate::MakeDelegate(this, &Delta::newSample)),
+  buffer_(1), 
+  output(&buffer_)
 {
-  sampBuf_ = sampleBuf; 
+
+  output.samplerate = 0;  // FIXME need to compute from source
+
 }
 
-sample_t Delta::nextSample(void)
+
+void Delta::newSample(sample_t data)
 {
-  return (*sampBuf_)[0]; 
+  buffer_.append(data); 
+  output.newSample(data); 
+  
 }
 
 Delta::~Delta()
 {
+
 
 }

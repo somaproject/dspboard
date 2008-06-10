@@ -1,19 +1,20 @@
 #ifndef FILTERLINK_DELTA_H
 #define FILTERLINK_DELTA_H
 
-#include <filterlinkbase.h>
+#include <filterio.h>
+#include <samplebuffer.hpp>
 
-class Delta : public  FilterLink
+class Delta 
 {
-
+  typedef int32_t sample_t; 
  public: 
-  Delta(SampleBuffer<sample_t> *); 
+  Delta(); 
   ~Delta(); 
-
-  sample_t nextSample(void); 
-  
+  FilterLinkSink<sample_t> input; 
+  FilterLinkSource<sample_t> output; 
  private: 
-  
+  SampleRingBuffer<sample_t> buffer_; 
+  void newSample(sample_t); 
 }; 
 
 #endif // FILTERLINK_DELTA_H

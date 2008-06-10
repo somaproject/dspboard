@@ -11,17 +11,17 @@ public:
   RawData_t (unsigned char src) :
   datasrc(src) 
   {
-
+    
 
   }
   void toBuffer(unsigned char * c) {
-    const short len = BUFSIZE * sizeof(uint32_t) + 2; 
+    const short len = BUFSIZE * sizeof(uint32_t) + 4; 
     *c = len >> 8; 
     c++; 
     *c = len & 0xFF; 
     c++; 
     // type
-    *c = TYPE; 
+    *c = DATATYPE; 
     c++; 
     // source
     *c = datasrc; 
@@ -43,15 +43,14 @@ public:
   static const short BUFSIZE = 128; 
   uint32_t buffer[BUFSIZE]; 
   unsigned char datasrc; 
-  static const char TYPE = 2; 
+  static const char DATATYPE = 2; 
 
 }; 
 
 
 class RawSink 
 {
-  static const unsigned char DATATYPE = 3; 
-  
+
  public:
   RawSink(SystemTimer * st, DataOut * dout, unsigned char DataSrc); 
   
@@ -67,7 +66,8 @@ private:
   RawData_t pendingRawData_; 
   short pendingPos_; 
   unsigned char dataSource_; 
-  
+  sample_t pos; 
+
 }; 
 
 
