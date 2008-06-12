@@ -5,14 +5,14 @@ const int32_t AcqDataSource::GAINS[] = {0, 100, 200, 500, 1000,
 				      2000, 5000, 10000}; 
 
 const int32_t AcqDataSource::GAINSCALE[] = 
-  { ACQRANGE / ACQBITRANGE / GAINS[0], 
-    ACQRANGE / ACQBITRANGE / GAINS[1], 
-    ACQRANGE / ACQBITRANGE / GAINS[2], 
-    ACQRANGE / ACQBITRANGE / GAINS[3], 
-    ACQRANGE / ACQBITRANGE / GAINS[4], 
-    ACQRANGE / ACQBITRANGE / GAINS[5], 
-    ACQRANGE / ACQBITRANGE / GAINS[6], 
-    ACQRANGE / ACQBITRANGE / GAINS[7]}; 
+  { 0, 
+    ACQRANGE / ACQBITRANGE / 100, 
+    ACQRANGE / ACQBITRANGE / 200, 
+    ACQRANGE / ACQBITRANGE / 500, 
+    ACQRANGE / ACQBITRANGE / 1000, 
+    ACQRANGE / ACQBITRANGE / 2000, 
+    ACQRANGE / ACQBITRANGE / 5000, 
+    ACQRANGE / ACQBITRANGE / 10000};
     
 
 AcqDataSource::AcqDataSource(AcqState * as) :
@@ -52,7 +52,7 @@ void AcqDataSource::newAcqFrame(AcqFrame * af)
     char gainpos = decodeGain(pAcqState_->gain[i]); 
     int32_t scale = GAINSCALE[gainpos]; 
 
-    samps[i] = 10000000; // FIXME sample * scale;  
+    samps[i] = sample * scale; 
   }
 
   bufferA_.append(samps[0]); 

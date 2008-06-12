@@ -142,18 +142,18 @@ int main_loop()
   AcqDataSourceControl * adsc = new AcqDataSourceControl(ed, etx, &asc); 
 
 
-  RawSink * pRawSink = new RawSink(&timer, dataout, config.getDataSrc()); 
-  //TSpikeSink * pTSpikeSink = new TSpikeSink(&timer, dataout, 
-  //					    ed, etx, config.getDataSrc()); 
+  //RawSink * pRawSink = new RawSink(&timer, dataout, config.getDataSrc()); 
+  TSpikeSink * pTSpikeSink = new TSpikeSink(&timer, dataout, 
+  					    ed, etx, config.getDataSrc()); 
   //Delta * deltaA = new Delta(); 
   
 
-  acqdatasource->sourceA.connect(pRawSink->sink);
-//   acqdatasource->sourceA.connect(pTSpikeSink->sink1); 
-//   acqdatasource->sourceB.connect(pTSpikeSink->sink2); 
-//   acqdatasource->sourceC.connect(pTSpikeSink->sink3); 
-//   acqdatasource->sourceD.connect(pTSpikeSink->sink4); 
-//   acqdatasource->sourceSampleCycle.connect(pTSpikeSink->samplesink); 
+  //  acqdatasource->sourceA.connect(pRawSink->sink);
+  acqdatasource->sourceA.connect(pTSpikeSink->sink1); 
+  acqdatasource->sourceB.connect(pTSpikeSink->sink2); 
+  acqdatasource->sourceC.connect(pTSpikeSink->sink3); 
+  acqdatasource->sourceD.connect(pTSpikeSink->sink4); 
+  acqdatasource->sourceSampleCycle.connect(pTSpikeSink->samplesink); 
 
   acqserial->start(); 
 
