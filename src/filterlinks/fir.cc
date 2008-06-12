@@ -1,24 +1,33 @@
-#include <filterlinks/FIR.h>
-#include <dspmath.h>
+#include <filterlinks/fir.h>
+#include <filter.h>
+#include <filterlinks/delta.h>
 
-FIR::FIR(SampleBuffer<sample_t> * sampleBuf, sample_t * h) : 
-  sampBuf_(sampleBuf), 
-  ph_(h)
+FIR::FIR() :
+  input(fastdelegate::MakeDelegate(this, &FIR::newSample)),
+  buffer_(1), 
+  output(&buffer_)
 {
+
+  output.samplerate = 0;  // FIXME need to compute from source
   
 }
 
-sample_t FIR::nextSample(void)
+
+void FIR::newSample(sample_t data)
 {
-  sample_t y;
   
+  int32_t val = convolve(input.pSampleBuffer_->start(), input.pSampleBuffer_->length(), 
+			 input.pSampleBuffer_->head(), filter_, FIRLENMAX); 
   
-  y = dsp_dot_circbuffer(sampBuf_->start(), sampBuf_->head(), 
-			 sampBuf_->N, ph_, sizeof(ph_)); 
+	   
+  // get the connected 
+  buffer_.append(val); 
+  output.newSample(val); 
   
 }
 
 FIR::~FIR()
 {
+
 
 }

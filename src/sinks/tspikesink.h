@@ -7,6 +7,7 @@
 #include <dataout.h>
 #include <eventdispatch.h>
 #include <hw/eventtx.h>
+#include <hw/memory.h>
 
 class TSpikeData_t : public Data_t {
 public:
@@ -58,6 +59,7 @@ public:
     // chanllen
 
     c += 2; 
+
     c = Memcopy::hton_int64(c, time); 
 
     // offset points to the last sample, so to figure
@@ -88,7 +90,6 @@ public:
 	c1 = c; 
 	c = Memcopy::hton_int32array(c, &(buffer[i][0]), offset + 1); 
 	c2 = c; 
-
 
       }
     }

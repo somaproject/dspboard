@@ -7,7 +7,7 @@ CPUDEFINES = -D__ADSPBF561__ -D__ADSPLPBLACKFIN__
 INCLUDES = -I$(HWDIR) -I. -I$(SRCDIR) 
 ASMFLAGS = -x assembler-with-cpp $(CPUDEFINES) $(INCLUDES)
 ASMFLAGS += -DBOARD_$(BOARD)
-CXXFLAGS = -mcpu=bf533 $(INCLUDES) -O2  -g -DBOARD_$(BOARD) 
+CXXFLAGS = -mcpu=bf533 $(INCLUDES) -O6  -g -DBOARD_$(BOARD) 
 CXXFLAGS += $(CPUDEFINES) -fno-rtti --no-exceptions -ffast-math -mfast-fp
 BOARD=SOMA_DSPBOARD4X
 
@@ -20,7 +20,8 @@ LDFLAGS =  -g -T bftiny.x  -L$(BFROOT)lib/ -L$(BFROOT)/lib/gcc/bfin-elf/$(BFROOT
 OBJS = $(ASMSRCS:%.asm=%.o) $(CCSRCS:%.cc=%.o) eventtx.o eventrx.o \
 	eventdispatch.o memory.o dspuartconfig.o  acqserial.o \
 	uarttx.o acqstatecontrol.o systemtimer.o datasport.o \
-	fakesource.o rawsink.o tspikesink.o acqdatasourcecontrol.o acqdatasource.o
+	fakesource.o rawsink.o tspikesink.o \
+	filter.o delta.o fir.o acqdatasourcecontrol.o acqdatasource.o
 
 
 AS = bfin-elf-as
@@ -49,6 +50,9 @@ eventrx.o: $(HWDIR)hw/eventrx.cc
 datasport.o: $(HWDIR)hw/datasport.cc	
 	$(CXX) $(CXXFLAGS)  -c  $(HWDIR)hw/datasport.cc
 
+filter.o: $(HWDIR)filter.cc
+	$(CXX) $(CXXFLAGS)  -c  $(HWDIR)filter.cc
+
 eventdispatch.o: $(SRCDIR)/eventdispatch.cc	
 	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/eventdispatch.cc
 
@@ -72,6 +76,12 @@ rawsink.o: $(SRCDIR)/sinks/rawsink.cc
 
 tspikesink.o: $(SRCDIR)/sinks/tspikesink.cc
 	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/sinks/tspikesink.cc
+
+delta.o: $(SRCDIR)/filterlinks/delta.cc
+	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/filterlinks/delta.cc
+
+fir.o: $(SRCDIR)/filterlinks/fir.cc
+	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/filterlinks/fir.cc
 
 #acqdatasource.o: $(SRCDIR)/acqdatasource.cc
 #	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/acqdatasource.cc

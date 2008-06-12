@@ -1,7 +1,8 @@
 #ifndef SAMPLEBUFFER_H
 #define SAMPLEBUFFER_H
+#include <types.h>
 
-typedef int sample_t; 
+typedef int32_t sample_t; 
 
 template <class T>
 class SampleBuffer
@@ -66,7 +67,7 @@ public:
 
 private: 
   T * pBuffer_;
-  int hpos_, tpos_; 
+  int tpos_; 
   int N_; 
 
 }; 

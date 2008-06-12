@@ -1,27 +1,23 @@
 #ifndef FILTERLINK_FIR_H
 #define FILTERLINK_FIR_H
 
-#include <filterlinkbase.h>
-/*
+#include <filterio.h>
+#include <samplebuffer.hpp>
 
-What do we want here? 
-
-do we want FIR<h>? 
-
-Do we want FIR(argument)? 
-
-*/
-class FIR : public  FilterLink
+class FIR
 {
-
+  typedef int32_t sample_t; 
+  static const short FIRLENMAX = 256; 
  public: 
-  FIR(SampleBuffer<sample_t> *, sample_t* h); 
+  FIR(); 
   ~FIR(); 
-
-  sample_t nextSample(void); 
-  
+  FilterLinkSink<sample_t> input; 
+  FilterLinkSource<sample_t> output; 
  private: 
-  const sample_t * ph_; 
+  SampleRingBuffer<sample_t> buffer_; 
+  sample_t filter_[FIRLENMAX]; 
+
+  void newSample(sample_t); 
 
 }; 
 

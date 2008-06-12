@@ -21,6 +21,15 @@ public:
   static const int ACQBITS = 16;
   static const int ACQBITRANGE = 32768;
   static const int ACQRANGE = 2048000000; 
+  /*
+    Precomputed gain scalings: because the BF533 is slow,
+    esp. wrt divison, we precompute the mapping from sample
+    to nV for a given gain at startup. 
+    
+  */
+  static const int32_t GAINS[]; 
+
+  static const int32_t GAINSCALE[]; 
 
   void newAcqFrame(AcqFrame *); 
 
@@ -44,5 +53,8 @@ public:
   FilterLinkSource<char> sourceSampleCycle; 
 
 }; 
+
+
+
 
 #endif // ACQDATASOURCE_H

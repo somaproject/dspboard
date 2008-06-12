@@ -33,7 +33,7 @@ public:
 
   unsigned char mode; 
   bool linkUp; 
-  int gain[CHANNUM]; 
+  short gain[CHANNUM]; 
   bool hpfen[CHANNUM]; 
   char inputSel; 
 }; 

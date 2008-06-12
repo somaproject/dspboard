@@ -3,6 +3,7 @@
 
 #include <filterio.h>
 #include <samplebuffer.hpp>
+#include <types.h>
 
 class Delta 
 {

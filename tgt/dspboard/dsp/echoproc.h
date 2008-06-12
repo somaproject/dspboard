@@ -19,7 +19,10 @@ public:
   void eventTimeRX(Event_t * et); 
   void eventEcho(Event_t * et); 
   void eventLED(Event_t * et); 
+  void eventBenchQuery(Event_t * et); 
   
+  void benchStart(char counter); 
+  void benchStop(char counter); 
 private:  
   short eventpos; 
   EventTX* petx; 
@@ -27,6 +30,13 @@ private:
   short iterations; 
   char device_; 
   SystemTimer* ptimer_; 
+
+  // benchmarking / performance
+  static const short NUMBENCH = 4; 
+  int latest_[NUMBENCH]; 
+  int starttime_[NUMBENCH]; 
+  int max_[NUMBENCH]; 
+
 
 };
 

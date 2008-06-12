@@ -3,7 +3,10 @@
 
 #include </usr/include/stdint.h>
 
+/*
+HOST Types
 
+*/
 class Memcopy {
 public:
   static inline unsigned char *  hton_int32(unsigned char * dest, int32_t src) {

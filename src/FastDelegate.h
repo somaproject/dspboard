@@ -64,7 +64,7 @@
 // It will not work on systems where sizeof(dataptr) < sizeof(codeptr). 
 // Thus, it will not work for DOS compilers using the medium model.
 // It will also probably fail on some DSP systems.
-#define FASTDELEGATE_USESTATICFUNCTIONHACK
+//#define FASTDELEGATE_USESTATICFUNCTIONHACK
 
 // Uncomment the next line to allow function declarator syntax.
 // It is automatically enabled for those compilers where it is known to work.
@@ -117,7 +117,7 @@
 
 #ifdef __GNUC__ // Workaround GCC bug #8271 
 	// At present, GCC doesn't recognize constness of MFPs in templates
-#define FASTDELEGATE_GCC_BUG_8271
+//#define FASTDELEGATE_GCC_BUG_8271
 #endif
 
 

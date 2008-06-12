@@ -19,6 +19,7 @@ public:
   {
     for (char i = 0; i < MAXSINKS; i++) {
       connectedSinks_[i] = 0; 
+      isConnected_[i] = false; 
     }
 
   }
@@ -27,20 +28,20 @@ public:
 
   void connect(FilterLinkSink<T> & psink) {
     for (char i = 0; i < MAXSINKS; i++) {
-      if (connectedSinks_[i] == 0) {
+      if (! isConnected_[i]) {
 	connectedSinks_[i] = &psink; 
 	psink.setSource(this, pSampleBuffer_);
+	isConnected_[i] = true; 
 	break; 
       }
     }
-    
   }
 
   SampleBuffer<T> * pSampleBuffer_; 
   
-  void newSample(T sample) {
+  void inline newSample(T sample) {
     for (char i = 0; i < MAXSINKS; i++) {
-      if (connectedSinks_[i] != 0) {
+      if (isConnected_[i]) {
 	connectedSinks_[i]->newSample(sample); 
       }
     }
@@ -48,7 +49,7 @@ public:
 
 private:
   FilterLinkSink<T> * connectedSinks_[MAXSINKS]; 
-  
+  bool isConnected_[MAXSINKS]; 
   
 
 }; 
@@ -74,7 +75,7 @@ public:
     pSource_ = psrc; 
   }
   
-  void newSample(T sample) {
+  void inline newSample(T sample) {
     newSampleDelegate_(sample); 
   }
   

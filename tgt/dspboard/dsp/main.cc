@@ -20,6 +20,7 @@
 #include <fakesource.h>
 #include <sinks/rawsink.h>
 #include <sinks/tspikesink.h>
+#include <filterlinks/delta.h>
 
 #include "echoproc.h" 
 
@@ -142,15 +143,17 @@ int main_loop()
 
 
   RawSink * pRawSink = new RawSink(&timer, dataout, config.getDataSrc()); 
-  TSpikeSink * pTSpikeSink = new TSpikeSink(&timer, dataout, 
-					    ed, etx, config.getDataSrc()); 
+  //TSpikeSink * pTSpikeSink = new TSpikeSink(&timer, dataout, 
+  //					    ed, etx, config.getDataSrc()); 
+  //Delta * deltaA = new Delta(); 
+  
 
-  //acqdatasource->sourceA.connect(pRawSink->sink);
-  acqdatasource->sourceA.connect(pTSpikeSink->sink1); 
-  acqdatasource->sourceB.connect(pTSpikeSink->sink2); 
-  acqdatasource->sourceC.connect(pTSpikeSink->sink3); 
-  acqdatasource->sourceD.connect(pTSpikeSink->sink4); 
-  acqdatasource->sourceSampleCycle.connect(pTSpikeSink->samplesink); 
+  acqdatasource->sourceA.connect(pRawSink->sink);
+//   acqdatasource->sourceA.connect(pTSpikeSink->sink1); 
+//   acqdatasource->sourceB.connect(pTSpikeSink->sink2); 
+//   acqdatasource->sourceC.connect(pTSpikeSink->sink3); 
+//   acqdatasource->sourceD.connect(pTSpikeSink->sink4); 
+//   acqdatasource->sourceSampleCycle.connect(pTSpikeSink->samplesink); 
 
   acqserial->start(); 
 
@@ -158,7 +161,7 @@ int main_loop()
   int framecount = 0; 
   while (1) {
 
-
+    eep->benchStart(0);
     // ------------------------------------------------------------------
     // Event Processing, RX and TX 
     // ------------------------------------------------------------------
@@ -188,13 +191,15 @@ int main_loop()
     if (! acqserial->checkRxEmpty())
       {
 	//*pFIO_FLAG_T = 0x0100;
-
+	
 	acqserial->getNextFrame(&af); 
 	asc.newAcqFrame(&af); 
+	// trigger the set of filterlinks
+	eep->benchStart(1);
+	acqdatasource->newAcqFrame(&af); 
+	eep->benchStop(1);
 	
 
-	// trigger the set of filterlinks
-	acqdatasource->newAcqFrame(&af); 
 
 // 	framecount++; 
 // 	if (framecount %  32000 == 1000) {
@@ -209,7 +214,7 @@ int main_loop()
     // -----------------------------------------------------------------
     dataout->sendPending(); 
 
-    
+    eep->benchStop(0); 
 
   }
   

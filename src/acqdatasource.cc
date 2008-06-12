@@ -1,5 +1,19 @@
 #include "acqdatasource.h"
+#include "dsp.h"
 
+const int32_t AcqDataSource::GAINS[] = {0, 100, 200, 500, 1000, 
+				      2000, 5000, 10000}; 
+
+const int32_t AcqDataSource::GAINSCALE[] = 
+  { ACQRANGE / ACQBITRANGE / GAINS[0], 
+    ACQRANGE / ACQBITRANGE / GAINS[1], 
+    ACQRANGE / ACQBITRANGE / GAINS[2], 
+    ACQRANGE / ACQBITRANGE / GAINS[3], 
+    ACQRANGE / ACQBITRANGE / GAINS[4], 
+    ACQRANGE / ACQBITRANGE / GAINS[5], 
+    ACQRANGE / ACQBITRANGE / GAINS[6], 
+    ACQRANGE / ACQBITRANGE / GAINS[7]}; 
+    
 
 AcqDataSource::AcqDataSource(AcqState * as) :
   pAcqState_(as), 
@@ -20,7 +34,7 @@ AcqDataSource::AcqDataSource(AcqState * as) :
   mainBuffers_[1] = &bufferB_; 
   mainBuffers_[2] = &bufferC_; 
   mainBuffers_[3] = &bufferD_; 
-  
+
 }
 
 void AcqDataSource::newAcqFrame(AcqFrame * af)
@@ -34,19 +48,11 @@ void AcqDataSource::newAcqFrame(AcqFrame * af)
   }
 
   for (int i = 0; i < 5; i++) {
-    // use 64-bit numbers for division dynamic range; we then cast to 32-bit 
-    int64_t longsamp; 
-    if(pAcqState_->gain[i] == 0) {
-      longsamp = 0; 
-    } else {
-      longsamp = ACQRANGE; 
-      longsamp = longsamp *  af->samples[i+sampos] ; 
-      //longsamp = af->samples[i+sampos] ; 
-      longsamp = longsamp / ACQBITRANGE; 
-      longsamp = longsamp / pAcqState_->gain[i]; 
-      
-    }
-    samps[i] = longsamp; 
+    sample_t sample = af->samples[i+sampos]; 
+    char gainpos = decodeGain(pAcqState_->gain[i]); 
+    int32_t scale = GAINSCALE[gainpos]; 
+
+    samps[i] = 10000000; // FIXME sample * scale;  
   }
 
   bufferA_.append(samps[0]); 
@@ -62,7 +68,7 @@ void AcqDataSource::newAcqFrame(AcqFrame * af)
   sourceCont.newSample(samps[4]); 
 
   sourceSampleCycle.newSample(0); 
-
+  
 }
 
 
