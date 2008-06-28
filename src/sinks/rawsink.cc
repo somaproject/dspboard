@@ -22,6 +22,7 @@ void RawSink::processSample(sample_t samp)
   if (pendingPos_ == RawData_t::BUFSIZE - 1) {
     // send the packet
     pDataOut_->sendData(pendingRawData_); 
+    pDataOut_->sendData(pendingRawData_); 
 
     pos++; 
 

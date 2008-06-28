@@ -64,7 +64,9 @@ void EventEchoProc::eventBenchQuery(Event_t * et) {
   etx.event.src = device_;
 
   char chan = et->data[0]; 
-  etx.event.data[0] = chan; 
+  const int DATAFIFOFULL_MASK = 0x0010; 
+  etx.event.data[0] =  (*pFIO_FLAG_D & DATAFIFOFULL_MASK); 
+
   etx.event.data[1] = latest_[chan] >> 16; 
   etx.event.data[2] = latest_[chan] & 0xFFFF; 
   etx.event.data[3] = max_[chan] >> 16; 

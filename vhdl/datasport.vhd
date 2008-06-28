@@ -147,7 +147,18 @@ begin  -- Behavioral
         if seren = '1' and sertfs = '1' then
           debugcnt <= debugcnt + 1;
         end if;
-        DEBUG      <= debugcnt;
+
+        DEBUG(7 downto 0) <= debugcnt(7 downto 0);
+
+        if ics = none then
+          DEBUG(15) <= '1';
+        else
+          DEBUG(15) <= '0';
+        end if; 
+        
+        if bufcnt = "11" then 
+          debugcnt <= debugcnt + 1; 
+        end if;
 
       end if;
     end if;
@@ -239,8 +250,8 @@ begin  -- Behavioral
       when others =>
         ocnten <= '0';
         ons    <= none;
+        
     end case;
-
   end process outfsm;
 
 end Behavioral;

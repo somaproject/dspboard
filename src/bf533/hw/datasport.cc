@@ -5,7 +5,8 @@
 DataSPORT::DataSPORT() :
   nextFreeData_(0), 
   nextSendData_(0), 
-  txPending_(false)
+  txPending_(false), 
+  delay_(0)
 {
   setup(); // automatically setup
 
@@ -22,10 +23,11 @@ void DataSPORT::setup()
 void DataSPORT::sendData(Data_t & data)
 {
   // copy data into next packet...
-  
-  data.toBuffer(&buffer_[nextFreeData_][0]); 
+  if (! txBufferFull()) {
+    data.toBuffer(&buffer_[nextFreeData_][0]); 
 
-  nextFreeData_ = (nextFreeData_+1) % DATABUFLEN; 
+    nextFreeData_ = (nextFreeData_+1) % DATABUFLEN; 
+  }
   
 }
 
@@ -41,20 +43,46 @@ bool DataSPORT::isFPGAFIFOFull()
   return (*pFIO_FLAG_D & DATAFIFOFULL_MASK); 
 }
 
+bool DataSPORT::isSPORTHoldRegEmpty()
+{
+  /*
+    
+  
+  */
+  if(SPORT1_STAT & TXHRE == 0) {
+    return false; 
+  } else {
+    return true;
+  }
+}
+
 void DataSPORT::sendPending()
 {
   if (txPending_) {
     if (isDMADone()) {
       txPending_ = false; 
-
+      // FIXME DEBUGGING LED flashes when DMA is done
+      *pFIO_DIR    |= 0x0100;
+      *pFIO_FLAG_D |= 0x0100;
+      delay_ = 9; 
     } else {
       return;  // DMA still pending
     } 
   }
+//   if (delay_ > 0) {
+//     delay_--; 
+//     return; 
+//   } 
+  if (!isSPORTHoldRegEmpty()) {
+    return; 
+  }
+
+  *pFIO_FLAG_D &= ~0x0100;
 
   if (isFPGAFIFOFull() ) {
     return; 
   }
+
   // else, we're good to send! 
   if ( nextSendData_ != nextFreeData_) {
     sendDataNum(nextSendData_); 

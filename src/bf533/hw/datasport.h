@@ -31,8 +31,11 @@ class DataSPORT : public DataOut
   void setupFPGAFIFOFlag(); 
   bool isFPGAFIFOFull(); 
   bool isDMADone(); 
+  bool isSPORTHoldRegEmpty(); 
 
   void sendDataNum(int n); 
+  int delay_; 
+
 
 }; 
 

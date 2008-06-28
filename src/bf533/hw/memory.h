@@ -46,6 +46,19 @@ public:
   }
 
 
+  static inline unsigned char *  hton_int16(unsigned char * dest, int32_t src){
+    /*
+      copy the host-order int in src
+      to the destination pointer dest in network byteorder
+      
+    */
+    int x = __bswap_16(src); 
+    *dest = x; 
+    return dest + 2; 
+    
+  }
+
+
 
   static inline unsigned char *  hton_int64(unsigned char * dest, int64_t src) {
     /*

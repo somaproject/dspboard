@@ -588,6 +588,9 @@ architecture Behavioral of dspboard is
   signal eventrxreqcnt   : std_logic_vector(15 downto 0)  := (others => '0');
   signal reql            : std_logic                     := '0';
 
+  signal datafullcnta : std_logic_vector(15 downto 0) := (others => '0');
+  signal datadebug : std_logic_vector(15 downto 0) := (others => '0');
+  
 begin  -- Behavioral
 
 
@@ -727,7 +730,7 @@ begin  -- Behavioral
       SPIMISOS    => dspimisoa,
       EVTFIFOFULL => devtfifofulla,
       -- DATA SPORT IF interface
-      DATAFULL    => datafulla,
+      DATAFULL    => datafulla, 
       -- FIBER IF
       FIBERLINKUP => fiberlinkupa
       );
@@ -758,7 +761,7 @@ begin  -- Behavioral
       GRANT  => dgrant(0),
       DOUT   => ddataa,
       DONE   => ddone(0),
-      DEBUG  => open);
+      DEBUG  => datadebug);
 
 
   dspcontproc_b : dspcontproc
@@ -1142,12 +1145,10 @@ begin  -- Behavioral
 
 
   --jtagwordout(7 downto 0)   <= fifofullcnta;
-  jtagwordout(15 downto 0)  <= eventrxreqcnt;
-  jtagwordout(23 downto 16) <= procspienacnt;
-  jtagwordout(24)           <= procdspspiena;
-  jtagwordout(31) <= reql; 
-  jtagwordout(47 downto 32) <= eventrxdebuga;
-  LEDPOWER                  <= linkup;
+  jtagwordout(15 downto 0)  <= datafullcnta;
+  --jtagwordout(31 downto 16) <= datadebug; 
+  jtagwordout(47 downto 40) <= X"AB"; 
+  --LEDPOWER                  <= linkup;
 
   process(CLK)
     variable scnt   : integer range 0 to 2 := 0;
@@ -1160,8 +1161,12 @@ begin  -- Behavioral
       if rising_edge(clk) then
         rxdatal <= rxdata;
         rxkl    <= rxk;
-
-        jtagwordout(27) <= dspissa; 
+        LEDPOWER <= datadebug(15);
+        
+        if datafulla = '1'  then
+          datafullcnta <= datafullcnta + 1;
+        end if;
+        
         if scnt = 2 then
           scnt := 0;
         else

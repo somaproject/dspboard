@@ -27,6 +27,7 @@ OUTPUT_DEVICE = 0xA0
 INPUT_BOOTSERDONE = 0x03
 
 EVENTRXCMD_PING = 0x08
+
 EVENTRXCMD_LEDSET = 0x31
 EVENTRXCMD_DATABUF = 0x32
 EVENTRXCMD_DATABUFTX = 0x33
@@ -36,6 +37,9 @@ EVENTRXCMD_DSPRESET = 0x36
 EVENTRXCMD_UARTTX = 0x37
 
 EVENTRXCMD_YOUARE = 0x01
+
+
+EVENTTXCMD_PING_RESPONSE = 0x09
 
 env = createEnvironment()
 counter = env.createVariable("counter")
@@ -96,12 +100,11 @@ def pingResponseEvent():
   
   proc.output(EVENTOUT_DATA2, env.buftxcounter)
 
-  proc.move(tmp, ereg.edata[0])
-  proc.output(EVENTOUT_DATA0, tmp)
+  proc.move(tmp, ereg.edata[4])
+  proc.output(EVENTOUT_DATA4, tmp)
 
-  proc.load(tmp, EVENTRXCMD_PING)
+  proc.load(tmp, EVENTTXCMD_PING_RESPONSE)
   proc.output(EVENTOUT_CMD, tmp)
-  proc.load(tmp, EVENTRXCMD_PING)
 
 
 def pingSetLT():

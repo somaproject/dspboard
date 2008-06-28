@@ -59,9 +59,9 @@ public:
     // chanllen
 
     c += 2; 
-
+    
     c = Memcopy::hton_int64(c, time); 
-
+    
     // offset points to the last sample, so to figure
     // out where to start sampling from, we need to subtract 
     // total buffer size

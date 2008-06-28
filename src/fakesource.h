@@ -18,7 +18,6 @@ private:
   somatime_t lasttime_; 
   SystemTimer* pSystemTimer_; 
 
-
   SampleRingBuffer<sample_t> buffer_; 
 
 public:
