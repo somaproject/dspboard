@@ -56,7 +56,9 @@ architecture Behavioral of datasport is
 begin  -- Behavioral
   dinint(0) <= SERDT;
 
-  FULL <= '1' when BUFCNT /= "00" and ics /=none else '0';
+  -- not really "FULL" so much as "BUSY or FULL"
+  FULL <= '0' when (BUFCNT = "00" and ics = none) else '1';
+  
   DONE <= '1' when ocs = ddone                   else '0';
 
   RAM1 : RAMB16_S1_S9
@@ -148,17 +150,6 @@ begin  -- Behavioral
           debugcnt <= debugcnt + 1;
         end if;
 
-        DEBUG(7 downto 0) <= debugcnt(7 downto 0);
-
-        if ics = none then
-          DEBUG(15) <= '1';
-        else
-          DEBUG(15) <= '0';
-        end if; 
-        
-        if bufcnt = "11" then 
-          debugcnt <= debugcnt + 1; 
-        end if;
 
       end if;
     end if;

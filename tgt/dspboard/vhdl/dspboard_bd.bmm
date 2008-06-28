@@ -3,7 +3,7 @@
 // Release 10.1i - Data2MEM K.31, build 1.5.7 Nov 8, 2007
 // Copyright (c) 1995-2008 Xilinx, Inc.  All rights reserved.
 //
-// Created on 06/28/08 02:03 pm
+// Created on 06/28/08 04:33 pm
 //
 
 
@@ -22,7 +22,7 @@
 
 ADDRESS_SPACE dspcontproca RAMB18 [0x00000000:0x000008FF]
     BUS_BLOCK
-        dspcontproc_a/instruction_ram [17:0] PLACED = X0Y0;
+        dspcontproc_a/instruction_ram [17:0] PLACED = X1Y0;
     END_BUS_BLOCK;
 END_ADDRESS_SPACE;
 
@@ -35,7 +35,7 @@ END_ADDRESS_SPACE;
 
 ADDRESS_SPACE dspcontprocb RAMB18 [0x10000000:0x100008FF]
     BUS_BLOCK
-        dspcontproc_b/instruction_ram [17:0] PLACED = X0Y5;
+        dspcontproc_b/instruction_ram [17:0] PLACED = X0Y7;
     END_BUS_BLOCK;
 END_ADDRESS_SPACE;
 
@@ -48,7 +48,7 @@ END_ADDRESS_SPACE;
 
 ADDRESS_SPACE dspcontprocc RAMB18 [0x20000000:0x200008FF]
     BUS_BLOCK
-        dspcontproc_c/instruction_ram [17:0] PLACED = X1Y6;
+        dspcontproc_c/instruction_ram [17:0] PLACED = X0Y4;
     END_BUS_BLOCK;
 END_ADDRESS_SPACE;
 
@@ -61,7 +61,7 @@ END_ADDRESS_SPACE;
 
 ADDRESS_SPACE dspcontprocd RAMB18 [0x30000000:0x300008FF]
     BUS_BLOCK
-        dspcontproc_d/instruction_ram [17:0] PLACED = X1Y7;
+        dspcontproc_d/instruction_ram [17:0] PLACED = X0Y0;
     END_BUS_BLOCK;
 END_ADDRESS_SPACE;
 
