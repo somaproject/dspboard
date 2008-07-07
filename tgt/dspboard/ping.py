@@ -1,5 +1,7 @@
 """
-Try and PING the DSPboard
+Try and PING a DSPboard dspcontproc
+(does not actually engage the DSP)
+
 """
 import sys
 from somapynet.event import Event
@@ -9,23 +11,25 @@ from somapynet.neteventio import NetEventIO
 import struct
 import time
 
+whoping = [int(x) for x in sys.argv[1:]]
+    
 eio = NetEventIO("10.0.0.2")
 
-DSPBOARDADDR = 0x08
-
-eio.addRXMask(xrange(256), DSPBOARDADDR)
+for i in whoping:
+    eio.addRXMask(i, xrange(256))
 
 eio.start()
 
 # Create event and set mask
 e = Event()
 e.src = eaddr.NETWORK
-e.cmd =  0x30
+e.cmd =  0x08
 e.data[0] = 0x1234
 e.data[1] = 0x5678
 
 ea = eaddr.TXDest()
-ea[DSPBOARDADDR] = 1
+for i in whoping:
+    ea[i] = 1
 
 eio.sendEvent(ea, e)
 

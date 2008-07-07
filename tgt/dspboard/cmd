@@ -1,0 +1,2 @@
+#python dspboot.py /home/jonas/periodictxtest.ldr
+python dspboot.py /home/jonas/soma/dspecho.ldr

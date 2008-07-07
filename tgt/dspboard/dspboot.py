@@ -104,10 +104,11 @@ def chunk(string, maxlen):
         chunks.append(string[i*maxlen:((i+1)*maxlen)])
     assert "".join(chunks) == string
     return chunks
-    
+
+tgt = int (sys.argv[2])    
 eio = NetEventIO("10.0.0.2")
 
-DSPBOARDADDR = 0x08
+DSPBOARDADDR = tgt
 eio.addRXMask(xrange(256), DSPBOARDADDR)
 
 eio.start()
@@ -126,16 +127,18 @@ e.data[0] = 0x0000
 ea = eaddr.TXDest()
 ea[DSPBOARDADDR] = 1
 eio.sendEvent(ea, e)
+
+
 e = Event()
 
 e.src = eaddr.NETWORK
 e.cmd =  EVENTRXCMD_DSPRESET
 e.data[0] = 0xFFFF
 
+
 ea = eaddr.TXDest()
 ea[DSPBOARDADDR] = 1
 eio.sendEvent(ea, e)
-#time.sleep(1)
 
 # now make sure we are in control of the spi interface
 e = Event()
@@ -176,7 +179,7 @@ blocks = loadfiles()
 blockpos = 0
 
 for byteblock in blocks:
-    MAXLEN = 512
+    MAXLEN = 1024
     chunks = chunk(byteblock, MAXLEN)
     print "byteblock, len = ", len(byteblock), len(chunks), "chunks"
     cpos = 0

@@ -1,7 +1,6 @@
 """
-Ping the DSP on the DSPboard
+Set the UART ID of the DSPboard
 
-The first argument is the deviceID of the DSP
 
 """
 import sys
@@ -16,24 +15,25 @@ eio = NetEventIO("10.0.0.2")
 
 DSPBOARDADDR = int(sys.argv[1])
 
-eio.addRXMask(0xF1, xrange(256))
+eio.addRXMask(xrange(256), DSPBOARDADDR)
 
 eio.start()
 
 # Create event and set mask
 e = Event()
 e.src = eaddr.NETWORK
-e.cmd =  0xF0
-e.data[0] = 0x1234
+e.cmd =  0x37
+e.data[0] = DSPBOARDADDR
+e.data[1] = DSPBOARDADDR
+e.data[2] = DSPBOARDADDR
+e.data[3] = DSPBOARDADDR
+e.data[4] = DSPBOARDADDR
 
 ea = eaddr.TXDest()
 ea[DSPBOARDADDR] = 1
 
 eio.sendEvent(ea, e)
 
-erx = eio.getEvents()
-for q in erx:
-    print q
 eio.stop()
 
     
