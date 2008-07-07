@@ -590,6 +590,7 @@ architecture Behavioral of dspboard is
 
   signal datafullcnta : std_logic_vector(15 downto 0) := (others => '0');
   signal datadebug : std_logic_vector(15 downto 0) := (others => '0');
+  signal asdebug : std_logic_vector(47 downto 0) := (others => '0');
   
 begin  -- Behavioral
 
@@ -1085,7 +1086,8 @@ begin  -- Behavioral
       DSPAUARTRX  => DSPUARTRXA,
       DSPBUARTRX  => DSPUARTRXB,
       DSPALINKUP  => fiberlinkupa,
-      DSPBLINKUP  => fiberlinkupb);
+      DSPBLINKUP  => fiberlinkupb,
+      DEBUG => asdebug);
 
   acqserial_cd : acqserial
     port map (
@@ -1144,11 +1146,8 @@ begin  -- Behavioral
 
 
 
-  --jtagwordout(7 downto 0)   <= fifofullcnta;
-  jtagwordout(15 downto 0)  <= datafullcnta;
-  --jtagwordout(31 downto 16) <= datadebug; 
-  jtagwordout(47 downto 40) <= X"AB"; 
-  --LEDPOWER                  <= linkup;
+
+  jtagwordout(47 downto 0) <= asdebug; 
 
   process(CLK)
     variable scnt   : integer range 0 to 2 := 0;

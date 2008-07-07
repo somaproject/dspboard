@@ -20,9 +20,12 @@ public:
   void eventEcho(Event_t * et); 
   void eventLED(Event_t * et); 
   void eventBenchQuery(Event_t * et); 
+  void eventDebugQuery(Event_t * et); 
   
   void benchStart(char counter); 
   void benchStop(char counter); 
+  uint16_t debugdata[6]; 
+
 private:  
   short eventpos; 
   EventTX* petx; 

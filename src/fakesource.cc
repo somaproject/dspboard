@@ -17,6 +17,6 @@ void FakeSource::updateTime(somatime_t t)
     buffer_.append(val_); 
     source.newSample(val_); 
     val_++; 
-
   }
+
 }

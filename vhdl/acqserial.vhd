@@ -245,8 +245,7 @@ begin  -- Behavioral
   fibertx_inst : fibertx
     port map (
       CLK      => clkhi,
-      CMDIN    => cmdout,               -- DEBUGGING
-      --CMDIN => X"123456789ABC", 
+      CMDIN    => cmdout,              
       SENDCMD  => sendcmd,
       FIBEROUT => FIBEROUT);
 

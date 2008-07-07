@@ -38,6 +38,10 @@ public:
   
   AcqState * pAcqState_; 
 
+  unsigned char sequentialCMDID_; 
+  
+  bool waitForCMDID_; 
+
  private:
   AcqSerialBase * pAcqSerial_; 
 
@@ -66,10 +70,6 @@ public:
   void serialCommandSend(); 
 
   unsigned char getNextCMDID(); 
-
-  unsigned char sequentialCMDID_; 
-  
-  bool waitForCMDID_; 
 
 }; 
 

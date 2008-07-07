@@ -52,8 +52,8 @@ public:
       to the destination pointer dest in network byteorder
       
     */
-    int x = __bswap_16(src); 
-    *dest = x; 
+    int16_t x = __bswap_16(src); 
+    *((int16_t *)(dest)) = x; 
     return dest + 2; 
     
   }
@@ -67,7 +67,7 @@ public:
     */
 
 
-    *dest = __bswap_64(src); 
+    *((int64_t*)dest) = __bswap_64(src); 
 
     return dest + 8; 
 

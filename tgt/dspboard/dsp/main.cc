@@ -134,34 +134,37 @@ int main_loop()
 
   AcqFrame af; 
   AcqState acqstate; 
+  acqstate.linkUp = false; 
   AcqStateControl asc(acqserial, &acqstate); 
-
+  asc.setDSPPos(config.getDSPPos()); 
   // filterlink construction
   AcqDataSource * acqdatasource = new AcqDataSource(&acqstate); 
   acqdatasource->setDSP(config.getDSPPos()); 
   AcqDataSourceControl * adsc = new AcqDataSourceControl(ed, etx, &asc); 
 
-//   FakeSource * fs = new FakeSource(&timer); 
+  //  FakeSource * fs = new FakeSource(&timer); 
 //   RawSink * pRawSinkForFake = new RawSink(&timer, dataout, config.getDataSrc()); 
 //   fs->source.connect(pRawSinkForFake->sink); 
 //   RawSink * pRawSinkForFake2 = new RawSink(&timer, dataout, config.getDataSrc()); 
 //   fs->source.connect(pRawSinkForFake2->sink); 
 
-  RawSink * pRawSinkA = new RawSink(&timer, dataout, config.getDataSrc()); 
-  RawSink * pRawSinkB = new RawSink(&timer, dataout, config.getDataSrc()); 
-  RawSink * pRawSinkC = new RawSink(&timer, dataout, config.getDataSrc()); 
-  RawSink * pRawSinkD = new RawSink(&timer, dataout, config.getDataSrc()); 
+  RawSink * pRawSinkA = new RawSink(&timer, dataout, config.getDataSrc(), 0); 
+  RawSink * pRawSinkB = new RawSink(&timer, dataout, config.getDataSrc(), 1); 
+  RawSink * pRawSinkC = new RawSink(&timer, dataout, config.getDataSrc(), 2); 
+  RawSink * pRawSinkD = new RawSink(&timer, dataout, config.getDataSrc(), 3); 
 //   TSpikeSink * pTSpikeSink = new TSpikeSink(&timer, dataout, 
 // 					    ed, etx, config.getDataSrc()); 
-  //Delta * deltaA = new Delta(); 
+  //   Delta * deltaA = new Delta(); 
   
 
-  //acqdatasource->sourceA.connect(pRawSink->sink);
+  //  fs->source.connect(pRawSinkA->sink);
 //   acqdatasource->sourceA.connect(pTSpikeSink->sink1); 
 //   acqdatasource->sourceB.connect(pTSpikeSink->sink2); 
 //   acqdatasource->sourceC.connect(pTSpikeSink->sink3); 
 //   acqdatasource->sourceD.connect(pTSpikeSink->sink4); 
 //   acqdatasource->sourceSampleCycle.connect(pTSpikeSink->samplesink); 
+
+
   acqdatasource->sourceA.connect(pRawSinkA->sink); 
   acqdatasource->sourceB.connect(pRawSinkB->sink); 
   acqdatasource->sourceC.connect(pRawSinkC->sink); 
@@ -203,7 +206,9 @@ int main_loop()
     if (! acqserial->checkRxEmpty())
       {
 	//*pFIO_FLAG_T = 0x0100;
-	
+	eep->debugdata[0] = af.cmdid; 
+	eep->debugdata[1] = asc.sequentialCMDID_; 
+
 	acqserial->getNextFrame(&af); 
 	asc.newAcqFrame(&af); 
 	// trigger the set of filterlinks
