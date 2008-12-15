@@ -1,0 +1,25 @@
+Instructions to run this example:
+
+1. Build
+
+   $ make
+
+2. Load and run
+
+   Start gdbproxy:
+
+   $ sudo gdbproxy bfin
+
+   Load blink using gdb:
+
+   $ bfin-elf-gdb blink
+   (gdb) target remote :2000
+   (gdb) load
+   (gdb) c
+
+3. Pause running
+
+   Still in gdb debug session:
+
+   (gdb) ^C
+

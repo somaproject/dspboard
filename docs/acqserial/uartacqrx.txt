@@ -1,0 +1,3 @@
+The UARTAcqRX is simply a uart interface that takes in 6 9600 8N1
+bytes, deserializes them, and then calls DATAOUTNEW with the bytes.
+

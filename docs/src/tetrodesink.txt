@@ -1,0 +1,25 @@
+The TetrodeSink is the sink for the TSpike
+
+It has a few parameters, some compile-time, some not
+
+PRETRIGGER: how many samples to record pre-trigger
+POSTTRIGGER: how many samples to record post-trigger
+
+thresholds: the thresholds for each channel
+
+We keep an internal circular buffer of size PRETRIGGER + POSTTRIGGER
+for each channel.
+
+We read FILTID from the connected filter...
+
+---------------------------------------------------------------
+packetization
+---------------------------------------------------------------
+
+This is actually a bit tricky, as dataout takes in an object
+and then calls it's toBuffer pointing to the target char
+array. 
+
+So we're going to do this somewhat gross little hack and have
+our TSpikeData_t's fields simply point to the relevant locations
+in the sample buffers, along with lengths

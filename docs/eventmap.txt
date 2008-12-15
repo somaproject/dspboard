@@ -1,0 +1,102 @@
+This is just a crude hack of the event map for the DSPboard
+
+
+Common Commands: 
+0x00 : NOOP 
+0x01 : YOUARE
+0x08 : PING
+
+0x10 / src=0 : time-update
+
+Boot related:
+EVENTRXCMD_LEDSET = 0x31
+EVENTRXCMD_DATABUF = 0x32
+EVENTRXCMD_DATABUFTX = 0x33
+EVENTRXCMD_DSPSPISS = 0x34
+EVENTRXCMD_DSPSPIEN = 0x35
+EVENTRXCMD_DSPRESET = 0x36
+EVENTRXCMD_UARTTX = 0x37
+
+DSP Filter Link Related: 
+
+0x40-0x43 : AcqDataSource Settings
+0x44-0x47 : TSpike Sink Settings
+0x48-0x4B : Raw settings ... 
+
+--------------------------------------------------
+For AcqDataSource:
+
+Parameter:
+    LINKSTATUS = 0, 
+    MODE = 1, 
+    CHANGAIN = 2, 
+    CHANHPF = 3,
+    CHANSEL = 4
+
+0x40: query
+0x41: set
+0x42: response / broadcast
+
+For set:  
+DATA[0] : parameter #
+DATA[1] : chan mask
+DATA[2] : value
+
+for query:
+data[0] : parameter #
+data[1] : channel 
+
+response is per-channel:
+data[0] : parameter
+data[1] : channel #
+data[2] : value
+
+
+--------------------------------------------------
+For TSpikeSink:
+
+0x43: query
+0x44: set
+0x45: response / broadcast
+
+params: threshold = 1
+
+For set:  
+DATA[0] : parameter #
+DATA[1] : channel
+DATA[2] : value
+
+for query:
+data[0] : parameter #
+data[1] : channel 
+
+response:
+data[0] : parameter
+data[1] : channel # 
+data[2] : value
+
+
+--------------------------------------------------
+For WaveSink:
+[ for the time being, we assume there's only one per dsp]
+
+
+0x46: query
+0x47: set
+0x48: response/broadcast
+
+params: 
+   sampratenum = 1
+   samprateden = 2
+   filterid = 3
+   
+For set:  
+DATA[0] : parameter #
+DATA[1:] : value
+
+for query:
+data[0] : parameter #
+
+response:
+data[0] : parameter
+data[1:] : value

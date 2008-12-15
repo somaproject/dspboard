@@ -1,0 +1,10 @@
+How do we tell the devices who they are ? That is, how does
+a device, fresh out of reboot, learn of its deviceid? 
+
+We send the YOU ARE event, cmd = 0x01, to the device to tell 
+it who it is. 
+
+In the case of the DSPboards we will send a series of configuration
+bytes over the DSPBOARD UARTTX interface
+
+

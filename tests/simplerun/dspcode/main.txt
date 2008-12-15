@@ -1,0 +1,190 @@
+
+test.elf:     file format elf32-bfin
+
+Disassembly of section .text:
+
+00000000 <.text>:
+   0:	00 e8 02 00 	LINK 0x8;		/* (8) */
+   4:	00 60       	R0 = 0x0 (X);		/*		R0=0x0(  0) */
+   6:	e0 bb       	[FP -0x8] = R0;
+   8:	00 60       	R0 = 0x0 (X);		/*		R0=0x0(  0) */
+   a:	f0 bb       	[FP -0x4] = R0;
+   c:	07 20       	JUMP.S 0x1a <_binary_test_elf_start+0x1a>;
+   e:	f0 b9       	R0 = [FP -0x4];
+  10:	08 64       	R0 += 0x1;		/* (  1) */
+  12:	e0 bb       	[FP -0x8] = R0;
+  14:	f0 b9       	R0 = [FP -0x4];
+  16:	08 64       	R0 += 0x1;		/* (  1) */
+  18:	f0 bb       	[FP -0x4] = R0;
+  1a:	f0 b9       	R0 = [FP -0x4];
+  1c:	41 e1 0f 00 	R1.H = 0xf;		/* ( 15)	R1=0xf0000(983040) */
+  20:	01 e1 3f 42 	R1.L = 0x423f;		/* (16959)	R1=0xf423f(999999) */
+  24:	08 09       	CC = R0 <= R1;
+  26:	f4 1b       	IF CC JUMP 0xe <_binary_test_elf_start+0xe>;
+  28:	e0 b9       	R0 = [FP -0x8];
+  2a:	01 e8 00 00 	UNLINK;
+  2e:	10 00       	RTS;
+  30:	00 e8 04 00 	LINK 0x10;		/* (16) */
+  34:	4a e1 c0 ff 	P2.H = 0xffc0;		/* (-64)	P2=0xffc00000(-4194304) */
+  38:	0a e1 30 07 	P2.L = 0x730;		/* (1840)	P2=0xffc00730(-4192464) */
+  3c:	20 e1 00 01 	R0 = 0x100 (X);		/*		R0=0x100(256) */
+  40:	10 97       	W[P2] = R0;
+  42:	4a e1 c0 ff 	P2.H = 0xffc0;		/* (-64)	P2=0xffc00730(-4192464) */
+  46:	0a e1 00 07 	P2.L = 0x700;		/* (1792)	P2=0xffc00700(-4192512) */
+  4a:	20 e1 00 01 	R0 = 0x100 (X);		/*		R0=0x100(256) */
+  4e:	10 97       	W[P2] = R0;
+  50:	4a e1 c0 ff 	P2.H = 0xffc0;		/* (-64)	P2=0xffc00700(-4192512) */
+  54:	0a e1 40 07 	P2.L = 0x740;		/* (1856)	P2=0xffc00740(-4192448) */
+  58:	00 60       	R0 = 0x0 (X);		/*		R0=0x0(  0) */
+  5a:	10 97       	W[P2] = R0;
+  5c:	00 60       	R0 = 0x0 (X);		/*		R0=0x0(  0) */
+  5e:	f0 bb       	[FP -0x4] = R0;
+  60:	0d 20       	JUMP.S 0x7a <_binary_test_elf_start+0x7a>;
+  62:	4a e1 c0 ff 	P2.H = 0xffc0;		/* (-64)	P2=0xffc00740(-4192448) */
+  66:	0a e1 0c 07 	P2.L = 0x70c;		/* (1804)	P2=0xffc0070c(-4192500) */
+  6a:	20 e1 00 01 	R0 = 0x100 (X);		/*		R0=0x100(256) */
+  6e:	10 97       	W[P2] = R0;
+  70:	ff e3 c8 ff 	CALL 0x0 <_binary_test_elf_start>;
+  74:	f0 b9       	R0 = [FP -0x4];
+  76:	08 64       	R0 += 0x1;		/* (  1) */
+  78:	f0 bb       	[FP -0x4] = R0;
+  7a:	f0 b9       	R0 = [FP -0x4];
+  7c:	21 e1 0f 27 	R1 = 0x270f (X);		/*		R1=0x270f(9999) */
+  80:	08 09       	CC = R0 <= R1;
+  82:	f0 1b       	IF CC JUMP 0x62 <_binary_test_elf_start+0x62>;
+  84:	01 e8 00 00 	UNLINK;
+  88:	10 00       	RTS;
+  8a:	00 00       	NOP;
+  8c:	00 e8 08 00 	LINK 0x20;		/* (32) */
+  90:	00 60       	R0 = 0x0 (X);		/*		R0=0x0(  0) */
+  92:	e0 bb       	[FP -0x8] = R0;
+  94:	00 60       	R0 = 0x0 (X);		/*		R0=0x0(  0) */
+  96:	f0 bb       	[FP -0x4] = R0;
+  98:	ff e3 cc ff 	CALL 0x30 <_binary_test_elf_start+0x30>;
+  9c:	fe 2f       	JUMP.S 0x98 <_binary_test_elf_start+0x98>;
+  9e:	00 00       	NOP;
+  a0:	4e e1 b0 ff 	SP.H = 0xffb0;		/* (-80)	SP=0xffb00000 */
+  a4:	0e e1 00 04 	SP.L = 0x400;		/* (1024)	SP=0xffb00400 */
+  a8:	7e 32       	FP = SP;
+  aa:	08 e1 00 00 	P0.L = 0x0;		/* (  0)	P0=0x0 <_binary_test_elf_start> */
+  ae:	48 e1 c0 ff 	P0.H = 0xffc0;		/* (-64)	P0=0xffc00000(-4194304) */
+  b2:	01 95       	R1 = W[P0] (Z);
+  b4:	11 30       	R2 = R1;
+  b6:	80 e1 00 00 	R0 = 0x0 (Z);		/*		R0=0x0 <_binary_test_elf_start>(  0) */
+  ba:	00 e1 ff 81 	R0.L = 0x81ff;		/* (-32257)	R0=0x81ff(33279) */
+  be:	41 54       	R1 = R1 & R0;
+  c0:	00 e1 00 10 	R0.L = 0x1000;		/* (4096)	R0=0x1000(4096) */
+  c4:	41 56       	R1 = R1 | R0;
+  c6:	09 e1 24 01 	P1.L = 0x124;		/* (292)	P1=0x124 */
+  ca:	49 e1 c0 ff 	P1.H = 0xffc0;		/* (-64)	P1=0xffc00124(-4194012) */
+  ce:	08 91       	R0 = [P1];
+  d0:	00 4a       	BITSET (R0, 0x0);		/* bit  0 */
+  d2:	08 93       	[P1] = R0;
+  d4:	01 97       	W[P0] = R1;
+  d6:	24 00       	SSYNC;
+  d8:	30 00       	CLI R0;
+  da:	20 00       	IDLE;
+  dc:	40 00       	STI R0;
+  de:	08 e1 04 00 	P0.L = 0x4;		/* (  4)	P0=0xffc00004(-4194300) */
+  e2:	48 e1 c0 ff 	P0.H = 0xffc0;		/* (-64)	P0=0xffc00004(-4194300) */
+  e6:	00 e1 04 00 	R0.L = 0x4;		/* (  4)	R0=0x4(  4) */
+  ea:	00 97       	W[P0] = R0;
+  ec:	08 e1 08 20 	P0.L = 0x2008;		/* (8200)	P0=0xffc02008(-4186104) */
+  f0:	48 e1 e0 ff 	P0.H = 0xffe0;		/* (-32)	P0=0xffe02008(-2088952) */
+  f4:	00 e1 c8 01 	R0.L = 0x1c8;		/* (456)	R0=0x1c8(456) */
+  f8:	40 e1 a0 ff 	R0.H = 0xffa0;		/* (-96)	R0=0xffa001c8(-6291000) */
+  fc:	00 92       	[P0++] = R0;
+  fe:	00 e1 ca 01 	R0.L = 0x1ca;		/* (458)	R0=0xffa001ca(-6290998) */
+ 102:	40 e1 a0 ff 	R0.H = 0xffa0;		/* (-96)	R0=0xffa001ca(-6290998) */
+ 106:	00 92       	[P0++] = R0;
+ 108:	00 92       	[P0++] = R0;
+ 10a:	00 e1 c0 01 	R0.L = 0x1c0;		/* (448)	R0=0xffa001c0(-6291008) */
+ 10e:	40 e1 a0 ff 	R0.H = 0xffa0;		/* (-96)	R0=0xffa001c0(-6291008) */
+ 112:	00 92       	[P0++] = R0;
+ 114:	00 e1 ce 01 	R0.L = 0x1ce;		/* (462)	R0=0xffa001ce(-6290994) */
+ 118:	40 e1 a0 ff 	R0.H = 0xffa0;		/* (-96)	R0=0xffa001ce(-6290994) */
+ 11c:	00 92       	[P0++] = R0;
+ 11e:	00 e1 d4 01 	R0.L = 0x1d4;		/* (468)	R0=0xffa001d4(-6290988) */
+ 122:	40 e1 a0 ff 	R0.H = 0xffa0;		/* (-96)	R0=0xffa001d4(-6290988) */
+ 126:	00 92       	[P0++] = R0;
+ 128:	00 92       	[P0++] = R0;
+ 12a:	00 92       	[P0++] = R0;
+ 12c:	00 e1 e4 01 	R0.L = 0x1e4;		/* (484)	R0=0xffa001e4(-6290972) */
+ 130:	40 e1 a0 ff 	R0.H = 0xffa0;		/* (-96)	R0=0xffa001e4(-6290972) */
+ 134:	00 92       	[P0++] = R0;
+ 136:	00 e1 ea 01 	R0.L = 0x1ea;		/* (490)	R0=0xffa001ea(-6290966) */
+ 13a:	40 e1 a0 ff 	R0.H = 0xffa0;		/* (-96)	R0=0xffa001ea(-6290966) */
+ 13e:	00 92       	[P0++] = R0;
+ 140:	00 e1 f0 01 	R0.L = 0x1f0;		/* (496)	R0=0xffa001f0(-6290960) */
+ 144:	40 e1 a0 ff 	R0.H = 0xffa0;		/* (-96)	R0=0xffa001f0(-6290960) */
+ 148:	00 92       	[P0++] = R0;
+ 14a:	00 e1 f6 01 	R0.L = 0x1f6;		/* (502)	R0=0xffa001f6(-6290954) */
+ 14e:	40 e1 a0 ff 	R0.H = 0xffa0;		/* (-96)	R0=0xffa001f6(-6290954) */
+ 152:	00 92       	[P0++] = R0;
+ 154:	00 e1 fc 01 	R0.L = 0x1fc;		/* (508)	R0=0xffa001fc(-6290948) */
+ 158:	40 e1 a0 ff 	R0.H = 0xffa0;		/* (-96)	R0=0xffa001fc(-6290948) */
+ 15c:	00 92       	[P0++] = R0;
+ 15e:	00 e1 02 02 	R0.L = 0x202;		/* (514)	R0=0xffa00202(-6290942) */
+ 162:	40 e1 a0 ff 	R0.H = 0xffa0;		/* (-96)	R0=0xffa00202(-6290942) */
+ 166:	00 92       	[P0++] = R0;
+ 168:	08 e1 3c 20 	P0.L = 0x203c;		/* (8252)	P0=0xffe0203c(-2088900) */
+ 16c:	48 e1 e0 ff 	P0.H = 0xffe0;		/* (-32)	P0=0xffe0203c(-2088900) */
+ 170:	00 e1 90 01 	R0.L = 0x190;		/* (400)	R0=0xffa00190(-6291056) */
+ 174:	40 e1 a0 ff 	R0.H = 0xffa0;		/* (-96)	R0=0xffa00190(-6291056) */
+ 178:	00 93       	[P0] = R0;
+ 17a:	80 e1 ff ff 	R0 = 0xffff (Z);		/*		R0=0xffff(65535) */
+ 17e:	40 00       	STI R0;
+ 180:	9f 00       	RAISE 0xf;
+ 182:	08 e1 8e 01 	P0.L = 0x18e;		/* (398)	P0=0xffe0018e(-2096754) */
+ 186:	48 e1 a0 ff 	P0.H = 0xffa0;		/* (-96)	P0=0xffa0018e */
+ 18a:	58 3e       	RETI = P0;
+ 18c:	11 00       	RTI;
+ 18e:	00 20       	JUMP.S 0x18e <_binary_test_elf_start+0x18e>;
+ 190:	02 60       	R2 = 0x0 (X);		/*		R2=0x0(  0) */
+ 192:	32 3c       	CYCLES = R2;
+ 194:	3a 3c       	CYCLES2 = R2;
+ 196:	d2 31       	R2 = SYSCFG;
+ 198:	0a 4a       	BITSET (R2, 0x1);		/* bit  1 */
+ 19a:	12 3e       	SYSCFG = R2;
+ 19c:	7b 01       	[--SP] = RETI;
+ 19e:	08 e1 8c 00 	P0.L = 0x8c;		/* (140)	P0=0xffa0008c */
+ 1a2:	48 e1 a0 ff 	P0.H = 0xffa0;		/* (-96)	P0=0xffa0008c */
+ 1a6:	00 e1 b2 01 	R0.L = 0x1b2;		/* (434)	R0=0x1b2(434) */
+ 1aa:	40 e1 a0 ff 	R0.H = 0xffa0;		/* (-96)	R0=0xffa001b2(-6291022) */
+ 1ae:	38 38       	RETS = R0;
+ 1b0:	50 00       	JUMP (P0);
+ 1b2:	20 00       	IDLE;
+ 1b4:	ff 2f       	JUMP.S 0x1b2 <_binary_test_elf_start+0x1b2>;
+ 1b6:	20 00       	IDLE;
+ 1b8:	24 00       	SSYNC;
+ 1ba:	fe 2f       	JUMP.S 0x1b6 <_binary_test_elf_start+0x1b6>;
+ 1bc:	28 4a       	BITSET (R0, 0x5);		/* bit  5 */
+ 1be:	05 20       	JUMP.S 0x1c8 <_binary_test_elf_start+0x1c8>;
+ 1c0:	00 00       	NOP;
+ 1c2:	00 00       	NOP;
+ 1c4:	00 00       	NOP;
+ 1c6:	11 00       	RTI;
+ 1c8:	00 20       	JUMP.S 0x1c8 <_binary_test_elf_start+0x1c8>;
+ 1ca:	f6 2f       	JUMP.S 0x1b6 <_binary_test_elf_start+0x1b6>;
+ 1cc:	12 00       	RTX;
+ 1ce:	00 e1 06 00 	R0.L = 0x6;		/* (  6)	R0=0xffa00006(-6291450) */
+ 1d2:	f5 2f       	JUMP.S 0x1bc <_binary_test_elf_start+0x1bc>;
+ 1d4:	00 e1 07 00 	R0.L = 0x7;		/* (  7)	R0=0xffa00007(-6291449) */
+ 1d8:	f2 2f       	JUMP.S 0x1bc <_binary_test_elf_start+0x1bc>;
+ 1da:	11 00       	RTI;
+ 1dc:	00 00       	NOP;
+ 1de:	11 00       	RTI;
+ 1e0:	00 00       	NOP;
+ 1e2:	11 00       	RTI;
+ 1e4:	00 e1 0a 00 	R0.L = 0xa;		/* ( 10)	R0=0xffa0000a(-6291446) */
+ 1e8:	ea 2f       	JUMP.S 0x1bc <_binary_test_elf_start+0x1bc>;
+ 1ea:	00 e1 0b 00 	R0.L = 0xb;		/* ( 11)	R0=0xffa0000b(-6291445) */
+ 1ee:	e7 2f       	JUMP.S 0x1bc <_binary_test_elf_start+0x1bc>;
+ 1f0:	00 e1 0c 00 	R0.L = 0xc;		/* ( 12)	R0=0xffa0000c(-6291444) */
+ 1f4:	11 00       	RTI;
+ 1f6:	00 e1 0d 00 	R0.L = 0xd;		/* ( 13)	R0=0xffa0000d(-6291443) */
+ 1fa:	e1 2f       	JUMP.S 0x1bc <_binary_test_elf_start+0x1bc>;
+ 1fc:	00 e1 0e 00 	R0.L = 0xe;		/* ( 14)	R0=0xffa0000e(-6291442) */
+ 200:	de 2f       	JUMP.S 0x1bc <_binary_test_elf_start+0x1bc>;
+ 202:	00 e1 0f 00 	R0.L = 0xf;		/* ( 15)	R0=0xffa0000f(-6291441) */
+ 206:	db 2f       	JUMP.S 0x1bc <_binary_test_elf_start+0x1bc>;

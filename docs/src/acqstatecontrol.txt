@@ -1,0 +1,33 @@
+AcqStateControl: The control interface for the acqboard state
+
+Challenges: 
+  1. We're sharing the acqboard with another DSP, and must react accordingly, 
+     only using the subset of the CMDIDs that are ours
+  2. We'd love to work at other modes, because we want to be able to
+     acquire the sample buffers, test out filters, etc. 
+     But mode changes are particularly problematic
+
+
+acqstatecontrol.linkchane(function to call when link state changes)
+acqstatecontrol.modechange(function to call when mode changes)
+
+and then you have 
+bool acqstatecontrol.setGain(chanmask, value, callback, handle)
+bool acqstatecontrol.setHPF(chanmask, value, callback, handle)
+bool acqstatecontrol.changeMode(mode) 
+
+Note that the AcqStateControl can only process a single command
+at a time. 
+
+
+---------------------------------------------------------------------
+implementation
+
+Internally we have : 
+bool    pendingCommand : is there currently a command pending
+char[]  currentMask : mask of the channels the current command 
+        currentOP : current operation 
+        currentMaskPos : current channel we're working on / waiting on
+char    pendingSerialCMDID : commandid we're currently waiting for
+bool    pendingSerial : what's the serial command we're waiting for
+           

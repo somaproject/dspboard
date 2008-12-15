@@ -1,0 +1,21 @@
+The FIR FilterLink performs simple convolution on incoming data. 
+
+Things to watch out for: 
+   * the input buffer from the data source must be long enough
+     to support the filter 
+   * This must be fast, and really only supports signed ints
+   * how do we wrap? inline asm? 
+
+
+AD EE-186, Extended-Precision Fixed-point arithmetic, suggests we can
+get ~31-bit answers with 
+
+C + 2T
+ticks, where T is the # of taps. 
+
+and C ~50 
+
+this means that for a 128-tap filter for
+each of the 5 channels, we need
+5 * (128 *2 + 50)  = ~150 ticks
+

@@ -1,0 +1,30 @@
+This is the IO library for handling events within the 
+DSPboard and communication with it. 
+
+This library by-and-large just handles event parsing and unparsing. 
+
+It would be fantastic if this could be used from within python, but
+it's really not clear how to get the callbacks working properly
+
+It would be great to have an object that we could pass
+events into, that would then fire the relevant signals. 
+
+And similarly, that we could call methods, and it would spit
+back the encapsulated event, and be purely functional
+
+AcqDataSource::queryLinkStatus(datasource_t)
+AcqDataSource::processLinkStatus(event)
+AcqDataSource::EVENT_QUERY
+
+AcqDataSource::setMode(datasource_T, mode); 
+mode = AcqDataSource::processMode(event); 
+
+AcqDataSourceControl::setChanGain(datasource_t, chan, gain); 
+AcqDataSourceControl::processChanGain(event)
+
+
+And then there's a SomaDSPCodec object which handles caching state, 
+event firing, etc, taking in events and spitting out events
+
+
+
