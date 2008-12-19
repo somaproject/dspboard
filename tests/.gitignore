@@ -1,0 +1,9 @@
+transcript
+*.wlf
+work/
+tests/
+build/
+*.xrpt
+coregen.log
+*.twr
+*details.xml

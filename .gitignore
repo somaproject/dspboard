@@ -1,0 +1,13 @@
+pcb/History/
+*.o
+# FPGA 
+*code8b10b*
+!*.xco
+*.lso
+*.ngr
+*.srp
+*.twx
+
+xlnx_auto_0.ise
+xlnx_auto_0_xdb/
+*.block

@@ -1,0 +1,7 @@
+*.twr
+*.xrpt
+*.log
+xst/
+build/
+*.mrp
+*.srp
