@@ -4,9 +4,6 @@
 [submodule "vhdl/eproc"]
 	path = vhdl/eproc
 	url = git://github.com/somaproject/eproc.git
-[submodule "serial-deviceio"]
-	path = serial-deviceio
-	url = git://github.com/somaproject/serial-deviceio.git
 [submodule "vhdl/serial-deviceio"]
 	path = vhdl/serial-deviceio
 	url = git://github.com/somaproject/serial-deviceio.git
