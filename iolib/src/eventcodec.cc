@@ -148,6 +148,51 @@ EventTX_t queryMode( )
 
 }
 
+
+EventTX_t queryChanRangeMin(int chan)
+{
+  EventTX_t etx;
+  etx.event.cmd = QUERY;
+  etx.event.data[0] = CHANRANGEMIN;
+  etx.event.data[1] = chan; 
+
+  return etx; 
+}
+
+EventTX_t queryChanRangeMax(int chan)
+{
+  EventTX_t etx;
+  etx.event.cmd = QUERY;
+  etx.event.data[0] = CHANRANGEMAX;
+  etx.event.data[1] = chan; 
+
+  return etx; 
+}
+
+chanrange_t chanRangeMin(const Event_t & evt)
+{
+  chanrange_t cr; 
+  cr.first = evt.data[1]; 
+  int32_t rmin(0); 
+  rmin = evt.data[2]; 
+  rmin = (rmin << 16) | evt.data[3]; 
+  cr.second = rmin; 
+
+  return cr; 
+}
+
+chanrange_t chanRangeMax(const Event_t & evt)
+{
+  chanrange_t cr; 
+  cr.first = evt.data[1]; 
+  int32_t rmax(0); 
+  rmax = evt.data[2]; 
+  rmax = (rmax << 16) | evt.data[3]; 
+  cr.second = rmax; 
+
+  return cr; 
+}
+
 std::list<eventcmd_t> cmdsToReceive()
 {
   std::list<eventcmd_t> cmds; 
@@ -174,6 +219,12 @@ PARAMETERS whichParam(const Event_t & event)
     break;
   case CHANSEL:
     return CHANSEL;
+    break; 
+  case CHANRANGEMIN:
+    return CHANRANGEMIN;
+    break; 
+  case CHANRANGEMAX:
+    return CHANRANGEMAX;
     break; 
   }
 }

@@ -18,6 +18,7 @@ namespace dspiolib {
       
       typedef std::pair<int, int> changain_t; 
       typedef std::pair<int, bool> chanhpf_t; 
+      typedef std::pair<int, int32_t> chanrange_t; 
       
       EventTX_t queryLinkStatus(); 
       bool linkStatus(const Event_t & ); 
@@ -34,6 +35,13 @@ namespace dspiolib {
       EventTX_t chanSel(int chan); 
       int chanSel(const Event_t & ); 
       EventTX_t queryChanSel(); 
+      
+
+      chanrange_t chanRangeMin(const Event_t & ); 
+      EventTX_t queryChanRangeMin(int chan); 
+      
+      chanrange_t chanRangeMax(const Event_t & ); 
+      EventTX_t queryChanRangeMax(int chan); 
       
       EventTX_t mode(int mode); 
       int mode(const Event_t & ); 
@@ -52,7 +60,9 @@ namespace dspiolib {
 	MODE = 1, 
 	CHANGAIN = 2, 
 	CHANHPF = 3,
-	CHANSEL = 4
+	CHANSEL = 4, 
+	CHANRANGEMIN = 5, 
+	CHANRANGEMAX = 6
       };
       PARAMETERS whichParam(const Event_t &); 
       

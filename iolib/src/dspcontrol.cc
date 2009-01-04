@@ -38,7 +38,7 @@ namespace dspiolib {
     mode_  = 0; 
     for (int i = 0; i < CHANCNT; i++) {
       gains_[i] = 0; 
-      hpfen_[i] = false; 
+      hpfens_[i] = false; 
     }
     chansel_ = 0; 
     std::cout << "parent dsrc = " << (int)parent_.dsrc_ << std::endl;
@@ -117,6 +117,37 @@ namespace dspiolib {
 	}
       }
       break; 
+
+    case ads::CHANHPF:
+      {
+	ads::chanhpf_t hpf = ads::changeHPF(event); 
+	if (hpfens_[hpf.first] != hpf.second) {
+	  hpfens_[hpf.first] = hpf.second; 
+	  hpfenSignal_.emit(hpf.first, hpf.second); 
+	}
+      }
+      break; 
+
+    case ads::CHANRANGEMIN:
+      {
+	ads::chanrange_t range = ads::chanRangeMin(event); 
+	if (ranges_[range.first].first != range.second) {
+	  ranges_[range.first].first = range.second; 
+	  rangeSignal_.emit(range.first, ranges_[range.first]); 
+	}
+      }
+      break; 
+
+    case ads::CHANRANGEMAX:
+      {
+	ads::chanrange_t range = ads::chanRangeMax(event); 
+	if (ranges_[range.first].second != range.second) {
+	  ranges_[range.first].second = range.second; 
+	  rangeSignal_.emit(range.first, ranges_[range.first]); 
+	}
+      }
+      break; 
+
     default:
       // FIXME Add the rest here!!!
       break;
@@ -175,7 +206,7 @@ namespace dspiolib {
 
   bool AcqDataSource::getHPFen(int chan)
   {
-    return hpfen_[chan];
+    return hpfens_[chan];
   }
   
   void AcqDataSource::setHPFen(int chan, bool val)
@@ -219,6 +250,15 @@ namespace dspiolib {
     return chanselSignal_; 
   }
   
+
+  range_t AcqDataSource::getRange(int chan) {
+    return ranges_[chan]; 
+  }
+  
+  sigc::signal<void, int, range_t> & AcqDataSource::range()
+  {
+    return rangeSignal_; 
+  }
 
   bool TSpikeSink::newEvent(const Event_t & event)
   {

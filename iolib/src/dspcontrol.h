@@ -23,6 +23,7 @@ namespace dspiolib {
   class StateProxy; 
   typedef std::pair<uint32_t, uint32_t> samprate_t;
   typedef uint32_t filterid_t; 
+      typedef std::pair<int32_t, int32_t> range_t;
 
   // basically a proxy for remote state
     class AcqDataSource
@@ -43,8 +44,11 @@ namespace dspiolib {
       sigc::signal<void, int, bool> & hpfen(); 
       bool getHPFen(int chan); 
       void setHPFen(int chan, bool val); 
-      
-      
+
+      sigc::signal<void, int, range_t> & range(); 
+      range_t getRange(int chan); 
+      // there is no setter for range
+
       sigc::signal<void, int> & chansel(); 
       int getChanSel(); 
       void setChanSel(int); 
@@ -62,11 +66,13 @@ namespace dspiolib {
       sigc::signal<void, int, int> gainSignal_; 
       sigc::signal<void, int, bool> hpfenSignal_; 
       sigc::signal<void, int>  chanselSignal_;
+      sigc::signal<void, int, range_t> rangeSignal_; 
       
       bool linkStatus_; 
       int mode_; 
       int gains_[CHANCNT]; 
-      bool hpfen_[CHANCNT]; 
+      bool hpfens_[CHANCNT]; 
+      range_t ranges_[CHANCNT]; 
       int chansel_; 
       
       friend class StateProxy; 
@@ -126,7 +132,7 @@ namespace dspiolib {
     StateProxy(datasource_t dsrc, const sigc::slot<void, const EventTX_t &> & etgt); 
     
     void newEvent(const Event_t & event); 
-
+    
     datasource_t dsrc_;
     eventsource_t src_; 
 
