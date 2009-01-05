@@ -82,6 +82,7 @@ namespace dspiolib {
     
     class TSpikeSink
     {
+    public:
       static const int CHANN = 4; 
 
       sigc::signal<void, int, int> & thold(); 
@@ -106,6 +107,7 @@ namespace dspiolib {
     
     class WaveSink
     {
+    public:
       sigc::signal<void, filterid_t> & filterID(); 
       void setFilterID(filterid_t filterID); 
       filterid_t getFilterID(); 
