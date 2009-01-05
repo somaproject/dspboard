@@ -43,14 +43,11 @@ namespace dspiolib {
       hpfens_[i] = false; 
     }
     chansel_ = 0; 
-    std::cout << "parent dsrc = " << (int)parent_.dsrc_ << std::endl;
-    std::cout << "AcqDataSource init mid0" << std::endl;
 
     // send queries
     EventTX_t etx = ads::queryLinkStatus(); 
     parent_.setETXDest(etx); 
     parent_.eventTX_(etx); 
-    std::cout << "AcqDataSource init mid1" << std::endl;
     
     etx = ads::queryMode(); 
     parent_.setETXDest(etx); 
@@ -64,12 +61,19 @@ namespace dspiolib {
       etx = ads::queryHPF(i); 
       parent_.setETXDest(etx); 
       parent_.eventTX_(etx); 
+
+      etx = ads::queryChanRangeMin(i); 
+      parent_.setETXDest(etx); 
+      parent_.eventTX_(etx); 
+
+      etx = ads::queryChanRangeMax(i); 
+      parent_.setETXDest(etx); 
+      parent_.eventTX_(etx); 
     }
 
     etx = ads::queryChanSel(); 
     parent_.setETXDest(etx); 
     parent_.eventTX_(etx); 
-    std::cout << "AcqDataSource init done" << std::endl;
   
     
   }
@@ -113,6 +117,9 @@ namespace dspiolib {
     case ads::CHANGAIN:
       {
 	ads::changain_t gain = ads::changeGain(event); 
+	if (gain.first > CHANCNT) {
+	  throw std::runtime_error("received channel gain event with incorrect channel"); 
+	}
 	if (gains_[gain.first] != gain.second) {
 	  gains_[gain.first] = gain.second; 
 	  gainSignal_.emit(gain.first, gain.second); 
