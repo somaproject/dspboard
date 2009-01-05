@@ -95,14 +95,17 @@ namespace dspiolib {
 
     private:
       TSpikeSink(StateProxy & ); 
+
+      sigc::signal<void, int, int32_t> tholdSignal_; 
+      sigc::signal<void, int, uint32_t> filterIDSignal_; 
       
       friend class StateProxy; 
       bool newEvent(const Event_t & );
       StateProxy & parent_;
-      int32_t thold_[CHANN]; 
-      filterid_t filterid_[CHANN]; 
+      int32_t tholds_[CHANN]; 
+      filterid_t filterids_[CHANN]; 
       void parseEvent(const Event_t & event); 
-      
+
     }; 
     
     class WaveSink

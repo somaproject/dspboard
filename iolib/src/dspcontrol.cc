@@ -4,6 +4,8 @@
 namespace dspiolib {
 
   namespace ads =  codec::AcqDataSource; 
+  namespace tspike = codec::TSpikeSink; 
+
   
   StateProxy::StateProxy(datasource_t dsrc, const sigc::slot<void, const EventTX_t & > & etgt) :
     dsrc_(dsrc), 
@@ -263,7 +265,7 @@ namespace dspiolib {
   bool TSpikeSink::newEvent(const Event_t & event)
   {
     switch(event.cmd) {
-    case codec::TSpikeSink::RESPBCAST :
+    case tspike::RESPBCAST :
       parseEvent(event); 
       return true; 
     default:
@@ -275,8 +277,76 @@ namespace dspiolib {
   void TSpikeSink::parseEvent(const Event_t & event)
   {
 
+    tspike::PARAMETERS p = tspike::whichParam(event); 
+    switch(p) {
+    case tspike::THRESHOLD:
+      {
+	tspike::chanthold_t thold = tspike::changeThreshold(event); 
+	if (tholds_[thold.first] != thold.second) {
+	  tholds_[thold.first] = thold.second; 
+	  tholdSignal_.emit(thold.first, thold.second); 
+	}
+      }
+      break; 
+
+    case tspike::FILTERID:
+      {
+	tspike::chanfiltid_t filtid = tspike::changeFilterID(event); 
+	if (filterids_[filtid.first] != filtid.second) {
+	  filterids_[filtid.first] = filtid.second; 
+	  filterIDSignal_.emit(filtid.first, filtid.second); 
+	}
+      }
+      break; 
+
+    }
+    
+  }
+  
+
+  sigc::signal<void, int, int> & TSpikeSink::thold()
+  {
+    return tholdSignal_; 
+  }
+
+  void TSpikeSink::setThold(int chan, int thold)
+  {
+    tspike::chanthold_t ct; 
+    ct.first = chan; 
+    ct.second = thold; 
+    EventTX_t etx = tspike::changeThreshold(ct); 
+    parent_.setETXDest(etx); 
+    parent_.eventTX_(etx); 
 
   }
+
+  int TSpikeSink::getThold(int chan)
+  {
+    return tholds_[chan];
+  }
+  
+  sigc::signal<void, int, filterid_t> & TSpikeSink::filterID()
+  {
+    return filterIDSignal_; 
+  }
+
+  void TSpikeSink::setFilterID(int chan, filterid_t filterID)
+  {
+    tspike::chanfiltid_t cfid; 
+    cfid.first = chan; 
+    cfid.second = filterID; 
+    EventTX_t etx = tspike::changeFilterID(cfid); 
+    parent_.setETXDest(etx); 
+    parent_.eventTX_(etx); 
+
+  }
+
+  filterid_t TSpikeSink::getFilterID(int chan)
+  {
+    return filterids_[chan];
+
+  }
+
 
   WaveSink::WaveSink(StateProxy & sp) :
     parent_(sp)

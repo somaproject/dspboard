@@ -230,5 +230,104 @@ PARAMETERS whichParam(const Event_t & event)
 }
 
 }
+
+namespace TSpikeSink {
+
+  PARAMETERS whichParam(const Event_t & event)
+  {
+    switch(event.data[0]) {
+    case THRESHOLD:
+      return THRESHOLD; 
+      break; 
+    case FILTERID: 
+      return FILTERID; 
+      break; 
+    }
+  }
+
+  std::list<eventcmd_t> cmdsToReceive()
+  {
+    std::list<eventcmd_t> cmds; 
+    cmds.push_back(QUERY); 
+    cmds.push_back(SET); 
+    cmds.push_back(RESPBCAST); 
+  
+  }
+
+EventTX_t changeThreshold(chanthold_t ct)
+{
+  EventTX_t etx;
+  etx.event.cmd = SET;
+  etx.event.data[0] = THRESHOLD;
+  etx.event.data[1] = ct.first; 
+  etx.event.data[2] = (ct.second >> 16) & 0xFFFF; 
+  etx.event.data[3] = ct.second & 0xFFFF; 
+  return etx; 
+
+}
+
+
+chanthold_t changeThreshold(const Event_t & event)
+{
+  chanthold_t ct; 
+  ct.first = event.data[1]; 
+  uint32_t thold = 0; 
+  thold = event.data[2]; 
+  thold = (thold << 16) | event.data[3]; 
+  ct.second = thold; 
+
+  return ct; 
+
+}
+
+EventTX_t queryThold(int chan)
+{
+  EventTX_t etx;
+  etx.event.cmd = QUERY;
+  etx.event.data[0] = THRESHOLD; 
+  etx.event.data[1] = chan; 
+
+  return etx; 
+}
+
+
+EventTX_t changeFilterID(chanfiltid_t cfid)
+{
+  EventTX_t etx;
+  etx.event.cmd = SET;
+  etx.event.data[0] = THRESHOLD;
+  etx.event.data[1] = cfid.first; 
+  etx.event.data[2] = (cfid.second >> 16) & 0xFFFF; 
+  etx.event.data[3] = cfid.second & 0xFFFF; 
+  return etx; 
+
+}
+
+
+chanfiltid_t changeFilterID(const Event_t & event)
+{
+  chanfiltid_t cfid; 
+  cfid.first = event.data[1]; 
+  uint32_t filtid = 0; 
+  filtid = event.data[2]; 
+  filtid = (filtid << 16) | event.data[3]; 
+  cfid.second = filtid; 
+
+  return cfid; 
+
+}
+
+EventTX_t queryFiltid(int chan)
+{
+  EventTX_t etx;
+  etx.event.cmd = QUERY;
+  etx.event.data[0] = THRESHOLD; 
+  etx.event.data[1] = chan; 
+
+  return etx; 
+}
+
+
+}
 }
 }

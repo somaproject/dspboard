@@ -70,6 +70,18 @@ namespace dspiolib {
     
     namespace TSpikeSink
     {
+      typedef std::pair<int, int> chanthold_t; 
+      typedef std::pair<int, uint32_t> chanfiltid_t; 
+      
+      EventTX_t changeThreshold(chanthold_t); 
+      chanthold_t changeThreshold(const Event_t & ); 
+      EventTX_t queryThreshold(int chan); 
+      
+      EventTX_t changeFilterID(chanfiltid_t); 
+      chanfiltid_t changeFilterID(const Event_t & ); 
+      EventTX_t queryFilterID(int chan); 
+      
+
       enum CMDS {
 	QUERY = 0x43, 
 	SET = 0x44, 
@@ -77,11 +89,13 @@ namespace dspiolib {
       }; 
       
       enum PARAMETERS { 
-	THRESHOLD = 1
+	THRESHOLD = 1,
+	FILTERID = 2
       }; 
       
       std::list<eventcmd_t> cmdsToReceive(); 
       
+      PARAMETERS whichParam(const Event_t &); 
     }
     
     namespace WaveSink
@@ -93,9 +107,9 @@ namespace dspiolib {
       }; 
       
       enum PARAMETERS { 
-	sampratenum = 1, 
-	samprateden = 2, 
-	filterid = 3
+	SAMPRATENUM = 1, 
+	SAMPRATEDEN = 2, 
+	FILTERID = 3
       }; 
       
       std::list<eventcmd_t> cmdsToReceive(); 
