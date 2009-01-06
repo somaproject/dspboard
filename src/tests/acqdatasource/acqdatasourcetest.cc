@@ -28,10 +28,9 @@ BOOST_AUTO_TEST_CASE(acqdatasource_simple)
   HostDataOut dataout; 
 
   const char SRC =  10; 
-  
   std::vector<RawSink *> rawsinks; 
   for (int i = 0; i < 5; i++) {
-    rawsinks.push_back(new RawSink(&timer, &dataout, SRC)); 
+    rawsinks.push_back(new RawSink(&timer, &dataout, SRC, i)); 
   }
 
 
@@ -45,11 +44,12 @@ BOOST_AUTO_TEST_CASE(acqdatasource_simple)
   // now setup the acqstate
   acqstate.mode = 0; 
   acqstate.linkUp = true; 
-  acqstate.gain[0] = 10; 
+  acqstate.gain[0] = 100; 
   acqstate.gain[1] = 100;
-  acqstate.gain[2] = 500;
-  acqstate.gain[3] = 1000;
-  acqstate.gain[4] = 10000;
+  acqstate.gain[2] = 100;
+  acqstate.gain[3] = 100;
+  acqstate.gain[4] = 100;
+
   acqstate.hpfen[0] = false; 
   acqstate.hpfen[1] = false; 
   acqstate.hpfen[2] = false; 
@@ -76,10 +76,10 @@ BOOST_AUTO_TEST_CASE(acqdatasource_simple)
   // data check -- note that this depends on the order in 
   // which the acqframe fires
   
-  for (int bufnum = 0; bufnum < 1; bufnum++) {
+  for (int bufnum = 0; bufnum < 4; bufnum++) {
     unsigned char * buffer = dataout.allbuffers[bufnum]; 
- 
-    int LEN = 128 * 4 + 2; 
+    const int BUFOFFSET = 4 +  8 + 2 + 4; 
+    int LEN = 128 * 4 + BUFOFFSET; 
     BOOST_CHECK_EQUAL(buffer[0], LEN >> 8); 
     BOOST_CHECK_EQUAL(buffer[1], LEN & 0xFF ); 
     
@@ -91,11 +91,12 @@ BOOST_AUTO_TEST_CASE(acqdatasource_simple)
     
     for (int i = 0; i < RawData_t::BUFSIZE; i++) {
       int32_t hostx, netx = 0 ; 
-      memcpy(&netx, &(buffer[i*4 + 4]), 4); 
+      memcpy(&netx, &(buffer[i*4 + BUFOFFSET ]), 4); 
       hostx = ntohl(netx); 
-      int tgtval = bufnum * 10 + i * 100; 
-      double val = 2.048 / acqstate.gain[bufnum] * (tgtval / 32768.0);  
-      BOOST_CHECK_CLOSE(double(hostx) / 1000000000.0, val, 1.0/32768.0);
+      double tgtval = bufnum * 10 + i * 100; 
+      double tgtvald = 2.048 / acqstate.gain[bufnum] * (tgtval / 32768.0);  
+      double vald = double(hostx) / 1000000000.0; 
+      BOOST_CHECK_CLOSE(tgtvald, vald, 1.0/32768.0);
     }
   }
 
