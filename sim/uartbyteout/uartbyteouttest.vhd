@@ -2,11 +2,11 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 use IEEE.numeric_std.all;
 
-entity uartouttest is
+entity uartbyteouttest is
 
-end uartouttest;
+end uartbyteouttest;
 
-architecture Behavioral of uartouttest is
+architecture Behavioral of uartbyteouttest is
   component uartbyteout
     port (
       CLK         : in  std_logic;      -- '0'
@@ -26,6 +26,8 @@ architecture Behavioral of uartouttest is
 
   
   constant bitlen : time := 1.0 sec / 9600;
+  signal recoveredbyte  : std_logic_vector(7 downto 0) := (others => '0');
+  signal recovered : std_logic := '0';
 begin
 
     uartbyteout_inst: uartbyteout
@@ -37,6 +39,21 @@ begin
       UARTTX => DSPUARTTX); 
 
 
+  uartrecover: process
+  begin  -- process uartrecover
+    wait until falling_edge(DSPUARTTX);
+    for i in 0 to 7 loop
+      wait for bitlen/2.0;
+      wait for bitlen/2.0;
+      recoveredbyte(i)  <= DSPUARTTX; 
+    end loop;
+    wait until rising_edge(CLK);
+    recovered <= '1';
+    wait until rising_edge(CLK);
+    recovered <= '0';
+    
+    
+  end process uartrecover;
   CLK   <= not CLK after 5 ns;
   RESET <= '0'     after 100 ns;
 
@@ -49,7 +66,9 @@ begin
     wait until rising_edge(CLK);
     DIN <= X"00";
     uarttxsend <= '0';
-    wait for 3 ms;
+    wait until rising_edge(CLK) and uarttxdone = '1';
+    assert recoveredbyte = X"85" report "Error recovering byte" severity Error;
+    wait for 1 ms;
     
     wait until rising_edge(CLK);
     DIN <= X"AB";
@@ -57,7 +76,9 @@ begin
     wait until rising_edge(CLK);
     DIN <= X"00";
     uarttxsend <= '0';
-    
+    wait until rising_edge(CLK) and uarttxdone = '1';
+    assert recoveredbyte = X"AB" report "Error recovering byte" severity Error;
+    report "End of Simulation" severity Failure;
     end process; 
 
 end Behavioral;

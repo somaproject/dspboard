@@ -11,13 +11,13 @@ hw: $(WORKDIR)/uartbyteout/behavioral.dat
 
 comp: 
 
-$(WORKDIR)/uartacqrxtest/behavioral.dat: $(WORKDIR)/touched uartouttest.vhd
+$(WORKDIR)/uartbyteouttest/behavioral.dat: $(WORKDIR)/touched uartbyteouttest.vhd
 	mkdir -p $(WORKDIR)
-	$(VHDLC) uartouttest.vhd
+	$(VHDLC) uartbyteouttest.vhd
 
-sim: $(WORKDIR)/uartacqrxtest/behavioral.dat 
+sim: $(WORKDIR)/uartbyteouttest/behavioral.dat 
 runsim: all
-	$(VHDLS) uartouttest
+	$(VHDLS) uartbyteouttest
 
 
 clean:
