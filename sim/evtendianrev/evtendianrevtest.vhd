@@ -62,5 +62,23 @@ begin  -- Behavioral
         
       end if;
       
-    end process;  
+    end process;
+
+ processverify : process
+   begin
+     wait until rising_edge(CLK) and DOUTEN = '1';
+     for i in 0 to 499 loop
+       assert DOUT = std_logic_vector(TO_UNSIGNED((i*2 + 1 )mod 256, 8))
+          report "Error in high byte" severity Error;
+       wait until rising_edge(CLK);
+
+       assert DOUT = std_logic_vector(TO_UNSIGNED((i*2) mod 256, 8))
+          report "Error in low byte" severity Error;
+       wait until rising_edge(CLK);
+     end loop;  -- i
+
+     report "End of Simulation" severity Failure;
+
+   end process processverify; 
+    
 end Behavioral;
