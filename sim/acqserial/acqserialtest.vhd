@@ -21,13 +21,11 @@ architecture Behavioral of acqserialtest is
       -- SPORT outputs
       DSPASERDT  : out std_logic;
       DSPASERTFS : out std_logic;
-      DSPASERDR  : in  std_logic;
-      DSPASERRFS : in  std_logic;
-
-      DSPBSERDT  : out std_logic;
-      DSPBSERTFS : out std_logic;
-      DSPBSERDR  : in  std_logic;
-      DSPBSERRFS : in  std_logic;
+      DSPBSERDT   : out std_logic;
+      DSPBSERTFS  : out std_logic;
+      -- uart interfaces
+      DSPAUARTRX : in  std_logic;
+      DSPBUARTRX : in  std_logic;
       -- link status
       DSPALINKUP : out std_logic;
       DSPBLINKUP : out std_logic
@@ -44,25 +42,24 @@ architecture Behavioral of acqserialtest is
   -- SPORT outputs
   signal DSPASERDT  : std_logic := '0';
   signal DSPASERTFS : std_logic := '0';
-  signal DSPASERDR  : std_logic := '0';
-  signal DSPASERRFS : std_logic := '0';
 
   signal DSPBSERDT  : std_logic := '0';
   signal DSPBSERTFS : std_logic := '0';
-  signal DSPBSERDR  : std_logic := '0';
-  signal DSPBSERRFS : std_logic := '0';
 
+  signal DSPAUARTRX : std_logic := '0';
+  signal DSPBUARTRX : std_logic := '0';
+  
   -- link status
   signal DSPALINKUP : std_logic := '0';
   signal DSPBLINKUP : std_logic := '0';
 
-  signal dspadatain  : std_logic_vector(255 downto 0) := (others => '0');
+  signal dspadatain : std_logic_vector(255 downto 0) := (others => '0');
 
   -- dspadataout : data the DSP sends to the FPGA
-  signal dspadataout : std_logic_vector(63 downto 0) := (others => '0');
-  signal dspadone    : std_logic                      := '0';
-  signal dspabitposTx  : integer                        := 257;
-  signal dspabitposrx  : integer                        := 257;
+  signal dspadataout  : std_logic_vector(63 downto 0) := (others => '0');
+  signal dspadone     : std_logic                     := '0';
+  signal dspabitposTx : integer                       := 257;
+  signal dspabitposrx : integer                       := 257;
 
   signal dspacmdout   : std_logic_vector(3 downto 0) := (others => '0');
   signal dspacmdidout : std_logic_vector(3 downto 0) := (others => '0');
@@ -72,11 +69,11 @@ architecture Behavioral of acqserialtest is
   signal dspbserclk : std_logic := '0';
 
 
-  signal dspbdatain  : std_logic_vector(255 downto 0) := (others => '0');
-  signal dspbdataout : std_logic_vector(63 downto 0) := (others => '0');
-  signal dspbdone    : std_logic                      := '0';
-  signal dspbbitposrx  : integer                        := 257;
-  signal dspbbitpostx  : integer                        := 257;
+  signal dspbdatain   : std_logic_vector(255 downto 0) := (others => '0');
+  signal dspbdataout  : std_logic_vector(63 downto 0)  := (others => '0');
+  signal dspbdone     : std_logic                      := '0';
+  signal dspbbitposrx : integer                        := 257;
+  signal dspbbitpostx : integer                        := 257;
 
   signal dspbcmdout   : std_logic_vector(3 downto 0) := (others => '0');
   signal dspbcmdidout : std_logic_vector(3 downto 0) := (others => '0');
@@ -114,7 +111,7 @@ architecture Behavioral of acqserialtest is
 
   signal dspasend, dsbsend : std_logic := '0';
 
-  
+
 begin  -- Behavioral
 
   acqboard_inst : acqboard
@@ -146,12 +143,11 @@ begin  -- Behavioral
       SERCLK     => SERCLK,
       DSPASERDT  => DSPASERDT,
       DSPASERTFS => DSPASERTFS,
-      DSPASERDR  => DSPASERDR,
-      DSPASERRFS => DSPASERRFS,
+      DSPAUARTRX => DSPAUARTRX,
       DSPBSERDT  => DSPBSERDT,
       DSPBSERTFS => DSPBSERTFS,
-      DSPBSERDR  => DSPBSERDR,
-      DSPBSERRFS => DSPBSERRFS,
+      DSPBUARTRX => DSPBUARTRX,
+
       DSPALINKUP => DSPALINKUP,
       DSPBLINKUP => DSPBLINKUP
       );
@@ -198,26 +194,26 @@ begin  -- Behavioral
     end if;
   end process;
 
-  process
-    begin
-      wait until rising_edge(DSPASEND);
-      wait until falling_edge(DSPASERCLK);
-      DSPASERRFS <= '1';
-      wait until falling_edge(DSPASERCLK);
-      DSPASERRFS <= '0'; 
-      for i in 0 to 63 loop
-        DSPASERDR <= dspadataout(i);
-        wait until falling_edge(DSPASERCLK);
-        
-      end loop;  -- i
-    end process; 
+--   process
+--   begin
+--     wait until rising_edge(DSPASEND);
+--     wait until falling_edge(DSPASERCLK);
+--     DSPASERRFS  <= '1';
+--     wait until falling_edge(DSPASERCLK);
+--     DSPASERRFS  <= '0';
+--     for i in 0 to 63 loop
+--       DSPASERDR <= dspadataout(i);
+--       wait until falling_edge(DSPASERCLK);
+
+--     end loop;  -- i
+--   end process;
 
   -- dspa transmit test
   dspadataout(19 downto 16) <= dspacmdout;
   dspadataout(23 downto 20) <= dspacmdidout;
   dspadataout(39 downto 32) <= dspadata0out;
 
---   -----------------------------------------------------------------------------
+--  -----------------------------------------------------------------------------
 --   -- DSP B MODEL
 --   -----------------------------------------------------------------------------
 --   process(DSPBSERCLK)
@@ -234,7 +230,7 @@ begin  -- Behavioral
 --     end if;
 --   end process;
 
---   -- dspb transmit test
+--  -- dspb transmit test
 --   dspbdataout(19 downto 16) <= dspbcmdout;
 --   dspbdataout(23 downto 20) <= dspbcmdidout;
 --   dspbdataout(39 downto 32) <= dspbdata0out;
@@ -252,9 +248,9 @@ begin  -- Behavioral
 
       dspacmdidout <= std_logic_vector(TO_UNSIGNED(i*2+1, 4));
       dspadata0out <= X"FE";
-      DSPASEND <= '1';
+      DSPASEND     <= '1';
       wait until rising_edge(CLK);
-      DSPASEND <= '0'; 
+      DSPASEND     <= '0';
       wait until rising_edge(clk) and dspabitposrx = 256;
       wait until rising_edge(clk) and dspabitposrx = 256;
       wait until rising_edge(clk) and dspabitposrx = 256;
