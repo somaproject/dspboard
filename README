@@ -1,0 +1,18 @@
+The DSPBoard is the 4-DSP signal processing module that 
+performs the majority of the per-channel signal processing in soma. 
+
+Directory structure: 
+
+boot/       : Code for boot CPLD on device
+docs/       : documentation, design, and protocols
+iolib/      : C++ library for parsing and processing events
+sim/        : vhdl unit tests 
+solidmodel/ : SolidWorks model of the DSP board and mounting hardware
+src/        : DSP code 
+src/tests   : unit tests for c++
+tgt/dspboard : buildable code for actual dspboard targets
+
+At the moment I think we're going to support two targets, 
+"tetrode-ad" 
+and "raw-continuous" 
+
