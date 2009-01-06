@@ -2,14 +2,14 @@
 
 vhdl soma "../../../vhdl/somabackplane.vhd"
 
-vhdl eproc "../../../vhdl/eproc/alu.vhd" 
-vhdl eproc "../../../vhdl/eproc/regfile.vhd"
-vhdl eproc "../../../vhdl/eproc/ecore.vhd"
-vhdl eproc "../../../vhdl/eproc/eventtx.vhd"
-vhdl eproc "../../../vhdl/eproc/evtdnd.vhd"
-vhdl eproc "../../../vhdl/eproc/txreqeventbuffer.vhd"
-vhdl eproc "../../../vhdl/eproc/txreqbrambuffer.vhd"
-vhdl eproc "../../../vhdl/eproc/eproc.vhd"
+vhdl eproc "../../../vhdl/eproc/vhdl/alu.vhd" 
+vhdl eproc "../../../vhdl/eproc/vhdl/regfile.vhd"
+vhdl eproc "../../../vhdl/eproc/vhdl/ecore.vhd"
+vhdl eproc "../../../vhdl/eproc/vhdl/eventtx.vhd"
+vhdl eproc "../../../vhdl/eproc/vhdl/evtdnd.vhd"
+vhdl eproc "../../../vhdl/eproc/vhdl/txreqeventbuffer.vhd"
+vhdl eproc "../../../vhdl/eproc/vhdl/txreqbrambuffer.vhd"
+vhdl eproc "../../../vhdl/eproc/vhdl/eproc.vhd"
 
 vhdl work "../../../vhdl/fiberrx.vhd"
 vhdl work "../../../vhdl/fibertx.vhd"
@@ -24,7 +24,7 @@ vhdl work "../../../vhdl/acqserial.vhd"
 vhdl work "../../../vhdl/evtendianrev.vhd"
 vhdl work "../../../vhdl/datasport.vhd"
 
-vhdl work "../../../vhdl/deviceio/devicelink.vhd"
+vhdl work "../../../vhdl/serial-deviceio/vhdl/devicelink.vhd"
 
 vhdl work "../../../vhdl/bootser.vhd"
 vhdl work "../../../vhdl/dspiomux.vhd"
