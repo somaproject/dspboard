@@ -7,15 +7,19 @@ $(WORKDIR)/decodemux/behavioral.dat: $(WORKDIR)/touched ../../vhdl/decodemux.vhd
 	mkdir -p $(WORKDIR)
 	$(VHDLC) ../../vhdl/decodemux.vhd
 
-hw: $(WORKDIR)/decodemux/behavioral.dat 
+$(WORKDIR)/regfile/behavioral.dat: $(WORKDIR)/touched ../../vhdl/decodemux.vhd ../../vhdl/decodemux.vhd ../../vhdl/regfile.vhd
+	mkdir -p $(WORKDIR)
+	$(VHDLC) ../../vhdl/regfile.vhd
+
+hw: $(WORKDIR)/decodemux/behavioral.dat $(WORKDIR)/regfile/behavioral.dat 
 
 comp: 
 
-$(WORKDIR)/decodemuxtext/behavioral.dat: $(WORKDIR)/touched decodemuxtest.vhd
+$(WORKDIR)/decodemuxtest/behavioral.dat: $(WORKDIR)/touched decodemuxtest.vhd
 	mkdir -p $(WORKDIR)
 	$(VHDLC) decodemuxtest.vhd
 
-sim: $(WORKDIR)/decodemuxtext/behavioral.dat 
+sim: $(WORKDIR)/decodemuxtest/behavioral.dat 
 runsim: all
 	$(VHDLS) decodemuxtest
 
