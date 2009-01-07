@@ -1,5 +1,5 @@
-#include "defaultmainloop.h"
-void DefaultMainLoop::setup(EventDispatch * ed, EventTX * etx, 
+#include "rawmainloop.h"
+void RawMainLoop::setup(EventDispatch * ed, EventTX * etx, 
 			    AcqSerial * as, DataOut * dout, 
 			    DSPConfig * config)
 {
@@ -38,7 +38,7 @@ void DefaultMainLoop::setup(EventDispatch * ed, EventTX * etx,
 
 }
 
-void DefaultMainLoop::runloop()
+void RawMainLoop::runloop()
 {
   eep_->benchStart(0); 
   pAcqStateControl_->setLinkStatus(pAcqSerial_->checkLinkUp()); 

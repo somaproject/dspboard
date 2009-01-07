@@ -1,5 +1,5 @@
 
-CCSRCS   = main.cc echoproc.cc
+CCSRCS   = main.cc
 ASMSRCS = crt0.asm
 SRCDIR= ../../../src/
 HWDIR = $(SRCDIR)/bf533/
@@ -20,7 +20,7 @@ LDFLAGS =  -g -T bftiny.x  -L$(BFROOT)lib/ -L$(BFROOT)/lib/gcc/bfin-elf/$(BFROOT
 OBJS = $(ASMSRCS:%.asm=%.o) $(CCSRCS:%.cc=%.o) eventtx.o eventrx.o \
 	eventdispatch.o memory.o dspuartconfig.o  acqserial.o \
 	uarttx.o acqstatecontrol.o systemtimer.o datasport.o \
-	fakesource.o rawsink.o tspikesink.o defaultmainloop.o\
+	fakesource.o rawsink.o tspikesink.o rawmainloop.o echoproc.o\
 	filter.o delta.o fir.o acqdatasourcecontrol.o acqdatasource.o
 
 
@@ -56,6 +56,9 @@ filter.o: $(HWDIR)filter.cc
 eventdispatch.o: $(SRCDIR)/eventdispatch.cc	
 	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/eventdispatch.cc
 
+echoproc.o: $(SRCDIR)/echoproc.cc	
+	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/echoproc.cc
+
 acqdatasource.o: $(SRCDIR)/acqdatasource.cc	
 	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/acqdatasource.cc
 
@@ -68,8 +71,8 @@ dspuartconfig.o: $(HWDIR)hw/dspuartconfig.cc
 acqstatecontrol.o: $(SRCDIR)/acqstatecontrol.cc
 	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/acqstatecontrol.cc
 
-defaultmainloop.o: $(SRCDIR)/defaultmainloop.cc
-	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/defaultmainloop.cc
+rawmainloop.o: $(SRCDIR)/mainloops/rawmainloop.cc
+	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/mainloops/rawmainloop.cc
 
 systemtimer.o: $(SRCDIR)/systemtimer.cc
 	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/systemtimer.cc

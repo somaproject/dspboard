@@ -10,7 +10,7 @@
 #include <sinks/rawsink.h>
 #include <dsp.h>
 
-class DefaultMainLoop : public MainLoop
+class RawMainLoop : public MainLoop
 {
  public:  
   void setup(EventDispatch * ed, EventTX * etx, AcqSerial * as, DataOut *, DSPConfig * ); 
