@@ -1,5 +1,5 @@
 #include "hostdataout.h" 
-
+#include <iostream>
 
 HostDataOut::HostDataOut() :
   dataCount_(0)

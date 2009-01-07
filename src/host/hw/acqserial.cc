@@ -1,8 +1,10 @@
 #include "acqserial.h"
 #include <stdexcept>
 #include <iostream>
+#include <stdexcept>
 
-AcqSerial::AcqSerial() :
+AcqSerial::AcqSerial(bool autosend) :
+  autosend(autosend),
   gains_(10), 
   hpfs_(10),
   recentCMDID_ (0), 
@@ -23,15 +25,26 @@ AcqSerial::AcqSerial() :
 AcqSerial::~AcqSerial()
 {
 }
+void AcqSerial::appendSamples(std::vector<int16_t> samps)
+{
+  if(autosend) {
+    throw std::runtime_error("Can't append samples to an autosend AcqSerial"); 
+  }
+  pendingSamples.push_back(samps); 
 
-bool AcqSerial::linkUp(){
+}
+
+bool AcqSerial::checkLinkUp(){
   return linkUpState_; 
 }
 
 bool AcqSerial::checkRxEmpty(){
   // we always have sim packets to send
-  
-  return false; 
+  if (autosend) {
+    return false; 
+  } else {
+    return pendingSamples.empty(); 
+  }
 
 }
 
@@ -76,11 +89,17 @@ void AcqSerial::getNextFrame(AcqFrame * af) {
   
   
   // populate data
-  for (int i = 0; i < 10; i++)
-    {
-      af->samples[i] = (fpos_ << 4) + i; 
+  if (autosend) {
+    for (int i = 0; i < 10; i++)
+      {
+	af->samples[i] = (fpos_ << 4) + i; 
+      }
+  } else {
+    for (int i = 0; i < 10; i++) {
+      af->samples[i] = pendingSamples.front()[i]; 
     }
-  
+    pendingSamples.pop_front(); 
+  }
   fpos_ += 1; 
 
   acDelaycnt_--; 

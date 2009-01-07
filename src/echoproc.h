@@ -1,11 +1,9 @@
 #ifndef ECHOPROC
 #define ECHOPROC
 
-#include <cdefBF533.h>
 #include <event.h>
 #include <hw/eventtx.h>
-#include <hw/eventrx.h>
-#include <hw/dspuartconfig.h>
+#include <dsp.h>
 #include <eventdispatch.h>
 #include <systemtimer.h>
 

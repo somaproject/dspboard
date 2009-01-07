@@ -1,0 +1,23 @@
+# BUILD OUTPUT
+*.o
+*.in
+Makefile
+*.o
+*.lo
+.dirstamp
+*.la
+.libs
+.deps
+#.*.swp
+
+config.*
+missing
+somadspio-1.0.pc
+stamp-h1
+aclocal.m4
+autom4te.cache
+configure
+depcomp
+install-sh
+libtool
+ltmain.sh

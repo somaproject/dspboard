@@ -20,7 +20,7 @@ LDFLAGS =  -g -T bftiny.x  -L$(BFROOT)lib/ -L$(BFROOT)/lib/gcc/bfin-elf/$(BFROOT
 OBJS = $(ASMSRCS:%.asm=%.o) $(CCSRCS:%.cc=%.o) eventtx.o eventrx.o \
 	eventdispatch.o memory.o dspuartconfig.o  acqserial.o \
 	uarttx.o acqstatecontrol.o systemtimer.o datasport.o \
-	fakesource.o rawsink.o tspikesink.o \
+	fakesource.o rawsink.o tspikesink.o defaultmainloop.o\
 	filter.o delta.o fir.o acqdatasourcecontrol.o acqdatasource.o
 
 
@@ -67,6 +67,9 @@ dspuartconfig.o: $(HWDIR)hw/dspuartconfig.cc
 
 acqstatecontrol.o: $(SRCDIR)/acqstatecontrol.cc
 	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/acqstatecontrol.cc
+
+defaultmainloop.o: $(SRCDIR)/defaultmainloop.cc
+	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/defaultmainloop.cc
 
 systemtimer.o: $(SRCDIR)/systemtimer.cc
 	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/systemtimer.cc

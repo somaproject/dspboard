@@ -7,7 +7,10 @@ pcb/History/
 *.ngr
 *.srp
 *.twx
-
+*.lo
 xlnx_auto_0.ise
 xlnx_auto_0_xdb/
 *.block
+*.imem
+#*#
+runner

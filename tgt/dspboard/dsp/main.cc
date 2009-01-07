@@ -18,6 +18,7 @@
 #include <acqdatasource.h>
 #include <acqdatasourcecontrol.h>
 #include <fakesource.h>
+#include <defaultmainloop.h>
 #include <sinks/rawsink.h>
 #include <sinks/tspikesink.h>
 #include <filterlinks/delta.h>
@@ -126,21 +127,20 @@ int main_loop()
 
   EventDispatch * ed = new EventDispatch(config.getDSPPos()); 
   
-  SystemTimer timer(ed); 
-  EventEchoProc * eep = new EventEchoProc(ed, etx, &timer, config.getEventDevice()); 
-
+  //SystemTimer timer(ed); 
 
   eventrx->start(); 
-
-  AcqFrame af; 
-  AcqState acqstate; 
-  acqstate.linkUp = false; 
-  AcqStateControl asc(acqserial, &acqstate); 
-  asc.setDSPPos(config.getDSPPos()); 
-  // filterlink construction
-  AcqDataSource * acqdatasource = new AcqDataSource(&acqstate); 
-  acqdatasource->setDSP(config.getDSPPos()); 
-  AcqDataSourceControl * adsc = new AcqDataSourceControl(ed, etx, &asc); 
+  DefaultMainLoop * pMainLoop = new DefaultMainLoop(); 
+  pMainLoop->setup(ed, etx, acqserial, dataout, &config); 
+  //AcqFrame af; 
+//   AcqState acqstate; 
+//   acqstate.linkUp = false; 
+//   AcqStateControl asc(acqserial, &acqstate); 
+//   asc.setDSPPos(config.getDSPPos()); 
+//   // filterlink construction
+//   AcqDataSource * acqdatasource = new AcqDataSource(&acqstate); 
+//   acqdatasource->setDSP(config.getDSPPos()); 
+//   AcqDataSourceControl * adsc = new AcqDataSourceControl(ed, etx, &asc); 
 
   //  FakeSource * fs = new FakeSource(&timer); 
 //   RawSink * pRawSinkForFake = new RawSink(&timer, dataout, config.getDataSrc()); 
@@ -148,10 +148,10 @@ int main_loop()
 //   RawSink * pRawSinkForFake2 = new RawSink(&timer, dataout, config.getDataSrc()); 
 //   fs->source.connect(pRawSinkForFake2->sink); 
 
-  RawSink * pRawSinkA = new RawSink(&timer, dataout, config.getDataSrc(), 0); 
-  RawSink * pRawSinkB = new RawSink(&timer, dataout, config.getDataSrc(), 1); 
-  RawSink * pRawSinkC = new RawSink(&timer, dataout, config.getDataSrc(), 2); 
-  RawSink * pRawSinkD = new RawSink(&timer, dataout, config.getDataSrc(), 3); 
+//   RawSink * pRawSinkA = new RawSink(&timer, dataout, config.getDataSrc(), 0); 
+//   RawSink * pRawSinkB = new RawSink(&timer, dataout, config.getDataSrc(), 1); 
+//   RawSink * pRawSinkC = new RawSink(&timer, dataout, config.getDataSrc(), 2); 
+//   RawSink * pRawSinkD = new RawSink(&timer, dataout, config.getDataSrc(), 3); 
 //   TSpikeSink * pTSpikeSink = new TSpikeSink(&timer, dataout, 
 // 					    ed, etx, config.getDataSrc()); 
   //   Delta * deltaA = new Delta(); 
@@ -165,10 +165,10 @@ int main_loop()
 //   acqdatasource->sourceSampleCycle.connect(pTSpikeSink->samplesink); 
 
 
-  acqdatasource->sourceA.connect(pRawSinkA->sink); 
-  acqdatasource->sourceB.connect(pRawSinkB->sink); 
-  acqdatasource->sourceC.connect(pRawSinkC->sink); 
-  acqdatasource->sourceD.connect(pRawSinkD->sink); 
+//   acqdatasource->sourceA.connect(pRawSinkA->sink); 
+//   acqdatasource->sourceB.connect(pRawSinkB->sink); 
+//   acqdatasource->sourceC.connect(pRawSinkC->sink); 
+//   acqdatasource->sourceD.connect(pRawSinkD->sink); 
 
   acqserial->start(); 
 
@@ -176,7 +176,7 @@ int main_loop()
   int framecount = 0; 
   while (1) {
 
-    eep->benchStart(0);
+//     eep->benchStart(0);
     // ------------------------------------------------------------------
     // Event Processing, RX and TX 
     // ------------------------------------------------------------------
@@ -201,37 +201,37 @@ int main_loop()
     // ------------------------------------------------------------------
     // Fiber interface for acqboard data
     // ------------------------------------------------------------------
+    pMainLoop->runloop();
+//     asc.setLinkStatus(acqserial->checkLinkUp()); 
+//     if (! acqserial->checkRxEmpty())
+//       {
+// 	//*pFIO_FLAG_T = 0x0100;
+// 	eep->debugdata[0] = af.cmdid; 
+// 	eep->debugdata[1] = asc.sequentialCMDID_; 
 
-    asc.setLinkStatus(acqserial->checkLinkUp()); 
-    if (! acqserial->checkRxEmpty())
-      {
-	//*pFIO_FLAG_T = 0x0100;
-	eep->debugdata[0] = af.cmdid; 
-	eep->debugdata[1] = asc.sequentialCMDID_; 
-
-	acqserial->getNextFrame(&af); 
-	asc.newAcqFrame(&af); 
-	// trigger the set of filterlinks
-	eep->benchStart(1);
-	acqdatasource->newAcqFrame(&af); 
-	eep->benchStop(1);
+// 	acqserial->getNextFrame(&af); 
+// 	asc.newAcqFrame(&af); 
+// 	// trigger the set of filterlinks
+// 	eep->benchStart(1);
+// 	acqdatasource->newAcqFrame(&af); 
+// 	eep->benchStop(1);
 	
 
 
-// 	framecount++; 
-// 	if (framecount %  32000 == 1000) {
-// 	  asc.setGain(1, 100, 
-// 		      fastdelegate::MakeDelegate(&cfs, &AmpCallbackFuncs::CommandDone), 
-// 		      0x1234); 
-// 	}
-      }
+// // 	framecount++; 
+// // 	if (framecount %  32000 == 1000) {
+// // 	  asc.setGain(1, 100, 
+// // 		      fastdelegate::MakeDelegate(&cfs, &AmpCallbackFuncs::CommandDone), 
+// // 		      0x1234); 
+// // 	}
+//       }
 
     // -----------------------------------------------------------------
     // Data bus transmission
     // -----------------------------------------------------------------
     dataout->sendPending(); 
 
-    eep->benchStop(0); 
+//     eep->benchStop(0); 
 
   }
   

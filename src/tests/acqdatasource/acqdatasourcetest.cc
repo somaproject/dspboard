@@ -102,6 +102,5 @@ BOOST_AUTO_TEST_CASE(acqdatasource_simple)
 
 }
 
-
 BOOST_AUTO_TEST_SUITE_END(); 
 

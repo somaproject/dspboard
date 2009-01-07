@@ -1,5 +1,6 @@
 #include "echoproc.h" 
 #include <filter.h>
+#include <hw/misc.h>
 
 EventEchoProc::EventEchoProc(EventDispatch * ed, EventTX* etx, 
 			     SystemTimer * ptimer, 
@@ -51,11 +52,10 @@ void EventEchoProc::eventEcho(Event_t * et) {
 
 void EventEchoProc::eventLED(Event_t * et) {
   
-  *pFIO_DIR    |= 0x0100;
   if (et->data[0] > 0) {
-    *pFIO_FLAG_D |= 0x0100;
+    setEventLED(true); 
   } else {
-    *pFIO_FLAG_D &= ~0x0100;
+    setEventLED(false); 
   }
   
 }
@@ -68,7 +68,7 @@ void EventEchoProc::eventBenchQuery(Event_t * et) {
 
   char chan = et->data[0]; 
   const int DATAFIFOFULL_MASK = 0x0010; 
-  etx.event.data[0] =  (*pFIO_FLAG_D & DATAFIFOFULL_MASK); 
+  //etx.event.data[0] =  (*pFIO_FLAG_D & DATAFIFOFULL_MASK); 
 
   etx.event.data[1] = latest_[chan] >> 16; 
   etx.event.data[2] = latest_[chan] & 0xFFFF; 

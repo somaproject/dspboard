@@ -3,22 +3,27 @@
 
 #include <acqboardif.h>
 #include <vector>
+#include <list>
 
+/*
+  if autosend = 1, then we always have data to send, 
+  otherwise we can put new sample sets in via appendSamples(); 
+
+*/
 
 class AcqSerial: public AcqSerialBase
 {
 public: 
-  AcqSerial(); 
+  AcqSerial(bool autosend); 
   ~AcqSerial(); 
   
   bool checkRxEmpty(); 
   void getNextFrame(AcqFrame *); 
   void sendCommand(AcqCommand *); 
-  bool linkUp(); 
-
+  bool checkLinkUp(); 
+  bool autosend; 
   bool linkUpState_; 
-  //  void addSample(); 
-
+  void appendSamples(std::vector<int16_t> samps); 
 
 
   std::vector<int> gains_; 
@@ -29,6 +34,7 @@ public:
   AcqCommand acPending_; 
   int acDelaycnt_; 
   
+  std::list<std::vector<int16_t> > pendingSamples;
   
   short fpos_; 
 }; 

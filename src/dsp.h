@@ -10,6 +10,7 @@ enum DSP_POSITION { DSPA, DSPB, DSPC, DSPD, DSPNONE};
 
 class DSPConfig // ABC for all dsp configuration
 {
+public:
   virtual DSP_POSITION getDSPPos() = 0; 
   virtual unsigned char getEventDevice() = 0; 
   virtual unsigned char getDataSrc() = 0; 
