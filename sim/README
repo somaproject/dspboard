@@ -1,0 +1,27 @@
+Unit tests for FPGA modules. Modules to make sure we test: 
+
+acqcmdmux.vhd
+acqserial.vhd
+bootser [DONE]
+datamux.vhd
+datasport [DONE]
+decodemux [DONE]
+devicemuxtx.vhd
+dspcontproc.vhd
+dspiomux.vhd
+encodemux.vhd
+eventfilter.vhd
+eventrx.vhd
+evtendianrev [DONE]
+fiberrx.vhd
+fibertx.vhd
+framedis.vhd
+jtag.vhd
+regfilesingle.vhd
+regfile.vhd
+senddata.vhd
+sendevent.vhd
+somabackplane.vhd
+sportacqser.vhd
+uartacqrx.vhd
+uartbyteout [DONE]

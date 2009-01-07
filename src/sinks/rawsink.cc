@@ -1,5 +1,4 @@
 #include <sinks/rawsink.h>
-
 RawSink::RawSink(SystemTimer * st, DataOut * dout, 
 		 unsigned char datasrc, unsigned char chansrc ) : 
   pSystemTimer_(st), 

@@ -1,3 +1,5 @@
 transcript
 *.wlf
 work/
+*.vlf
+*.do

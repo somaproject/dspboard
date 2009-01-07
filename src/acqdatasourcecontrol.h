@@ -17,7 +17,8 @@ class AcqDataSourceControl
     MODE = 1, 
     CHANGAIN = 2, 
     CHANHPF = 3,
-    CHANSEL = 4
+    CHANSEL = 4, 
+    RANGE = 5
   };
       
   static const char CMDRESPBCAST = 0x60; 

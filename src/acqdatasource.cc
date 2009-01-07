@@ -1,6 +1,5 @@
 #include "acqdatasource.h"
 #include "dsp.h"
-
 const int32_t AcqDataSource::GAINS[] = {0, 100, 200, 500, 1000, 
 				      2000, 5000, 10000}; 
 
@@ -51,7 +50,6 @@ void AcqDataSource::newAcqFrame(AcqFrame * af)
     sample_t sample = af->samples[i+sampos]; 
     char gainpos = decodeGain(pAcqState_->gain[i]); 
     int32_t scale = GAINSCALE[gainpos]; 
-
     samps[i] = sample * scale; 
   }
 
