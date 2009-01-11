@@ -1,4 +1,5 @@
-AcqStateControl: The control interface for the acqboard state
+AcqStateControl: The control interface for the acqboard state, that serves
+as a local proxy. 
 
 Challenges: 
   1. We're sharing the acqboard with another DSP, and must react accordingly, 

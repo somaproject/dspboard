@@ -4,35 +4,23 @@
 AcqDataSourceControl::AcqDataSourceControl(EventDispatch * ed, EventTX* etx, 
 					   AcqStateControl * as):
   pEventTX_(etx), 
-  pAcqStateControl_(as), 
-  pendinghandle_(false), 
-  nexthandle_(0)
+  pAcqStateControl_(as)
 {
   
   // prime broadcast event (to save time)
   bcastEventTX_.clear(); 
   bcastEventTX_.setall();   
-  
-  as->setLinkChangeCallback(fastdelegate::MakeDelegate(this, 
-						       &AcqDataSourceControl::linkChange)); 
-  as->setModeChangeCallback(fastdelegate::MakeDelegate(this, 
-						       &AcqDataSourceControl::modeChange)); 
-  
-  ed->registerCallback(QUERY, fastdelegate::MakeDelegate(this, 
-							 &AcqDataSourceControl::query)); 
 
-  ed->registerCallback(SET, fastdelegate::MakeDelegate(this, 
-							 &AcqDataSourceControl::setstate)); 
   
   
 }
 
-void AcqDataSourceControl::modeChange(char){
+void AcqDataSourceControl::onModeChange(char mode){
   sendModeEvent(); 
   
 }
 
-void AcqDataSourceControl::linkChange(bool linkup){
+void AcqDataSourceControl::onLinkChange(bool linkup){
   // tell everyone the link has changed has changed!
   sendLinkStatusEvent(); 
   
@@ -171,70 +159,54 @@ void AcqDataSourceControl::setGain(Event_t * et)
 {
   
   uint16_t chanmask = et->data[1]; 
+  chanmask_t cmout[AcqState::CHANNUM]; 
+  decodeChanMask(chanmask, cmout); 
+
   uint32_t gain = et->data[2];
 
-  uint16_t handle = nextHandle(); 
-  bool result = pAcqStateControl_->setGain(chanmask, gain, 
-					   fastdelegate::MakeDelegate(this, 
-								      &AcqDataSourceControl::setGainDone), 
-					   handle); 
+  bool result = pAcqStateControl_->setGain(cmout, gain); 
+					 
   if (!result) {
     sendPendingError(et); 
     return; 
   }
-
-  pendingChanMask_ = chanmask; 
     
 }
 
 
-void AcqDataSourceControl::setGainDone(uint16_t handle, bool success){
-  char chanmask = pendingChanMask_; 
-  
-  for (char i = 0; i < 5; i++) {
-    if (chanmask & 0x1) { 
+void AcqDataSourceControl::onGainChange(chanmask_t * chanmask, int gain) {
+
+  for (char i = 0; i < AcqState::CHANNUM; i++) {
+    if (chanmask[i]) { 
       sendChanGainEvent(i); 
     } 
-    chanmask = chanmask >> 1; 
   }
-  
-}
-
-uint16_t AcqDataSourceControl::nextHandle()
-{
-  nexthandle_++; 
-  return nexthandle_; 
 }
 
 void AcqDataSourceControl::setHPF(Event_t * et)
 {
   uint16_t chanmask = et->data[1]; 
+  chanmask_t cmout[AcqState::CHANNUM]; 
+  decodeChanMask(chanmask, cmout); 
+
   uint16_t hpf = et->data[2];
 
-  uint16_t handle = nextHandle(); 
-  bool result = pAcqStateControl_->setHPF(chanmask, hpf, 
-					  fastdelegate::MakeDelegate(this, 
-								     &AcqDataSourceControl::setHPFDone), 
-					  handle); 
+  bool result = pAcqStateControl_->setHPF(cmout, hpf); 
+  
   if (!result) {
     sendPendingError(et); 
     return; 
   }
 
-  pendingChanMask_ = chanmask; 
-  
 } 
 
-void AcqDataSourceControl::setHPFDone(uint16_t handle, bool success){
-  char chanmask = pendingChanMask_; 
-  
-  for (char i = 0; i < 5; i++) {
-    if (chanmask & 0x1) { 
+void AcqDataSourceControl::onHPFChange(chanmask_t * chanmask, bool enabled) 
+{
+  for (char i = 0; i < AcqState::CHANNUM; i++) {
+    if (chanmask[i]) { 
       sendChanHPFEvent(i); 
-    } 
-    chanmask = chanmask >> 1; 
-  }
-  
+    }
+  } 
 }
 
 
@@ -256,3 +228,19 @@ void AcqDataSourceControl::sendPendingError(Event_t * et)
   // FIXME 
 } 
 
+void AcqDataSourceControl::onInputSelChange(char chan)
+{
+  //FIXME
+}
+
+void  AcqDataSourceControl::decodeChanMask(uint16_t chanmask, chanmask_t * cmout)
+{
+  for(int i = 0; i < AcqState::CHANNUM; i++) {
+    if(chanmask & 0x1) {
+      cmout[i] = true; 
+    } else {
+      cmout[i] = false; 
+    }
+    chanmask = chanmask >> 1; 
+  }
+}

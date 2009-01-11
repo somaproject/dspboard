@@ -1,6 +1,8 @@
 #ifndef ACQBOARDIF_H
 #define ACQBOARDIF_H
 
+typedef bool chanmask_t; 
+
 class AcqFrame
 {
  public: 
@@ -30,6 +32,24 @@ class AcqState
 {
 public:
   static const int CHANNUM = 5; 
+  AcqState() {
+    // initialize to BS values
+    mode = -1; 
+    linkUp = false; 
+    gain[0] = -1; 
+    gain[1] = -1; 
+    gain[2] = -1; 
+    gain[3] = -1; 
+    gain[4] = -1; 
+
+    hpfen[0] = false; 
+    hpfen[1] = false; 
+    hpfen[2] = false; 
+    hpfen[3] = false; 
+    hpfen[4] = false;
+    
+    inputSel = 0; 
+  }
 
   unsigned char mode; 
   bool linkUp; 

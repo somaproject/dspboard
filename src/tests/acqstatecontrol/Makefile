@@ -6,11 +6,15 @@ LDFLAGS=-lboost_unit_test_framework
 
 all: runner
 
+
 acqserial.o: $(HWDIR)/hw/acqserial.cc
 	$(CXX) $(CXXFLAGS) -c $(HWDIR)/hw/acqserial.cc -o acqserial.o
 
 acqstatecontrol.o: $(SRCDIR)/acqstatecontrol.cc
 	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/acqstatecontrol.cc -o acqstatecontrol.o
+
+mock_receiver.o: mock_receiver.cc
+	$(CXX) $(CXXFLAGS) -c mock_receiver.cc -o mock_receiver.o
 
 runner.o: runner.cc
 
@@ -20,5 +24,7 @@ clean:
 	rm *.o
 
 
-runner: runner.o acqstatecontroltest.o acqserial.o acqstatecontrol.o
+runner: runner.o acqstatecontroltest.o acqserial.o \
+	 acqstatecontrol.o mock_receiver.o
+
 

@@ -19,6 +19,7 @@ AcqSerial::AcqSerial(bool autosend) :
       gains_[i] = 0; 
       hpfs_[i] = 0; 
     }; 
+  chanSel_ = 0; 
 
 }
 
@@ -81,6 +82,13 @@ void AcqSerial::getNextFrame(AcqFrame * af) {
       bool val = (acPending_.data >> 16) & 0xFF; 
 
       hpfs_[chan] = val; 
+      std::cout << "AcqSerial setting hpf[" << (int)chan << "] = " 
+		<< (int) val << std::endl ;
+    } else if (acPending_.cmd == 0x3) {
+      char chan = acPending_.data >> 24; 
+      chanSel_ = chan; 
+      std::cout << "AcqSerial setting insel = " 
+		<< (int)chanSel_ << std::endl; 
 
     }
   }

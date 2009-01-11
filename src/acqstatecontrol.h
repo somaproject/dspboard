@@ -5,13 +5,9 @@
 #include <dsp.h>
 #include <types.h>
 
+class AcqStateReceiver; 
 
-typedef fastdelegate::FastDelegate1<bool> LinkChangeProc_t; 
-typedef fastdelegate::FastDelegate1<char> ModeChangeProc_t; 
-
-typedef fastdelegate::FastDelegate2<uint16_t, bool> CommandDoneProc_t; 
-
-enum OPS {NONE, SETGAIN, SETHPF, CHANGEMODE, 
+enum OPS {NONE, SETGAIN, SETHPF, SETINSEL, CHANGEMODE, 
 	  OFFSETWRITE, SAMPLEBUFFERWRITE, FILTERWRITE}; 
 
 
@@ -21,20 +17,20 @@ class AcqStateControl
 public:
   AcqStateControl(AcqSerialBase *, AcqState *); 
   // configure callbacks
-  void setLinkChangeCallback(LinkChangeProc_t lcp); 
-  void setModeChangeCallback(ModeChangeProc_t mcp); 
 
   void setDSPPos(DSP_POSITION); 
   // interfaces
   bool setLinkStatus(bool); 
   bool newAcqFrame(AcqFrame* af); 
+  void setAcqStateReceiver(AcqStateReceiver * as); 
 
   // commands
-  bool setGain(char chanmask, int gain, CommandDoneProc_t proc, short donehandle); 
-  bool setHPF(char chanmask, bool enabled, CommandDoneProc_t proc, short donehandle); 
-  bool setInput(char chan, CommandDoneProc_t proc, short donehandle); 
+  bool setGain(chanmask_t * chanmask, int gain); 
+  bool setHPF(chanmask_t * chanmask, bool enabled); 
+  bool setInput(char chan); 
   bool changeMode(char mode); 
   
+  bool isStateInit(); 
   
   AcqState * pAcqState_; 
 
@@ -42,15 +38,20 @@ public:
   
   bool waitForCMDID_; 
 
- private:
+  enum INIT_STATES {INIT_NONE, INIT_INIT, INIT_MODE, 
+		      INIT_GAINS, INIT_HPFS, INIT_INSEL}; 
+  
+  bool isInitializing() {
+    return isInitializing_; 
+  }
+private:
   AcqSerialBase * pAcqSerial_; 
-
+  AcqStateReceiver * pAcqStateReceiver_; 
   DSP_POSITION dsppos_; 
   
   // pending / processing variables
   bool pendingCommand_; // is there a command pending?
-  short pendingHandle_; // handle for when we're done
-  CommandDoneProc_t doneProc_; // delegate for when we're done
+
   bool currentMask_[AcqState::CHANNUM]; 
   OPS currentOP_; 
   char currentMaskPos_; 
@@ -61,8 +62,6 @@ public:
   bool pendingSerial_; 
 
   // callbacks 
-  LinkChangeProc_t lcp_; 
-  ModeChangeProc_t mcp_; 
 
   void cancelAllPending(); 
   void serialCommandDone(); 
@@ -70,7 +69,12 @@ public:
   void serialCommandSend(); 
 
   unsigned char getNextCMDID(); 
-
+  
+  void initStateAdvance();   // method that is called when 
+  void resetChanMask(chanmask_t *); 
+public:
+  INIT_STATES initState_; 
+  bool isInitializing_; 
 }; 
 
 #endif // ACQSTATECONTROL_H

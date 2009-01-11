@@ -1,32 +1,29 @@
 #include "acqstatecontrol.h"
+#include <acqstatereceiver.h>
 
+#define NULL 0
 
 AcqStateControl::AcqStateControl(AcqSerialBase * aserial, AcqState *astate) :
   pAcqSerial_(aserial), 
   pAcqState_(astate), 
+  pAcqStateReceiver_(NULL), 
   pendingCommand_(false), 
-  pendingHandle_(0), 
   currentOP_(NONE), 
   currentMaskPos_(0), 
   pendingSerialCMDID_(0), 
   pendingSerial_(false), 
   sequentialCMDID_(0), 
-  lcp_(0), 
-  mcp_(0), 
-  waitForCMDID_(true)
+  waitForCMDID_(true), 
+  initState_(INIT_NONE), 
+  isInitializing_(false)
 {
   
 
 }
 
-void AcqStateControl::setLinkChangeCallback(LinkChangeProc_t lcp)
+void AcqStateControl::setAcqStateReceiver(AcqStateReceiver * asr)
 {
-  lcp_ = lcp; 
-}
-
-void AcqStateControl::setModeChangeCallback(ModeChangeProc_t mcp)
-{
-  mcp_ = mcp; 
+  pAcqStateReceiver_ = asr; 
 }
 
 bool AcqStateControl::setLinkStatus(bool linkup)
@@ -37,14 +34,15 @@ bool AcqStateControl::setLinkStatus(bool linkup)
     
     // we've changed
     if (linkup ) {
-      // FIXME: We shoul really reinitalize all the relevant settings
+      // FIXME: We should really reinitalize all the relevant settings
       waitForCMDID_ = true;  // wait until we get our next cmdid
+      initState_ = INIT_INIT; 
+      isInitializing_ = true; 
     } else {
       // link down FIXME: What to do here? Cancel all pending events? 
       cancelAllPending(); 
     }
-    if (lcp_) 
-      lcp_(linkup); 
+    pAcqStateReceiver_->onLinkChange(linkup); 
     
   }
   
@@ -59,6 +57,7 @@ bool AcqStateControl::newAcqFrame(AcqFrame * af)
     if (af->cmdid == sequentialCMDID_) {
       getNextCMDID(); 
     }
+
     return true; 
   }
  // if the mode has changed, notify the mode change interface
@@ -66,12 +65,13 @@ bool AcqStateControl::newAcqFrame(AcqFrame * af)
 
     pAcqState_->mode = af->mode; 
     
-    if(mcp_) 
-      mcp_(pAcqState_->mode); 
+    pAcqStateReceiver_->onModeChange(pAcqState_->mode); 
     
-    // cancell all pending commands? a no-op if we're in a command
+    // cancell all pending commands? a no-op if we're not in a command
     cancelAllPending();  // 
 
+    initState_ = INIT_GAINS; // kick it off??
+    initStateAdvance();
   } 
 
   if ((af->cmdid == pendingSerialCMDID_) and pendingSerial_) {
@@ -94,7 +94,7 @@ void AcqStateControl::cancelAllPending()
   if (pendingCommand_) {
     pendingSerial_ = false; 
     pendingCommand_ = false; 
-    doneProc_(pendingHandle_, false); // FAILURE    
+    //doneProc_(pendingHandle_, false); // FAILURE    FIXME? 
 
   }
 
@@ -112,7 +112,7 @@ void AcqStateControl::serialCommandDone()
 	    ! currentMask_[currentMaskPos_]) {
 	currentMaskPos_++; 
       }
-      if (currentMaskPos_ == AcqState::CHANNUM) {
+      if (currentMaskPos_ >= AcqState::CHANNUM) {
 	// oops, done
 	commandDone(); 
       } else {
@@ -136,26 +136,45 @@ void AcqStateControl::commandDone()
     {
       int gainrealvalue = encodeGain(currentVal_);
       // update the state registers
-      for (int i = 0; i < 5; i++) {
+      for (int i = 0; i < AcqState::CHANNUM; i++) {
 	if (currentMask_[i] != 0) {
 	  pAcqState_->gain[i] = gainrealvalue; 
 	}
       }      
-      doneProc_(pendingHandle_, true); 
+      pAcqStateReceiver_->onGainChange(currentMask_, gainrealvalue); 
     }
     break; 
 
   case SETHPF: 
-    doneProc_(pendingHandle_, true); 
+    {
+      bool val  = false; // FIXME // get the current value
+      for (int i = 0; i < AcqState::CHANNUM; i++) {
+	if (currentMask_[i] != 0) {
+	  pAcqState_->hpfen[i] = val; 
+	}
+      }      
+      
+      pAcqStateReceiver_->onHPFChange(currentMask_, val); 
+    }
     break; 
-
+  case SETINSEL: 
+    {
+      bool val  = false; // FIXME
+      pAcqState_->inputSel = val; 
+      pAcqStateReceiver_->onInputSelChange(val); 
+    }
+    break; 
   
   }
 
-  pendingHandle_ = 0; 
   pendingSerial_ = false; 
   pendingCommand_ = false; 
-
+  if (initState_ != INIT_NONE) {
+    initStateAdvance(); // advance state
+    
+  } else { 
+    isInitializing_ = false; 
+  }
 }
 
 void AcqStateControl::serialCommandSend()
@@ -202,7 +221,7 @@ void AcqStateControl::serialCommandSend()
 
 }
 
-bool AcqStateControl::setInput(char chan, CommandDoneProc_t proc, short donehandle)
+bool AcqStateControl::setInput(char chan)
 {
   
   if (pendingCommand_)  // abort if currently sending a command
@@ -211,16 +230,18 @@ bool AcqStateControl::setInput(char chan, CommandDoneProc_t proc, short donehand
   if (!pAcqState_->linkUp) 
     return false; 
   
-  currentMaskPos_ = AcqState::CHANNUM -1;  // so when Done gets called we correctly dispatch
+  currentMaskPos_ = AcqState::CHANNUM ;  // so when Done gets called we correctly dispatch
+  currentOP_ = SETINSEL; 
   currentVal_ = chan; 
   char cmdid = getNextCMDID(); 
 
   AcqCommand changeinputcmd; 
   changeinputcmd.cmdid = cmdid; 
-  changeinputcmd.cmd = 2; 
+  changeinputcmd.cmd = 3; 
   changeinputcmd.data = chan; 
   changeinputcmd.data = changeinputcmd.data << 24; 
   
+
   
   pAcqSerial_->sendCommand(&changeinputcmd); 
 
@@ -252,12 +273,11 @@ bool AcqStateControl::changeMode(char mode) {
 
   pendingSerialCMDID_ = cmdid;
   pendingSerial_ = true; 
-     
+  
 
 }
 
-bool AcqStateControl::setGain(char chanmask, int gainval, CommandDoneProc_t proc, 
-			      short donehandle)
+bool AcqStateControl::setGain(chanmask_t * chanmask, int gainval)
 {
   
   if (pendingCommand_)  // abort if currently sending a command
@@ -265,28 +285,13 @@ bool AcqStateControl::setGain(char chanmask, int gainval, CommandDoneProc_t proc
   if (!pAcqState_->linkUp) 
     return false; 
 
-
   // decode the gainval
   char gainsetting = decodeGain(gainval); 
 
   pendingCommand_ = true; 
-  pendingHandle_ = donehandle; 
-  doneProc_ = proc; 
-  
-  
+
   // populate the mask
-  currentMaskPos_ = -1; 
-  for (int i = 0; i < AcqState::CHANNUM; i++) {
-    if (chanmask & 0x01) {
-      if (currentMaskPos_ < 0) {
-	currentMaskPos_ = i; 
-      }
-      currentMask_[i] = true; 
-    } else {
-      currentMask_[i] = false; 
-    } 
-    chanmask = chanmask >> 1; 
-  }
+  resetChanMask(chanmask); 
 
   currentOP_ = SETGAIN; 
   currentVal_ = gainsetting; 
@@ -298,12 +303,11 @@ bool AcqStateControl::setGain(char chanmask, int gainval, CommandDoneProc_t proc
   } else {
     commandDone(); 
   }
-  
+  return true; 
 }
 
 
-bool AcqStateControl::setHPF(char chanmask, bool enabled, CommandDoneProc_t proc, 
-			      short donehandle)
+bool AcqStateControl::setHPF(chanmask_t * chanmask, bool enabled)
 {
   
   if (pendingCommand_)  // abort if currently sending a command
@@ -311,26 +315,12 @@ bool AcqStateControl::setHPF(char chanmask, bool enabled, CommandDoneProc_t proc
   if (!pAcqState_->linkUp) 
     return false; 
   
-
   // decode the gainval
 
   pendingCommand_ = true; 
-  pendingHandle_ = donehandle; 
-  doneProc_ = proc; 
-  
+      
   // populate the mask
-  currentMaskPos_ = -1; 
-  for (int i = 0; i < AcqState::CHANNUM; i++) {
-    if (chanmask & 0x01) {
-      if (currentMaskPos_ < 0) {
-	currentMaskPos_ = i; 
-      }
-      currentMask_[i] = true; 
-    } else {
-      currentMask_[i] = false; 
-    } 
-    chanmask = chanmask >> 1; 
-  }
+  resetChanMask(chanmask); 
 
   currentOP_ = SETHPF; 
   currentVal_ = enabled; 
@@ -342,7 +332,7 @@ bool AcqStateControl::setHPF(char chanmask, bool enabled, CommandDoneProc_t proc
   } else {
     commandDone(); 
   }
-  
+  return true; 
 }
 
 
@@ -362,4 +352,64 @@ void AcqStateControl::setDSPPos(DSP_POSITION p)
     sequentialCMDID_ = 1; 
 
   }
+}
+
+void AcqStateControl::resetChanMask(chanmask_t * chanmask) {
+  currentMaskPos_ = -1; 
+
+  for (int i = 0; i < AcqState::CHANNUM; i++) {
+    if (chanmask[i]) {
+      if (currentMaskPos_ < 0) {
+	currentMaskPos_ = i; 
+      }
+    }
+    currentMask_[i] = chanmask[i]; 
+  }
+  
+}
+
+void AcqStateControl::initStateAdvance()
+{
+  bool chanmask[AcqState::CHANNUM];
+  chanmask[0] = true; 
+  chanmask[1] = true; 
+  chanmask[2] = true; 
+  chanmask[3] = true; 
+  chanmask[4] = true; 
+  //std::cout << "AcqStateControl::initStateAdvance" << std::endl; 
+  switch(initState_) {
+  case INIT_NONE: 
+    //std::cout << "AcqStateControl INIT_NONE" << std::endl; 
+    // none
+    break; 
+  case INIT_INIT:
+    {
+      //std::cout << "AcqStateControl INIT_INIT" << std::endl; 
+      changeMode(0); 
+      initState_ = INIT_GAINS; 
+      break; 
+    }
+  case INIT_GAINS: 
+    {
+      //std::cout << "AcqStateControl INIT_GAINS" << std::endl; 
+      setGain(chanmask, 0); 
+      initState_ = INIT_HPFS; 
+      break; 
+    }
+  case INIT_HPFS:
+    {
+      //std::cout << "AcqStateControl INIT_HPFS" << std::endl; 
+      setHPF(chanmask, false); 
+      initState_ = INIT_INSEL; 
+      break; 
+    }
+  case INIT_INSEL: 
+    {
+      //std::cout << "AcqStateControl INIT_INSEL" << std::endl; 
+      setInput(0); 
+      initState_ = INIT_NONE; 
+      break; 
+    }
+  }
+  
 }

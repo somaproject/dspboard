@@ -28,6 +28,7 @@ public:
 
   std::vector<int> gains_; 
   std::vector<bool> hpfs_; 
+  int chanSel_;
   int recentCMDID_; 
   int mode_; 
 

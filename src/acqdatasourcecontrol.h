@@ -4,8 +4,8 @@
 #include <eventdispatch.h>
 #include <hw/eventtx.h>
 #include <acqstatecontrol.h>
-
-class AcqDataSourceControl
+#include "acqstatereceiver.h"
+class AcqDataSourceControl : public AcqStateReceiver
 {
   enum INCMDS {
     QUERY =0x40,
@@ -59,11 +59,15 @@ class AcqDataSourceControl
 
   void setstate(Event_t * et);
 
-  char pendingChanMask_; 
-  uint16_t nextHandle(); 
   void set(Event_t * et); 
-  bool pendinghandle_; 
-  uint16_t nexthandle_; 
+
+  void onLinkChange(bool); 
+  void onModeChange(char mode); 
+  void onGainChange(chanmask_t * chanmask, int gain); 
+  void onHPFChange(chanmask_t *  chanmask, bool enabled); 
+  void onInputSelChange(char chan); 
+  
+  void decodeChanMask(uint16_t cm, chanmask_t *  cmout); 
 
 }; 
 

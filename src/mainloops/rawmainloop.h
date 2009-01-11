@@ -17,7 +17,9 @@ class RawMainLoop : public MainLoop
   
   void runloop(); 
 
- private:
+  // The following are only public for debugging
+  // and testing
+
   // pointers to external state
   EventDispatch *  pEventDispatch_; 
   EventTX * pEventTX_; 
@@ -33,7 +35,8 @@ class RawMainLoop : public MainLoop
   AcqStateControl * pAcqStateControl_; 
   AcqDataSourceControl * pAcqDataSourceControl_; 
   AcqDataSource * pAcqDataSource_; 
-  
+
+ private:  
   RawSink * pRawSinkA_; 
   RawSink * pRawSinkB_; 
   RawSink * pRawSinkC_;  

@@ -23,7 +23,10 @@ void RawMainLoop::setup(EventDispatch * ed, EventTX * etx,
   
   pAcqDataSourceControl_ = new AcqDataSourceControl(pEventDispatch_,
 							   pEventTX_,
-							   pAcqStateControl_); 
+							   pAcqStateControl_);
+  
+  pAcqStateControl_->setAcqStateReceiver(pAcqDataSourceControl_); 
+
 
   RawSink * pRawSinkA_ = new RawSink(timer_, pDataOut_, pConfig_->getDataSrc(), 0); 
   RawSink * pRawSinkB_ = new RawSink(timer_, pDataOut_, pConfig_->getDataSrc(), 1); 
