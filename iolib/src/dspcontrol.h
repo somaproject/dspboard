@@ -19,7 +19,7 @@
 
 
 namespace dspiolib {
-  using namespace somanetwork; 
+  namespace sn = somanetwork; 
   class StateProxy; 
   typedef std::pair<uint32_t, uint32_t> samprate_t;
   typedef uint32_t filterid_t; 
@@ -53,7 +53,7 @@ namespace dspiolib {
     int getChanSel(); 
     void setChanSel(int); 
     
-    bool newEvent(const Event_t & );
+    bool newEvent(const sn::Event_t & );
     
   private:
     AcqDataSource(StateProxy & parent); 
@@ -76,7 +76,7 @@ namespace dspiolib {
     int chansel_; 
     
     friend class StateProxy; 
-    void parseEvent(const Event_t & event); 
+    void parseEvent(const sn::Event_t & event); 
     
   }; 
   
@@ -100,11 +100,11 @@ namespace dspiolib {
       sigc::signal<void, int, uint32_t> filterIDSignal_; 
       
       friend class StateProxy; 
-      bool newEvent(const Event_t & );
+      bool newEvent(const sn::Event_t & );
       StateProxy & parent_;
       int32_t tholds_[CHANN]; 
       filterid_t filterids_[CHANN]; 
-      void parseEvent(const Event_t & event); 
+      void parseEvent(const sn::Event_t & event); 
 
     }; 
     
@@ -122,33 +122,33 @@ namespace dspiolib {
     private:
       WaveSink(StateProxy & ); 
       friend class StateProxy; 
-      bool newEvent(const Event_t & );
+      bool newEvent(const sn::Event_t & );
       StateProxy & parent_; 
       
       samprate_t samprate_; 
       filterid_t filterid_; 
-      void parseEvent(const Event_t & event); 
+      void parseEvent(const sn::Event_t & event); 
 
     }; 
     
     
   class StateProxy {
   public:
-    StateProxy(datasource_t dsrc, const sigc::slot<void, const EventTX_t &> & etgt); 
+    StateProxy(sn::datasource_t dsrc, const sigc::slot<void, const sn::EventTX_t &> & etgt); 
     
-    void newEvent(const Event_t & event); 
+    void newEvent(const sn::Event_t & event); 
     
-    datasource_t dsrc_;
-    eventsource_t src_; 
+    sn::datasource_t dsrc_;
+    sn::eventsource_t src_; 
 
-    const sigc::slot<void, const EventTX_t & > & eventTX_;
+    const sigc::slot<void, const sn::EventTX_t & > & eventTX_;
     
     AcqDataSource acqdatasrc; 
     TSpikeSink tspikesink; 
     WaveSink wavesink; 
 
 
-    void setETXDest(EventTX_t &  etx); 
+    void setETXDest(sn::EventTX_t &  etx); 
 
   private:
 

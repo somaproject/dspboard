@@ -58,7 +58,7 @@ void EventDispatch::dispatchEventByte(uint8_t eventpos, uint8_t addrbyte)
   for (uint16_t apos = 0; apos < 8; apos++ ) {
     if ((addrbyte & (1 << apos)) != 0) {
       uint16_t * curbuf = &(currentBuffer_[24 + (apos + eventpos*8) * 6]); 
-      Event_t evt;
+      dsp::Event_t evt;
       evt.clear(); 
       evt.cmd = (curbuf[0] >> 8) & 0xFF; 
       evt.src = curbuf[0] & 0xFF; 

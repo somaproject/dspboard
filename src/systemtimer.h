@@ -25,7 +25,7 @@ class SystemTimer
 
   static const int MAXCONN = 6; 
 
-  void eventSetTime(Event_t * event); 
+  void eventSetTime(dsp::Event_t * event); 
 
   timeUpdateDelegate_t connectedUpdates_[MAXCONN]; 
 

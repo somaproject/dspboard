@@ -26,7 +26,7 @@ void AcqDataSourceControl::onLinkChange(bool linkup){
   
 }
 
-void AcqDataSourceControl::query(Event_t * et)
+void AcqDataSourceControl::query(dsp::Event_t * et)
 {
   // generic query dispatch
   switch(et->data[0]) {
@@ -53,7 +53,7 @@ void AcqDataSourceControl::query(Event_t * et)
   
 }
 
-void AcqDataSourceControl::setstate(Event_t * et)
+void AcqDataSourceControl::setstate(dsp::Event_t * et)
 {
   // generic query dispatch
   switch(et->data[0]) {
@@ -155,7 +155,7 @@ void AcqDataSourceControl::sendChanSelEvent()
 }
 
 
-void AcqDataSourceControl::setGain(Event_t * et)
+void AcqDataSourceControl::setGain(dsp::Event_t * et)
 {
   
   uint16_t chanmask = et->data[1]; 
@@ -183,7 +183,7 @@ void AcqDataSourceControl::onGainChange(chanmask_t * chanmask, int gain) {
   }
 }
 
-void AcqDataSourceControl::setHPF(Event_t * et)
+void AcqDataSourceControl::setHPF(dsp::Event_t * et)
 {
   uint16_t chanmask = et->data[1]; 
   chanmask_t cmout[AcqState::CHANNUM]; 
@@ -210,12 +210,12 @@ void AcqDataSourceControl::onHPFChange(chanmask_t * chanmask, bool enabled)
 }
 
 
-void AcqDataSourceControl::setChanSel(Event_t * et)
+void AcqDataSourceControl::setChanSel(dsp::Event_t * et)
 {
   // FIXME
 }
 
-void AcqDataSourceControl::setMode(Event_t * et)
+void AcqDataSourceControl::setMode(dsp::Event_t * et)
 {
   // no acq state response, just directly set
   uint16_t modeval = et->data[2]; 
@@ -223,7 +223,7 @@ void AcqDataSourceControl::setMode(Event_t * et)
   
 } 
 
-void AcqDataSourceControl::sendPendingError(Event_t * et)
+void AcqDataSourceControl::sendPendingError(dsp::Event_t * et)
 {
   // FIXME 
 } 

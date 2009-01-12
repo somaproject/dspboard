@@ -23,7 +23,7 @@ SystemTimer::SystemTimer(EventDispatch * ed) :
 
 }
 
-void SystemTimer::eventSetTime(Event_t * et)
+void SystemTimer::eventSetTime(dsp::Event_t * et)
 {
   
   if (et->src == EADDR_TIMER ) {

@@ -35,31 +35,31 @@ class AcqDataSourceControl : public AcqStateReceiver
   void linkChange(bool); 
   void commandDone(short, bool); 
   
-  EventTX_t bcastEventTX_; 
+  dsp::EventTX_t bcastEventTX_; 
   
-  void query(Event_t * et); 
+  void query(dsp::Event_t * et); 
   void sendLinkStatusEvent(); 
   void sendModeEvent(); 
   void sendChanGainEvent(uint16_t); 
   void sendChanHPFEvent(uint16_t); 
   void sendChanSelEvent(); 
 
-  void setMode(Event_t* et); 
+  void setMode(dsp::Event_t* et); 
 
-  void setGain(Event_t* et); 
+  void setGain(dsp::Event_t* et); 
   void setGainDone(uint16_t handle, bool success); 
 
-  void setHPF(Event_t* et); 
+  void setHPF(dsp::Event_t* et); 
   void setHPFDone(uint16_t handle, bool success); 
 
-  void setChanSel(Event_t* et); 
+  void setChanSel(dsp::Event_t* et); 
   void setChanSelDone(uint16_t handle, bool success); 
   
-  void sendPendingError(Event_t * et); 
+  void sendPendingError(dsp::Event_t * et); 
 
-  void setstate(Event_t * et);
+  void setstate(dsp::Event_t * et);
 
-  void set(Event_t * et); 
+  void set(dsp::Event_t * et); 
 
   void onLinkChange(bool); 
   void onModeChange(char mode); 

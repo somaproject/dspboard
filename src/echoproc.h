@@ -11,14 +11,15 @@
 
 class EventEchoProc
 {
+  
 public:
   EventEchoProc(EventDispatch * ed, EventTX* etx, SystemTimer * pst, 
 		unsigned char device); 
-  void eventTimeRX(Event_t * et); 
-  void eventEcho(Event_t * et); 
-  void eventLED(Event_t * et); 
-  void eventBenchQuery(Event_t * et); 
-  void eventDebugQuery(Event_t * et); 
+  void eventTimeRX(dsp::Event_t * et); 
+  void eventEcho(dsp::Event_t * et); 
+  void eventLED(dsp::Event_t * et); 
+  void eventBenchQuery(dsp::Event_t * et); 
+  void eventDebugQuery(dsp::Event_t * et); 
   
   void benchStart(char counter); 
   void benchStop(char counter); 

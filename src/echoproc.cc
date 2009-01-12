@@ -33,8 +33,8 @@ EventEchoProc::EventEchoProc(EventDispatch * ed, EventTX* etx,
   
 }
 
-void EventEchoProc::eventEcho(Event_t * et) {
-  EventTX_t etx ;
+void EventEchoProc::eventEcho(dsp::Event_t * et) {
+  dsp::EventTX_t etx ;
   etx.addr[0] = 0xF; 
   etx.event.cmd = 0xF1; 
   etx.event.src = device_;
@@ -50,7 +50,7 @@ void EventEchoProc::eventEcho(Event_t * et) {
   
 }
 
-void EventEchoProc::eventLED(Event_t * et) {
+void EventEchoProc::eventLED(dsp::Event_t * et) {
   
   if (et->data[0] > 0) {
     setEventLED(true); 
@@ -60,8 +60,8 @@ void EventEchoProc::eventLED(Event_t * et) {
   
 }
 
-void EventEchoProc::eventBenchQuery(Event_t * et) {
-  EventTX_t etx ;
+void EventEchoProc::eventBenchQuery(dsp::Event_t * et) {
+  dsp::EventTX_t etx ;
   etx.addr[0] = 0xF;  // FIXME Actually send to requester
   etx.event.cmd = 0xF4; 
   etx.event.src = device_;
@@ -78,8 +78,8 @@ void EventEchoProc::eventBenchQuery(Event_t * et) {
   
 }
 
-void EventEchoProc::eventDebugQuery(Event_t * et) {
-  EventTX_t etx ;
+void EventEchoProc::eventDebugQuery(dsp::Event_t * et) {
+  dsp::EventTX_t etx ;
   etx.addr[0] = 0xF;  // FIXME Actually send to requester
   etx.event.cmd = 0xF6; 
   etx.event.src = device_;
