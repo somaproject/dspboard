@@ -5,8 +5,8 @@
 
 #include "FastDelegate.h" 
 
+using namespace dsp; 
 typedef fastdelegate::FastDelegate1<Event_t *>  EventDispatchProc_t; 
-
 
 class EventDispatch
 {

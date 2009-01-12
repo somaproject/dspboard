@@ -68,14 +68,16 @@ AC_PROG_CXX
 AC_PROG_LIBTOOL
 
 # Boost!!! 
-AX_BOOST_BASE([1.34.1])
-AX_BOOST_UNIT_TEST_FRAMEWORK
-AX_BOOST_PROGRAM_OPTIONS
+BOOST_REQUIRE([1.34.1])
+BOOST_THREADS
+BOOST_TEST
+BOOST_PROGRAM_OPTIONS
+BOOST_FORMAT
 
 # sigc++ for fakenetworksrc
-PKG_CHECK_MODULES(FAKESRC, sigc++-2.0 >= 2.0 somanetwork-1.0 >= 1.0)
-AC_SUBST(FAKESRC_CFLAGS)
-AC_SUBST(FAKESRC_LIBS)
+PKG_CHECK_MODULES(SOMADEPS, sigc++-2.0 >= 2.0 somanetwork-1.0 >= 1.0)
+AC_SUBST(SOMADEPS_CFLAGS)
+AC_SUBST(SOMADEPS_LIBS)
 
 
 AM_PROG_LIBTOOL
@@ -88,7 +90,7 @@ dnl -----------------------------------------------
 dnl Generates Makefile's, configuration files and scripts
 dnl -----------------------------------------------
 
-AC_CONFIG_FILES([Makefile src/Makefile somadspio-1.0.pc] )
+AC_CONFIG_FILES([Makefile src/Makefile tests/Makefile somadspio-1.0.pc] )
 
 AC_OUTPUT
 

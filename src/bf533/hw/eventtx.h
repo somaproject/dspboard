@@ -9,7 +9,7 @@ class EventTX
 public: 
   EventTX(); 
   
-  void newEvent(const EventTX_t & evt); 
+  void newEvent(const dsp::EventTX_t & evt); 
   bool sendEvent(); 
   void setup(); 
   bool txBufferFull(); 
@@ -25,7 +25,7 @@ public:
   static uint16_t buffer_[EVTBUFLEN][BUFSIZE]; 
   int nextFreeEvent_; 
   int nextSendEvent_; 
-  void eventToDMABuffer(const EventTX_t & etx, uint16_t * tgtbuff); 
+  void eventToDMABuffer(const dsp::EventTX_t & etx, uint16_t * tgtbuff); 
   
   bool txPending_; 
   

@@ -2,7 +2,7 @@
 
 
 namespace dspiolib {
-
+  using namespace somanetwork; 
   namespace ads =  codec::AcqDataSource; 
   namespace tspike = codec::TSpikeSink; 
 

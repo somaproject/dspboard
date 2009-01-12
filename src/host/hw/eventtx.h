@@ -9,14 +9,14 @@ class EventTX
 public: 
   EventTX(); 
   
-  void newEvent(const EventTX_t & evt); 
+  void newEvent(const  dsp::EventTX_t & evt); 
   bool sendEvent(); 
   void setup(); 
   bool txBufferFull(); 
 
   char mysrc; 
 
-  std::list<EventTX_t> eventBuffer_; 
+  std::list<dsp::EventTX_t> eventBuffer_; 
   
 }; 
 

@@ -15,7 +15,7 @@ namespace dspiolib {
   namespace codec { 
     namespace AcqDataSource
     {
-      
+      using namespace somanetwork; 
       typedef std::pair<int, int> changain_t; 
       typedef std::pair<int, bool> chanhpf_t; 
       typedef std::pair<int, int32_t> chanrange_t; 
@@ -70,6 +70,8 @@ namespace dspiolib {
     
     namespace TSpikeSink
     {
+      using namespace somanetwork; 
+
       typedef std::pair<int, int> chanthold_t; 
       typedef std::pair<int, uint32_t> chanfiltid_t; 
       
@@ -100,6 +102,7 @@ namespace dspiolib {
     
     namespace WaveSink
     {
+      using namespace somanetwork; 
       enum CMDS { 
 	QUERY = 0x46,  
 	SET = 0x47, 

@@ -14,7 +14,7 @@ EventTX::EventTX() :
 
 }
 
-void EventTX::newEvent(const EventTX_t &evt)
+void EventTX::newEvent(const dsp::EventTX_t &evt)
 {
   // copy to the next free buffer
   if (txBufferFull()) {
@@ -34,7 +34,7 @@ bool EventTX::txBufferFull() {
   return false; 
 }
 
-void EventTX::eventToDMABuffer(const EventTX_t & etx, uint16_t * tgtbuff) {
+void EventTX::eventToDMABuffer(const dsp::EventTX_t & etx, uint16_t * tgtbuff) {
   // copy the data into the correct order
   // note buffer must be of correct length, and 2-byte-aligned
   

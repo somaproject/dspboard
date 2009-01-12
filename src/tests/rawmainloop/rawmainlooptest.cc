@@ -38,7 +38,7 @@ BOOST_AUTO_TEST_CASE(rawmainloop_simple)
   acqserial.linkUpState_ = true; 
   RawMainLoop mainloop; 
   mainloop.setup(&ed, &eventtx, &acqserial, &dataout, &config); 
-  
+
   AcqFrame af; 
   af.mode = 0; 
   af.cmdid = 0;

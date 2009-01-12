@@ -8,7 +8,7 @@ EventTX::EventTX() :
 
 }
 
-void EventTX::newEvent(const EventTX_t &evt)
+void EventTX::newEvent(const dsp::EventTX_t &evt)
 {
   eventBuffer_.push_back(evt); 
 
