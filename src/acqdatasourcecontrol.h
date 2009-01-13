@@ -21,7 +21,7 @@ class AcqDataSourceControl : public AcqStateReceiver
     RANGE = 5
   };
       
-  static const char CMDRESPBCAST = 0x60; 
+  static const char CMDRESPBCAST = 0x42; 
   
  public:
   AcqDataSourceControl(EventDispatch * ed, EventTX* etx, 

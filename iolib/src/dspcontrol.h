@@ -134,14 +134,14 @@ namespace dspiolib {
     
   class StateProxy {
   public:
-    StateProxy(sn::datasource_t dsrc, const sigc::slot<void, const sn::EventTX_t &> & etgt); 
+    StateProxy(sn::datasource_t dsrc, sigc::slot<void, const sn::EventTX_t &>  etgt); 
     
     void newEvent(const sn::Event_t & event); 
     
     sn::datasource_t dsrc_;
     sn::eventsource_t src_; 
 
-    const sigc::slot<void, const sn::EventTX_t & > & eventTX_;
+    const sigc::slot<void, const sn::EventTX_t & > eventTX_;
     
     AcqDataSource acqdatasrc; 
     TSpikeSink tspikesink; 

@@ -34,7 +34,7 @@ EventTX_t changeGain(changain_t cg)
   EventTX_t etx;
   etx.event.cmd = SET;
   etx.event.data[0] = CHANGAIN;
-  etx.event.data[1] = cg.first; 
+  etx.event.data[1] = 0x01 << cg.first; 
   etx.event.data[2] = (cg.second >> 16) & 0xFFFF; 
   etx.event.data[3] = cg.second & 0xFFFF; 
   return etx; 
@@ -60,7 +60,7 @@ EventTX_t queryGain(int chan)
   EventTX_t etx;
   etx.event.cmd = QUERY;
   etx.event.data[0] = CHANGAIN;
-  etx.event.data[1] = chan; 
+  etx.event.data[1] = 0x01 << chan; 
 
   return etx; 
 }
@@ -71,7 +71,7 @@ EventTX_t changeHPF(chanhpf_t ch)
   EventTX_t etx;
   etx.event.cmd = SET;
   etx.event.data[0] = CHANHPF;
-  etx.event.data[1] = ch.first; 
+  etx.event.data[1] = 0x01 << ch.first; 
   etx.event.data[2] = ch.second; 
   return etx; 
 
@@ -90,7 +90,7 @@ EventTX_t queryHPF( int chan)
   EventTX_t etx;
   etx.event.cmd = QUERY;
   etx.event.data[0] = CHANHPF;
-  etx.event.data[1] = chan; 
+  etx.event.data[1] = 0x01 <<  chan; 
   return etx; 
   
 

@@ -1,5 +1,6 @@
 #include "eventdispatch.h"
 //#include <cdefBF533.h>
+#include <iostream>
 
 EventDispatch::EventDispatch(DSP_POSITION dsppos) :
   dsppos_ (dsppos), 
@@ -67,6 +68,7 @@ void EventDispatch::dispatchEventByte(uint8_t eventpos, uint8_t addrbyte)
       evt.data[2] = curbuf[3]; 
       evt.data[3] = curbuf[4]; 
       evt.data[4] = curbuf[5]; 
+
       if (cmdDispatch[evt.cmd] != 0 ) {
 	cmdDispatch[evt.cmd](&evt); 
       }

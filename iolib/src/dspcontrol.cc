@@ -7,7 +7,7 @@ namespace dspiolib {
   namespace tspike = codec::TSpikeSink; 
 
   
-  StateProxy::StateProxy(datasource_t dsrc, const sigc::slot<void, const EventTX_t & > & etgt) :
+  StateProxy::StateProxy(datasource_t dsrc, sigc::slot<void, const EventTX_t & > etgt) :
     dsrc_(dsrc), 
     src_(dsrc + 0x08),
     eventTX_(etgt), 
@@ -205,6 +205,7 @@ namespace dspiolib {
     EventTX_t etx = ads::changeGain(cg); 
     parent_.setETXDest(etx); 
     parent_.eventTX_(etx); 
+
   }
 
   sigc::signal<void, int, int> & AcqDataSource::gain()

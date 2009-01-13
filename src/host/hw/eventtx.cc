@@ -1,5 +1,5 @@
 #include "eventtx.h"
-
+#include <iostream>
 
 EventTX::EventTX() :
   eventBuffer_()
@@ -27,4 +27,3 @@ void EventTX::setup()
 {
 
 }
-

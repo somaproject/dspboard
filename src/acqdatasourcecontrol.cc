@@ -1,5 +1,6 @@
 #include "acqdatasourcecontrol.h"
 #include "FastDelegate.h"
+#include <iostream>
 
 AcqDataSourceControl::AcqDataSourceControl(EventDispatch * ed, EventTX* etx, 
 					   AcqStateControl * as):
@@ -11,6 +12,12 @@ AcqDataSourceControl::AcqDataSourceControl(EventDispatch * ed, EventTX* etx,
   bcastEventTX_.clear(); 
   bcastEventTX_.setall();   
 
+  ed->registerCallback(QUERY, fastdelegate::MakeDelegate(this,
+							 &AcqDataSourceControl::query)); 
+  
+  
+  ed->registerCallback(SET, fastdelegate::MakeDelegate(this,
+							 &AcqDataSourceControl::setstate)); 
   
   
 }
@@ -115,9 +122,10 @@ void AcqDataSourceControl::sendChanGainEvent(uint16_t chan)
 
   bcastEventTX_.event.data[0] = CHANGAIN; 
   bcastEventTX_.event.data[1] = chan; 
-  
-  bcastEventTX_.event.data[2] = pAcqStateControl_->pAcqState_->gain[chan]; 
-  bcastEventTX_.event.data[3] = 0x1234;
+
+  bcastEventTX_.event.data[2] = 0;  
+  bcastEventTX_.event.data[3] = pAcqStateControl_->pAcqState_->gain[chan]; 
+
 
   pEventTX_->newEvent(bcastEventTX_); 
 
@@ -157,12 +165,13 @@ void AcqDataSourceControl::sendChanSelEvent()
 
 void AcqDataSourceControl::setGain(dsp::Event_t * et)
 {
-  
   uint16_t chanmask = et->data[1]; 
   chanmask_t cmout[AcqState::CHANNUM]; 
   decodeChanMask(chanmask, cmout); 
 
   uint32_t gain = et->data[2];
+  gain =  gain << 16; 
+  gain |= et->data[3]; 
 
   bool result = pAcqStateControl_->setGain(cmout, gain); 
 					 
