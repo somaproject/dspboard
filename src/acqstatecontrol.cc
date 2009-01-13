@@ -1,6 +1,5 @@
 #include "acqstatecontrol.h"
 #include <acqstatereceiver.h>
-
 #define NULL 0
 
 AcqStateControl::AcqStateControl(AcqSerialBase * aserial, AcqState *astate) :
@@ -139,6 +138,9 @@ void AcqStateControl::commandDone()
       for (int i = 0; i < AcqState::CHANNUM; i++) {
 	if (currentMask_[i] != 0) {
 	  pAcqState_->gain[i] = gainrealvalue; 
+	  pAcqState_->rangemin[i] = AcqState:: RANGEMIN[currentVal_]; 
+	  pAcqState_->rangemax[i] = AcqState::RANGEMAX[currentVal_]; 
+
 	}
       }      
       pAcqStateReceiver_->onGainChange(currentMask_, gainrealvalue); 
@@ -147,7 +149,7 @@ void AcqStateControl::commandDone()
 
   case SETHPF: 
     {
-      bool val  = false; // FIXME // get the current value
+      bool val  = currentVal_; 
       for (int i = 0; i < AcqState::CHANNUM; i++) {
 	if (currentMask_[i] != 0) {
 	  pAcqState_->hpfen[i] = val; 
@@ -159,7 +161,7 @@ void AcqStateControl::commandDone()
     break; 
   case SETINSEL: 
     {
-      bool val  = false; // FIXME
+      char val  = currentVal_;
       pAcqState_->inputSel = val; 
       pAcqStateReceiver_->onInputSelChange(val); 
     }
@@ -241,7 +243,7 @@ bool AcqStateControl::setInput(char chan)
   changeinputcmd.data = chan; 
   changeinputcmd.data = changeinputcmd.data << 24; 
   
-
+  
   
   pAcqSerial_->sendCommand(&changeinputcmd); 
 

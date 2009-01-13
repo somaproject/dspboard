@@ -1,6 +1,5 @@
 #include "acqdatasourcecontrol.h"
 #include "FastDelegate.h"
-#include <iostream>
 
 AcqDataSourceControl::AcqDataSourceControl(EventDispatch * ed, EventTX* etx, 
 					   AcqStateControl * as):
@@ -133,6 +132,35 @@ void AcqDataSourceControl::sendChanGainEvent(uint16_t chan)
 
 }
 
+void AcqDataSourceControl::sendChanRangeEvents(uint16_t chan)
+{
+  bcastEventTX_.event.cmd = CMDRESPBCAST; 
+  bcastEventTX_.event.src = pEventTX_->mysrc; 
+
+  bcastEventTX_.event.data[0] = RANGEMIN; 
+  bcastEventTX_.event.data[1] = chan; 
+
+  int min = pAcqStateControl_->pAcqState_->rangemin[chan]; 
+  bcastEventTX_.event.data[2] = min >> 16; 
+  bcastEventTX_.event.data[3] = min & 0xFFFF; 
+
+
+  pEventTX_->newEvent(bcastEventTX_); 
+
+  bcastEventTX_.event.data[0] = RANGEMAX; 
+  bcastEventTX_.event.data[1] = chan; 
+
+  int max = pAcqStateControl_->pAcqState_->rangemax[chan]; 
+  bcastEventTX_.event.data[2] = max >> 16; 
+  bcastEventTX_.event.data[3] = max & 0xFFFF; 
+
+
+  pEventTX_->newEvent(bcastEventTX_); 
+
+
+
+}
+
 void AcqDataSourceControl::sendChanHPFEvent(uint16_t chan)
 {
 
@@ -143,7 +171,6 @@ void AcqDataSourceControl::sendChanHPFEvent(uint16_t chan)
   bcastEventTX_.event.data[1] = chan; 
   
   bcastEventTX_.event.data[2] = pAcqStateControl_->pAcqState_->hpfen[chan]; 
-
   pEventTX_->newEvent(bcastEventTX_); 
 
 
@@ -188,6 +215,7 @@ void AcqDataSourceControl::onGainChange(chanmask_t * chanmask, int gain) {
   for (char i = 0; i < AcqState::CHANNUM; i++) {
     if (chanmask[i]) { 
       sendChanGainEvent(i); 
+      sendChanRangeEvents(i); 
     } 
   }
 }
@@ -199,7 +227,6 @@ void AcqDataSourceControl::setHPF(dsp::Event_t * et)
   decodeChanMask(chanmask, cmout); 
 
   uint16_t hpf = et->data[2];
-
   bool result = pAcqStateControl_->setHPF(cmout, hpf); 
   
   if (!result) {
@@ -212,6 +239,7 @@ void AcqDataSourceControl::setHPF(dsp::Event_t * et)
 void AcqDataSourceControl::onHPFChange(chanmask_t * chanmask, bool enabled) 
 {
   for (char i = 0; i < AcqState::CHANNUM; i++) {
+
     if (chanmask[i]) { 
       sendChanHPFEvent(i); 
     }
@@ -221,7 +249,12 @@ void AcqDataSourceControl::onHPFChange(chanmask_t * chanmask, bool enabled)
 
 void AcqDataSourceControl::setChanSel(dsp::Event_t * et)
 {
-  // FIXME
+  int chan = et->data[1]; 
+  bool result = pAcqStateControl_->setInput(chan); 
+  if (!result) {
+    sendPendingError(et); 
+  }
+  
 }
 
 void AcqDataSourceControl::setMode(dsp::Event_t * et)
@@ -239,7 +272,7 @@ void AcqDataSourceControl::sendPendingError(dsp::Event_t * et)
 
 void AcqDataSourceControl::onInputSelChange(char chan)
 {
-  //FIXME
+  sendChanSelEvent(); 
 }
 
 void  AcqDataSourceControl::decodeChanMask(uint16_t chanmask, chanmask_t * cmout)

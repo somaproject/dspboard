@@ -56,7 +56,15 @@ public:
   short gain[CHANNUM]; 
   bool hpfen[CHANNUM]; 
   char inputSel; 
+  int rangemin[CHANNUM]; 
+  int rangemax[CHANNUM];
+  // constant ranges
+  static const int RANGEMAX[8]; 
+				 
+  static const int RANGEMIN[8];
+				 
 }; 
+
 
 class AcqSerialBase
 {

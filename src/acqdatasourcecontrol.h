@@ -18,7 +18,8 @@ class AcqDataSourceControl : public AcqStateReceiver
     CHANGAIN = 2, 
     CHANHPF = 3,
     CHANSEL = 4, 
-    RANGE = 5
+    RANGEMIN = 5, 
+    RANGEMAX =  6
   };
       
   static const char CMDRESPBCAST = 0x42; 
@@ -40,7 +41,9 @@ class AcqDataSourceControl : public AcqStateReceiver
   void query(dsp::Event_t * et); 
   void sendLinkStatusEvent(); 
   void sendModeEvent(); 
+
   void sendChanGainEvent(uint16_t); 
+  void sendChanRangeEvents(uint16_t); 
   void sendChanHPFEvent(uint16_t); 
   void sendChanSelEvent(); 
 

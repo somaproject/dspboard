@@ -108,6 +108,7 @@ EventTX_t chanSel(int chan)
 
 int chanSel(const Event_t & event )
 {
+  std::cout << "EventCodec chansel event " << event.data[1] << std::endl;
   return event.data[1]; 
 }
 

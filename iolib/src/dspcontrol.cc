@@ -130,9 +130,22 @@ namespace dspiolib {
     case ads::CHANHPF:
       {
 	ads::chanhpf_t hpf = ads::changeHPF(event); 
+	if (hpf.first > CHANCNT) {
+	  throw std::runtime_error("received channel hpf event with incorrect channel"); 
+	}
 	if (hpfens_[hpf.first] != hpf.second) {
 	  hpfens_[hpf.first] = hpf.second; 
 	  hpfenSignal_.emit(hpf.first, hpf.second); 
+	}
+      }
+      break; 
+
+    case ads::CHANSEL:
+      {
+	int chan = ads::chanSel(event); 
+	if (chansel_ != chan) {
+	  chansel_ = chan; 
+	  chanselSignal_.emit(chan); 
 	}
       }
       break; 
