@@ -1,0 +1,9 @@
+Here we use some of the common code from the DSP project to create
+a little "synthetic" dspboard that will let us test our commands and
+verify that the relevant, expected changes do indeed occur. 
+
+
+we want a general loop that will pass events back and forth: 
+
+1. FauxDSPBoard.getEvents()
+2. dspIO.getEvents(). 
