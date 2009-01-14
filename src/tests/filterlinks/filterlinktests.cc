@@ -22,7 +22,7 @@ BOOST_AUTO_TEST_CASE(fakesource_rawsink_test)
 
   const char SRC =  10; 
   
-  RawSink rawsink(&timer, &dataout, SRC); 
+  RawSink rawsink(&timer, &dataout, SRC, 0); 
 
   fs.source.connect(rawsink.sink); 
   // now we run a loop of 12800 timestamps, which should give us 
@@ -33,7 +33,7 @@ BOOST_AUTO_TEST_CASE(fakesource_rawsink_test)
   }
   BOOST_CHECK_EQUAL(dataout.dataCount_,  1); 
   // now the painstaking process of checking the buffer
-  int LEN = 128 * 4 + 2; 
+  int LEN = 128 * 4 + 4 + (8 + 2 + 4); 
   BOOST_CHECK_EQUAL(dataout.mostrecentbuffer[0], LEN >> 8); 
   BOOST_CHECK_EQUAL(dataout.mostrecentbuffer[1], LEN & 0xFF ); 
   
@@ -42,10 +42,11 @@ BOOST_AUTO_TEST_CASE(fakesource_rawsink_test)
   BOOST_CHECK_EQUAL(dataout.mostrecentbuffer[2], TYP); 
   BOOST_CHECK_EQUAL(dataout.mostrecentbuffer[3], SRC); 
   
+  int offset = 4 + (8 + 2 + 4); 
 
   for (int i = 0; i < RawData_t::BUFSIZE; i++) {
     int32_t hostx, netx = 0 ; 
-    memcpy(&netx, &(dataout.mostrecentbuffer[i*4 + 4]), 4); 
+    memcpy(&netx, &(dataout.mostrecentbuffer[i*4 + offset]), 4); 
     hostx = ntohl(netx); 
 
     BOOST_CHECK_EQUAL(hostx, i); 

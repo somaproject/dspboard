@@ -138,7 +138,7 @@ void AcqStateControl::commandDone()
       for (int i = 0; i < AcqState::CHANNUM; i++) {
 	if (currentMask_[i] != 0) {
 	  pAcqState_->gain[i] = gainrealvalue; 
-	  pAcqState_->rangemin[i] = AcqState:: RANGEMIN[currentVal_]; 
+	  pAcqState_->rangemin[i] = AcqState::RANGEMIN[currentVal_]; 
 	  pAcqState_->rangemax[i] = AcqState::RANGEMAX[currentVal_]; 
 
 	}

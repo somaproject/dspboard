@@ -7,7 +7,7 @@
 #include <dsp.h>
 #include <types.h>
 
-class AcqDataSource
+class AcqDataSource : public FilterLink
 {
 public:
   AcqDataSource(AcqState * as); 
@@ -32,6 +32,7 @@ public:
   static const int32_t GAINSCALE[]; 
 
   void newAcqFrame(AcqFrame *); 
+  filterid_t getFilterID(); 
 
 private:
   AcqState * pAcqState_; 

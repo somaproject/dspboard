@@ -3,7 +3,7 @@
 FakeSource::FakeSource(SystemTimer *pst) :
   pSystemTimer_(pst), 
   buffer_(BUFSIZE), 
-  source(&buffer_), 
+  source(&buffer_, this), 
   val_(0)
 {
   pst->connect(fastdelegate::MakeDelegate(this, &FakeSource::updateTime)); 

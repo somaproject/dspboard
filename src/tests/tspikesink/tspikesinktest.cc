@@ -15,7 +15,7 @@
 
 BOOST_AUTO_TEST_SUITE(tspikesink_test); 
 
-class SourceObject {
+class SourceObject : public FilterLink{
 public:
   SampleRingBuffer<int> buf1_; 
   SampleRingBuffer<int> buf2_; 
@@ -30,6 +30,10 @@ public:
   FilterLinkSource<int> source4; 
   
   FilterLinkSource<char> sourceCycle; 
+
+  filterid_t getFilterID() {
+    return 7; 
+  }
   
   SourceObject() :
     buf1_(100), 
@@ -37,11 +41,11 @@ public:
     buf3_(100), 
     buf4_(100), 
     bufCycle_(1), 
-    source1(&buf1_), 
-    source2(&buf2_), 
-    source3(&buf3_), 
-    source4(&buf4_), 
-    sourceCycle(&bufCycle_)
+    source1(&buf1_, this), 
+    source2(&buf2_, this), 
+    source3(&buf3_, this), 
+    source4(&buf4_, this), 
+    sourceCycle(&bufCycle_, this)
   {
 
     
@@ -61,7 +65,7 @@ public:
 
 uint16_t * createEventBuffer(std::vector<bool> amask, std::vector<bool> bmask, 
 		       std::vector<bool> cmask, std::vector<bool> dmask, 
-		       std::vector<Event_t> events)
+		       std::vector<dsp::Event_t> events)
 {
   /* A helper function that creates a buffer and copies the relevant
      events into it for debugging
@@ -149,7 +153,7 @@ uint16_t * createEventBuffer(std::vector<bool> amask, std::vector<bool> bmask,
   }
 
   int bpos = 24; 
-  for (std::vector<Event_t>::iterator i = events.begin(); i!= events.end(); i++)
+  for (std::vector<dsp::Event_t>::iterator i = events.begin(); i!= events.end(); i++)
     {
       uint16_t newcmd = (*i).cmd; 
       
@@ -179,7 +183,8 @@ BOOST_AUTO_TEST_CASE(simple_compile_test)
   EventDispatch ed(DSPA); 
   HostDataOut dataout; 
   EventTX etx; 
-  TSpikeSink sink(&timer, &dataout, &ed, &etx, 17); 
+  FilterLinkController flc(&ed, &etx); 
+  TSpikeSink sink(&timer, &dataout, &ed, &etx, &flc, 17); 
   int32_t filtids[] = {0x12340000, 0x77881122, 0x00001111, 
 		       0x00001234}; 
 
@@ -218,16 +223,16 @@ BOOST_AUTO_TEST_CASE(simple_compile_test)
   
 
   // now we try and decode
-  pDataPacket_t dp( new DataPacket_t()); 
+  somanetwork::pDataPacket_t dp( new somanetwork::DataPacket_t()); 
   dp->seq = 0; 
   dp->src = 0; 
-  dp->typ = TSPIKE; 
+  dp->typ = somanetwork::TSPIKE; 
   dp->missing = false; 
   memcpy(&dp->body[0], &(dataout.mostrecentbuffer[2]), 1000); 
 
   // construct a datapacket
   
-  TSpike_t ts = rawToTSpike(dp); 
+  somanetwork::TSpike_t ts = somanetwork::rawToTSpike(dp); 
   BOOST_CHECK_EQUAL(ts.src, 17); 
   BOOST_CHECK_EQUAL(ts.time, 0x123456789A); 
 
@@ -243,7 +248,7 @@ BOOST_AUTO_TEST_CASE(simple_compile_test)
   BOOST_CHECK_EQUAL(ts.a.threshold, 1000); 
   BOOST_CHECK_EQUAL(ts.b.threshold, 1000); 
 
-  TSpikeWave_t * waveptrs[] = {&ts.x, &ts.y, &ts.a, &ts.b}; 
+  somanetwork::TSpikeWave_t * waveptrs[] = {&ts.x, &ts.y, &ts.a, &ts.b}; 
 
   for (int chan = 0; chan < TSpikeData_t::CHANNUM; chan++) {
     
@@ -279,9 +284,9 @@ BOOST_AUTO_TEST_CASE(varying_startpoint_test)
     EventDispatch ed(DSPA); 
     HostDataOut dataout; 
     EventTX etx; 
-
+    FilterLinkController flc(&ed, &etx);
   
-    TSpikeSink sink(&timer, &dataout, &ed, &etx,  17); 
+    TSpikeSink sink(&timer, &dataout, &ed, &etx, &flc,  17); 
     int32_t filtids[] = {0x12340000, 0x77881122, 0x00001111, 
 			 0x00001234}; 
 
@@ -320,16 +325,16 @@ BOOST_AUTO_TEST_CASE(varying_startpoint_test)
   
 
     // now we try and decode
-    pDataPacket_t dp( new DataPacket_t()); 
+    somanetwork::pDataPacket_t dp( new somanetwork::DataPacket_t()); 
     dp->seq = 0; 
     dp->src = 0; 
-    dp->typ = TSPIKE; 
+    dp->typ = somanetwork::TSPIKE; 
     dp->missing = false; 
     memcpy(&dp->body[0], &(dataout.mostrecentbuffer[2]), 1000); 
 
     // construct a datapacket
   
-    TSpike_t ts = rawToTSpike(dp); 
+    somanetwork::TSpike_t ts = somanetwork::rawToTSpike(dp); 
     BOOST_CHECK_EQUAL(ts.src, 17); 
     BOOST_CHECK_EQUAL(ts.time, 0x123456789A); 
 
@@ -345,7 +350,7 @@ BOOST_AUTO_TEST_CASE(varying_startpoint_test)
     BOOST_CHECK_EQUAL(ts.a.threshold, 1000); 
     BOOST_CHECK_EQUAL(ts.b.threshold, 1000); 
 
-    TSpikeWave_t * waveptrs[] = {&ts.x, &ts.y, &ts.a, &ts.b}; 
+    somanetwork::TSpikeWave_t * waveptrs[] = {&ts.x, &ts.y, &ts.a, &ts.b}; 
 
     for (int chan = 0; chan < TSpikeData_t::CHANNUM; chan++) {
     
@@ -376,10 +381,10 @@ BOOST_AUTO_TEST_CASE(set_state_test)
     timer.setTime(0x123456789A); 
     EventDispatch ed(DSPA); 
     HostDataOut dataout; 
-    EventTX etx; 
-
+    EventTX etx;
+    FilterLinkController flc(&ed, &etx); 
   
-    TSpikeSink sink(&timer, &dataout, &ed, &etx,  17); 
+    TSpikeSink sink(&timer, &dataout, &ed, &etx, &flc,  17); 
     int32_t filtids[] = {0x12340000, 0x77881122, 0x00001111, 
 			 0x00001234}; 
 
@@ -408,7 +413,7 @@ BOOST_AUTO_TEST_CASE(set_state_test)
     BOOST_CHECK_EQUAL(dataout.dataCount_, 0); 
   
     // Now we change the threshold 
-    Event_t etx1; 
+    dsp::Event_t etx1; 
     etx1.cmd = 0x43; 
     etx1.src = 0x10; 
     etx1.data[0] = 1; 
@@ -419,7 +424,7 @@ BOOST_AUTO_TEST_CASE(set_state_test)
     //masks
     std::vector<bool> amask(80), bmask(80), cmask(80), dmask(80); 
     amask[0] = 1; 
-    std::vector<Event_t> events(80); 
+    std::vector<dsp::Event_t> events(80); 
     events[0] = etx1; 
     
     uint16_t * buf = createEventBuffer(amask, bmask, cmask, dmask, events); 
@@ -428,7 +433,7 @@ BOOST_AUTO_TEST_CASE(set_state_test)
     
     BOOST_CHECK_EQUAL(etx.eventBuffer_.size(), 1); 
     // verify the query event
-    EventTX_t eventtx = etx.eventBuffer_.front(); 
+    dsp::EventTX_t eventtx = etx.eventBuffer_.front(); 
     BOOST_CHECK_EQUAL(eventtx.event.cmd, 0x45); 
     BOOST_CHECK_EQUAL(eventtx.event.data[0], 1); 
     BOOST_CHECK_EQUAL(eventtx.event.data[1], 2); 

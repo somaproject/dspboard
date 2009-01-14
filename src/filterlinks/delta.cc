@@ -3,13 +3,16 @@
 Delta::Delta() :
   input(fastdelegate::MakeDelegate(this, &Delta::newSample)),
   buffer_(1), 
-  output(&buffer_)
+  output(&buffer_, this)
 {
 
   output.samplerate = 0;  // FIXME need to compute from source
 
 }
 
+filterid_t Delta::getFilterID() {
+  return 1; 
+}
 
 void Delta::newSample(sample_t data)
 {

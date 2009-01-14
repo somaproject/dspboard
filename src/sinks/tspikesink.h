@@ -6,6 +6,8 @@
 #include <filterio.h>
 #include <dataout.h>
 #include <eventdispatch.h>
+#include <filterlinkcontroller.h>
+
 #include <hw/eventtx.h>
 #include <hw/memory.h>
 
@@ -22,7 +24,7 @@ public:
   int32_t buffer[CHANNUM][BUFSIZE]; 
   
   int32_t threshold[CHANNUM]; 
-  int32_t filterid[CHANNUM]; 
+  filterid_t filterid[CHANNUM]; 
   somatime_t time; 
   short offset; 
   char datasrc; 
@@ -109,6 +111,7 @@ class TSpikeSink
  public:
   TSpikeSink(SystemTimer * st, DataOut * dout, 
 	     EventDispatch * ed, EventTX* etx, 
+	     FilterLinkController * fl, // At the moment we need this hack 
 	     unsigned char DataSrc); 
 
  private: 
@@ -143,19 +146,26 @@ private:
   void sendSpike(); 
 
   // event processing
-  
-  static const char ECMD_QUERY = 0x43; 
-  static const char ECMD_SET = 0x44; 
-  static const char ECMD_RESPONSE = 0x45; 
+  enum INCMDS { 
+    ECMD_QUERY = 0x43, 
+    ECMD_SET = 0x44,   
+    ECMD_RESPONSE = 0x45
+  }; 
 
-  static const char PARAM_THRESHOLD = 1; 
+  //  static const char CMDRESPBCAST = 0x45; 
+
+  enum PARAMETERS { 
+    THRESHOLD = 1, 
+    FILTERID = 2
+  }; 
 
   
-  void query(Event_t* et); 
-  void setstate(Event_t* et); 
+  void query(dsp::Event_t* et); 
+  void setstate(dsp::Event_t* et); 
   void sendThresholdResponse(char chan); 
-  
-  EventTX_t bcastEventTX_; 
+  void sendFilterLinkResponse(char chan); 
+
+  dsp::EventTX_t bcastEventTX_; 
 
 }; 
 

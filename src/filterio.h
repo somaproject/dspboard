@@ -5,6 +5,14 @@
 #include <types.h>
 #include <FastDelegate.h>
 
+typedef uint32_t filterid_t; 
+
+class FilterLink
+{
+public:
+  virtual filterid_t getFilterID() = 0; 
+}; 
+
 template<class T> 
 class FilterLinkSink; 
 
@@ -14,8 +22,9 @@ class FilterLinkSource
 public:
 
   static const int MAXSINKS = 4; 
-  FilterLinkSource(SampleBuffer<T> * psb) :
-    pSampleBuffer_(psb)
+  FilterLinkSource(SampleBuffer<T> * psb, FilterLink * fl) :
+    pSampleBuffer_(psb), 
+    pFilterLink_(fl)
   {
     for (char i = 0; i < MAXSINKS; i++) {
       connectedSinks_[i] = 0; 
@@ -38,7 +47,8 @@ public:
   }
 
   SampleBuffer<T> * pSampleBuffer_; 
-  
+  FilterLink * pFilterLink_; 
+
   void inline newSample(T sample) {
     for (char i = 0; i < MAXSINKS; i++) {
       if (isConnected_[i]) {
@@ -62,11 +72,19 @@ class FilterLinkSink
 public:
   FilterLinkSink(newSampleDelegate_t nsd) :
     newSampleDelegate_(nsd), 
-    pSampleBuffer_(0)
+    pSampleBuffer_(0), 
+    pSource_(0)
   {
     
   }
+  filterid_t getFilterID() {
+    if (pSource_) {
+      return pSource_->pFilterLink_->getFilterID(); 
+    } else { 
+      return 0;
+    }
 
+  }
   SampleBuffer<T> * pSampleBuffer_; 
   FilterLinkSource<T> * pSource_; 
 

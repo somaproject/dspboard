@@ -22,12 +22,12 @@ AcqDataSource::AcqDataSource(AcqState * as) :
   bufferD_(BUFSIZE), 
   bufferCont_(BUFSIZE), 
   bufferDummyCycle_(1), 
-  sourceA(&bufferA_), 
-  sourceB(&bufferB_), 
-  sourceC(&bufferC_), 
-  sourceD(&bufferD_), 
-  sourceCont(&bufferCont_), 
-  sourceSampleCycle(&bufferDummyCycle_)
+  sourceA(&bufferA_, this), 
+  sourceB(&bufferB_, this), 
+  sourceC(&bufferC_, this), 
+  sourceD(&bufferD_, this), 
+  sourceCont(&bufferCont_, this), 
+  sourceSampleCycle(&bufferDummyCycle_, this)
 {
   mainBuffers_[0] = &bufferA_; 
   mainBuffers_[1] = &bufferB_; 
@@ -70,3 +70,7 @@ void AcqDataSource::newAcqFrame(AcqFrame * af)
 }
 
 
+filterid_t AcqDataSource::getFilterID()
+{
+  return 2; 
+}

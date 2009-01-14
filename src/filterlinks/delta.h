@@ -5,7 +5,7 @@
 #include <samplebuffer.hpp>
 #include <types.h>
 
-class Delta 
+class Delta : FilterLink
 {
   typedef int32_t sample_t; 
  public: 
@@ -13,6 +13,8 @@ class Delta
   ~Delta(); 
   FilterLinkSink<sample_t> input; 
   FilterLinkSource<sample_t> output; 
+  filterid_t getFilterID(); 
+
  private: 
   SampleRingBuffer<sample_t> buffer_; 
   void newSample(sample_t); 

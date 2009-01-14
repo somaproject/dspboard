@@ -1,7 +1,8 @@
 #include <sinks/tspikesink.h>
 
 TSpikeSink::TSpikeSink(SystemTimer * st, DataOut * dout, EventDispatch *ed,
-		       EventTX * etx, unsigned char datasrc) : 
+		       EventTX * etx, FilterLinkController * fl,
+		       unsigned char datasrc) : 
   pSystemTimer_(st), 
   pDataOut_(dout), 
   pEventDispatch_(ed), 
@@ -134,11 +135,11 @@ int32_t TSpikeSink::getThreshold(char chan){
   return pendingTSpikeData_.threshold[chan]; 
 }
 
-void TSpikeSink::query(Event_t * et){
+void TSpikeSink::query(dsp::Event_t * et){
   char param = et->data[0]; 
   char channel = et->data[1]; 
   switch(param) {
-  case  PARAM_THRESHOLD: 
+  case  THRESHOLD: 
     sendThresholdResponse(channel); 
     break; 
   default:
@@ -148,12 +149,12 @@ void TSpikeSink::query(Event_t * et){
   
 }
 
-void TSpikeSink::setstate(Event_t * et) {
+void TSpikeSink::setstate(dsp::Event_t * et) {
   char param = et->data[0]; 
   uint16_t channel = et->data[1]; 
   
   switch(param) {
-  case  PARAM_THRESHOLD: 
+  case  THRESHOLD: 
     {
       uint32_t thold = (et->data[2] << 16) | (et->data[3]); 
       pendingTSpikeData_.threshold[channel] = thold; 
@@ -174,7 +175,7 @@ void TSpikeSink::sendThresholdResponse(char chan){
   bcastEventTX_.event.cmd = ECMD_RESPONSE; 
   bcastEventTX_.event.src = pEventTX_->mysrc; 
 
-  bcastEventTX_.event.data[0] = PARAM_THRESHOLD; 
+  bcastEventTX_.event.data[0] = THRESHOLD; 
   bcastEventTX_.event.data[1] = chan; 
   
   bcastEventTX_.event.data[2] = pendingTSpikeData_.threshold[chan] >> 16; 

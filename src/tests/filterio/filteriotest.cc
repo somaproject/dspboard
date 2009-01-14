@@ -7,7 +7,7 @@
 
 BOOST_AUTO_TEST_SUITE(filterio_test); 
 
-class SourceObject {
+class SourceObject  : FilterLink {
 public:
   SampleRingBuffer<int> bufA_; 
   SampleRingBuffer<int> bufB_; 
@@ -16,14 +16,17 @@ public:
   FilterLinkSource<int> sourceA; 
   FilterLinkSource<int> sourceB;
   FilterLinkSource<int> sourceC; 
-  
+  filterid_t getFilterID() {
+    return 117;
+  }
+
   SourceObject() :
     bufA_(100), 
     bufB_(100), 
     bufC_(100), 
-    sourceA(&bufA_), 
-    sourceB(&bufB_), 
-    sourceC(&bufC_)
+    sourceA(&bufA_, this), 
+    sourceB(&bufB_, this), 
+    sourceC(&bufC_, this)
   {
 
 

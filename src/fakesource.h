@@ -6,12 +6,15 @@
 #include "filterio.h"
 #include "samplebuffer.hpp"
 
-class FakeSource
+class FakeSource : public FilterLink
 {
 public:
   FakeSource(SystemTimer * pst); 
   
   static const int BUFSIZE = 128; 
+  filterid_t getFilterID() {
+    return 1712;
+  }
 
 private:
   void updateTime(somatime_t t); 

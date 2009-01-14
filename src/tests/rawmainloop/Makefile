@@ -32,6 +32,9 @@ eventtx.o: $(HWDIR)/hw/eventtx.o
 acqdatasource.o: $(SRCDIR)/acqdatasource.o
 	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/acqdatasource.cc -o acqdatasource.o
 
+acqboardif.o: $(SRCDIR)/acqboardif.o
+	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/acqboardif.cc -o acqboardif.o
+
 acqdatasourcecontrol.o: $(SRCDIR)/acqdatasourcecontrol.o
 	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/acqdatasourcecontrol.cc -o acqdatasourcecontrol.o
 
@@ -54,7 +57,8 @@ clean:
 
 
 runner: runner.o rawmainloop.o rawmainlooptest.o  systemtimer.o eventdispatch.o fakesource.o \
-	eventtx.o acqserial.o hostdataout.o rawsink.o  acqdatasource.o echoproc.o acqstatecontrol.o acqdatasourcecontrol.o
+	eventtx.o acqserial.o hostdataout.o rawsink.o  acqdatasource.o echoproc.o \
+	acqboardif.o acqstatecontrol.o acqdatasourcecontrol.o
 
 
 

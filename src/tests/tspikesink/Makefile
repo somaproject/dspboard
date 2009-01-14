@@ -13,6 +13,9 @@ systemtimer.o: $(SRCDIR)/systemtimer.cc
 eventdispatch.o: $(SRCDIR)/eventdispatch.cc
 	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/eventdispatch.cc -o eventdispatch.o
 
+filterlinkcontroller.o: $(SRCDIR)/filterlinkcontroller.cc
+	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/filterlinkcontroller.cc -o filterlinkcontroller.o
+
 tspikesink.o: $(SRCDIR)/sinks/tspikesink.cc
 	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/sinks/tspikesink.cc -o tspikesink.o
 
@@ -38,7 +41,9 @@ clean:
 	rm *.o
 
 
-runner: runner.o tspikesinktest.o systemtimer.o eventdispatch.o fakesource.o hostdataout.o tspikesink.o eventtx.o
+runner: runner.o tspikesinktest.o systemtimer.o \
+	eventdispatch.o fakesource.o hostdataout.o tspikesink.o eventtx.o \
+	filterlinkcontroller.o
 
 
 

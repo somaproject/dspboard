@@ -6,7 +6,6 @@ Things to watch out for:
    * This must be fast, and really only supports signed ints
    * how do we wrap? inline asm? 
 
-
 AD EE-186, Extended-Precision Fixed-point arithmetic, suggests we can
 get ~31-bit answers with 
 
@@ -18,4 +17,19 @@ and C ~50
 this means that for a 128-tap filter for
 each of the 5 channels, we need
 5 * (128 *2 + 50)  = ~150 ticks
+
+How to Program the FitlerLink
+-----------------------------
+
+I think we should program the filter links at start-up, 
+and then select from the resulting FIR. So we have a generic
+"filter control" interface which creates the space of available
+filters. We always start off with a delta filter. 
+
+FilterConfig, and then the tspike tells the filter
+to use the next filtertype. 
+
+At the moment we only support FIR filters.
+
+
 
