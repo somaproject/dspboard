@@ -74,3 +74,8 @@ filterid_t AcqDataSource::getFilterID()
 {
   return 2; 
 }
+
+bool AcqDataSource::setFilterID(filterid_t) 
+{
+
+}

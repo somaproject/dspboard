@@ -53,7 +53,13 @@ namespace dsp {
 	addr[i] = 0xff; 
       }
     }
-  
+
+    inline void set(char pos) {
+      char byte = pos >> 3; 
+      char os = pos & 0x7; 
+      addr[byte] |= (0x01) <<os; 
+    }
+
   }; 
 }
 #endif // EVENT_H

@@ -14,13 +14,15 @@ class FIR : FilterLink
   
   FilterLinkSink<sample_t> input; 
   FilterLinkSource<sample_t> output; 
-  void setFilterID(filterid_t); 
+  bool setFilterID(filterid_t); 
   filterid_t getFilterID(); 
 
  private: 
   SampleRingBuffer<sample_t> buffer_; 
   sample_t * filter_; 
-
+  short filterLen_; 
+  filterid_t filterID_; 
+  
   void newSample(sample_t); 
   AvailableFIRs* afs; 
 }; 

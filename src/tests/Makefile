@@ -43,8 +43,11 @@ $(BUILDDIR)/rawmainloop.o: $(SRCDIR)/mainloops/rawmainloop.cc builddir
 $(BUILDDIR)/rawsink.o: $(SRCDIR)/sinks/rawsink.cc builddir
 	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/sinks/rawsink.cc -o $(BUILDDIR)/rawsink.o
 
-$(BUILDDIR)/delta.o: $(SRCDIR)/filterlinks/delta.o builddir
+$(BUILDDIR)/delta.o: $(SRCDIR)/filterlinks/delta.cc builddir
 	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/filterlinks/delta.cc -o $(BUILDDIR)/delta.o
+
+$(BUILDDIR)/availablefirs.o: $(SRCDIR)/filterlinks/availablefirs.cc builddir
+	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/filterlinks/availablefirs.cc -o $(BUILDDIR)/availablefirs.o
 
 $(BUILDDIR)/tspikesink.o: $(SRCDIR)/sinks/tspikesink.cc builddir
 	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/sinks/tspikesink.cc -o $(BUILDDIR)/tspikesink.o
@@ -61,6 +64,9 @@ $(BUILDDIR)/acqdatasourcecontrol.o: $(SRCDIR)/acqdatasourcecontrol.o builddir
 $(BUILDDIR)/acqstatecontrol.o: $(SRCDIR)/acqstatecontrol.o builddir
 	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/acqstatecontrol.cc -o $(BUILDDIR)/acqstatecontrol.o
 
+$(BUILDDIR)/test_util.o : $(SRCDIR)/tests/utils/util.cc builddir
+	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/tests/utils/util.cc -o $(BUILDDIR)/test_util.o
+
 COREOBJS = $(BUILDDIR)/systemtimer.o $(BUILDDIR)/filterlinkcontroller.o $(BUILDDIR)/delta.o\
 	$(BUILDDIR)/eventdispatch.o $(BUILDDIR)/echoproc.o $(BUILDDIR)/fakesource.o $(BUILDDIR)/hostdataout.o \
 	 $(BUILDDIR)/rawsink.o $(BUILDDIR)/rawmainloop.o  \
@@ -76,12 +82,12 @@ CALLBACK_OBJS =
 DATAOUTFIFO_OBJS = 
 EVENTDISPATCH_OBJS = 
 FILTERIO_OBJS = filterio/filteriotest.o
-FILTERLINKS_OBJS = filterlinks/filterlinktests.o filterlinks/deltatest.o
+FILTERLINKS_OBJS = filterlinks/filterlinktests.o filterlinks/deltatest.o $(BUILDDIR)/availablefirs.o
 RAWMAINLOOP_OBJS = rawmainloop/rawmainlooptest.o 
 SAMPLEBUFFERS_OBJ = 
 TSPIKESINK_OBJS = tspikesink/tspikesinktest.o
 
-runner: runner.o $(COREOBJS)  \
+runner: runner.o $(BUILDDIR)/test_util.o $(COREOBJS)  \
 	$(ACQDATASOURCE_OBJS) \
 	$(ACQSTATECONTROL_OBJS) \
 	$(CALLBACK_OBJS) \

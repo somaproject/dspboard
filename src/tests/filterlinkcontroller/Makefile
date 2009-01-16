@@ -16,11 +16,8 @@ eventdispatch.o: $(SRCDIR)/eventdispatch.cc
 filterlinkcontroller.o: $(SRCDIR)/filterlinkcontroller.cc
 	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/filterlinkcontroller.cc -o filterlinkcontroller.o
 
-tspikesink.o: $(SRCDIR)/sinks/tspikesink.cc
-	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/sinks/tspikesink.cc -o tspikesink.o
-
-availablefirs.o: $(SRCDIR)/sinks/availablefirs.cc
-	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/sinks/availablefirs.cc -o availablefirs.o
+availablefirs.o: $(SRCDIR)/filterlinks/availablefirs.cc
+	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/filterlinks/availablefirs.cc -o availablefirs.o
 
 eventtx.o: $(HWDIR)/hw/eventtx.cc
 	$(CXX) $(CXXFLAGS) -c  $(HWDIR)/hw/eventtx.cc -o eventtx.o
@@ -32,10 +29,11 @@ fakesource.o: $(SRCDIR)/fakesource.cc
 rawsink.o: $(SRCDIR)/sinks/rawsink.cc
 	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/sinks/rawsink.cc -o rawsink.o
 
-hostdataout.o: $(HWDIR)/hostdataout.o
+hostdataout.o: $(HWDIR)/hostdataout.cc
 	$(CXX) $(CXXFLAGS) -c $(HWDIR)/hostdataout.cc -o hostdataout.o
 
-
+util.o: $(SRCDIR)/tests/utils/util.cc
+	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/tests/utils/util.cc -o util.o
 runner.o: runner.cc
 
 runner: runner.o 
@@ -44,9 +42,10 @@ clean:
 	rm *.o
 
 
-runner: runner.o tspikesinktest.o systemtimer.o availablefirs.o \
-	eventdispatch.o fakesource.o hostdataout.o tspikesink.o eventtx.o \
+runner: runner.o util.o filterlinkcontrollertest.o systemtimer.o availablefirs.o \
+	eventdispatch.o fakesource.o hostdataout.o eventtx.o \
 	filterlinkcontroller.o
+
 
 
 

@@ -11,6 +11,9 @@ class FilterLink
 {
 public:
   virtual filterid_t getFilterID() = 0; 
+  virtual bool setFilterID(filterid_t) = 0; // returns true if set was successful
+
+
 }; 
 
 template<class T> 

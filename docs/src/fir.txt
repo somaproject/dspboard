@@ -33,3 +33,4 @@ At the moment we only support FIR filters.
 
 
 
+setFilter(int, filterid) 

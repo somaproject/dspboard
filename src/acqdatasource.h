@@ -33,6 +33,7 @@ public:
 
   void newAcqFrame(AcqFrame *); 
   filterid_t getFilterID(); 
+  bool setFilterID(filterid_t); 
 
 private:
   AcqState * pAcqState_; 

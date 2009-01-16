@@ -1,0 +1,14 @@
+The filter link controller generally controls filter settings
+and availability. 
+
+events: 
+
+set_fir_coefficient(fir_num, coeffnum, value)
+get_fir_coefficient(fir_num, coeffnum)
+get_fir_status(fir_num):
+   is set? 
+   what is length? 
+   what is fir id? 
+
+fir_set_status(fir_num, isset, len); 
+   causes broadcast of state too
