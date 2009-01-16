@@ -142,6 +142,9 @@ void TSpikeSink::query(dsp::Event_t * et){
   case  THRESHOLD: 
     sendThresholdResponse(channel); 
     break; 
+  case FILTERID: 
+    sendFilterIDResponse(channel); 
+    break; 
   default:
     break; 
   } 
@@ -161,7 +164,30 @@ void TSpikeSink::setstate(dsp::Event_t * et) {
       sendThresholdResponse(channel); 
     }
     break; 
-
+  case FILTERID:
+    {
+      filterid_t filterid= (et->data[2] << 16) | (et->data[3]); 
+      bool success = false; 
+      switch(channel) { 
+      case 0 :
+	success = sink1.setFilterID(filterid); 
+	break; 
+      case 1 :
+	success = sink2.setFilterID(filterid); 
+	break; 
+      case 2 :
+	success = sink3.setFilterID(filterid); 
+	break; 
+      case 3 :
+	success = sink4.setFilterID(filterid); 
+	break; 
+      }
+      if (!success) {
+	// FIXME : send error
+      }
+      sendFilterIDResponse(channel); 
+    }
+    break; 
   default:
     break; 
   }
@@ -181,6 +207,37 @@ void TSpikeSink::sendThresholdResponse(char chan){
   bcastEventTX_.event.data[2] = pendingTSpikeData_.threshold[chan] >> 16; 
   bcastEventTX_.event.data[3] = pendingTSpikeData_.threshold[chan] & 0xFFFF; 
 
+  pEventTX_->newEvent(bcastEventTX_); 
+
+  
+}
+
+void TSpikeSink::sendFilterIDResponse(char chan){
+
+  bcastEventTX_.event.cmd = ECMD_RESPONSE; 
+  bcastEventTX_.event.src = pEventTX_->mysrc; 
+
+  bcastEventTX_.event.data[0] = FILTERID; 
+  bcastEventTX_.event.data[1] = chan; 
+  
+  filterid_t fid =0; 
+  switch(chan) { 
+      case 0 :
+	fid = sink1.getFilterID(); 
+	break; 
+      case 1 :
+	fid = sink2.getFilterID(); 
+	break; 
+      case 2 :
+	fid = sink3.getFilterID(); 
+	break; 
+      case 3 :
+	fid = sink4.getFilterID(); 
+	break; 
+      }
+  bcastEventTX_.event.data[2] = fid  >> 16; 
+  bcastEventTX_.event.data[3] = fid & 0xFFFF; 
+  
   pEventTX_->newEvent(bcastEventTX_); 
 
   

@@ -267,7 +267,7 @@ BOOST_AUTO_TEST_CASE(varying_startpoint_test)
   }
 }
 
-BOOST_AUTO_TEST_CASE(set_state_test)
+BOOST_AUTO_TEST_CASE(set_threshold_test)
 {
   /*
     EVENT TEST: 
@@ -308,19 +308,15 @@ BOOST_AUTO_TEST_CASE(set_state_test)
 
     // First, query the threshold
 
-
     // fill the buffer with data
     source.sendSample(100); 
     BOOST_CHECK_EQUAL(dataout.dataCount_, 0); 
   
-    // Now we change the threshold 
     dsp::Event_t etx1; 
-    etx1.cmd = 0x43; 
+    etx1.cmd = TSpikeSink::ECMD_QUERY; 
     etx1.src = 0x10; 
-    etx1.data[0] = 1; 
+    etx1.data[0] = TSpikeSink::THRESHOLD; 
     etx1.data[1] = 2; 
-//     etx1.data[2] = 0x1234; 
-//     etx1.data[3] = 0x5678; 
     
     //masks
     std::vector<bool> amask(80), bmask(80), cmask(80), dmask(80); 
@@ -335,8 +331,8 @@ BOOST_AUTO_TEST_CASE(set_state_test)
     BOOST_CHECK_EQUAL(etx.eventBuffer_.size(), 1); 
     // verify the query event
     dsp::EventTX_t eventtx = etx.eventBuffer_.front(); 
-    BOOST_CHECK_EQUAL(eventtx.event.cmd, 0x45); 
-    BOOST_CHECK_EQUAL(eventtx.event.data[0], 1); 
+    BOOST_CHECK_EQUAL(eventtx.event.cmd, TSpikeSink::ECMD_RESPONSE); 
+    BOOST_CHECK_EQUAL(eventtx.event.data[0], TSpikeSink::THRESHOLD); 
     BOOST_CHECK_EQUAL(eventtx.event.data[1], 2); 
     BOOST_CHECK_EQUAL(eventtx.event.data[2], 0000); 
     BOOST_CHECK_EQUAL(eventtx.event.data[3], 1000); 
@@ -344,9 +340,9 @@ BOOST_AUTO_TEST_CASE(set_state_test)
     etx.eventBuffer_.clear(); 
 
     // now set the event cmd
-    events[0].cmd = 0x44; 
+    events[0].cmd = TSpikeSink::ECMD_SET; 
     events[0].src = 0x10; 
-    events[0].data[0] = 1; 
+    events[0].data[0] = TSpikeSink::THRESHOLD; 
     events[0].data[1] = 3; 
     events[0].data[2] = 0x1234; 
     events[0].data[3] = 0x5678; 
@@ -358,11 +354,110 @@ BOOST_AUTO_TEST_CASE(set_state_test)
     BOOST_CHECK_EQUAL(etx.eventBuffer_.size(), 1); 
 
     eventtx = etx.eventBuffer_.front(); 
-    BOOST_CHECK_EQUAL(eventtx.event.cmd, 0x45); 
-    BOOST_CHECK_EQUAL(eventtx.event.data[0], 1); 
+    BOOST_CHECK_EQUAL(eventtx.event.cmd,TSpikeSink::ECMD_RESPONSE); 
+    BOOST_CHECK_EQUAL(eventtx.event.data[0], TSpikeSink::THRESHOLD); 
     BOOST_CHECK_EQUAL(eventtx.event.data[1], 3); 
     BOOST_CHECK_EQUAL(eventtx.event.data[2], 0x1234);
     BOOST_CHECK_EQUAL(eventtx.event.data[3], 0x5678); 
+
+    etx.eventBuffer_.clear(); 
+
+    
+}
+BOOST_AUTO_TEST_CASE(set_filterid_test)
+{
+  /*
+    EVENT TEST: 
+
+    Query the filterid and then set it and check for update broadcast
+
+    Note: at the moment our sourceObject is not a real filterlink
+    as it has multiple sinks and only a single equivalent filterid. 
+
+    as a result, we are not fully testing our filterlink setting
+    capabilities.  FIXME
+
+  */
+
+    SourceObject source; 
+    SystemTimer timer; 
+    timer.setTime(0x123456789A); 
+    EventDispatch ed(DSPA); 
+    HostDataOut dataout; 
+    EventTX etx;
+    AvailableFIRs firs;
+    FilterLinkController flc(&ed, &etx, &firs); 
+  
+    TSpikeSink sink(&timer, &dataout, &ed, &etx, &flc,  17); 
+    int32_t filtids[] = {0x12340000, 0x77881122, 0x00001111, 
+			 0x00001234}; 
+
+    source.source1.connect(sink.sink1); 
+    source.source1.id = filtids[0]; 
+    source.source2.connect(sink.sink2); 
+    source.source2.id = filtids[1]; 
+
+    source.source3.connect(sink.sink3); 
+    source.source3.id = filtids[2]; 
+
+    source.source4.connect(sink.sink4); 
+    source.source4.id = filtids[3]; 
+
+    source.sourceCycle.connect(sink.samplesink); 
+
+    // First, query the filterid
+
+    // fill the buffer with data
+    source.sendSample(100); 
+    BOOST_CHECK_EQUAL(dataout.dataCount_, 0); 
+  
+    dsp::Event_t etx1; 
+    etx1.cmd = TSpikeSink::ECMD_QUERY; 
+    etx1.src = 0x10; 
+    etx1.data[0] = TSpikeSink::FILTERID; 
+    etx1.data[1] = 2; 
+    
+    //masks
+    std::vector<bool> amask(80), bmask(80), cmask(80), dmask(80); 
+    amask[0] = 1; 
+    std::vector<dsp::Event_t> events(80); 
+    events[0] = etx1; 
+    
+    uint16_t * buf = createEventBuffer(amask, bmask, cmask, dmask, events); 
+    ed.parseECycleBuffer(buf); 
+    while(ed.dispatchEvents()) {}; 
+    
+    BOOST_CHECK_EQUAL(etx.eventBuffer_.size(), 1); 
+    // verify the query event
+    dsp::EventTX_t eventtx = etx.eventBuffer_.front(); 
+    BOOST_CHECK_EQUAL(eventtx.event.cmd, TSpikeSink::ECMD_RESPONSE); 
+    BOOST_CHECK_EQUAL(eventtx.event.data[0], TSpikeSink::FILTERID); 
+    BOOST_CHECK_EQUAL(eventtx.event.data[1], 2); 
+    BOOST_CHECK_EQUAL(eventtx.event.data[2], 0000); 
+    BOOST_CHECK_EQUAL(eventtx.event.data[3], 0x7); 
+
+    etx.eventBuffer_.clear(); 
+
+    // now set the event cmd
+    events[0].cmd = TSpikeSink::ECMD_SET; 
+    events[0].src = 0x10; 
+    events[0].data[0] = TSpikeSink::FILTERID; 
+    events[0].data[1] = 3; 
+    events[0].data[2] = 0x1234; 
+    events[0].data[3] = 0x5678; 
+    
+    buf = createEventBuffer(amask, bmask, cmask, dmask, events); 
+    ed.parseECycleBuffer(buf); 
+    while(ed.dispatchEvents()) {}; 
+    
+    BOOST_CHECK_EQUAL(etx.eventBuffer_.size(), 1); 
+
+    eventtx = etx.eventBuffer_.front(); 
+    BOOST_CHECK_EQUAL(eventtx.event.cmd,TSpikeSink::ECMD_RESPONSE); 
+    BOOST_CHECK_EQUAL(eventtx.event.data[0], TSpikeSink::FILTERID); 
+    BOOST_CHECK_EQUAL(eventtx.event.data[1], 3); 
+    BOOST_CHECK_EQUAL(eventtx.event.data[2], 0x0);
+    BOOST_CHECK_EQUAL(eventtx.event.data[3], 0x7); 
 
     etx.eventBuffer_.clear(); 
 
