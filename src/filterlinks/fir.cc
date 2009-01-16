@@ -2,10 +2,11 @@
 #include <filter.h>
 #include <filterlinks/delta.h>
 
-FIR::FIR() :
+FIR::FIR(AvailableFIRs * afirs) :
   input(fastdelegate::MakeDelegate(this, &FIR::newSample)),
   buffer_(1), 
-  output(&buffer_)
+  output(&buffer_, this),
+  afs(afirs)
 {
 
   output.samplerate = 0;  // FIXME need to compute from source
@@ -16,8 +17,10 @@ FIR::FIR() :
 void FIR::newSample(sample_t data)
 {
   
-  int32_t val = convolve(input.pSampleBuffer_->start(), input.pSampleBuffer_->length(), 
-			 input.pSampleBuffer_->head(), filter_, FIRLENMAX); 
+  int32_t val = convolve(input.pSampleBuffer_->start(), 
+			 input.pSampleBuffer_->length(), 
+			 input.pSampleBuffer_->head(), 
+			 filter_, FIRLENMAX); 
   
   
   // get the connected 
@@ -36,8 +39,8 @@ bool FIR::setFilterID(filterid_t fid) {
   bool found = false; 
   int pos = 0; 
   for (int i = 0; i < AvailableFIRs::FILTERNUM; i++) {
-    if (af->filterset[i]) {
-      if (af->filterids[i] == fid) {
+    if (afs->filterset[i]) {
+      if (afs->filterids[i] == fid) {
 	found = true; 
 	pos = i; 
 	break;
@@ -47,8 +50,8 @@ bool FIR::setFilterID(filterid_t fid) {
   if (!found) {
     return false; 
   } 
-  filter_ = af->filters[i]; 
-  filterLen_ = af->filterlens[i]; 
+  filter_ = afs->filters[pos]; 
+  filterLen_ = afs->filterlens[pos]; 
   filterID_ = fid; 
   return true; 
 }

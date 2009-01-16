@@ -15,7 +15,7 @@ public:
   unsigned char filterlens[FILTERNUM]; 
   bool filterset[FILTERNUM]; 
   filterid_t filterids[FILTERNUM]; 
-
+  
 }; 
 
 

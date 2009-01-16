@@ -3,6 +3,7 @@
 
 #include <filterio.h>
 #include <samplebuffer.hpp>
+#include <filterlinks/availablefirs.h>
 
 class FIR : FilterLink
 {

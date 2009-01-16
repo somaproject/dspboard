@@ -28,6 +28,9 @@ $(BUILDDIR)/acqserial.o: $(HWDIR)/hw/acqserial.cc builddir
 $(BUILDDIR)/eventtx.o: $(HWDIR)/hw/eventtx.cc builddir
 	$(CXX) $(CXXFLAGS) -c $(HWDIR)/hw/eventtx.cc -o $(BUILDDIR)/eventtx.o
 
+$(BUILDDIR)/filter.o: $(HWDIR)/filter.cc builddir
+	$(CXX) $(CXXFLAGS) -c $(HWDIR)/filter.cc -o $(BUILDDIR)/filter.o
+
 $(BUILDDIR)/eventdispatch.o: $(SRCDIR)/eventdispatch.cc builddir
 	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/eventdispatch.cc -o $(BUILDDIR)/eventdispatch.o
 
@@ -40,11 +43,17 @@ $(BUILDDIR)/fakesource.o: $(SRCDIR)/fakesource.cc builddir
 $(BUILDDIR)/rawmainloop.o: $(SRCDIR)/mainloops/rawmainloop.cc builddir
 	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/mainloops/rawmainloop.cc -o $(BUILDDIR)/rawmainloop.o
 
+$(BUILDDIR)/somamainloop.o: $(SRCDIR)/mainloops/somamainloop.cc builddir
+	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/mainloops/somamainloop.cc -o $(BUILDDIR)/somamainloop.o
+
 $(BUILDDIR)/rawsink.o: $(SRCDIR)/sinks/rawsink.cc builddir
 	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/sinks/rawsink.cc -o $(BUILDDIR)/rawsink.o
 
 $(BUILDDIR)/delta.o: $(SRCDIR)/filterlinks/delta.cc builddir
 	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/filterlinks/delta.cc -o $(BUILDDIR)/delta.o
+
+$(BUILDDIR)/fir.o: $(SRCDIR)/filterlinks/fir.cc builddir
+	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/filterlinks/fir.cc -o $(BUILDDIR)/fir.o
 
 $(BUILDDIR)/availablefirs.o: $(SRCDIR)/filterlinks/availablefirs.cc builddir
 	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/filterlinks/availablefirs.cc -o $(BUILDDIR)/availablefirs.o
@@ -67,11 +76,11 @@ $(BUILDDIR)/acqstatecontrol.o: $(SRCDIR)/acqstatecontrol.o builddir
 $(BUILDDIR)/test_util.o : $(SRCDIR)/tests/utils/util.cc builddir
 	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/tests/utils/util.cc -o $(BUILDDIR)/test_util.o
 
-COREOBJS = $(BUILDDIR)/systemtimer.o $(BUILDDIR)/filterlinkcontroller.o $(BUILDDIR)/delta.o\
+COREOBJS = $(BUILDDIR)/systemtimer.o $(BUILDDIR)/filterlinkcontroller.o $(BUILDDIR)/delta.o $(BUILDDIR)/fir.o \
 	$(BUILDDIR)/eventdispatch.o $(BUILDDIR)/echoproc.o $(BUILDDIR)/fakesource.o $(BUILDDIR)/hostdataout.o \
-	 $(BUILDDIR)/rawsink.o $(BUILDDIR)/rawmainloop.o  \
+	 $(BUILDDIR)/rawsink.o $(BUILDDIR)/rawmainloop.o  $(BUILDDIR)/somamainloop.o \
 	$(BUILDDIR)/tspikesink.o $(BUILDDIR)/acqdatasource.o $(BUILDDIR)/acqdatasourcecontrol.o \
-	 $(BUILDDIR)/acqboardif.o \
+	 $(BUILDDIR)/acqboardif.o $(BUILDDIR)/filter.o\
 	$(BUILDDIR)/acqstatecontrol.o $(BUILDDIR)/acqserial.o $(BUILDDIR)/eventtx.o
 
 # Actual tests
