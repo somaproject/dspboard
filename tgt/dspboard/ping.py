@@ -1,5 +1,5 @@
 """
-Try and PING a DSPboard dspcontproc
+Try and PING a DSPboard dspcontproc on the FPGA
 (does not actually engage the DSP)
 
 """
@@ -16,7 +16,7 @@ whoping = [int(x) for x in sys.argv[1:]]
 eio = NetEventIO("10.0.0.2")
 
 for i in whoping:
-    eio.addRXMask(i, xrange(256))
+    eio.addRXMask(0x09, i)
 
 eio.start()
 
