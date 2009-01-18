@@ -15,7 +15,7 @@ public:
   bool txBufferFull(); 
   char mysrc; 
   private:
-  static const int EVTBUFLEN = 10; 
+  static const int EVTBUFLEN = 30; 
   static const int BUFSIZE = 16; 
   static const unsigned short FIFOFULL_MASK = 0x0001; 
   //static const unsigned short DMA_RUN = 0x0008; 

@@ -1,6 +1,5 @@
 #include "eventdispatch.h"
 //#include <cdefBF533.h>
-#include <iostream>
 
 EventDispatch::EventDispatch(DSP_POSITION dsppos) :
   dsppos_ (dsppos), 

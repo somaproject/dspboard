@@ -1,6 +1,5 @@
 #include "filterlinkcontroller.h"
 #include "event.h"
-#include <iostream>
 
 FilterLinkController::FilterLinkController(EventDispatch * ed, EventTX* etx, 
 					   AvailableFIRs * firs) :

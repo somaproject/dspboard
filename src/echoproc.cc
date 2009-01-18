@@ -23,6 +23,10 @@ EventEchoProc::EventEchoProc(EventDispatch * ed, EventTX* etx,
     
   ed->registerCallback(0xF6, fastdelegate::MakeDelegate(this, 
 							&EventEchoProc::eventDebugQuery)); 
+
+  ed->registerCallback(0xF8, fastdelegate::MakeDelegate(this, 
+							&EventEchoProc::eventMemCheck)); 
+
     
   for (int i = 0; i < NUMBENCH; i++){
     latest_[i] = 0; 
@@ -108,4 +112,21 @@ void EventEchoProc::benchStop(char counter)
     max_[counter] = delta; 
   }
 
+}
+
+void EventEchoProc::eventMemCheck(dsp::Event_t * et) {
+  dsp::EventTX_t etx ;
+  etx.addr[0] = 0xF; // FIXME actually send to requester
+  etx.event.cmd = 0xF9; 
+  etx.event.src = device_;
+  uint32_t memamt = memory_in_use(); 
+  
+  etx.event.data[0] = memamt >> 16; 
+  etx.event.data[1] = memamt & 0xFFFF; 
+  somatime_t time = ptimer_->getTime(); 
+  etx.event.data[2] = (time >> 32) & 0xFFFF;
+  etx.event.data[3] = (time >> 16) & 0xFFFF;
+  etx.event.data[4] = (time >> 0) & 0xFFFF;
+  petx->newEvent(etx); 
+  
 }

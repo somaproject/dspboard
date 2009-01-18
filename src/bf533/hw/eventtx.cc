@@ -2,7 +2,7 @@
 #include <cdefBF533.h>
 
 
-uint16_t EventTX::buffer_[10][16]; 
+uint16_t EventTX::buffer_[EVTBUFLEN][BUFSIZE]; 
 
 EventTX::EventTX() :
   nextFreeEvent_(0), 
