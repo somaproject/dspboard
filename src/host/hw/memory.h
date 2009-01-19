@@ -6,6 +6,11 @@
 #include <sys/types.h>
 #include <types.h>
 
+uint32_t inline memory_in_use()
+{
+  return 0; 
+
+}
 
 class Memcopy {
 public:

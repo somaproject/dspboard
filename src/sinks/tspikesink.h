@@ -46,7 +46,8 @@ public:
   void toBuffer(unsigned char *c) 
   {
     
-    const short len = CHANNUM * ((POSTTRIGGER + PRETRIGGER) * sizeof(int32_t) + 6) + 
+    const short len = 
+      CHANNUM * ((POSTTRIGGER + PRETRIGGER) * sizeof(int32_t) + 10) + 
       8 + 4  +  2 ; 
     *c = len >> 8; 
     c++; 
@@ -77,7 +78,7 @@ public:
     // for each channel
     for (short i = 0; i < CHANNUM; i++) {
       // FIXME incorporate VALID field
-      c++; 
+      c++;  // VALID FIELD
       c++;
       c = Memcopy::hton_int32(c, filterid[i]); 
       c = Memcopy::hton_int32(c, threshold[i]); 
