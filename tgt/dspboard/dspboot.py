@@ -14,7 +14,12 @@ from somapynet import eaddr
 from somapynet.neteventio import NetEventIO
 
 import time
-
+EVENTRXCMD_DATABUF = 0x32
+EVENTRXCMD_DATABUFTX = 0x33
+EVENTRXCMD_DSPSPISS = 0x34
+EVENTRXCMD_DSPSPIEN = 0x35
+EVENTRXCMD_DSPRESET = 0x36
+    
 class Block(object):
     def __init__(self, fid):
 
@@ -105,139 +110,175 @@ def chunk(string, maxlen):
     assert "".join(chunks) == string
     return chunks
 
-tgt = int (sys.argv[2])    
-eio = NetEventIO("10.0.0.2")
+def main():
+    dspaddrs = [int(x) for x in sys.argv[2:]]
+               
+    eio = NetEventIO("10.0.0.2")
 
-DSPBOARDADDR = tgt
-eio.addRXMask(xrange(256), DSPBOARDADDR)
+    #DSPBOARDADDR = tgt
+    for d in dspaddrs:
+        eio.addRXMask(xrange(256), d)
 
-eio.start()
-EVENTRXCMD_DATABUF = 0x32
-EVENTRXCMD_DATABUFTX = 0x33
-EVENTRXCMD_DSPSPISS = 0x34
-EVENTRXCMD_DSPSPIEN = 0x35
-EVENTRXCMD_DSPRESET = 0x36
-
-# Create event and set mask
-e = Event()
-e.src = eaddr.NETWORK
-e.cmd =  EVENTRXCMD_DSPRESET
-e.data[0] = 0x0000
-
-ea = eaddr.TXDest()
-ea[DSPBOARDADDR] = 1
-eio.sendEvent(ea, e)
+    eio.start()
 
 
-e = Event()
+    # Create event and set mask
+    e = Event()
+    e.src = eaddr.NETWORK
+    e.cmd =  EVENTRXCMD_DSPRESET
+    e.data[0] = 0x0000
 
-e.src = eaddr.NETWORK
-e.cmd =  EVENTRXCMD_DSPRESET
-e.data[0] = 0xFFFF
-
-
-ea = eaddr.TXDest()
-ea[DSPBOARDADDR] = 1
-eio.sendEvent(ea, e)
-
-# now make sure we are in control of the spi interface
-e = Event()
-e.src = eaddr.NETWORK
-e.cmd =  EVENTRXCMD_DSPSPIEN
-e.data[0] = 0xFFFF
-
-ea = eaddr.TXDest()
-ea[DSPBOARDADDR] = 1
-eio.sendEvent(ea, e)
-#time.sleep(1)
-
-#sys.exit(1)
-# deassert SPISS
-e = Event()
-e.src = eaddr.NETWORK
-e.cmd =  EVENTRXCMD_DSPSPISS
-e.data[0] = 0xFFFF
-
-ea = eaddr.TXDest()
-ea[DSPBOARDADDR] = 1
-eio.sendEvent(ea, e)
+    ea = eaddr.TXDest()
+    for d in dspaddrs:
+        ea[d] = 1
+    eio.sendEvent(ea, e)
 
 
-e = Event()
-e.src = eaddr.NETWORK
-e.cmd =  EVENTRXCMD_DSPSPISS
-e.data[0] = 0x0000
+    e = Event()
 
-ea = eaddr.TXDest()
-ea[DSPBOARDADDR] = 1
-eio.sendEvent(ea, e)
-time.sleep(1)
+    e.src = eaddr.NETWORK
+    e.cmd =  EVENTRXCMD_DSPRESET
+    e.data[0] = 0xFFFF
 
-# load up the blocks and send
 
-blocks = loadfiles()
-blockpos = 0
+    ea = eaddr.TXDest()
+    for d in dspaddrs:
+        ea[d] = 1
+    eio.sendEvent(ea, e)
 
-for byteblock in blocks:
-    MAXLEN = 1024
-    chunks = chunk(byteblock, MAXLEN)
-    print "byteblock, len = ", len(byteblock), len(chunks), "chunks"
-    cpos = 0
-    for b in chunks:
-        pos = 0
-        while pos < len(b):
-            bytes = b[pos:pos+2]
+    # now make sure we are in control of the spi interface
+    e = Event()
+    e.src = eaddr.NETWORK
+    e.cmd =  EVENTRXCMD_DSPSPIEN
+    e.data[0] = 0xFFFF
 
-            words = struct.unpack(">H", bytes)
+    ea = eaddr.TXDest()
+    for d in dspaddrs:
+        ea[d] = 1
+    eio.sendEvent(ea, e)
+    #time.sleep(1)
 
+    #sys.exit(1)
+    # deassert SPISS
+    e = Event()
+    e.src = eaddr.NETWORK
+    e.cmd =  EVENTRXCMD_DSPSPISS
+    e.data[0] = 0xFFFF
+
+    ea = eaddr.TXDest()
+    for d in dspaddrs:
+        ea[d] = 1
+    eio.sendEvent(ea, e)
+
+
+    e = Event()
+    e.src = eaddr.NETWORK
+    e.cmd =  EVENTRXCMD_DSPSPISS
+    e.data[0] = 0x0000
+
+    ea = eaddr.TXDest()
+    for d in dspaddrs:
+        ea[d] = 1
+    
+    eio.sendEvent(ea, e)
+    time.sleep(1)
+
+    # load up the blocks and send
+
+    blocks = loadfiles()
+    blockpos = 0
+
+    for byteblock in blocks:
+        MAXLEN = 1024
+        chunks = chunk(byteblock, MAXLEN)
+        print "byteblock, len = ", len(byteblock), len(chunks), "chunks"
+        cpos = 0
+        for b in chunks:
+            pos = 0
+            while pos < len(b):
+                bytes = b[pos:pos+2]
+
+                words = struct.unpack(">H", bytes)
+
+                e = Event()
+                e.src = eaddr.NETWORK
+                e.cmd =  EVENTRXCMD_DATABUF
+                e.data[0] = words[0]
+
+                ea = eaddr.TXDest()
+                for d in dspaddrs:
+                    ea[d] = 1
+
+                eio.sendEvent(ea, e)
+
+                pos += 2
             e = Event()
             e.src = eaddr.NETWORK
-            e.cmd =  EVENTRXCMD_DATABUF
-            e.data[0] = words[0]
-
+            e.cmd =  EVENTRXCMD_DATABUFTX
+            e.data[0] = blockpos * 256 + cpos
             ea = eaddr.TXDest()
-            ea[DSPBOARDADDR] = 1
+            for d in dspaddrs:
+                ea[d] = 1
+
             eio.sendEvent(ea, e)
+            print "sent databuftx event, blockpos =%d,  block len = %d, chunk number %d" % (blockpos, len(b), cpos)
 
-            pos += 2
-        e = Event()
-        e.src = eaddr.NETWORK
-        e.cmd =  EVENTRXCMD_DATABUFTX
-        e.data[0] = blockpos * 256 + cpos
+            # we need to get events from everyone
+            ecnt = 0
+            while ecnt < len(dspaddrs):
+                erx = eio.getEvents()
+                for q in erx:
+                    ecnt += 1
+            
+
+            cpos += 1
+        blockpos += 1
+    e = Event()
+    e.src = eaddr.NETWORK
+    e.cmd =  EVENTRXCMD_DSPSPISS
+    e.data[0] = 0xFFFF
+
+    ea = eaddr.TXDest()
+    for d in dspaddrs:
+        ea[d] = 1
+    eio.sendEvent(ea, e)
+
+
+    # Give DSP control of SPI interface
+    e = Event()
+    e.src = eaddr.NETWORK
+    e.cmd =  EVENTRXCMD_DSPSPIEN
+    e.data[0] = 0x0000
+
+    ea = eaddr.TXDest()
+
+    for d in dspaddrs:
+        ea[d] = 1
+
+    eio.sendEvent(ea, e)
+
+    time.sleep(1)
+    # now send all of the UART settings
+    e = Event()
+    e.src = eaddr.NETWORK
+    e.cmd =  0x37
+    for d in dspaddrs:
+        e.data[0] = d
+        e.data[1] = d
+        e.data[2] = d
+        e.data[3] = d
+        e.data[4] = d
         ea = eaddr.TXDest()
-        
-        ea[DSPBOARDADDR] = 1
+        ea[d] = 1
+
         eio.sendEvent(ea, e)
-        print "sent databuftx event, blockpos =%d,  block len = %d, chunk number %d" % (blockpos, len(b), cpos)
-        erx = eio.getEvents()
-        for q in erx:
-            print q
-
-        cpos += 1
-    blockpos += 1
-e = Event()
-e.src = eaddr.NETWORK
-e.cmd =  EVENTRXCMD_DSPSPISS
-e.data[0] = 0xFFFF
-
-ea = eaddr.TXDest()
-ea[DSPBOARDADDR] = 1
-eio.sendEvent(ea, e)
-
+        
     
-# Give DSP control of SPI interface
-e = Event()
-e.src = eaddr.NETWORK
-e.cmd =  EVENTRXCMD_DSPSPIEN
-e.data[0] = 0x0000
-
-ea = eaddr.TXDest()
-ea[DSPBOARDADDR] = 1
-eio.sendEvent(ea, e)
-
-eio.stop()
+    eio.stop()
 
 
 
-    
 
+
+if __name__ == "__main__":
+    main()

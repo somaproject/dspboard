@@ -1,6 +1,7 @@
 """
 Set the UART ID of the DSPboard
 
+Not necessary with newest dspboot.py
 
 """
 import sys
