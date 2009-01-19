@@ -39,7 +39,8 @@ private:
   int latest_[NUMBENCH]; 
   int starttime_[NUMBENCH]; 
   int max_[NUMBENCH]; 
-
+  
+  uint16_t etx_errors; 
 
 };
 

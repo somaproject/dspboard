@@ -8,23 +8,25 @@ EventTX::EventTX() :
   nextFreeEvent_(0), 
   nextSendEvent_(0), 
   txPending_(false), 
-  fullcount_(0)
+  fifo_full_count_(0), 
+  fpga_full_count_(0)
 {
   
 
 }
 
-void EventTX::newEvent(const dsp::EventTX_t &evt)
+bool EventTX::newEvent(const dsp::EventTX_t &evt)
 {
   // copy to the next free buffer
   if (txBufferFull()) {
-    // should throw event-output-fifo-error
-    return; 
+    // FIXME should throw event-output-fifo-error
+    fifo_full_count_++; 
+    return false; 
   }
 
   eventToDMABuffer(evt, &buffer_[nextFreeEvent_][0]); 
   nextFreeEvent_ = (nextFreeEvent_+1) % EVTBUFLEN; 
-
+  return true; 
 }
 
 bool EventTX::txBufferFull() {
@@ -83,7 +85,7 @@ bool EventTX::sendEvent()
   }
   // check if the fifo is full 
   if (isFPGAFIFOFull()){
-    fullcount_++; 
+    fpga_full_count_++; 
     return false; 
   }
   if (nextSendEvent_ != nextFreeEvent_) {
@@ -152,5 +154,16 @@ bool EventTX::isFPGAFIFOFull()
   // read the relevant line 
   return (*pFIO_FLAG_D & FIFOFULL_MASK); 
 
+
+}
+
+uint16_t EventTX::getFIFOFullCount()
+{
+  return fifo_full_count_; 
+}
+
+uint16_t EventTX::getFPGAFullCount()
+{
+  return fpga_full_count_; 
 
 }

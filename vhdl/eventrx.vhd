@@ -29,6 +29,9 @@ architecture Behavioral of eventrx is
   signal mosil         : std_logic := '0';
   signal sclkl, sclkll : std_logic := '0';
 
+  -- debug
+  signal debugEventCounter : std_logic_vector(7 downto 0) := (others => '0');
+
   -- INPUT SIGNALS
 
   signal din    : std_logic_vector(15 downto 0) := (others => '0');
@@ -92,10 +95,17 @@ begin  -- Behavioral
 
   REQ <= '1' when ocs = armareq or ocs = armbreq else '0';
 
--- FIFOFULL <= armeda and armedb;       -- causes race conditions
+--     FIFOFULL <= armeda and armedb;       -- causes race conditions
+-- THE ABOVE MESSAGE WAS IN THE CODE BEFORE IT WAS CHANGED TO THIS:
+--
+--   FIFOFULL <= '1' when (armeda = '1' and armedb = '1' ) or
+--               (armeda = '1' and ics = wordw) or
+--               (armedb = '1' and ics = wordw) else
+--               '0';
+-- which is correct? I do not know! 
   FIFOFULL <= '1' when (armeda = '1' and armedb = '1' ) or
-              (armeda = '1' and ics = wordw) or
-              (armedb = '1' and ics = wordw) else
+              (armeda = '1' and wcntin > 0 ) or
+              (armedb = '1' and wcntin > 0) else
               '0';
 
   
@@ -134,9 +144,11 @@ begin  -- Behavioral
       if rising_edge(CLK) then
         ics <= ins;
         ocs <= ons;
-        DEBUG(7 downto 4) <= wcntin; 
-        DEBUG(8) <= armeda;
-        DEBUG(9) <= armedb; 
+        DEBUG(15 downto 8) <= debugEventCounter;
+        if ics = bufarm then
+          debugEventCounter <= debugEventCounter + 1;
+        end if;         
+
 
         scsl   <= SCS;
         mosil  <= MOSI;

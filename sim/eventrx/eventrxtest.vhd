@@ -80,12 +80,12 @@ begin  -- Behavioral
         wait until rising_edge(CLK);
         wait until rising_edge(CLK);
         for i in 15 downto 0 loop
-          SCLK <= '0';
+          SCLK <= '1';
           MOSI <= txwords(word)(i);
           wait until rising_edge(CLK);
           wait until rising_edge(CLK);
           wait until rising_edge(CLK);
-          SCLK <= '1';
+          SCLK <= '0';
           MOSI <= txwords(word)(i);
           wait until rising_edge(CLK);
           wait until rising_edge(CLK);

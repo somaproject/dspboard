@@ -9,10 +9,12 @@ class EventTX
 public: 
   EventTX(); 
   
-  void newEvent(const dsp::EventTX_t & evt); 
+  bool newEvent(const dsp::EventTX_t & evt); 
   bool sendEvent(); 
   void setup(); 
   bool txBufferFull(); 
+  uint16_t getFIFOFullCount();  // FOR DEBUGGING BUFFER OVERFLOW PROBLEMS
+  uint16_t getFPGAFullCount();  
   char mysrc; 
   private:
   static const int EVTBUFLEN = 30; 
@@ -32,7 +34,8 @@ public:
   void setupSPI(); 
   void setupDMA(); 
   void setupFPGAFIFOFlag(); 
-  int fullcount_; 
+  uint16_t fifo_full_count_; 
+  uint16_t fpga_full_count_; 
   bool isFPGAFIFOFull(); 
 
 

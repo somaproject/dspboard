@@ -587,6 +587,7 @@ architecture Behavioral of dspboard is
   signal eventrxdebuga   : std_logic_vector(15 downto 0) := (others => '0');
   signal eventrxreqcnt   : std_logic_vector(15 downto 0)  := (others => '0');
   signal reql            : std_logic                     := '0';
+  signal reqll            : std_logic                     := '0';
 
   signal datafullcnta : std_logic_vector(15 downto 0) := (others => '0');
   signal datadebug : std_logic_vector(15 downto 0) := (others => '0');
@@ -1147,7 +1148,8 @@ begin  -- Behavioral
 
 
 
-  jtagwordout(47 downto 0) <= asdebug; 
+
+  jtagwordout(47 downto 0) <=  eventrxdebuga & X"AABB" & eventrxreqcnt;
 
   process(CLK)
     variable scnt   : integer range 0 to 2 := 0;
@@ -1201,8 +1203,9 @@ begin  -- Behavioral
         end if;
 
         reql            <= edspreq(0);
+        reqll <= reql; 
         dspissal <= dspissa; 
-        if dspissal = '1' and dspissa = '0' then 
+        if reqll = '0' and reql = '1' then  -- rising edge on request line
           eventrxreqcnt <= eventrxreqcnt + 1;
         end if;
 
