@@ -88,6 +88,14 @@ public:
     }
 
   }
+
+  bool setFilterID(filterid_t fid) {
+    if (pSource_) {
+      return pSource_->pFilterLink_->setFilterID(fid); 
+    } else {
+      return false; 
+    }
+  }
   SampleBuffer<T> * pSampleBuffer_; 
   FilterLinkSource<T> * pSource_; 
 

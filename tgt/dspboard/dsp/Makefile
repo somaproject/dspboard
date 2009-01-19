@@ -19,7 +19,7 @@ LDFLAGS =  -g -T bftiny.x  -L$(BFROOT)lib/ -L$(BFROOT)/lib/gcc/bfin-elf/$(BFROOT
 
 OBJS = $(ASMSRCS:%.asm=%.o) $(CCSRCS:%.cc=%.o) eventtx.o eventrx.o \
 	eventdispatch.o memory.o dspuartconfig.o  acqserial.o \
-	uarttx.o acqstatecontrol.o systemtimer.o datasport.o \
+	uarttx.o acqstatecontrol.o systemtimer.o datasport.o acqboardif.o\
 	fakesource.o rawsink.o tspikesink.o rawmainloop.o echoproc.o\
 	filter.o delta.o fir.o acqdatasourcecontrol.o acqdatasource.o
 
@@ -58,6 +58,9 @@ eventdispatch.o: $(SRCDIR)/eventdispatch.cc
 
 echoproc.o: $(SRCDIR)/echoproc.cc	
 	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/echoproc.cc
+
+acqboardif.o: $(SRCDIR)/acqboardif.cc	
+	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/acqboardif.cc
 
 acqdatasource.o: $(SRCDIR)/acqdatasource.cc	
 	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/acqdatasource.cc

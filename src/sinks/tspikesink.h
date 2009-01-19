@@ -129,6 +129,20 @@ public:
 
   void setThreshold(char chan, int32_t value); 
   int32_t getThreshold(char chan); 
+
+  enum INCMDS { 
+    ECMD_QUERY = 0x43, 
+    ECMD_SET = 0x44,   
+    ECMD_RESPONSE = 0x45
+  }; 
+
+  //  static const char CMDRESPBCAST = 0x45; 
+
+  enum PARAMETERS { 
+    THRESHOLD = 1, 
+    FILTERID = 2
+  }; 
+
 private:
   void processSample1(sample_t); 
   void processSample2(sample_t); 
@@ -146,24 +160,12 @@ private:
   void sendSpike(); 
 
   // event processing
-  enum INCMDS { 
-    ECMD_QUERY = 0x43, 
-    ECMD_SET = 0x44,   
-    ECMD_RESPONSE = 0x45
-  }; 
-
-  //  static const char CMDRESPBCAST = 0x45; 
-
-  enum PARAMETERS { 
-    THRESHOLD = 1, 
-    FILTERID = 2
-  }; 
 
   
   void query(dsp::Event_t* et); 
   void setstate(dsp::Event_t* et); 
   void sendThresholdResponse(char chan); 
-  void sendFilterLinkResponse(char chan); 
+  void sendFilterIDResponse(char chan); 
 
   dsp::EventTX_t bcastEventTX_; 
 

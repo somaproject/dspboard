@@ -18,6 +18,7 @@ public:
   void eventTimeRX(dsp::Event_t * et); 
   void eventEcho(dsp::Event_t * et); 
   void eventLED(dsp::Event_t * et); 
+  void eventMemCheck(dsp::Event_t * et); 
   void eventBenchQuery(dsp::Event_t * et); 
   void eventDebugQuery(dsp::Event_t * et); 
   
@@ -38,7 +39,8 @@ private:
   int latest_[NUMBENCH]; 
   int starttime_[NUMBENCH]; 
   int max_[NUMBENCH]; 
-
+  
+  uint16_t etx_errors; 
 
 };
 

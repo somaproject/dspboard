@@ -19,8 +19,8 @@ filterlinkcontroller.o: $(SRCDIR)/filterlinkcontroller.cc
 tspikesink.o: $(SRCDIR)/sinks/tspikesink.cc
 	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/sinks/tspikesink.cc -o tspikesink.o
 
-availablefirs.o: $(SRCDIR)/sinks/availablefirs.cc
-	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/sinks/availablefirs.cc -o availablefirs.o
+availablefirs.o: $(SRCDIR)/filterlinks/availablefirs.cc
+	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/filterlinks/availablefirs.cc -o availablefirs.o
 
 eventtx.o: $(HWDIR)/hw/eventtx.cc
 	$(CXX) $(CXXFLAGS) -c  $(HWDIR)/hw/eventtx.cc -o eventtx.o
@@ -35,6 +35,8 @@ rawsink.o: $(SRCDIR)/sinks/rawsink.cc
 hostdataout.o: $(HWDIR)/hostdataout.o
 	$(CXX) $(CXXFLAGS) -c $(HWDIR)/hostdataout.cc -o hostdataout.o
 
+util.o: $(SRCDIR)/tests/utils/util.cc
+	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/tests/utils/util.cc -o util.o
 
 runner.o: runner.cc
 
@@ -46,7 +48,7 @@ clean:
 
 runner: runner.o tspikesinktest.o systemtimer.o availablefirs.o \
 	eventdispatch.o fakesource.o hostdataout.o tspikesink.o eventtx.o \
-	filterlinkcontroller.o
+	filterlinkcontroller.o util.o
 
 
 

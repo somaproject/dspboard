@@ -1,6 +1,7 @@
 #include "echoproc.h" 
 #include <filter.h>
 #include <hw/misc.h>
+#include <hw/memory.h>
 
 EventEchoProc::EventEchoProc(EventDispatch * ed, EventTX* etx, 
 			     SystemTimer * ptimer, 
@@ -9,7 +10,8 @@ EventEchoProc::EventEchoProc(EventDispatch * ed, EventTX* etx,
   petx(etx), 
   iterations(0),
   ptimer_(ptimer), 
-  device_(device)
+  device_(device), 
+  etx_errors(0)
 {
   
   ed->registerCallback(0xF0, fastdelegate::MakeDelegate(this, 
@@ -23,6 +25,10 @@ EventEchoProc::EventEchoProc(EventDispatch * ed, EventTX* etx,
     
   ed->registerCallback(0xF6, fastdelegate::MakeDelegate(this, 
 							&EventEchoProc::eventDebugQuery)); 
+
+  ed->registerCallback(0xF8, fastdelegate::MakeDelegate(this, 
+							&EventEchoProc::eventMemCheck)); 
+
     
   for (int i = 0; i < NUMBENCH; i++){
     latest_[i] = 0; 
@@ -79,17 +85,30 @@ void EventEchoProc::eventBenchQuery(dsp::Event_t * et) {
 }
 
 void EventEchoProc::eventDebugQuery(dsp::Event_t * et) {
+  /*
+    Right now, this checks to see if we overflow the event buffer
+    by sending the requested number of simultaneous event packets
+
+  */ 
+
+
   dsp::EventTX_t etx ;
   etx.addr[0] = 0xF;  // FIXME Actually send to requester
-  etx.event.cmd = 0xF6; 
+  etx.event.cmd = 0xF7; 
   etx.event.src = device_;
-
-  etx.event.data[0] =  debugdata[0]; 
-  etx.event.data[1] =  debugdata[1]; 
-  etx.event.data[2] =  debugdata[2]; 
-  etx.event.data[3] =  debugdata[3]; 
-  etx.event.data[4] =  debugdata[4]; 
-  petx->newEvent(etx); 
+  
+  uint16_t reqnonce = et->data[0]; 
+  uint16_t numtosend = et->data[1]; 
+  for(char i = 0; i < numtosend; i++) {
+    etx.event.data[0] =  reqnonce; 
+    etx.event.data[1] =  i; 
+    etx.event.data[2] = etx_errors; 
+    etx.event.data[3] = petx->getFIFOFullCount(); 
+    etx.event.data[4] = petx->getFPGAFullCount(); 
+    if (! petx->newEvent(etx)) {
+      etx_errors += 1; 
+    }
+  }
   
 }
 
@@ -108,4 +127,21 @@ void EventEchoProc::benchStop(char counter)
     max_[counter] = delta; 
   }
 
+}
+
+void EventEchoProc::eventMemCheck(dsp::Event_t * et) {
+  dsp::EventTX_t etx ;
+  etx.addr[0] = 0xF; // FIXME actually send to requester
+  etx.event.cmd = 0xF9; 
+  etx.event.src = device_;
+  uint32_t memamt = memory_in_use(); 
+  
+  etx.event.data[0] = memamt >> 16; 
+  etx.event.data[1] = memamt & 0xFFFF; 
+  somatime_t time = ptimer_->getTime(); 
+  etx.event.data[2] = (time >> 32) & 0xFFFF;
+  etx.event.data[3] = (time >> 16) & 0xFFFF;
+  etx.event.data[4] = (time >> 0) & 0xFFFF;
+  petx->newEvent(etx); 
+  
 }

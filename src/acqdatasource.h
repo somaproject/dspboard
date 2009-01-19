@@ -53,7 +53,7 @@ public:
 
   FilterLinkSource<sample_t> sourceCont; 
   FilterLinkSource<char> sourceSampleCycle; 
-
+  
 }; 
 
 
