@@ -14,6 +14,9 @@
 
 #include <filterlinks/fir.h>
 
+//making this static
+static AvailableFIRs availableFIRs; 
+
 class SomaMainLoop : public MainLoop
 {
  public:  

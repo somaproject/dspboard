@@ -19,6 +19,7 @@
 #include <acqdatasourcecontrol.h>
 #include <fakesource.h>
 #include <mainloops/rawmainloop.h>
+#include <mainloops/somamainloop.h>
 #include <sinks/rawsink.h>
 #include <sinks/tspikesink.h>
 #include <filterlinks/delta.h>
@@ -130,7 +131,8 @@ int main_loop()
   //SystemTimer timer(ed); 
 
   eventrx->start(); 
-  RawMainLoop * pMainLoop = new RawMainLoop(); 
+  //RawMainLoop * pMainLoop = new RawMainLoop(); 
+  SomaMainLoop * pMainLoop = new SomaMainLoop(); 
   pMainLoop->setup(ed, etx, acqserial, dataout, &config); 
   //AcqFrame af; 
 //   AcqState acqstate; 
