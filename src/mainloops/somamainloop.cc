@@ -1,4 +1,5 @@
 #include "somamainloop.h"
+
 void SomaMainLoop::setup(EventDispatch * ed, EventTX * etx, 
 			    AcqSerial * as, DataOut * dout, 
 			    DSPConfig * config)
@@ -24,40 +25,47 @@ void SomaMainLoop::setup(EventDispatch * ed, EventTX * etx,
   pAcqDataSourceControl_ = new AcqDataSourceControl(pEventDispatch_,
 							   pEventTX_,
 							   pAcqStateControl_);
+
+
   pFilterLinkController_ = new FilterLinkController(pEventDispatch_, 
 						    pEventTX_, 
-						    pAvailableFIRs_); 
+						    &availableFIRs); 
 
-  pAvailableFIRs_ = new AvailableFIRs(); 
+  pSpikeFilterA_ = new FIR(&availableFIRs); 
+  pSpikeFilterB_ = new FIR(&availableFIRs); 
+  pSpikeFilterC_ = new FIR(&availableFIRs); 
+  pSpikeFilterD_ = new FIR(&availableFIRs); 
 
-  pSpikeFilterA_ = new FIR(pAvailableFIRs_); 
-  pSpikeFilterB_ = new FIR(pAvailableFIRs_); 
-  pSpikeFilterC_ = new FIR(pAvailableFIRs_); 
-  pSpikeFilterD_ = new FIR(pAvailableFIRs_); 
-
-  pWaveFilter_ = new FIR(pAvailableFIRs_); 
+  pWaveFilter_ = new FIR(&availableFIRs); 
 
   pAcqStateControl_->setAcqStateReceiver(pAcqDataSourceControl_); 
 
-  TSpikeSink * pTSpikeSink = new 
+  pTSpikeSink_ = new 
     TSpikeSink(timer_, pDataOut_, pEventDispatch_, pEventTX_, 
 	       pFilterLinkController_, pConfig_->getDataSrc());
   
   
-  // Create the filter links. 
+//   //Create the filter links. 
 
-  pAcqDataSource_->sourceA.connect(pSpikeFilterA_->input); 
-  pAcqDataSource_->sourceB.connect(pSpikeFilterB_->input); 
-  pAcqDataSource_->sourceC.connect(pSpikeFilterC_->input); 
-  pAcqDataSource_->sourceD.connect(pSpikeFilterD_->input); 
-  pAcqDataSource_->sourceCont.connect(pWaveFilter_->input); 
+//   pAcqDataSource_->sourceA.connect(pSpikeFilterA_->input); 
+//   pAcqDataSource_->sourceB.connect(pSpikeFilterB_->input); 
+//   pAcqDataSource_->sourceC.connect(pSpikeFilterC_->input); 
+//   pAcqDataSource_->sourceD.connect(pSpikeFilterD_->input); 
+//   pAcqDataSource_->sourceCont.connect(pWaveFilter_->input); 
 
-  pSpikeFilterA_->output.connect(pTSpikeSink_->sink1); 
-  pSpikeFilterB_->output.connect(pTSpikeSink_->sink2); 
-  pSpikeFilterC_->output.connect(pTSpikeSink_->sink3); 
-  pSpikeFilterD_->output.connect(pTSpikeSink_->sink4); 
+//  pSpikeFilterA_->output.connect(pTSpikeSink_->sink1); 
+//   pSpikeFilterB_->output.connect(pTSpikeSink_->sink2); 
+//   pSpikeFilterC_->output.connect(pTSpikeSink_->sink3); 
+//   pSpikeFilterD_->output.connect(pTSpikeSink_->sink4); 
 
-  // FIXME: wave sink
+  pAcqDataSource_->sourceA.connect(pTSpikeSink_->sink1); 
+  pAcqDataSource_->sourceB.connect(pTSpikeSink_->sink2); 
+  pAcqDataSource_->sourceC.connect(pTSpikeSink_->sink3); 
+  pAcqDataSource_->sourceD.connect(pTSpikeSink_->sink4); 
+//   pAcqDataSource_->sourceCont.connect(pWaveFilter_->input); 
+
+//   // FIXME: wave sink
+
 
   pAcqDataSource_->sourceSampleCycle.connect(pTSpikeSink_->samplesink); 
   

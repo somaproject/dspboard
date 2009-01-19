@@ -143,7 +143,7 @@ public:
     FILTERID = 2
   }; 
 
-private:
+private: 
   void processSample1(sample_t); 
   void processSample2(sample_t); 
   void processSample3(sample_t); 

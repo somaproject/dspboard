@@ -9,7 +9,7 @@ public:
   // has event interface
   AvailableFIRs(); 
   
-  static const int FILTERNUM = 10; 
+  static const int FILTERNUM = 5; 
   static const int MAXFILTERLEN = 255; 
   sample_t filters[FILTERNUM][MAXFILTERLEN]; 
   unsigned char filterlens[FILTERNUM]; 

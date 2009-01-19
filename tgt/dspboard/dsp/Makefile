@@ -20,7 +20,8 @@ LDFLAGS =  -g -T bftiny.x  -L$(BFROOT)lib/ -L$(BFROOT)/lib/gcc/bfin-elf/$(BFROOT
 OBJS = $(ASMSRCS:%.asm=%.o) $(CCSRCS:%.cc=%.o) eventtx.o eventrx.o \
 	eventdispatch.o memory.o dspuartconfig.o  acqserial.o \
 	uarttx.o acqstatecontrol.o systemtimer.o datasport.o acqboardif.o\
-	fakesource.o rawsink.o tspikesink.o rawmainloop.o echoproc.o\
+	fakesource.o rawsink.o rawsink2.o tspikesink.o availablefirs.o filterlinkcontroller.o\
+	 rawmainloop.o somamainloop.o echoproc.o\
 	filter.o delta.o fir.o acqdatasourcecontrol.o acqdatasource.o
 
 
@@ -65,6 +66,12 @@ acqboardif.o: $(SRCDIR)/acqboardif.cc
 acqdatasource.o: $(SRCDIR)/acqdatasource.cc	
 	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/acqdatasource.cc
 
+filterlinkcontroller.o: $(SRCDIR)/filterlinkcontroller.cc	
+	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/filterlinkcontroller.cc
+
+availablefirs.o: $(SRCDIR)/filterlinks/availablefirs.cc	
+	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/filterlinks/availablefirs.cc -o availablefirs.o
+
 acqdatasourcecontrol.o: $(SRCDIR)/acqdatasourcecontrol.cc	
 	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/acqdatasourcecontrol.cc
 
@@ -77,11 +84,17 @@ acqstatecontrol.o: $(SRCDIR)/acqstatecontrol.cc
 rawmainloop.o: $(SRCDIR)/mainloops/rawmainloop.cc
 	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/mainloops/rawmainloop.cc
 
+somamainloop.o: $(SRCDIR)/mainloops/somamainloop.cc
+	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/mainloops/somamainloop.cc
+
 systemtimer.o: $(SRCDIR)/systemtimer.cc
 	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/systemtimer.cc
 
 rawsink.o: $(SRCDIR)/sinks/rawsink.cc
 	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/sinks/rawsink.cc
+
+rawsink2.o: $(SRCDIR)/sinks/rawsink2.cc
+	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/sinks/rawsink2.cc
 
 tspikesink.o: $(SRCDIR)/sinks/tspikesink.cc
 	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/sinks/tspikesink.cc
@@ -91,9 +104,6 @@ delta.o: $(SRCDIR)/filterlinks/delta.cc
 
 fir.o: $(SRCDIR)/filterlinks/fir.cc
 	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/filterlinks/fir.cc
-
-#acqdatasource.o: $(SRCDIR)/acqdatasource.cc
-#	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/acqdatasource.cc
 
 fakesource.o: $(SRCDIR)/fakesource.cc
 	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/fakesource.cc

@@ -7,7 +7,7 @@ TSpikeSink::TSpikeSink(SystemTimer * st, DataOut * dout, EventDispatch *ed,
   pDataOut_(dout), 
   pEventDispatch_(ed), 
   pEventTX_(etx),
-  sink1(fastdelegate::MakeDelegate(this, &TSpikeSink::processSample1)), 
+  sink1(fastdelegate::MakeDelegate(this, &TSpikeSink::processSample1)),
   sink2(fastdelegate::MakeDelegate(this, &TSpikeSink::processSample2)), 
   sink3(fastdelegate::MakeDelegate(this, &TSpikeSink::processSample3)), 
   sink4(fastdelegate::MakeDelegate(this, &TSpikeSink::processSample4)), 
@@ -119,7 +119,7 @@ void TSpikeSink::sendSpike()
   pendingTSpikeData_.filterid[2] = sink3.pSource_->id; 
   pendingTSpikeData_.filterid[3] = sink4.pSource_->id; 
 
-  pDataOut_->sendData(pendingTSpikeData_); 
+ pDataOut_->sendData(pendingTSpikeData_); 
   
   
 }
@@ -181,7 +181,7 @@ void TSpikeSink::setstate(dsp::Event_t * et) {
       case 3 :
 	success = sink4.setFilterID(filterid); 
 	break; 
-      }
+     }
       if (!success) {
 	// FIXME : send error
       }
