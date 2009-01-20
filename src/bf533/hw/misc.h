@@ -1,3 +1,6 @@
+#ifndef MISC_H
+#define MISC_H
+
 #include <cdefBF533.h>
 
 
@@ -9,3 +12,5 @@ inline void setEventLED(bool on) {
     *pFIO_FLAG_D &= ~0x0100;
   }
 }
+
+#endif
