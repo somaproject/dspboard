@@ -129,7 +129,7 @@ clean:
 
 ldr: simpletest.ldr
 
-dump: dspboard.dxe:
+dspboard.dump: dspboard.dxe
 	bfin-elf-objdump -s --disassemble --line-numbers dspboard.dxe > dspboard.dump
 
 dspboard.ldr: dspboard.dxe
