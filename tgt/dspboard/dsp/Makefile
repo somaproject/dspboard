@@ -8,7 +8,7 @@ INCLUDES = -I$(HWDIR) -I. -I$(SRCDIR)
 ASMFLAGS = -x assembler-with-cpp $(CPUDEFINES) $(INCLUDES)
 ASMFLAGS += -DBOARD_$(BOARD)
 CXXFLAGS = -mcpu=bf533 $(INCLUDES) -O2  -g -DBOARD_$(BOARD) 
-CXXFLAGS += $(CPUDEFINES) -fno-rtti --no-exceptions -ffast-math -mfast-fp
+CXXFLAGS += $(CPUDEFINES) -fno-rtti --no-exceptions -ffast-math -mfast-fp -funsafe-math-optimizations
 BOARD=SOMA_DSPBOARD4X
 
 BFROOT = /home/jonas/blackfin/out-elf/
