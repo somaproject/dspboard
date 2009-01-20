@@ -43,7 +43,8 @@ void RawMainLoop::setup(EventDispatch * ed, EventTX * etx,
 
 void RawMainLoop::runloop()
 {
-  eep_->benchStart(0); 
+  Benchmark benchmark; 
+  benchmark.start(4); 
   pAcqStateControl_->setLinkStatus(pAcqSerial_->checkLinkUp()); 
   if (! pAcqSerial_->checkRxEmpty())
     {
@@ -52,13 +53,12 @@ void RawMainLoop::runloop()
       eep_->debugdata[1] = pAcqStateControl_->sequentialCMDID_; 
       
       pAcqSerial_->getNextFrame(&acqFrame_); 
-      pAcqStateControl_->newAcqFrame(&acqFrame_); 
       // trigger the set of filterlinks
-      eep_->benchStart(1);
-      pAcqDataSource_->newAcqFrame(&acqFrame_); 
-      eep_->benchStop(1);
+      benchmark.start(5); 
+      //pAcqDataSource_->newAcqFrame(&acqFrame_); 
+      benchmark.stop(5); 
       
     }
-  eep_->benchStop(0); 
+  benchmark.stop(4); 
 
 }

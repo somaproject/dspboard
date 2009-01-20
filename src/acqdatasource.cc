@@ -65,7 +65,7 @@ void AcqDataSource::newAcqFrame(AcqFrame * af)
   sourceD.newSample(samps[3]); 
   sourceCont.newSample(samps[4]); 
 
-  sourceSampleCycle.newSample(0); // FIXME
+  //sourceSampleCycle.newSample(0); // FIXME
   
 }
 

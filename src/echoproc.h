@@ -6,7 +6,7 @@
 #include <dsp.h>
 #include <eventdispatch.h>
 #include <systemtimer.h>
-
+#include <benchmark.h>
 
 
 class EventEchoProc
@@ -35,13 +35,9 @@ private:
   SystemTimer* ptimer_; 
 
   // benchmarking / performance
-  static const short NUMBENCH = 4; 
-  int latest_[NUMBENCH]; 
-  int starttime_[NUMBENCH]; 
-  int max_[NUMBENCH]; 
   
   uint16_t etx_errors; 
-
+  Benchmark benchmark_; 
 };
 
 

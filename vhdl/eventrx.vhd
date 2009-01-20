@@ -20,7 +20,7 @@ entity eventrx is
     REQ      : out std_logic;
     GRANT    : in  std_logic;
     DONE     : out std_logic;
-    DEBUG    : out std_logic_vector(15 downto 0));
+    DEBUG    : out std_logic_vector(31 downto 0));
 end eventrx;
 
 architecture Behavioral of eventrx is
@@ -51,6 +51,7 @@ architecture Behavioral of eventrx is
   type instates is (startup, none, wordw, wordchk, bufarm, nextisel);
   signal ics, ins : instates := none;
 
+  signal lfifofull : std_logic := '0';
   -- OUTPUT SIGNALS
 
   signal douta, doutb : std_logic_vector(15 downto 0) := (others => '0');
@@ -66,7 +67,8 @@ architecture Behavioral of eventrx is
                      armbw, armbreq, sendbh, sendbl, doneb);
   signal ocs, ons : outstates := armaw;
 
-
+  signal fifofullcntdebug : std_logic_vector(7 downto 0) := (others => '0');
+  
   component regfile
     generic (
       BITS  :     integer := 16);
@@ -103,11 +105,11 @@ begin  -- Behavioral
 --               (armedb = '1' and ics = wordw) else
 --               '0';
 -- which is correct? I do not know! 
-  FIFOFULL <= '1' when (armeda = '1' and armedb = '1' ) or
+  lfifofull <= '1' when (armeda = '1' and armedb = '1' ) or
               (armeda = '1' and wcntin > 0 ) or
               (armedb = '1' and wcntin > 0) else
               '0';
-
+  FIFOFULL <= lfifofull;
   
   regfile_a : regfile
     generic map (
@@ -149,6 +151,8 @@ begin  -- Behavioral
           debugEventCounter <= debugEventCounter + 1;
         end if;         
 
+        DEBUG(19 downto 16) <= wcntin;
+        DEBUG(23) <= lfifofull;
 
         scsl   <= SCS;
         mosil  <= MOSI;
@@ -285,6 +289,7 @@ begin  -- Behavioral
   begin
     case ocs is
       when armaw =>
+        DEBUG(7 downto 4) <= X"0";
         osel  <= '0';
         dsel  <= '0';
         if armeda = '1' then
@@ -294,6 +299,7 @@ begin  -- Behavioral
         end if;
 
       when armareq =>
+        DEBUG(7 downto 4) <= X"1";
         osel  <= '0';
         dsel  <= '0';
         if GRANT = '1' then
@@ -303,11 +309,13 @@ begin  -- Behavioral
         end if;
 
       when sendah =>
+        DEBUG(7 downto 4) <= X"2";
         osel <= '0';
         dsel <= '0';
         ons  <= sendal;
 
       when sendal =>
+        DEBUG(7 downto 4) <= X"3";
         osel  <= '0';
         dsel  <= '1';
         if wcntout = "1010" then
@@ -317,11 +325,13 @@ begin  -- Behavioral
         end if;
 
       when donea =>
+        DEBUG(7 downto 4) <= X"4";
         osel <= '0';
         dsel <= '0';
         ons  <= armbw;
 
       when armbw =>
+        DEBUG(7 downto 4) <= X"5";
         osel  <= '1';
         dsel  <= '0';
         if armedb = '1' then
@@ -331,6 +341,7 @@ begin  -- Behavioral
         end if;
 
       when armbreq =>
+        DEBUG(7 downto 4) <= X"6";
         osel  <= '1';
         dsel  <= '0';
         if GRANT = '1' then
@@ -340,11 +351,13 @@ begin  -- Behavioral
         end if;
 
       when sendbh =>
+        DEBUG(7 downto 4) <= X"7";
         osel <= '1';
         dsel <= '0';
         ons  <= sendbl;
 
       when sendbl =>
+        DEBUG(7 downto 4) <= X"8";
         osel  <= '1';
         dsel  <= '1';
         if wcntout = "1010" then
@@ -354,11 +367,13 @@ begin  -- Behavioral
         end if;
 
       when doneb =>
+        DEBUG(7 downto 4) <= X"9";
         osel <= '1';
         dsel <= '0';
         ons  <= armaw;
 
       when others =>
+        DEBUG(7 downto 4) <= X"F";
         osel <= '0';
         dsel <= '0';
         ons  <= armaw;

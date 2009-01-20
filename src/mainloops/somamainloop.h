@@ -53,7 +53,7 @@ class SomaMainLoop : public MainLoop
   FIR * pSpikeFilterD_; 
 
   FIR * pWaveFilter_; 
-  
+  bool firstloop_;
 }; 
 
 

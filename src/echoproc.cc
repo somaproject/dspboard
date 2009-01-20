@@ -2,6 +2,7 @@
 #include <filter.h>
 #include <hw/misc.h>
 #include <hw/memory.h>
+#include <benchmark.h>
 
 EventEchoProc::EventEchoProc(EventDispatch * ed, EventTX* etx, 
 			     SystemTimer * ptimer, 
@@ -30,13 +31,6 @@ EventEchoProc::EventEchoProc(EventDispatch * ed, EventTX* etx,
 							&EventEchoProc::eventMemCheck)); 
 
     
-  for (int i = 0; i < NUMBENCH; i++){
-    latest_[i] = 0; 
-    starttime_[i] = 0; 
-    max_[i] = 0; 
-    
-  }
-  
 }
 
 void EventEchoProc::eventEcho(dsp::Event_t * et) {
@@ -76,10 +70,14 @@ void EventEchoProc::eventBenchQuery(dsp::Event_t * et) {
   const int DATAFIFOFULL_MASK = 0x0010; 
   //etx.event.data[0] =  (*pFIO_FLAG_D & DATAFIFOFULL_MASK); 
 
-  etx.event.data[1] = latest_[chan] >> 16; 
-  etx.event.data[2] = latest_[chan] & 0xFFFF; 
-  etx.event.data[3] = max_[chan] >> 16; 
-  etx.event.data[4] = max_[chan] & 0xFFFF; 
+// FIXME really use a singleton
+  uint32_t bench_recent = benchmark_.recent(chan); 
+  uint32_t bench_max = benchmark_.max(chan); 
+  
+  etx.event.data[1] = bench_recent >> 16; 
+  etx.event.data[2] = bench_recent & 0xFFFF; 
+  etx.event.data[3] = bench_max >> 16; 
+  etx.event.data[4] = bench_max & 0xFFFF; 
   petx->newEvent(etx); 
   
 }
@@ -112,22 +110,22 @@ void EventEchoProc::eventDebugQuery(dsp::Event_t * et) {
   
 }
 
-void EventEchoProc::benchStart(char counter)
-{
-  starttime_[counter] = cycles(); 
+// void EventEchoProc::benchStart(char counter)
+// {
+//   starttime_[counter] = cycles(); 
   
-}
+// }
 
-void EventEchoProc::benchStop(char counter)
-{
-  int delta = cycles() - starttime_[counter]; 
+// void EventEchoProc::benchStop(char counter)
+// {
+//   int delta = cycles() - starttime_[counter]; 
   
-  latest_[counter] = delta; 
-  if (delta > max_[counter]) {
-    max_[counter] = delta; 
-  }
+//   latest_[counter] = delta; 
+//   if (delta > max_[counter]) {
+//     max_[counter] = delta; 
+//   }
 
-}
+// }
 
 void EventEchoProc::eventMemCheck(dsp::Event_t * et) {
   dsp::EventTX_t etx ;

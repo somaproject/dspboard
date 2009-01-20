@@ -386,7 +386,7 @@ architecture Behavioral of dspboard is
       REQ      : out std_logic;
       GRANT    : in  std_logic;
       DONE     : out std_logic;
-      DEBUG    : out std_logic_vector(15 downto 0));
+      DEBUG    : out std_logic_vector(31 downto 0));
   end component;
 
   component dspiomux
@@ -584,7 +584,7 @@ architecture Behavioral of dspboard is
   signal procspienacnt   : std_logic_vector(7 downto 0)  := (others => '0');
   signal devtfifofullal  : std_logic                     := '0';
   signal procdspspienal  : std_logic                     := '0';
-  signal eventrxdebuga   : std_logic_vector(15 downto 0) := (others => '0');
+  signal eventrxdebuga   : std_logic_vector(31 downto 0) := (others => '0');
   signal eventrxreqcnt   : std_logic_vector(15 downto 0)  := (others => '0');
   signal reql            : std_logic                     := '0';
   signal reqll            : std_logic                     := '0';
@@ -1149,7 +1149,7 @@ begin  -- Behavioral
 
 
 
-  jtagwordout(47 downto 0) <=  eventrxdebuga & X"AABB" & eventrxreqcnt;
+  jtagwordout(47 downto 0) <=  eventrxdebuga &  eventrxreqcnt;
 
   process(CLK)
     variable scnt   : integer range 0 to 2 := 0;

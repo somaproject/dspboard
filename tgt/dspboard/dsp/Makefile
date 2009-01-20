@@ -21,7 +21,7 @@ OBJS = $(ASMSRCS:%.asm=%.o) $(CCSRCS:%.cc=%.o) eventtx.o eventrx.o \
 	eventdispatch.o memory.o dspuartconfig.o  acqserial.o \
 	uarttx.o acqstatecontrol.o systemtimer.o datasport.o acqboardif.o\
 	fakesource.o rawsink.o rawsink2.o tspikesink.o availablefirs.o filterlinkcontroller.o\
-	 rawmainloop.o somamainloop.o echoproc.o\
+	 rawmainloop.o somamainloop.o echoproc.o benchmark.o\
 	filter.o delta.o fir.o acqdatasourcecontrol.o acqdatasource.o
 
 
@@ -56,6 +56,9 @@ filter.o: $(HWDIR)filter.cc
 
 eventdispatch.o: $(SRCDIR)/eventdispatch.cc	
 	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/eventdispatch.cc
+
+benchmark.o: $(SRCDIR)/benchmark.cc	
+	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/benchmark.cc
 
 echoproc.o: $(SRCDIR)/echoproc.cc	
 	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/echoproc.cc
