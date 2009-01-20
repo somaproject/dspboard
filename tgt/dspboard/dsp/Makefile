@@ -7,7 +7,7 @@ CPUDEFINES = -D__ADSPBF561__ -D__ADSPLPBLACKFIN__
 INCLUDES = -I$(HWDIR) -I. -I$(SRCDIR) 
 ASMFLAGS = -x assembler-with-cpp $(CPUDEFINES) $(INCLUDES)
 ASMFLAGS += -DBOARD_$(BOARD)
-CXXFLAGS = -mcpu=bf533 $(INCLUDES) -O6  -g -DBOARD_$(BOARD) 
+CXXFLAGS = -mcpu=bf533 $(INCLUDES) -O2  -g -DBOARD_$(BOARD) 
 CXXFLAGS += $(CPUDEFINES) -fno-rtti --no-exceptions -ffast-math -mfast-fp
 BOARD=SOMA_DSPBOARD4X
 
@@ -128,6 +128,9 @@ clean:
 
 
 ldr: simpletest.ldr
+
+dump: dspboard.dxe:
+	bfin-elf-objdump -s --disassemble --line-numbers dspboard.dxe > dspboard.dump
 
 dspboard.ldr: dspboard.dxe
 	rm -f dspboard.ldr
