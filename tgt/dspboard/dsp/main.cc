@@ -23,9 +23,8 @@
 #include <sinks/rawsink.h>
 #include <sinks/tspikesink.h>
 #include <filterlinks/delta.h>
-
-#include "echoproc.h" 
-
+#include <hw/misc.h>
+#include <filter.h>
 
 AcqSerial * acqserial;  // global so we can get function wrappers for ISR. 
 
@@ -130,14 +129,15 @@ int main_loop()
   
   //SystemTimer timer(ed); 
 
-  eventrx->start(); 
-  //RawMainLoop * pMainLoop = new RawMainLoop(); 
-  SomaMainLoop * pMainLoop = new SomaMainLoop(); 
+
+  RawMainLoop * pMainLoop = new RawMainLoop(); 
+  //  SomaMainLoop * pMainLoop = new SomaMainLoop(); 
   pMainLoop->setup(ed, etx, acqserial, dataout, &config); 
 
 
   acqserial->start(); 
 
+  eventrx->start(); 
   uint16_t *  eventbuf = 0; 
   int framecount = 0; 
   while (1) {
@@ -153,7 +153,8 @@ int main_loop()
     }
 
     if( eventbuf != 0 ) {
-      if(ed->dispatchEvents())
+      if(ed->dispatchEvents()) // NOTE THAT DISPATCH EVENTS SHOULD BE CALLED MANY TIMES
+	                       // PER ECYCLE, so DONT DO MUCH DURING THIS LOOP
 	{
  	  // do nothing, dispatch all the evnets
 	} else {
@@ -175,7 +176,12 @@ int main_loop()
     dataout->sendPending(); 
 
 //     eep->benchStop(0); 
-
+     if (eventrx->errorCount > 10 ){
+       setEventLED(true); 
+     } else {
+       setEventLED(false); 
+       
+     }
   }
   
    
