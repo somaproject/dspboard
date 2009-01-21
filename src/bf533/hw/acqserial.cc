@@ -100,11 +100,6 @@ bool AcqSerial::checkLinkUp()
 
 }
 
-void AcqSerial::RXDMAdoneISR(void)
-{
-  curRXpos_ = (curRXpos_ +1) % RXBUFLEN_; 
-  totalRXBufCnt_++; 
-}
 
 bool AcqSerial::checkRxEmpty()
 {

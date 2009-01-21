@@ -14,13 +14,14 @@ public:
   void RXDMAdoneISR(); 
   uint16_t * getReadBuffer();
   uint16_t * doneReadBuffer();
-
+  uint16_t errorCount;
+  //  uint16_t errorCount2;
 private:
   static const short BUFNUM = 4; 
   static const short BUFLEN = 512; 
   static const short BUFBURST = 497; 
 
-  uint16_t buffer_[BUFNUM * BUFLEN]; 
+  uint16_t buffer_[BUFNUM * BUFLEN] __attribute__ ((aligned (4))); 
   uint16_t currentReadBuffer_; 
   uint16_t currentWriteBuffer_; 
 

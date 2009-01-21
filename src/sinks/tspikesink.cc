@@ -25,6 +25,11 @@ TSpikeSink::TSpikeSink(SystemTimer * st, DataOut * dout, EventDispatch *ed,
 
   ed->registerCallback(ECMD_SET, fastdelegate::MakeDelegate(this, 
 							    &TSpikeSink::setstate)); 
+  pendingTSpikeData_.threshold[0] = 0; 
+  pendingTSpikeData_.threshold[1] = 0; 
+  pendingTSpikeData_.threshold[2] = 0; 
+  pendingTSpikeData_.threshold[3] = 0; 
+
 }
 
 void TSpikeSink::processSample1(sample_t samp)
@@ -70,7 +75,6 @@ void TSpikeSink::processSampleCycle(char)
 
   
   // pendingPos_ points to most recent sample
-  
   backpos = pendingPos_ - TSpikeData_t::POSTTRIGGER; 
   backposm1 = pendingPos_ - TSpikeData_t::POSTTRIGGER - 1; 
   if (backpos < 0) 
@@ -87,13 +91,13 @@ void TSpikeSink::processSampleCycle(char)
     pending_--; 
   } else {
     // not currently pending
-    if ((pendingTSpikeData_.buffer[0][backpos] > pendingTSpikeData_.threshold[0]
+    if ((pendingTSpikeData_.buffer[0][backpos] >= pendingTSpikeData_.threshold[0]
 	 and pendingTSpikeData_.buffer[0][backposm1] <= pendingTSpikeData_.threshold[0]) or
-	(pendingTSpikeData_.buffer[1][backpos] > pendingTSpikeData_.threshold[1]
+	(pendingTSpikeData_.buffer[1][backpos] >= pendingTSpikeData_.threshold[1]
 	 and pendingTSpikeData_.buffer[1][backposm1] <= pendingTSpikeData_.threshold[1]) or
-	(pendingTSpikeData_.buffer[2][backpos] > pendingTSpikeData_.threshold[2]
+	(pendingTSpikeData_.buffer[2][backpos] >= pendingTSpikeData_.threshold[2]
 	 and pendingTSpikeData_.buffer[2][backposm1] <= pendingTSpikeData_.threshold[2]) or
-	(pendingTSpikeData_.buffer[3][backpos] > pendingTSpikeData_.threshold[3]
+	(pendingTSpikeData_.buffer[3][backpos] >= pendingTSpikeData_.threshold[3]
 	 and pendingTSpikeData_.buffer[3][backposm1] <= pendingTSpikeData_.threshold[3]))
       {
 	pendingTSpikeData_.time = 
@@ -113,13 +117,13 @@ void TSpikeSink::sendSpike()
 {
   // send the current spike
   
-  // set the filterID
+  //set the filterID
   pendingTSpikeData_.filterid[0] = sink1.pSource_->id; 
   pendingTSpikeData_.filterid[1] = sink2.pSource_->id; 
   pendingTSpikeData_.filterid[2] = sink3.pSource_->id; 
   pendingTSpikeData_.filterid[3] = sink4.pSource_->id; 
 
- pDataOut_->sendData(pendingTSpikeData_); 
+  pDataOut_->sendData(pendingTSpikeData_); 
   
   
 }

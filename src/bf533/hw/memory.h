@@ -5,7 +5,7 @@
 
 #include <sys/types.h>
 #include <types.h>
-
+#include <string.h>
 
 void * operator new (size_t size); 
 void * operator new[] (size_t size); 
@@ -68,10 +68,10 @@ public:
 
     */
 
-
-    *((int64_t*)dest) = __bswap_64(src); 
-
-    return dest + 8; 
+    int64_t x = __bswap_64(src); 
+    memcpy(dest, &x, sizeof(int64_t)); 
+    
+    return dest + sizeof(int64_t); 
 
   }
 

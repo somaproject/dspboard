@@ -23,9 +23,8 @@
 #include <sinks/rawsink.h>
 #include <sinks/tspikesink.h>
 #include <filterlinks/delta.h>
-
-#include "echoproc.h" 
-
+#include <hw/misc.h>
+#include <filter.h>
 
 AcqSerial * acqserial;  // global so we can get function wrappers for ISR. 
 
@@ -130,52 +129,18 @@ int main_loop()
   
   //SystemTimer timer(ed); 
 
-  eventrx->start(); 
+
   //RawMainLoop * pMainLoop = new RawMainLoop(); 
   SomaMainLoop * pMainLoop = new SomaMainLoop(); 
   pMainLoop->setup(ed, etx, acqserial, dataout, &config); 
-  //AcqFrame af; 
-//   AcqState acqstate; 
-//   acqstate.linkUp = false; 
-//   AcqStateControl asc(acqserial, &acqstate); 
-//   asc.setDSPPos(config.getDSPPos()); 
-//   // filterlink construction
-//   AcqDataSource * acqdatasource = new AcqDataSource(&acqstate); 
-//   acqdatasource->setDSP(config.getDSPPos()); 
-//   AcqDataSourceControl * adsc = new AcqDataSourceControl(ed, etx, &asc); 
 
-  //  FakeSource * fs = new FakeSource(&timer); 
-//   RawSink * pRawSinkForFake = new RawSink(&timer, dataout, config.getDataSrc()); 
-//   fs->source.connect(pRawSinkForFake->sink); 
-//   RawSink * pRawSinkForFake2 = new RawSink(&timer, dataout, config.getDataSrc()); 
-//   fs->source.connect(pRawSinkForFake2->sink); 
-
-//   RawSink * pRawSinkA = new RawSink(&timer, dataout, config.getDataSrc(), 0); 
-//   RawSink * pRawSinkB = new RawSink(&timer, dataout, config.getDataSrc(), 1); 
-//   RawSink * pRawSinkC = new RawSink(&timer, dataout, config.getDataSrc(), 2); 
-//   RawSink * pRawSinkD = new RawSink(&timer, dataout, config.getDataSrc(), 3); 
-//   TSpikeSink * pTSpikeSink = new TSpikeSink(&timer, dataout, 
-// 					    ed, etx, config.getDataSrc()); 
-  //   Delta * deltaA = new Delta(); 
-  
-
-  //  fs->source.connect(pRawSinkA->sink);
-//   acqdatasource->sourceA.connect(pTSpikeSink->sink1); 
-//   acqdatasource->sourceB.connect(pTSpikeSink->sink2); 
-//   acqdatasource->sourceC.connect(pTSpikeSink->sink3); 
-//   acqdatasource->sourceD.connect(pTSpikeSink->sink4); 
-//   acqdatasource->sourceSampleCycle.connect(pTSpikeSink->samplesink); 
-
-
-//   acqdatasource->sourceA.connect(pRawSinkA->sink); 
-//   acqdatasource->sourceB.connect(pRawSinkB->sink); 
-//   acqdatasource->sourceC.connect(pRawSinkC->sink); 
-//   acqdatasource->sourceD.connect(pRawSinkD->sink); 
 
   acqserial->start(); 
 
+  eventrx->start(); 
   uint16_t *  eventbuf = 0; 
   int framecount = 0; 
+  uint16_t lasterror = 0; 
   while (1) {
 
 //     eep->benchStart(0);
@@ -187,54 +152,40 @@ int main_loop()
       eventbuf = eventrx->getReadBuffer(); 
       ed->parseECycleBuffer(eventbuf); 
     }
-
-    if( eventbuf != 0 ) {
-      if(ed->dispatchEvents())
-	{
- 	  // do nothing, dispatch all the evnets
-	} else {
-	  eventrx->doneReadBuffer(); 
-	  eventbuf = 0; 
-	}
-    }
     
+    for (char i = 0; i < 10; i++) { 
+      if( eventbuf != 0 ) {
+	if(ed->dispatchEvents()) // NOTE THAT DISPATCH EVENTS SHOULD BE CALLED MANY TIMES
+	  // PER ECYCLE, so DONT DO MUCH DURING THIS LOOP
+	  {
+	    // do nothing, dispatch all the evnets
+	  } else {
+	    eventrx->doneReadBuffer(); 
+	    eventbuf = 0; 
+	    break; 
+	  }
+      }
+    }
+
     etx->sendEvent();       
 
     // ------------------------------------------------------------------
     // Fiber interface for acqboard data
     // ------------------------------------------------------------------
     pMainLoop->runloop();
-//     asc.setLinkStatus(acqserial->checkLinkUp()); 
-//     if (! acqserial->checkRxEmpty())
-//       {
-// 	//*pFIO_FLAG_T = 0x0100;
-// 	eep->debugdata[0] = af.cmdid; 
-// 	eep->debugdata[1] = asc.sequentialCMDID_; 
-
-// 	acqserial->getNextFrame(&af); 
-// 	asc.newAcqFrame(&af); 
-// 	// trigger the set of filterlinks
-// 	eep->benchStart(1);
-// 	acqdatasource->newAcqFrame(&af); 
-// 	eep->benchStop(1);
-	
-
-
-// // 	framecount++; 
-// // 	if (framecount %  32000 == 1000) {
-// // 	  asc.setGain(1, 100, 
-// // 		      fastdelegate::MakeDelegate(&cfs, &AmpCallbackFuncs::CommandDone), 
-// // 		      0x1234); 
-// // 	}
-//       }
-
+       setEventLED(true);     
     // -----------------------------------------------------------------
     // Data bus transmission
     // -----------------------------------------------------------------
     dataout->sendPending(); 
 
 //     eep->benchStop(0); 
+//     if (eventrx->errorCount > lasterror ){
 
+//        //lasterror = eventrx->errorCount; 
+//      } else {
+    setEventLED(false); 
+       //     }
   }
   
    

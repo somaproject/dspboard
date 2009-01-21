@@ -46,19 +46,20 @@ public:
   void toBuffer(unsigned char *c) 
   {
     
-    const short len = CHANNUM * ((POSTTRIGGER + PRETRIGGER) * sizeof(int32_t) + 6) + 
+    const short len = 
+      CHANNUM * ((POSTTRIGGER + PRETRIGGER) * sizeof(int32_t) + 10) + 
       8 + 4  +  2 ; 
     *c = len >> 8; 
     c++; 
     *c = len & 0xFF; 
     c++; 
-    // type
+    //type
     *c = TYPE; 
     c++; 
-    // source
+    //source
     *c = datasrc; 
     c++; 
-    // chanllen
+    //chanllen
 
     c += 2; 
     
@@ -77,7 +78,7 @@ public:
     // for each channel
     for (short i = 0; i < CHANNUM; i++) {
       // FIXME incorporate VALID field
-      c++; 
+      c++;  // VALID FIELD
       c++;
       c = Memcopy::hton_int32(c, filterid[i]); 
       c = Memcopy::hton_int32(c, threshold[i]); 
@@ -92,7 +93,7 @@ public:
 	c1 = c; 
 	c = Memcopy::hton_int32array(c, &(buffer[i][0]), offset + 1); 
 	c2 = c; 
-
+	
       }
     }
     

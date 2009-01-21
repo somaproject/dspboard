@@ -22,7 +22,11 @@ public:
   void stop(); 
   bool sendCommandDone();
 
-  void RXDMAdoneISR(void); 
+  void inline RXDMAdoneISR(void)
+  {
+    curRXpos_ = (curRXpos_ +1) % RXBUFLEN_; 
+    totalRXBufCnt_++; 
+  }
 private:
   
   static const int RXBUFLEN_ = 10; 

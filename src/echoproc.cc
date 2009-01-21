@@ -69,7 +69,7 @@ void EventEchoProc::eventLED(dsp::Event_t * et) {
 void EventEchoProc::eventBenchQuery(dsp::Event_t * et) {
   dsp::EventTX_t etx ;
   etx.addr[0] = 0xF;  // FIXME Actually send to requester
-  etx.event.cmd = 0xF4; 
+  etx.event.cmd = 0xF5; 
   etx.event.src = device_;
 
   char chan = et->data[0]; 
