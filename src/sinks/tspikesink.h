@@ -76,26 +76,26 @@ public:
     }
     
     // for each channel
-//     for (short i = 0; i < CHANNUM; i++) {
-//       // FIXME incorporate VALID field
-//       c++;  // VALID FIELD
-//       c++;
-//       c = Memcopy::hton_int32(c, filterid[i]); 
-//       c = Memcopy::hton_int32(c, threshold[i]); 
+    for (short i = 0; i < CHANNUM; i++) {
+      // FIXME incorporate VALID field
+      c++;  // VALID FIELD
+      c++;
+      c = Memcopy::hton_int32(c, filterid[i]); 
+      c = Memcopy::hton_int32(c, threshold[i]); 
       
-//       if (!twopass) {
-// 	c = Memcopy::hton_int32array(c, &(buffer[i][pos]), 
-// 				     POSTTRIGGER+PRETRIGGER); 
+      if (!twopass) {
+	c = Memcopy::hton_int32array(c, &(buffer[i][pos]), 
+				     POSTTRIGGER+PRETRIGGER); 
 	
-//       } else {
-// 	unsigned char * c1, *c2; 
-// 	c = Memcopy::hton_int32array(c, &(buffer[i][pos]), BUFSIZE - pos); 
-// 	c1 = c; 
-// 	c = Memcopy::hton_int32array(c, &(buffer[i][0]), offset + 1); 
-// 	c2 = c; 
+      } else {
+	unsigned char * c1, *c2; 
+	c = Memcopy::hton_int32array(c, &(buffer[i][pos]), BUFSIZE - pos); 
+	c1 = c; 
+	c = Memcopy::hton_int32array(c, &(buffer[i][0]), offset + 1); 
+	c2 = c; 
 	
-//       }
-//     }
+      }
+    }
     
   }
 
