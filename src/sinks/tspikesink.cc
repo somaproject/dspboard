@@ -118,13 +118,13 @@ void TSpikeSink::sendSpike()
 {
   // send the current spike
   
-  // set the filterID
+  //set the filterID
   pendingTSpikeData_.filterid[0] = sink1.pSource_->id; 
   pendingTSpikeData_.filterid[1] = sink2.pSource_->id; 
   pendingTSpikeData_.filterid[2] = sink3.pSource_->id; 
   pendingTSpikeData_.filterid[3] = sink4.pSource_->id; 
 
- pDataOut_->sendData(pendingTSpikeData_); 
+  pDataOut_->sendData(pendingTSpikeData_); 
   
   
 }

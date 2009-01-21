@@ -23,7 +23,8 @@ extern "C" {
 
 EventRX::EventRX() :
   currentReadBuffer_(0), 
-  currentWriteBuffer_(0)
+  currentWriteBuffer_(0), 
+  errorCount(0)
 {
   // zero buffer
   for (int i = 0; i < BUFNUM * BUFLEN; i++) {
@@ -117,5 +118,7 @@ uint16_t * EventRX::doneReadBuffer()
 
 void EventRX::RXDMAdoneISR() {
   currentWriteBuffer_ = (currentWriteBuffer_ + 1) % BUFNUM; 
-
+  if (currentWriteBuffer_ == currentReadBuffer_) {
+    errorCount++; 
+  }
 }

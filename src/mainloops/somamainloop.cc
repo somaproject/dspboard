@@ -1,5 +1,5 @@
 #include "somamainloop.h"
-
+#include <filter.h>
 void SomaMainLoop::setup(EventDispatch * ed, EventTX * etx, 
 			    AcqSerial * as, DataOut * dout, 
 			    DSPConfig * config)
@@ -68,27 +68,45 @@ void SomaMainLoop::setup(EventDispatch * ed, EventTX * etx,
 
 
   pAcqDataSource_->sourceSampleCycle.connect(pTSpikeSink_->samplesink); 
-  
+  firstpass_ = true; 
+  loopcnt = 0; 
+  delay = 10; 
+
 }
 
 void SomaMainLoop::runloop()
 {
-  eep_->benchStart(0); 
+  if (!firstpass_) {
+    eep_->benchStop(3); 
+  }
+  firstpass_ = false; 
+  
+  eep_->benchStart(2); 
   pAcqStateControl_->setLinkStatus(pAcqSerial_->checkLinkUp()); 
+  eep_->benchStop(2); 
+
   if (! pAcqSerial_->checkRxEmpty())
     {
-      //*pFIO_FLAG_T = 0x0100;
-      eep_->debugdata[0] = acqFrame_.cmdid; 
-      eep_->debugdata[1] = pAcqStateControl_->sequentialCMDID_; 
-      
+
       pAcqSerial_->getNextFrame(&acqFrame_); 
       pAcqStateControl_->newAcqFrame(&acqFrame_); 
       // trigger the set of filterlinks
-      eep_->benchStart(1);
-      pAcqDataSource_->newAcqFrame(&acqFrame_); 
-      eep_->benchStop(1);
-      
-    }
-  eep_->benchStop(0); 
+//       eep_->benchStart(1);
+//       pAcqDataSource_->newAcqFrame(&acqFrame_); 
+//       eep_->benchStop(1);
+      eep_->benchStart(0); 
 
+      for(unsigned short i = 0; i < delay; i++) {
+	cycles();
+      }
+      eep_->benchStop(0); 
+
+      if (loopcnt == 14000) {
+	delay++;
+	loopcnt = 0; 
+      } 
+      loopcnt++; 
+    }
+
+  eep_->benchStart(3); 
 }

@@ -130,8 +130,8 @@ int main_loop()
   //SystemTimer timer(ed); 
 
 
-  RawMainLoop * pMainLoop = new RawMainLoop(); 
-  //  SomaMainLoop * pMainLoop = new SomaMainLoop(); 
+  //RawMainLoop * pMainLoop = new RawMainLoop(); 
+  SomaMainLoop * pMainLoop = new SomaMainLoop(); 
   pMainLoop->setup(ed, etx, acqserial, dataout, &config); 
 
 
@@ -140,6 +140,7 @@ int main_loop()
   eventrx->start(); 
   uint16_t *  eventbuf = 0; 
   int framecount = 0; 
+  uint16_t lasterror = 0; 
   while (1) {
 
 //     eep->benchStart(0);
@@ -151,37 +152,40 @@ int main_loop()
       eventbuf = eventrx->getReadBuffer(); 
       ed->parseECycleBuffer(eventbuf); 
     }
-
-    if( eventbuf != 0 ) {
-      if(ed->dispatchEvents()) // NOTE THAT DISPATCH EVENTS SHOULD BE CALLED MANY TIMES
-	                       // PER ECYCLE, so DONT DO MUCH DURING THIS LOOP
-	{
- 	  // do nothing, dispatch all the evnets
-	} else {
-	  eventrx->doneReadBuffer(); 
-	  eventbuf = 0; 
-	}
-    }
     
+    for (char i = 0; i < 10; i++) { 
+      if( eventbuf != 0 ) {
+	if(ed->dispatchEvents()) // NOTE THAT DISPATCH EVENTS SHOULD BE CALLED MANY TIMES
+	  // PER ECYCLE, so DONT DO MUCH DURING THIS LOOP
+	  {
+	    // do nothing, dispatch all the evnets
+	  } else {
+	    eventrx->doneReadBuffer(); 
+	    eventbuf = 0; 
+	    break; 
+	  }
+      }
+    }
+
     etx->sendEvent();       
 
     // ------------------------------------------------------------------
     // Fiber interface for acqboard data
     // ------------------------------------------------------------------
-    //pMainLoop->runloop();
-
+    pMainLoop->runloop();
+       setEventLED(true);     
     // -----------------------------------------------------------------
     // Data bus transmission
     // -----------------------------------------------------------------
     dataout->sendPending(); 
 
 //     eep->benchStop(0); 
-     if (eventrx->errorCount > 10 ){
-       setEventLED(true); 
-     } else {
-       setEventLED(false); 
-       
-     }
+//     if (eventrx->errorCount > lasterror ){
+
+//        //lasterror = eventrx->errorCount; 
+//      } else {
+    setEventLED(false); 
+       //     }
   }
   
    

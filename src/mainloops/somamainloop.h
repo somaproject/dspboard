@@ -53,6 +53,9 @@ class SomaMainLoop : public MainLoop
   FIR * pSpikeFilterD_; 
 
   FIR * pWaveFilter_; 
+  bool firstpass_; 
+  uint16_t delay; 
+  uint16_t loopcnt; 
   
 }; 
 

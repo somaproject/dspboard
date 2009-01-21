@@ -35,7 +35,7 @@ private:
   SystemTimer* ptimer_; 
 
   // benchmarking / performance
-  static const short NUMBENCH = 4; 
+  static const short NUMBENCH = 6; 
   int latest_[NUMBENCH]; 
   int starttime_[NUMBENCH]; 
   int max_[NUMBENCH]; 
