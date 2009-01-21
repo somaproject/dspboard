@@ -81,18 +81,19 @@ void SomaMainLoop::runloop()
   }
   firstpass_ = false; 
   
-  eep_->benchStart(2); 
+
   pAcqStateControl_->setLinkStatus(pAcqSerial_->checkLinkUp()); 
-  eep_->benchStop(2); 
 
   if (! pAcqSerial_->checkRxEmpty())
     {
 
       pAcqSerial_->getNextFrame(&acqFrame_); 
       pAcqStateControl_->newAcqFrame(&acqFrame_); 
-      // trigger the set of filterlinks
-//       eep_->benchStart(1);
-//       pAcqDataSource_->newAcqFrame(&acqFrame_); 
+
+      eep_->benchStart(2); 
+      pAcqDataSource_->newAcqFrame(&acqFrame_); 
+      eep_->benchStop(2); 
+
 //       eep_->benchStop(1);
       eep_->benchStart(0); 
 

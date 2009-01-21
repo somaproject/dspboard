@@ -75,7 +75,6 @@ void TSpikeSink::processSampleCycle(char)
 
   
   // pendingPos_ points to most recent sample
-  
   backpos = pendingPos_ - TSpikeData_t::POSTTRIGGER; 
   backposm1 = pendingPos_ - TSpikeData_t::POSTTRIGGER - 1; 
   if (backpos < 0) 
