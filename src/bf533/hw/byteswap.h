@@ -87,4 +87,17 @@ __bswap_32 (unsigned int __bsx)
 	 __r.__ll; }))
 #endif
 
+# define __bswap_32_faster(x) \
+     (__extension__							      \
+      ({ register unsigned int __v, __x = (x);				      \
+	 if (__builtin_constant_p (__x))				      \
+	   __v = __bswap_constant_32 (__x);				      \
+	 else								      \
+	   __asm__ ("%1 = %0 >> 8 (V);"					      \
+		    "%0 = %0 << 8 (V);"					      \
+		    "%0 = %0 | %1;"					      \
+		    "%1 = PACK(%0.L, %0.H);"				      \
+		    : "+d"(__x), "=&d"(__v));				      \
+	 __v; }))
+
 #endif /* _BITS_BYTESWAP_H */

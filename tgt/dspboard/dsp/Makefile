@@ -7,7 +7,7 @@ CPUDEFINES = -D__ADSPBF561__ -D__ADSPLPBLACKFIN__
 INCLUDES = -I$(HWDIR) -I. -I$(SRCDIR) 
 ASMFLAGS = -x assembler-with-cpp $(CPUDEFINES) $(INCLUDES)
 ASMFLAGS += -DBOARD_$(BOARD)
-CXXFLAGS = -mcpu=bf533 $(INCLUDES) -O3  -g -DBOARD_$(BOARD) 
+CXXFLAGS = -mcpu=bf533 $(INCLUDES) -O3  -g -DBOARD_$(BOARD) -save-temps
 CXXFLAGS += $(CPUDEFINES) -fno-rtti --no-exceptions -ffast-math -mfast-fp -funsafe-math-optimizations
 BOARD=SOMA_DSPBOARD4X
 
@@ -21,7 +21,7 @@ OBJS = $(ASMSRCS:%.asm=%.o) $(CCSRCS:%.cc=%.o) eventtx.o eventrx.o \
 	eventdispatch.o memory.o dspuartconfig.o  acqserial.o \
 	uarttx.o acqstatecontrol.o systemtimer.o datasport.o acqboardif.o\
 	fakesource.o rawsink.o rawsink2.o tspikesink.o availablefirs.o filterlinkcontroller.o\
-	 rawmainloop.o somamainloop.o echoproc.o\
+	 rawmainloop.o somamainloop.o echoproc.o memtestproc.o\
 	filter.o delta.o fir.o acqdatasourcecontrol.o acqdatasource.o
 
 
@@ -59,6 +59,9 @@ eventdispatch.o: $(SRCDIR)/eventdispatch.cc
 
 echoproc.o: $(SRCDIR)/echoproc.cc	
 	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/echoproc.cc
+
+memtestproc.o: $(SRCDIR)/memtestproc.cc	
+	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/memtestproc.cc
 
 acqboardif.o: $(SRCDIR)/acqboardif.cc	
 	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/acqboardif.cc

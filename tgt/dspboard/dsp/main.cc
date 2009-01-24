@@ -25,7 +25,7 @@
 #include <filterlinks/delta.h>
 #include <hw/misc.h>
 #include <filter.h>
-
+#include <memtestproc.h>
 AcqSerial * acqserial;  // global so we can get function wrappers for ISR. 
 
 
@@ -127,14 +127,12 @@ int main_loop()
 
   EventDispatch * ed = new EventDispatch(config.getDSPPos()); 
   
-  //SystemTimer timer(ed); 
 
 
   //RawMainLoop * pMainLoop = new RawMainLoop(); 
-  SomaMainLoop * pMainLoop = new SomaMainLoop(); 
+  MemTestProc * mtp = new MemTestProc(ed, etx, config.getEventDevice()); 
+  SomaMainLoop * pMainLoop = new SomaMainLoop();
   pMainLoop->setup(ed, etx, acqserial, dataout, &config); 
-
-
   acqserial->start(); 
 
   eventrx->start(); 
@@ -173,22 +171,16 @@ int main_loop()
     // Fiber interface for acqboard data
     // ------------------------------------------------------------------
     pMainLoop->runloop();
-       setEventLED(true);     
+
     // -----------------------------------------------------------------
     // Data bus transmission
     // -----------------------------------------------------------------
     dataout->sendPending(); 
-
-//     eep->benchStop(0); 
-//     if (eventrx->errorCount > lasterror ){
-
-//        //lasterror = eventrx->errorCount; 
-//      } else {
-    setEventLED(false); 
-       //     }
   }
   
+
    
+
 }
 
 int main()

@@ -1,0 +1,39 @@
+We frequently have large swaths of 32-bit-wide buffers that we need
+to both copy and endian-reverse. 
+
+At the moment, copying 64 uint32_ts like this is taking ~1400 ticks, 
+which is just crazy. 
+
+The byte swap operation for the blackfin for 32-bit regs is as follows: 
+
+08 91       	R0 = [P1];
+81 c6 c0 83 	R1 = R0 >> 0x8 (V);
+81 c6 40 80 	R0 = R0 << 0x8 (V);
+08 56       	R0 = R0 | R1;
+04 c6 00 42 	R1 = PACK (R0.L, R0.H);
+
+where the (V) indicates that this is the vector op that treats the 32-bit
+reg as two 16-bit regs. 
+
+The ideal, inlined memcpy looks like this: 
+
+28 e1 b0 01 	P0 = 0x1b0 (X);		/*		P0=0x1b0(432) */
+29 e1 b0 00 	P1 = 0xb0 (X);		/*		P1=0xb0(176) */
+04 5a       	P0 = P4 + P0;
+4c 5a       	P1 = P4 + P1;
+fa 69       	P2 = 0x3f (X);		/*		P2=0x3f( 63) */
+68 32       	P5 = P0;
+41 34       	I0 = P1;
+00 9c       	R0 = [I0++];
+b2 e0 02 20 	LSETUP(0xffa05318 <__ZN11MemTestProc12eventRunTestEPN3dsp7Event_tE+0xf0>, 0xffa05318 <__ZN11MemTestProc12eventRunTestEPN3dsp7Event_tE+0xf0>) LC1 = P2;
+03 c8 00 18 	MNOP || [P5++] = R0 || R0 = [I0++];
+28 92 00 9c 
+28 92       	[P5++] = R0;
+
+--------------------------------------------------------------------------------
+Theoretical expectations
+Given that we can apparently only do an endian-swap in four ticks, the best
+we could possibly hope for would be N * 5 ticks. 
+
+136 
+
