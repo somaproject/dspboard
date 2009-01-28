@@ -31,8 +31,10 @@
 .global start
 start:
 
-	sp.h = 0xFFB0;		//Set up supervisor stack in scratch pad
-	sp.l = 0x0400;
+//	sp.h = 0xFFB0;		//Set up supervisor stack in scratch pad
+//	sp.l = 0x0400; Attempting to work around anomaly 05000227
+	sp.h = 0xFF90;	//	Now at the top of data bank b
+	sp.l = 0x8000;
 	fp = sp;
 
 
@@ -85,6 +87,23 @@ setupPLL:
 
 	w[p0] = r0; // set Core and system clock dividers
 
+clear_DAGs:
+	I0 = 0;  
+	B0 = 0;  
+	L0 = 0;  
+	M0 = 0;  
+	I1 = 0;  
+	B1 = 0;  
+	L1 = 0;  
+	M1 = 0;  
+	I2 = 0;  
+	B2 = 0;  
+	L2 = 0;  
+	M2 = 0;  
+	I3 = 0;  
+	B3 = 0;  
+	L3 = 0;  
+	M3 = 0;  
 
 	// not needed in reset routine: sti r1;
 
