@@ -20,7 +20,7 @@ LDFLAGS =  -g -T bftiny.x  -L$(BFROOT)lib/ -L$(BFROOT)/lib/gcc/bfin-elf/$(BFROOT
 OBJS = $(ASMSRCS:%.asm=%.o) $(CCSRCS:%.cc=%.o) eventtx.o eventrx.o \
 	eventdispatch.o memory.o dspuartconfig.o  acqserial.o \
 	uarttx.o acqstatecontrol.o systemtimer.o datasport.o acqboardif.o\
-	fakesource.o rawsink.o rawsink2.o tspikesink.o availablefirs.o filterlinkcontroller.o\
+	fakesource.o rawsink.o  tspikesink.o availablefirs.o filterlinkcontroller.o\
 	 rawmainloop.o somamainloop.o echoproc.o memtestproc.o\
 	filter.o delta.o fir.o acqdatasourcecontrol.o acqdatasource.o
 
@@ -95,9 +95,6 @@ systemtimer.o: $(SRCDIR)/systemtimer.cc
 
 rawsink.o: $(SRCDIR)/sinks/rawsink.cc
 	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/sinks/rawsink.cc
-
-rawsink2.o: $(SRCDIR)/sinks/rawsink2.cc
-	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/sinks/rawsink2.cc
 
 tspikesink.o: $(SRCDIR)/sinks/tspikesink.cc
 	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/sinks/tspikesink.cc
