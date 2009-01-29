@@ -25,10 +25,10 @@ TSpikeSink::TSpikeSink(SystemTimer * st, DataOut * dout, EventDispatch *ed,
 
   ed->registerCallback(ECMD_SET, fastdelegate::MakeDelegate(this, 
 							    &TSpikeSink::setstate)); 
-  pendingTSpikeData_.threshold[0] = 0; 
-  pendingTSpikeData_.threshold[1] = 0; 
-  pendingTSpikeData_.threshold[2] = 0; 
-  pendingTSpikeData_.threshold[3] = 0; 
+  pendingTSpikeData_.threshold[0] = 10000000; 
+  pendingTSpikeData_.threshold[1] = 10000000; 
+  pendingTSpikeData_.threshold[2] = 10000000; 
+  pendingTSpikeData_.threshold[3] = 10000000; 
 
 }
 
