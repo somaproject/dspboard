@@ -67,7 +67,7 @@ void SomaMainLoop::setup(EventDispatch * ed, EventTX * etx,
 //   // FIXME: wave sink
 
 
-  //pAcqDataSource_->sourceSampleCycle.connect(pTSpikeSink_->samplesink); 
+  pAcqDataSource_->sourceSampleCycle.connect(pTSpikeSink_->samplesink); 
   firstpass_ = true; 
   loopcnt = 0; 
   delay = 10; 
