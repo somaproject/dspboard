@@ -20,6 +20,10 @@ public:
     return 117;
   }
 
+  bool setFilterID(filterid_t) {
+    return true; 
+  }
+
   SourceObject() :
     bufA_(100), 
     bufB_(100), 
