@@ -115,24 +115,28 @@ int main_loop()
   acqserial->setup(); 
 
 
-  DataOut * dataout = new DataSPORT(); 
+  DataOut * dataout =  new DataSPORT(); 
 
   EventTX * etx = new EventTX; 
   etx->setup(); 
   etx->mysrc = config.getEventDevice(); 
 
-  
+  Benchmark * bm = new Benchmark(); 
+
   eventrx = new EventRX(); 
   eventrx->setup(); 
 
   EventDispatch * ed = new EventDispatch(config.getDSPPos()); 
+
+  SystemTimer * timer = new SystemTimer(ed); 
+  EventEchoProc * eep = new EventEchoProc(ed, etx, timer, bm, 
+					  config.getEventDevice()); 
   
 
-
-  //RawMainLoop * pMainLoop = new RawMainLoop(); 
-  MemTestProc * mtp = new MemTestProc(ed, etx, config.getEventDevice()); 
-  SomaMainLoop * pMainLoop = new SomaMainLoop();
-  pMainLoop->setup(ed, etx, acqserial, dataout, &config); 
+  RawMainLoop * pMainLoop = new RawMainLoop(); 
+  //MemTestProc * mtp = new MemTestProc(ed, etx, config.getEventDevice()); 
+  //SomaMainLoop * pMainLoop = new SomaMainLoop();
+  pMainLoop->setup(ed, etx, acqserial, timer, eep, dataout, &config); 
   acqserial->start(); 
 
   eventrx->start(); 
@@ -145,6 +149,8 @@ int main_loop()
     // ------------------------------------------------------------------
     // Event Processing, RX and TX 
     // ------------------------------------------------------------------
+
+    bm->start(4); 
 
     if (eventbuf == 0 and ! eventrx->empty()){ 
       eventbuf = eventrx->getReadBuffer(); 
@@ -164,22 +170,28 @@ int main_loop()
 	  }
       }
     }
-
+    bm->stop(4); 
+    bm->start(5); 
     etx->sendEvent();       
+    bm->stop(5); 
 
     // ------------------------------------------------------------------
     // Fiber interface for acqboard data
     // ------------------------------------------------------------------
+    bm->start(2); 
     pMainLoop->runloop();
+    bm->stop(2); 
 
     // -----------------------------------------------------------------
     // Data bus transmission
     // -----------------------------------------------------------------
-    dataout->sendPending(); 
+    bm->start(3); 
+    //dataout->sendPending(); 
+    bm->stop(3); 
   }
   
 
-   
+  
 
 }
 

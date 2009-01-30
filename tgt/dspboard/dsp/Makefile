@@ -21,7 +21,7 @@ OBJS = $(ASMSRCS:%.asm=%.o) $(CCSRCS:%.cc=%.o) eventtx.o eventrx.o \
 	eventdispatch.o memory.o dspuartconfig.o  acqserial.o \
 	uarttx.o acqstatecontrol.o systemtimer.o datasport.o acqboardif.o\
 	fakesource.o rawsink.o  tspikesink.o availablefirs.o filterlinkcontroller.o\
-	 rawmainloop.o somamainloop.o echoproc.o memtestproc.o\
+	 rawmainloop.o somamainloop.o echoproc.o benchmark.o memtestproc.o\
 	filter.o delta.o fir.o acqdatasourcecontrol.o acqdatasource.o
 
 
@@ -59,6 +59,9 @@ eventdispatch.o: $(SRCDIR)/eventdispatch.cc
 
 echoproc.o: $(SRCDIR)/echoproc.cc	
 	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/echoproc.cc
+
+benchmark.o: $(SRCDIR)/benchmark.cc	
+	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/benchmark.cc
 
 memtestproc.o: $(SRCDIR)/memtestproc.cc	
 	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/memtestproc.cc

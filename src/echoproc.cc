@@ -4,14 +4,15 @@
 #include <hw/memory.h>
 
 EventEchoProc::EventEchoProc(EventDispatch * ed, EventTX* etx, 
-			     SystemTimer * ptimer, 
+			     SystemTimer * ptimer, Benchmark * bm, 
 			     unsigned char device) : 
   eventpos(0), 
   petx(etx), 
   iterations(0),
   ptimer_(ptimer), 
   device_(device), 
-  etx_errors(0)
+  etx_errors(0), 
+  pBenchmark_(bm)
 {
   
   ed->registerCallback(0xF0, fastdelegate::MakeDelegate(this, 
@@ -30,13 +31,6 @@ EventEchoProc::EventEchoProc(EventDispatch * ed, EventTX* etx,
 							&EventEchoProc::eventMemCheck)); 
 
     
-  for (int i = 0; i < NUMBENCH; i++){
-    latest_[i] = 0; 
-    starttime_[i] = 0; 
-    max_[i] = 0; 
-    
-  }
-  
 }
 
 void EventEchoProc::eventEcho(dsp::Event_t * et) {
@@ -75,11 +69,13 @@ void EventEchoProc::eventBenchQuery(dsp::Event_t * et) {
   char chan = et->data[0]; 
   const int DATAFIFOFULL_MASK = 0x0010; 
   //etx.event.data[0] =  (*pFIO_FLAG_D & DATAFIFOFULL_MASK); 
-
-  etx.event.data[1] = latest_[chan] >> 16; 
-  etx.event.data[2] = latest_[chan] & 0xFFFF; 
-  etx.event.data[3] = max_[chan] >> 16; 
-  etx.event.data[4] = max_[chan] & 0xFFFF; 
+  
+  uint32_t duration = pBenchmark_->read(chan); 
+  uint32_t max = pBenchmark_->max(chan); 
+  etx.event.data[1] = duration >> 16; 
+  etx.event.data[2] = duration & 0xFFFF; 
+  etx.event.data[3] = max >> 16; 
+  etx.event.data[4] = max & 0xFFFF; 
   petx->newEvent(etx); 
   
 }
@@ -112,22 +108,6 @@ void EventEchoProc::eventDebugQuery(dsp::Event_t * et) {
   
 }
 
-void EventEchoProc::benchStart(char counter)
-{
-  starttime_[counter] = cycles(); 
-  
-}
-
-void EventEchoProc::benchStop(char counter)
-{
-  int delta = cycles() - starttime_[counter]; 
-  
-  latest_[counter] = delta; 
-  if (delta > max_[counter]) {
-    max_[counter] = delta; 
-  }
-
-}
 
 void EventEchoProc::eventMemCheck(dsp::Event_t * et) {
   dsp::EventTX_t etx ;
@@ -144,4 +124,15 @@ void EventEchoProc::eventMemCheck(dsp::Event_t * et) {
   etx.event.data[4] = (time >> 0) & 0xFFFF;
   petx->newEvent(etx); 
   
+}
+
+void EventEchoProc::benchStart(short counter)
+{
+  pBenchmark_->start(counter); 
+}
+
+
+void EventEchoProc::benchStop(short counter)
+{
+  pBenchmark_->stop(counter); 
 }

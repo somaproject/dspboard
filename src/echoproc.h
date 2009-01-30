@@ -6,15 +6,18 @@
 #include <dsp.h>
 #include <eventdispatch.h>
 #include <systemtimer.h>
+#include <benchmark.h>
 
 
+/*
 
+*/ 
 class EventEchoProc
 {
   
 public:
   EventEchoProc(EventDispatch * ed, EventTX* etx, SystemTimer * pst, 
-		unsigned char device); 
+		Benchmark *  bm, unsigned char device); 
   void eventTimeRX(dsp::Event_t * et); 
   void eventEcho(dsp::Event_t * et); 
   void eventLED(dsp::Event_t * et); 
@@ -22,9 +25,9 @@ public:
   void eventBenchQuery(dsp::Event_t * et); 
   void eventDebugQuery(dsp::Event_t * et); 
   
-  void benchStart(char counter); 
-  void benchStop(char counter); 
   uint16_t debugdata[6]; 
+  void benchStart(short counter); 
+  void benchStop(short counter); 
 
 private:  
   short eventpos; 
@@ -33,14 +36,9 @@ private:
   short iterations; 
   char device_; 
   SystemTimer* ptimer_; 
-
-  // benchmarking / performance
-  static const short NUMBENCH = 6; 
-  int latest_[NUMBENCH]; 
-  int starttime_[NUMBENCH]; 
-  int max_[NUMBENCH]; 
   
   uint16_t etx_errors; 
+  Benchmark * pBenchmark_; 
 
 };
 
