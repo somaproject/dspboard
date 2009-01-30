@@ -6,6 +6,8 @@
 #include <hw/acqserial.h> 
 #include <hw/eventtx.h>
 #include <dsp.h>
+#include <echoproc.h>
+#include <systemtimer.h>
 
 /*
    Defines the architecture-independent parts of a processing loop. 
@@ -18,6 +20,7 @@ class MainLoop
 {
 public:
   virtual void setup(EventDispatch * ed, EventTX * etx, AcqSerial * as, 
+		     SystemTimer *, EventEchoProc *, 
 		     DataOut *, DSPConfig *) = 0; 
   
   virtual void runloop() = 0; 

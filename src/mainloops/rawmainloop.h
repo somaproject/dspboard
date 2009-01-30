@@ -13,7 +13,9 @@
 class RawMainLoop : public MainLoop
 {
  public:  
-  void setup(EventDispatch * ed, EventTX * etx, AcqSerial * as, DataOut *, DSPConfig * ); 
+  void setup(EventDispatch * ed, EventTX * etx, AcqSerial * as, 
+	     SystemTimer * timer, EventEchoProc * eep, 
+	     DataOut *, DSPConfig * ); 
   
   void runloop(); 
 

@@ -1,8 +1,9 @@
 #include "somamainloop.h"
 #include <filter.h>
 void SomaMainLoop::setup(EventDispatch * ed, EventTX * etx, 
-			    AcqSerial * as, DataOut * dout, 
-			    DSPConfig * config)
+			 AcqSerial * as, 
+			 SystemTimer * timer, EventEchoProc * eep, 
+			 DataOut * dout, DSPConfig * config)
 {
   pEventDispatch_ = ed; 
   pEventTX_ = etx; 
@@ -10,9 +11,8 @@ void SomaMainLoop::setup(EventDispatch * ed, EventTX * etx,
   pDataOut_ = dout; 
   pConfig_ = config; 
 
-  timer_ = new SystemTimer(pEventDispatch_); 
-  eep_ = new EventEchoProc(pEventDispatch_, pEventTX_, 
-			   timer_, pConfig_->getEventDevice()); 
+  timer_ = timer; 
+  eep_ = eep; 
 
   acqState_.linkUp = false; 
   pAcqStateControl_ = new AcqStateControl(pAcqSerial_, &acqState_); 
@@ -76,9 +76,7 @@ void SomaMainLoop::setup(EventDispatch * ed, EventTX * etx,
 
 void SomaMainLoop::runloop()
 {
-  if (!firstpass_) {
-    eep_->benchStop(3); 
-  }
+
   firstpass_ = false; 
   
 
@@ -109,5 +107,4 @@ void SomaMainLoop::runloop()
       loopcnt++; 
     }
 
-  eep_->benchStart(3); 
 }
