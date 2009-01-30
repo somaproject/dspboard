@@ -44,6 +44,9 @@ acqstatecontrol.o: $(SRCDIR)/acqstatecontrol.o
 echoproc.o: $(SRCDIR)/echoproc.o
 	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/echoproc.cc -o echoproc.o
 
+benchmark.o: $(SRCDIR)/benchmark.o
+	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/benchmark.cc -o benchmark.o
+
 rawmainloop.o: $(SRCDIR)/mainloops/rawmainloop.o
 	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/mainloops/rawmainloop.cc -o rawmainloop.o
 
@@ -58,7 +61,7 @@ clean:
 
 runner: runner.o rawmainloop.o rawmainlooptest.o  systemtimer.o eventdispatch.o fakesource.o \
 	eventtx.o acqserial.o hostdataout.o rawsink.o  acqdatasource.o echoproc.o \
-	acqboardif.o acqstatecontrol.o acqdatasourcecontrol.o
+	benchmark.o acqboardif.o acqstatecontrol.o acqdatasourcecontrol.o
 
 
 

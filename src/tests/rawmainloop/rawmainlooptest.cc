@@ -9,6 +9,7 @@
 #include <acqdatasource.h>
 #include <sinks/rawsink.h>
 #include <hostdataout.h>
+#include <benchmark.h>
 #include <vector>
 #include <iostream>
 #include <mainloops/rawmainloop.h>
@@ -36,8 +37,13 @@ BOOST_AUTO_TEST_CASE(rawmainloop_simple)
   
   AcqSerial acqserial(false); 
   acqserial.linkUpState_ = true; 
+  Benchmark benchmark; 
+  EventEchoProc eep(&ed, &eventtx, &timer, &benchmark, 
+		    config.getEventDevice()); 
+
+
   RawMainLoop mainloop; 
-  mainloop.setup(&ed, &eventtx, &acqserial, &dataout, &config); 
+  mainloop.setup(&ed, &eventtx, &acqserial, &timer, &eep, &dataout, &config); 
 
   AcqFrame af; 
   af.mode = 0; 

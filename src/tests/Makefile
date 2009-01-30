@@ -37,6 +37,9 @@ $(BUILDDIR)/eventdispatch.o: $(SRCDIR)/eventdispatch.cc builddir
 $(BUILDDIR)/echoproc.o: $(SRCDIR)/echoproc.cc builddir
 	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/echoproc.cc -o $(BUILDDIR)/echoproc.o
 
+$(BUILDDIR)/benchmark.o: $(SRCDIR)/benchmark.cc builddir
+	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/benchmark.cc -o $(BUILDDIR)/benchmark.o
+
 $(BUILDDIR)/fakesource.o: $(SRCDIR)/fakesource.cc builddir
 	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/fakesource.cc -o $(BUILDDIR)/fakesource.o
 
@@ -77,7 +80,7 @@ $(BUILDDIR)/test_util.o : $(SRCDIR)/tests/utils/util.cc builddir
 	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/tests/utils/util.cc -o $(BUILDDIR)/test_util.o
 
 COREOBJS = $(BUILDDIR)/systemtimer.o $(BUILDDIR)/filterlinkcontroller.o $(BUILDDIR)/delta.o $(BUILDDIR)/fir.o \
-	$(BUILDDIR)/eventdispatch.o $(BUILDDIR)/echoproc.o $(BUILDDIR)/fakesource.o $(BUILDDIR)/hostdataout.o \
+	$(BUILDDIR)/eventdispatch.o $(BUILDDIR)/echoproc.o $(BUILDDIR)/benchmark.o $(BUILDDIR)/fakesource.o $(BUILDDIR)/hostdataout.o \
 	 $(BUILDDIR)/rawsink.o $(BUILDDIR)/rawmainloop.o  $(BUILDDIR)/somamainloop.o \
 	$(BUILDDIR)/tspikesink.o $(BUILDDIR)/acqdatasource.o $(BUILDDIR)/acqdatasourcecontrol.o \
 	 $(BUILDDIR)/acqboardif.o $(BUILDDIR)/filter.o\
