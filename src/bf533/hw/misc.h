@@ -13,4 +13,14 @@ inline void setEventLED(bool on) {
   }
 }
 
+inline int cycles()
+{
+	int ret;
+ 
+	__asm__ __volatile__("%0 = CYCLES;\n\t"
+		:"=d"(ret));
+ 
+	return ret;
+}
+
 #endif
