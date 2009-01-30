@@ -1,7 +1,8 @@
 #ifndef HW_MISC
 #define HW_MISC
 
-bool eventLED; 
+static bool eventLED; 
+
 inline void setEventLED(bool on) {
   eventLED = on; 
 }
