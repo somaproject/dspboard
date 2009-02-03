@@ -31,13 +31,18 @@
 .global start
 start:
 
-//	sp.h = 0xFFB0;		//Set up supervisor stack in scratch pad
-//	sp.l = 0x0400; Attempting to work around anomaly 05000227
-	sp.h = 0xFF90;	//	Now at the top of data bank b
-	sp.l = 0x8000;
+	sp.h = 0xFFB0;		//Set up supervisor stack in scratch pad
+	sp.l = 0x0400; // Attempting to work around anomaly 05000227
+//	sp.h = 0xFF90;	//	Now at the top of data bank b
+//	sp.l = 0x8000;
 	fp = sp;
 
-
+	// disable the cache
+	p0.l = LO(IMEM_CONTROL)	;
+	p0.h = HI(IMEM_CONTROL)	;
+	R0 = 0			;  
+	[p0] = R0;
+	
 ////////////////////////////////////////////////////////////////////////////
 // PLL and clock setups
 //
