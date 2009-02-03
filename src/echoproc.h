@@ -29,6 +29,7 @@ public:
   void benchStart(short counter); 
   void benchStop(short counter); 
 
+  uint16_t erx_errors; 
 private:  
   short eventpos; 
   EventTX* petx; 
@@ -38,6 +39,7 @@ private:
   SystemTimer* ptimer_; 
   
   uint16_t etx_errors; 
+
   Benchmark * pBenchmark_; 
 
 };

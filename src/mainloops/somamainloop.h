@@ -39,8 +39,8 @@ class SomaMainLoop : public MainLoop
   SystemTimer * timer_; 
   EventEchoProc * eep_;
 
-  AcqFrame acqFrame_; 
-  AcqState acqState_; 
+  AcqFrame acqFrame_ __attribute__ ((aligned (4))); 
+  AcqState acqState_ __attribute__ ((aligned (4))); 
   AcqStateControl * pAcqStateControl_; 
   AcqDataSourceControl * pAcqDataSourceControl_; 
   AcqDataSource * pAcqDataSource_; 
@@ -55,9 +55,6 @@ class SomaMainLoop : public MainLoop
   FIR * pSpikeFilterD_; 
 
   FIR * pWaveFilter_; 
-  bool firstpass_; 
-  uint16_t delay; 
-  uint16_t loopcnt; 
   
 }; 
 

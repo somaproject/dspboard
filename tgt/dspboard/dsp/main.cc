@@ -81,7 +81,15 @@ int main_loop()
 
   DSPUARTConfig config; 
   
-  
+  /*     This code is legacy debugging code for when we find ourselves wanting
+	 to write to a location in memory so we can use the ICEbear 
+	 register memory dumping code to extract state 
+
+	 uint32_t * ptr; 
+	 ptr = (uint32_t *) 0xFF907FF0; 
+	 *ptr = 0x12345678; 
+	 ptr++; 
+  */ 
 
 //   // System interrupt Mask Register
   *pSIC_IMASK = 0x00; 
@@ -110,19 +118,18 @@ int main_loop()
    // now also enable acqserial SPORT 0 rx IVG8
    *pIMASK |= 0x100;
   
-  acqserial = new AcqSerial(); 
-  //AcqSerial as; 
-  acqserial->setup(); 
+   acqserial = new AcqSerial(); 
+   acqserial->setup(); 
 
 
   DataOut * dataout =  new DataSPORT(); 
 
-  EventTX * etx = new EventTX; 
+  EventTX * etx = new EventTX(); 
   etx->setup(); 
   etx->mysrc = config.getEventDevice(); 
 
   Benchmark * bm = new Benchmark(); 
-
+  
   eventrx = new EventRX(); 
   eventrx->setup(); 
 
@@ -133,9 +140,9 @@ int main_loop()
 					  config.getEventDevice()); 
   
 
-  RawMainLoop * pMainLoop = new RawMainLoop(); 
+  //RawMainLoop * pMainLoop = new RawMainLoop(); 
   //MemTestProc * mtp = new MemTestProc(ed, etx, config.getEventDevice()); 
-  //SomaMainLoop * pMainLoop = new SomaMainLoop();
+  SomaMainLoop * pMainLoop = new SomaMainLoop();
   pMainLoop->setup(ed, etx, acqserial, timer, eep, dataout, &config); 
   acqserial->start(); 
 
@@ -143,6 +150,8 @@ int main_loop()
   uint16_t *  eventbuf = 0; 
   int framecount = 0; 
   uint16_t lasterror = 0; 
+  somatime_t oldtime = timer->getTime(); 
+
   while (1) {
 
 //     eep->benchStart(0);
@@ -170,6 +179,7 @@ int main_loop()
 	  }
       }
     }
+    eep->erx_errors = eventrx->errorCount; 
     bm->stop(4); 
     bm->start(5); 
     etx->sendEvent();       
@@ -179,6 +189,7 @@ int main_loop()
     // Fiber interface for acqboard data
     // ------------------------------------------------------------------
     bm->start(2); 
+
     pMainLoop->runloop();
     bm->stop(2); 
 
@@ -186,7 +197,7 @@ int main_loop()
     // Data bus transmission
     // -----------------------------------------------------------------
     bm->start(3); 
-    //dataout->sendPending(); 
+    dataout->sendPending(); 
     bm->stop(3); 
   }
   

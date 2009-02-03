@@ -68,43 +68,25 @@ void SomaMainLoop::setup(EventDispatch * ed, EventTX * etx,
 
 
   pAcqDataSource_->sourceSampleCycle.connect(pTSpikeSink_->samplesink); 
-  firstpass_ = true; 
-  loopcnt = 0; 
-  delay = 10; 
+  //  firstpass_ = true; 
+  //  loopcnt = 0; 
 
 }
 
 void SomaMainLoop::runloop()
 {
 
-  firstpass_ = false; 
-  
-
-  pAcqStateControl_->setLinkStatus(pAcqSerial_->checkLinkUp()); 
-
-  if (! pAcqSerial_->checkRxEmpty())
-    {
-
-      pAcqSerial_->getNextFrame(&acqFrame_); 
-      pAcqStateControl_->newAcqFrame(&acqFrame_); 
-
-      eep_->benchStart(2); 
-      pAcqDataSource_->newAcqFrame(&acqFrame_); 
-      eep_->benchStop(2); 
-
-//       eep_->benchStop(1);
-      eep_->benchStart(0); 
-
-//       for(unsigned short i = 0; i < delay; i++) {
-// 	cycles();
-//       }
-      eep_->benchStop(0); 
-
-//       if (loopcnt == 14000) {
-// 	delay++;
-// 	loopcnt = 0; 
-//       } 
-      loopcnt++; 
-    }
-
+  // what if we add some linkup hyseresis
+  bool linkup = pAcqSerial_->checkLinkUp(); 
+  pAcqStateControl_->setLinkStatus(linkup); 
+  if (linkup) {
+    if (! pAcqSerial_->checkRxEmpty())
+      {
+	
+	pAcqSerial_->getNextFrame(&acqFrame_); 
+	pAcqStateControl_->newAcqFrame(&acqFrame_); 
+	
+	pAcqDataSource_->newAcqFrame(&acqFrame_); 
+      }
+  }
 }

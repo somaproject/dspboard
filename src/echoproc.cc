@@ -12,6 +12,7 @@ EventEchoProc::EventEchoProc(EventDispatch * ed, EventTX* etx,
   ptimer_(ptimer), 
   device_(device), 
   etx_errors(0), 
+  erx_errors(0), 
   pBenchmark_(bm)
 {
   
@@ -44,7 +45,9 @@ void EventEchoProc::eventEcho(dsp::Event_t * et) {
   etx.event.data[2] = (time >> 32) & 0xFFFF;
   etx.event.data[3] = (time >> 16) & 0xFFFF;
   etx.event.data[4] = (time >> 0) & 0xFFFF;
-  petx->newEvent(etx); 
+  if (! petx->newEvent(etx)) {
+    etx_errors++; 
+  }
   
   iterations++; 
   
@@ -76,7 +79,14 @@ void EventEchoProc::eventBenchQuery(dsp::Event_t * et) {
   etx.event.data[2] = duration & 0xFFFF; 
   etx.event.data[3] = max >> 16; 
   etx.event.data[4] = max & 0xFFFF; 
-  petx->newEvent(etx); 
+//   etx.event.data[1] = 0x1234; 
+//   etx.event.data[2] = 0x5678; 
+//   etx.event.data[3] = 0x9ABC; 
+//   etx.event.data[4] = 0xDEF0; 
+  if (!petx->newEvent(etx) )
+    {
+      etx_errors++;
+    }
   
 }
 
@@ -93,18 +103,15 @@ void EventEchoProc::eventDebugQuery(dsp::Event_t * et) {
   etx.event.cmd = 0xF7; 
   etx.event.src = device_;
   
-  uint16_t reqnonce = et->data[0]; 
-  uint16_t numtosend = et->data[1]; 
-  for(char i = 0; i < numtosend; i++) {
-    etx.event.data[0] =  reqnonce; 
-    etx.event.data[1] =  i; 
-    etx.event.data[2] = etx_errors; 
-    etx.event.data[3] = petx->getFIFOFullCount(); 
-    etx.event.data[4] = petx->getFPGAFullCount(); 
-    if (! petx->newEvent(etx)) {
-      etx_errors += 1; 
+
+  etx.event.data[0] = petx->getFIFOFullCount(); 
+  etx.event.data[1] = petx->getFPGAFullCount(); 
+  etx.event.data[2] = etx_errors; 
+  etx.event.data[3] = erx_errors; 
+  if (!petx->newEvent(etx) )
+    {
+      etx_errors++;
     }
-  }
   
 }
 
@@ -118,10 +125,7 @@ void EventEchoProc::eventMemCheck(dsp::Event_t * et) {
   
   etx.event.data[0] = memamt >> 16; 
   etx.event.data[1] = memamt & 0xFFFF; 
-  somatime_t time = ptimer_->getTime(); 
-  etx.event.data[2] = (time >> 32) & 0xFFFF;
-  etx.event.data[3] = (time >> 16) & 0xFFFF;
-  etx.event.data[4] = (time >> 0) & 0xFFFF;
+
   petx->newEvent(etx); 
   
 }
