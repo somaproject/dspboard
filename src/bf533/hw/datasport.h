@@ -20,10 +20,10 @@ class DataSPORT : public DataOut
   static const int BUFSIZE = 1024; 
   static const int DATAFIFOFULL_MASK = 0x0010; 
 
-  uint8_t buffer_[DATABUFLEN][BUFSIZE]  __attribute__ ((aligned (8))); 
+  static uint8_t buffer_[DATABUFLEN][BUFSIZE]  __attribute__ ((aligned (8))); 
 
-  int nextFreeData_; 
-  int nextSendData_; 
+  unsigned short nextFreeData_; 
+  unsigned short nextSendData_; 
   bool txPending_; 
 
   void setupSPORT(); 

@@ -1,6 +1,7 @@
 #include "datasport.h"
 #include <cdefBF533.h>
 
+uint8_t DataSPORT::buffer_[DATABUFLEN][BUFSIZE]  ; 
 
 DataSPORT::DataSPORT() :
   nextFreeData_(0), 
