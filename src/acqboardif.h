@@ -34,7 +34,7 @@ public:
   static const int CHANNUM = 5; 
   AcqState() {
     // initialize to BS values
-    mode = -1; 
+    mode = 0; 
     linkUp = false; 
     gain[0] = -1; 
     gain[1] = -1; 

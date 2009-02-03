@@ -35,6 +35,10 @@ void AcqDataSourceControl::onLinkChange(bool linkup){
 void AcqDataSourceControl::query(dsp::Event_t * et)
 {
   // generic query dispatch
+  if(!pAcqStateControl_->isReady()) {
+    sendPendingError(et); 
+  }
+  
   switch(et->data[0]) {
   case  LINKSTATUS: 
     sendLinkStatusEvent(); 
@@ -62,6 +66,11 @@ void AcqDataSourceControl::query(dsp::Event_t * et)
 void AcqDataSourceControl::setstate(dsp::Event_t * et)
 {
   // generic query dispatch
+
+  if(!pAcqStateControl_->isReady()) {
+    sendPendingError(et); 
+  }
+
   switch(et->data[0]) {
   case MODE:
     setMode(et); 
@@ -90,12 +99,20 @@ void AcqDataSourceControl::sendLinkStatusEvent()
   bcastEventTX_.event.src = pEventTX_->mysrc; 
 
   bcastEventTX_.event.data[0] = LINKSTATUS; 
-
   if (pAcqStateControl_->pAcqState_->linkUp) {
     bcastEventTX_.event.data[1] = 1;
   } else {
     bcastEventTX_.event.data[1] = 0;
   }
+  bcastEventTX_.event.data[2] = pAcqStateControl_->isReady(); 
+  bcastEventTX_.event.data[3] = pAcqStateControl_->pendingSerialCMDID_; 
+  bcastEventTX_.event.data[3] =  (bcastEventTX_.event.data[3] << 8) | 
+    pAcqStateControl_->mostRecentReceivedCMDID_; 
+    
+  bcastEventTX_.event.data[4] = pAcqStateControl_->controlstate_; 
+  bcastEventTX_.event.data[4] = bcastEventTX_.event.data[4]  << 8 | 
+    pAcqStateControl_->cmdstate_; 
+
   pEventTX_->newEvent(bcastEventTX_); 
 
 }
@@ -267,7 +284,13 @@ void AcqDataSourceControl::setMode(dsp::Event_t * et)
 
 void AcqDataSourceControl::sendPendingError(dsp::Event_t * et)
 {
-  // FIXME 
+  dsp::EventTX_t eventtx; 
+  eventtx.set(et->src);  // reply to sender
+  eventtx.event.cmd = 0xE0; 
+  
+  // FIXME add some data
+
+  pEventTX_->newEvent(eventtx); 
 } 
 
 void AcqDataSourceControl::onInputSelChange(char chan)

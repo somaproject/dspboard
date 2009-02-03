@@ -53,8 +53,11 @@ void AcqSerial::sendCommand(AcqCommand * ac)
 {
 
   if (acDelaycnt_ >= 0) {
+    std::cout << "Command send before previous command had completed" 
+	      << std::endl; 
     throw std::runtime_error("command sent before previous had completed"); 
   } else {
+    std::cout << "AcqSerial sending command" << std::endl; 
     acDelaycnt_ = 5; 
     acPending_ = *ac; 
   }

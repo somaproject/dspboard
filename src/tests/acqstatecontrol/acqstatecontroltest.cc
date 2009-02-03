@@ -70,7 +70,7 @@ BOOST_AUTO_TEST_CASE(simple_linkup_state_initialize)
       AcqFrame af; 
       acqs.getNextFrame(&af); 
       asc.newAcqFrame(&af); 
-      if(asc.isInitializing() == false) {
+      if(asc.isReady() == true) {
 	break; 
       }
       
@@ -126,21 +126,27 @@ BOOST_AUTO_TEST_CASE(simple_gain_test)
       AcqFrame af; 
       acqs.getNextFrame(&af); 
       asc.newAcqFrame(&af); 
-      if(mockReceiver.count > 1 and !asc.isInitializing()) {
+      if(mockReceiver.count > 1 and asc.isReady()) {
 	break; 
       }
     }
 
   }
+  std::cout << "ABOUT TO SET ---------------------------------------------------"
+	    << std::endl; 
+
+  std::cout << "-------------------------------------------------------"
+	    << std::endl; 
 
   // now, setup the callbacks
-  asc.setGain(enables, 100); 
+  BOOST_CHECK_EQUAL(asc.setGain(enables, 100), true); 
 
   while(1) {
     if (! acqs.checkRxEmpty()){
       AcqFrame af; 
       acqs.getNextFrame(&af); 
       asc.newAcqFrame(&af); 
+      std::cout << "mockReceiver.count = " << mockReceiver.count << std::endl; 
       if(mockReceiver.count > 5) {
 	break; 
       }
@@ -188,7 +194,7 @@ BOOST_AUTO_TEST_CASE(simple_hpf_test)
       AcqFrame af; 
       acqs.getNextFrame(&af); 
       asc.newAcqFrame(&af); 
-      if(mockReceiver.count > 1 and !asc.isInitializing()) {
+      if(mockReceiver.count > 1 and asc.isReady()) {
 	break; 
       }
     }
@@ -250,7 +256,8 @@ BOOST_AUTO_TEST_CASE(simple_hpf_test)
 
 //   MockReceiver mockReceiver; 
 
-//   AcqStateControl asc(&acqs, &as, &mockReceiver); 
+//   AcqStateControl asc(&acqs, &as); 
+
 //   asc.setDSPPos(DSPA); 
   
 //   asc.setLinkStatus(true); // bring up the interface
@@ -272,6 +279,17 @@ BOOST_AUTO_TEST_CASE(simple_hpf_test)
 //   enables[3] = false; 
 //   enables[4] = true; 
 
+//   while(1) {
+//     if (! acqs.checkRxEmpty()){
+//       AcqFrame af; 
+//       acqs.getNextFrame(&af); 
+//       asc.newAcqFrame(&af); 
+//       if(mockReceiver.count > 1 and asc.isReady()) {
+// 	break; 
+//       }
+//     }
+
+//   }
 
 //   // now, setup the callbacks
 //   asc.setHPF(enables, true); 
