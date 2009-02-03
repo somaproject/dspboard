@@ -152,11 +152,11 @@ private:
 
   void processSampleCycle(char); 
 
-  TSpikeData_t pendingTSpikeData_; 
-  short pendingPos_; 
-  unsigned char dataSource_; 
+  TSpikeData_t pendingTSpikeData_ __attribute__ ((aligned (4))); 
+  short pendingPos_  __attribute__ ((aligned (4))); 
+  unsigned char dataSource_  __attribute__ ((aligned (4))); 
   
-  short pending_; 
+  short pending_  __attribute__ ((aligned (4))); 
 
   void sendSpike(); 
 
@@ -168,7 +168,7 @@ private:
   void sendThresholdResponse(char chan); 
   void sendFilterIDResponse(char chan); 
 
-  dsp::EventTX_t bcastEventTX_; 
+  dsp::EventTX_t bcastEventTX_  __attribute__ ((aligned (4))); 
 
 }; 
 
