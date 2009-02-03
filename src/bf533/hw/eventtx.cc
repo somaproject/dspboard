@@ -1,5 +1,6 @@
 #include "eventtx.h"
 #include <cdefBF533.h>
+#include <hw/misc.h>
 
 
 uint16_t EventTX::buffer_[EVTBUFLEN][BUFSIZE]; 
@@ -11,7 +12,11 @@ EventTX::EventTX() :
   fifo_full_count_(0), 
   fpga_full_count_(0)
 {
-  
+  for(int i = 0; i < EVTBUFLEN; i++) {
+    for (int j = 0; j < BUFSIZE; j++) { 
+      buffer_[i][j] = 0; 
+    }
+  }
 
 }
 
@@ -82,6 +87,7 @@ bool EventTX::sendEvent()
   // txpending should be false, we are done. 
   for (int i = 0; i < 10; i++) {
     // race condition in waiting for full buffer
+    cycles(); 
   }
   // check if the fifo is full 
   if (isFPGAFIFOFull()){

@@ -8,6 +8,15 @@ extern "C" {
 
   void __attribute__((interrupt_handler)) ppirxisr() 
   {
+    /* workaround for anomaly:
+       05000257 - Interrupt/Exception During Short Hardware Loop May Cause Bad Instruction Fetches
+    */
+    __asm__("R0 = LC0;"
+	    "LC0 = R0;"
+	    "R0 = LC1;"
+	    "LC1 = R0" 
+	    : : : "R0" ); 
+
     eventrx->RXDMAdoneISR(); 
 
     short q = *pSIC_ISR;  // THIS HAS TO BE A SHORT FOR THE LOVE OF GOD

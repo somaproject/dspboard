@@ -25,9 +25,6 @@ private:
   uint16_t currentReadBuffer_; 
   uint16_t currentWriteBuffer_; 
 
-  
-  
-
 }; 
 
 extern EventRX * eventrx; 
