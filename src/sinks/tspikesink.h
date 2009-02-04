@@ -83,8 +83,6 @@ public:
       c++;
       c++; 
       c++; 
-      uint32_t val = (uint32_t) c; 
-
       c = Memcopy::hton_int32(c, filterid[i]); 
       c = Memcopy::hton_int32(c, threshold[i]); 
       
