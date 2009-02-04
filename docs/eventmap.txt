@@ -31,11 +31,13 @@ Parameter:
     MODE = 1, 
     CHANGAIN = 2, 
     CHANHPF = 3,
-    CHANSEL = 4
+    CHANSEL = 4, 
+    RANGEMIN = 5, 
+    RANGEMAX = 6
 
 0x40: query
 0x41: set
-0x42: response / broadcast
+0x12: response / broadcast
 
 For set:  
 DATA[0] : parameter #
@@ -57,9 +59,10 @@ For TSpikeSink:
 
 0x43: query
 0x44: set
-0x45: response / broadcast
+0x13: response / broadcast
 
 params: threshold = 1
+	filterid = 2
 
 For set:  
 DATA[0] : parameter #
@@ -83,7 +86,7 @@ For WaveSink:
 
 0x46: query
 0x47: set
-0x48: response/broadcast
+0x14: response/broadcast
 
 params: 
    sampratenum = 1

@@ -136,7 +136,7 @@ public:
   enum INCMDS { 
     ECMD_QUERY = 0x43, 
     ECMD_SET = 0x44,   
-    ECMD_RESPONSE = 0x45
+    ECMD_RESPONSE = 0x13
   }; 
 
   //  static const char CMDRESPBCAST = 0x45; 
