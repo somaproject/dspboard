@@ -18,5 +18,8 @@ public:
   
 }; 
 
+//static AvailableFIRs availableFIRs; 
+
+
 
 #endif // AVAILABLE_FIRS_H

@@ -15,11 +15,14 @@
 #include <filterlinks/fir.h>
 
 //making this static
+
 static AvailableFIRs availableFIRs; 
 
 class SomaMainLoop : public MainLoop
 {
  public:  
+  SomaMainLoop(); 
+
   void setup(EventDispatch * ed, EventTX * etx, AcqSerial * as, 
 	     SystemTimer * timer, EventEchoProc * eep, 
 	     DataOut *, DSPConfig * ); 

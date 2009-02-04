@@ -1,5 +1,11 @@
 #include "somamainloop.h"
 #include <filter.h>
+
+SomaMainLoop::SomaMainLoop()
+{
+
+}
+
 void SomaMainLoop::setup(EventDispatch * ed, EventTX * etx, 
 			 AcqSerial * as, 
 			 SystemTimer * timer, EventEchoProc * eep, 

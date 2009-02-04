@@ -52,7 +52,7 @@ namespace dspiolib {
       enum CMDS {
 	QUERY =0x40,
 	SET = 0x41,
-	RESPBCAST = 0x42
+	RESPBCAST = 0x12
       }; 
       
       enum PARAMETERS {
@@ -87,7 +87,7 @@ namespace dspiolib {
       enum CMDS {
 	QUERY = 0x43, 
 	SET = 0x44, 
-	RESPBCAST = 0x45, 
+	RESPBCAST = 0x13, 
       }; 
       
       enum PARAMETERS { 
@@ -106,7 +106,7 @@ namespace dspiolib {
       enum CMDS { 
 	QUERY = 0x46,  
 	SET = 0x47, 
-	RESPBCAST = 0x48, 
+	RESPBCAST = 0x14, 
       }; 
       
       enum PARAMETERS { 

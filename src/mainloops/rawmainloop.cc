@@ -1,4 +1,5 @@
 #include "rawmainloop.h"
+
 void RawMainLoop::setup(EventDispatch * ed, EventTX * etx, 
 			AcqSerial * as, 
 			SystemTimer * timer, EventEchoProc * eep, 
@@ -45,21 +46,24 @@ void RawMainLoop::setup(EventDispatch * ed, EventTX * etx,
 void RawMainLoop::runloop()
 {
   eep_->benchStart(0); 
-  pAcqStateControl_->setLinkStatus(pAcqSerial_->checkLinkUp()); 
-  if (! pAcqSerial_->checkRxEmpty())
-    {
-      //*pFIO_FLAG_T = 0x0100;
-      eep_->debugdata[0] = acqFrame_.cmdid; 
-      eep_->debugdata[1] = pAcqStateControl_->sequentialCMDID_; 
-      
-      pAcqSerial_->getNextFrame(&acqFrame_); 
-      pAcqStateControl_->newAcqFrame(&acqFrame_); 
-      // trigger the set of filterlinks
-      eep_->benchStart(1);
-      pAcqDataSource_->newAcqFrame(&acqFrame_); 
-      eep_->benchStop(1);
-      
-    }
-  eep_->benchStop(0); 
+  bool linkup = pAcqSerial_->checkLinkUp(); 
+  pAcqStateControl_->setLinkStatus(linkup); 
+  if (linkup) {
+    if (! pAcqSerial_->checkRxEmpty())
+      {
+	//*pFIO_FLAG_T = 0x0100;
+	eep_->debugdata[0] = acqFrame_.cmdid; 
+	eep_->debugdata[1] = pAcqStateControl_->sequentialCMDID_; 
+	pAcqSerial_->getNextFrame(&acqFrame_); 
+	pAcqStateControl_->newAcqFrame(&acqFrame_); 
+	// trigger the set of filterlinks
 
+	eep_->benchStart(1);
+	pAcqDataSource_->newAcqFrame(&acqFrame_); 
+	eep_->benchStop(1);
+
+	
+      }
+    eep_->benchStop(0); 
+  }
 }

@@ -3,6 +3,7 @@
 #include <vector>
 #include <list>
 #include "eventutil.h" 
+#include <mainloops/somamainloop.h>
 
 
 void dspboard_run(MockDSPBoard & dspboard, int iters) {
@@ -21,11 +22,14 @@ MockDSPBoard::MockDSPBoard(char dsrc, dsp::eventsource_t esrc):
   ed(config.getDSPPos()), 
   eventtx(), 
   acqserial(true), 
-  mainloop()
+  bm(), 
+  eep(&ed, &eventtx, &timer, &bm, config.getEventDevice()), 
+  mainloop(new RawMainLoop)
   //  sp(dsrc_, sigc::mem_fun(*this, &MockDSPBoard::sendEvents)))
 {
   timer.setTime(0); 
-  mainloop.setup(&ed, &eventtx, &acqserial, &dataout, &config); 
+  mainloop->setup(&ed, &eventtx, &acqserial, &timer, &eep, 
+		 &dataout, &config); 
   acqserial.linkUpState_ = true; 
   
 }
@@ -66,7 +70,8 @@ void MockDSPBoard::sendEvents(const somanetwork::EventTX_t & etx)
 
 void MockDSPBoard::runloop()
 {
-  mainloop.runloop(); 
+  mainloop->runloop(); 
+  
   if (eventtx.eventBuffer_.size() > 0) {
     // convert 
     dsp::EventTX_t et = eventtx.eventBuffer_.front(); 
