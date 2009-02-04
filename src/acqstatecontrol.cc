@@ -47,7 +47,9 @@ bool AcqStateControl::setLinkStatus(bool linkup)
   if (pAcqState_->linkUp != linkup) {
     pAcqState_->linkUp = linkup; 
     resetAll();     
-    
+    if (!linkup) {
+      pAcqStateReceiver_->onLinkChange(true); 
+    } 
   }
   
 }
