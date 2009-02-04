@@ -303,7 +303,10 @@ void AcqStateControl::controlStateAdvance(AcqFrame * af)
       //std::cout << "STATE_LINK_UP" << std::endl;
       // we've just brought up the link state; capture the CMDID 
       // as the current cmdID and capture the mode
-      sequentialCMDID_ = af->cmdid; 
+      while (sequentialCMDID_ == af->cmdid ) {
+	getNextCMDID(); 
+
+      }
       pAcqState_->mode = af->mode; 
       pAcqStateReceiver_->onModeChange(af->mode); 
       pAcqStateReceiver_->onLinkChange(true); 
