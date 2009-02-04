@@ -47,7 +47,7 @@ public:
   {
     
     const short len = 
-      CHANNUM * ((POSTTRIGGER + PRETRIGGER) * sizeof(int32_t) + 10) + 
+      CHANNUM * ((POSTTRIGGER + PRETRIGGER) * sizeof(int32_t) + 12) + 
       8 + 4  +  2 ; 
     *c = len >> 8; 
     c++; 
@@ -78,6 +78,8 @@ public:
     // for each channel
     for (short i = 0; i < CHANNUM; i++) {
       // FIXME incorporate VALID field
+      c++;  // VALID FIELD
+      c++;
       c++;  // VALID FIELD
       c++;
       c = Memcopy::hton_int32(c, filterid[i]); 
