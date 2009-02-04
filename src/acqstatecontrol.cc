@@ -48,8 +48,6 @@ bool AcqStateControl::setLinkStatus(bool linkup)
     pAcqState_->linkUp = linkup; 
     resetAll();     
     
-    pAcqStateReceiver_->onLinkChange(linkup); 
-    
   }
   
 }
@@ -306,7 +304,8 @@ void AcqStateControl::controlStateAdvance(AcqFrame * af)
       sequentialCMDID_ = af->cmdid; 
       pAcqState_->mode = af->mode; 
       pAcqStateReceiver_->onModeChange(af->mode); 
-
+      pAcqStateReceiver_->onLinkChange(true); 
+    
       controlstate_ = STATE_INIT_GAINS; 
     }
     break; 

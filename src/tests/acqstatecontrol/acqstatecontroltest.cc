@@ -21,6 +21,19 @@ BOOST_AUTO_TEST_CASE(simple_linkup_test)
   asc.setDSPPos(DSPA); 
   
   asc.setLinkStatus(true); 
+  for (int i = 0; i < 10; i++) {
+    if (! acqs.checkRxEmpty()){
+      AcqFrame af; 
+      acqs.getNextFrame(&af); 
+      asc.newAcqFrame(&af); 
+      if(asc.isReady() == true) {
+	break; 
+      }
+      
+    }
+    
+  }
+  
   BOOST_CHECK_EQUAL(mockReceiver.linkChanges.size(), 
 		    1); 
   BOOST_CHECK_EQUAL(mockReceiver.linkChanges[0], true); 
