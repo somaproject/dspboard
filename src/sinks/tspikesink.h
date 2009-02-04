@@ -21,6 +21,8 @@ public:
   
   static const unsigned char CHANNUM = 4; 
 
+  static const uint16_t TSPIKE_DATA_VERSION = 0x0100; 
+
   int32_t buffer[CHANNUM][BUFSIZE]; 
   
   int32_t threshold[CHANNUM]; 
@@ -73,8 +75,7 @@ public:
       twopass = true; 
       pos += BUFSIZE; 
     }
-    c++; // dummy for four-byte alignment
-    c++; 
+    c = Memcopy::hton_int16(c, TSPIKE_DATA_VERSION); 
     // for each channel
     for (short i = 0; i < CHANNUM; i++) {
       // FIXME incorporate VALID field
@@ -109,7 +110,6 @@ public:
 class TSpikeSink 
 {
   static const unsigned char DATATYPE = 0; 
-  
  public:
   TSpikeSink(SystemTimer * st, DataOut * dout, 
 	     EventDispatch * ed, EventTX* etx, 
