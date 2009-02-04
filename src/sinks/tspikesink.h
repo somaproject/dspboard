@@ -45,10 +45,9 @@ public:
   
   void toBuffer(unsigned char *c) 
   {
-    
     const short len = 
       CHANNUM * ((POSTTRIGGER + PRETRIGGER) * sizeof(int32_t) + 12) + 
-      8 + 4  +  2 ; 
+      8 + 4  +  2 +4; 
     *c = len >> 8; 
     c++; 
     *c = len & 0xFF; 
@@ -74,28 +73,28 @@ public:
       twopass = true; 
       pos += BUFSIZE; 
     }
-    
+    c++; // dummy for four-byte alignment
+    c++; 
     // for each channel
     for (short i = 0; i < CHANNUM; i++) {
       // FIXME incorporate VALID field
       c++;  // VALID FIELD
       c++;
-      c++;  // VALID FIELD
-      c++;
+      c++; 
+      c++; 
+      uint32_t val = (uint32_t) c; 
+
       c = Memcopy::hton_int32(c, filterid[i]); 
       c = Memcopy::hton_int32(c, threshold[i]); 
       
       if (!twopass) {
-	c = Memcopy::hton_int32array(c, &(buffer[i][pos]), 
-				     POSTTRIGGER+PRETRIGGER); 
-	
+  	c = Memcopy::hton_int32array(c, &(buffer[i][pos]), 
+  				     POSTTRIGGER+PRETRIGGER); 
       } else {
-	unsigned char * c1, *c2; 
-	c = Memcopy::hton_int32array(c, &(buffer[i][pos]), BUFSIZE - pos); 
-	c1 = c; 
-	c = Memcopy::hton_int32array(c, &(buffer[i][0]), offset + 1); 
-	c2 = c; 
-	
+
+ 	c = Memcopy::hton_int32array(c, &(buffer[i][pos]), BUFSIZE - pos); 
+ 	c = Memcopy::hton_int32array(c, &(buffer[i][0]), offset + 1); 
+	//c += 32 * 4; 
       }
     }
     

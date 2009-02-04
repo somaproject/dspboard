@@ -60,7 +60,7 @@ public:
       
     */
     int x = hton_int32(src); // __bswap_32_faster(src); 
-    *dest = x; 
+    memcpy(dest, &x, 4); 
     return dest + 4; 
     
   }
@@ -168,6 +168,7 @@ public:
       returns 
       
     */
+    int32_t * initdest = dest; 
     __asm__ __volatile__(
 	    "I0 = %0;"
 	    "I1 = %1;"
@@ -188,7 +189,7 @@ public:
 	    :  "a"(dest), "a"(src), "a"(len)
 	    : "I0", "I1", "R0", "R1", "R2", "P0", "memory"); 
     
-    return dest + (len * sizeof(int32_t)); 
+    return initdest + len ; 
   }
 
 

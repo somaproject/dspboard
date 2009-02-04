@@ -82,11 +82,14 @@ void SomaMainLoop::runloop()
   if (linkup) {
     if (! pAcqSerial_->checkRxEmpty())
       {
-	
+	eep_->benchStart(0); 
 	pAcqSerial_->getNextFrame(&acqFrame_); 
 	pAcqStateControl_->newAcqFrame(&acqFrame_); 
-	
+	eep_->benchStop(0); 
+
+	eep_->benchStart(1); 
 	pAcqDataSource_->newAcqFrame(&acqFrame_); 
+	eep_->benchStop(1); 
       }
   }
 }
