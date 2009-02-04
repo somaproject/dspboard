@@ -14,6 +14,10 @@
 #include <event.h>
 #include <somanetwork/eventtx.h>
 #include <sigc++/sigc++.h>
+#include <echoproc.h>
+#include <systemtimer.h>
+
+class SomaMainLoop; 
 
 class MockDSPBoard; 
 void dspboard_run(MockDSPBoard & dspboard, int iters); 
@@ -35,7 +39,11 @@ public:
   EventTX eventtx; 
   
   AcqSerial acqserial; 
-  RawMainLoop mainloop; 
+
+  Benchmark bm;
+ 
+  EventEchoProc eep; 
+  RawMainLoop  * mainloop; 
 
   void runloop(); 
   void sendEvents(const somanetwork::EventTX_t & etx); 
