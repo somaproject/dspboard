@@ -91,7 +91,6 @@ COREOBJS = $(BUILDDIR)/systemtimer.o $(BUILDDIR)/filterlinkcontroller.o $(BUILDD
 ACQDATASOURCE_OBJS = acqdatasource/acqdatasourcetest.o
 ACQSTATECONTROL_OBJS = acqstatecontrol/acqstatecontroltest.o acqstatecontrol/mock_receiver.o
 CALLBACK_OBJS = 
-DATAOUTFIFO_OBJS = 
 EVENTDISPATCH_OBJS = 
 FILTERIO_OBJS = filterio/filteriotest.o
 FILTERLINKS_OBJS = filterlinks/filterlinktests.o filterlinks/deltatest.o $(BUILDDIR)/availablefirs.o
@@ -103,7 +102,6 @@ runner: runner.o $(BUILDDIR)/test_util.o $(COREOBJS)  \
 	$(ACQDATASOURCE_OBJS) \
 	$(ACQSTATECONTROL_OBJS) \
 	$(CALLBACK_OBJS) \
-	$(DATAOUTFIFO_OBJS) \
 	$(EVENTDISPATCH_OBJS) \
 	$(FILTERIO_OBJS) \
 	$(FILTERLINKS_OBJS) \

@@ -8,6 +8,7 @@
 #include <acqdatasourcecontrol.h>
 #include <acqdatasource.h>
 #include <sinks/tspikesink.h>
+#include <sinks/wavesink.h>
 #include <dsp.h>
 #include <filterlinks/availablefirs.h>
 #include <filterlinkcontroller.h>
@@ -51,6 +52,7 @@ class SomaMainLoop : public MainLoop
   AvailableFIRs * pAvailableFIRs_; 
 
   TSpikeSink * pTSpikeSink_; 
+  WaveSink * pWaveSink_; 
   
   FIR * pSpikeFilterA_; 
   FIR * pSpikeFilterB_; 

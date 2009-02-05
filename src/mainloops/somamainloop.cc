@@ -51,6 +51,11 @@ void SomaMainLoop::setup(EventDispatch * ed, EventTX * etx,
 	       pFilterLinkController_, pConfig_->getDataSrc());
   
   
+  pWaveSink_ = new 
+    WaveSink(timer_, pDataOut_, pEventDispatch_, pEventTX_, 
+	       pFilterLinkController_, pConfig_->getDataSrc());
+  
+  
 //   //Create the filter links. 
 
 //   pAcqDataSource_->sourceA.connect(pSpikeFilterA_->input); 
@@ -68,6 +73,8 @@ void SomaMainLoop::setup(EventDispatch * ed, EventTX * etx,
   pAcqDataSource_->sourceB.connect(pTSpikeSink_->sink2); 
   pAcqDataSource_->sourceC.connect(pTSpikeSink_->sink3); 
   pAcqDataSource_->sourceD.connect(pTSpikeSink_->sink4); 
+  pAcqDataSource_->sourceCont.connect(pWaveSink_->sink); 
+
 //   pAcqDataSource_->sourceCont.connect(pWaveFilter_->input); 
 
 //   // FIXME: wave sink

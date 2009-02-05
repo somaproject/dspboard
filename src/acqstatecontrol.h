@@ -51,7 +51,7 @@ public:
   //private: // FIXME
   
   enum CONTROL_STATES {STATE_LINK_DOWN = 0 , STATE_LINK_UP = 1, 
-		       STATE_INIT_MODE = 2,  
+		       STATE_INIT_HOLDOFF = 2,  
 		       STATE_INIT_GAINS = 3, STATE_INIT_GAINS_WAIT = 4, 
 		       STATE_INIT_HPFS = 5 , STATE_INIT_HPFS_WAIT = 6, 
 		       STATE_INIT_INSEL = 7, STATE_INIT_INSEL_WAIT = 8, 
@@ -80,6 +80,8 @@ public:
 
   // The acqserial-specific (single-channel at a time) state variables
   char pendingSerialCMDID_; 
+
+  uint16_t startup_holdoff_; // fix bug? 
 
   // callbacks 
 

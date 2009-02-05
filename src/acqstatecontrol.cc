@@ -311,9 +311,21 @@ void AcqStateControl::controlStateAdvance(AcqFrame * af)
       pAcqStateReceiver_->onModeChange(af->mode); 
       pAcqStateReceiver_->onLinkChange(true); 
     
-      controlstate_ = STATE_INIT_GAINS; 
+      controlstate_ = STATE_INIT_HOLDOFF; 
+      startup_holdoff_ = 100; 
     }
     break; 
+  case STATE_INIT_HOLDOFF:
+    {
+      if (startup_holdoff_ == 0) {
+	
+	controlstate_ = STATE_INIT_GAINS; 
+      } else {
+	startup_holdoff_--; 
+      }
+    }
+    break; 
+
   case STATE_INIT_GAINS:
     {
       //std::cout << "STATE_INIT_GAINS" << std::endl;

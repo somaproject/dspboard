@@ -22,7 +22,7 @@ OBJS = $(ASMSRCS:%.asm=%.o) $(CCSRCS:%.cc=%.o) eventtx.o eventrx.o \
 	uarttx.o acqstatecontrol.o systemtimer.o datasport.o acqboardif.o\
 	fakesource.o rawsink.o  tspikesink.o availablefirs.o filterlinkcontroller.o\
 	 rawmainloop.o somamainloop.o echoproc.o benchmark.o memtestproc.o\
-	filter.o delta.o fir.o acqdatasourcecontrol.o acqdatasource.o
+	filter.o delta.o fir.o acqdatasourcecontrol.o acqdatasource.o wavesink.o
 
 
 AS = bfin-elf-as
@@ -101,6 +101,9 @@ rawsink.o: $(SRCDIR)/sinks/rawsink.cc
 
 tspikesink.o: $(SRCDIR)/sinks/tspikesink.cc
 	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/sinks/tspikesink.cc
+
+wavesink.o: $(SRCDIR)/sinks/wavesink.cc
+	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/sinks/wavesink.cc
 
 delta.o: $(SRCDIR)/filterlinks/delta.cc
 	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/filterlinks/delta.cc

@@ -89,10 +89,11 @@ For WaveSink:
 0x14: response/broadcast
 
 params: 
-   sampratenum = 1
-   samprateden = 2
-   filterid = 3
-   
+   downsamplenum = 1
+   chansel = 2
+   FILTERID = 3, 
+   SAMPRATE = 4 // READ ONLY
+
 For set:  
 DATA[0] : parameter #
 DATA[1:] : value
