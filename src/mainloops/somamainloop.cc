@@ -75,8 +75,6 @@ void SomaMainLoop::setup(EventDispatch * ed, EventTX * etx,
   pAcqDataSource_->sourceD.connect(pTSpikeSink_->sink4); 
   pAcqDataSource_->sourceCont.connect(pWaveSink_->sink); 
 
-//   pAcqDataSource_->sourceCont.connect(pWaveFilter_->input); 
-
 //   // FIXME: wave sink
 
 

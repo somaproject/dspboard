@@ -163,7 +163,8 @@ void TSpikeSink::setstate(dsp::Event_t * et) {
   switch(param) {
   case  THRESHOLD: 
     {
-      uint32_t thold = (et->data[2] << 16) | (et->data[3]); 
+      uint32_t thold = (et->data[2]); 
+      thold = (thold << 16) | (et->data[3]); 
       pendingTSpikeData_.threshold[channel] = thold; 
       sendThresholdResponse(channel); 
     }
