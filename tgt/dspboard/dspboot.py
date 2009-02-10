@@ -19,6 +19,16 @@ EVENTRXCMD_DATABUFTX = 0x33
 EVENTRXCMD_DSPSPISS = 0x34
 EVENTRXCMD_DSPSPIEN = 0x35
 EVENTRXCMD_DSPRESET = 0x36
+
+def reallysend(eio, ea, e):
+    while True:
+        try:
+            eio.sendEvent(ea, e)
+            break
+        except IOError:
+            print "Whoa, we didn't hear the answer" 
+            pass
+        
     
 class Block(object):
     def __init__(self, fid):
@@ -121,66 +131,47 @@ def main():
 
     eio.start()
 
+    ea = eaddr.TXDest()
 
-    # Create event and set mask
+    for d in dspaddrs:
+        ea[d] = 1
+
+    print "Asserting DSP reset" 
     e = Event()
     e.src = eaddr.NETWORK
     e.cmd =  EVENTRXCMD_DSPRESET
     e.data[0] = 0x0000
+    reallysend(eio, ea, e)
 
-    ea = eaddr.TXDest()
-    for d in dspaddrs:
-        ea[d] = 1
-    eio.sendEvent(ea, e)
-
-
+    print "Deasserting DSP reset" 
     e = Event()
-
     e.src = eaddr.NETWORK
     e.cmd =  EVENTRXCMD_DSPRESET
     e.data[0] = 0xFFFF
+    reallysend(eio, ea, e)
 
-
-    ea = eaddr.TXDest()
-    for d in dspaddrs:
-        ea[d] = 1
-    eio.sendEvent(ea, e)
-
-    # now make sure we are in control of the spi interface
+    print "Acquiring DSP SPI interface for FPGA" 
     e = Event()
     e.src = eaddr.NETWORK
     e.cmd =  EVENTRXCMD_DSPSPIEN
     e.data[0] = 0xFFFF
+    reallysend(eio, ea, e)
 
-    ea = eaddr.TXDest()
-    for d in dspaddrs:
-        ea[d] = 1
-    eio.sendEvent(ea, e)
-    #time.sleep(1)
-
-    #sys.exit(1)
-    # deassert SPISS
+    print "Deasserting SPISS"
     e = Event()
     e.src = eaddr.NETWORK
     e.cmd =  EVENTRXCMD_DSPSPISS
     e.data[0] = 0xFFFF
-
-    ea = eaddr.TXDest()
-    for d in dspaddrs:
-        ea[d] = 1
-    eio.sendEvent(ea, e)
+    reallysend(eio, ea, e)
 
 
+    print "Reasserting SPISS"
     e = Event()
     e.src = eaddr.NETWORK
     e.cmd =  EVENTRXCMD_DSPSPISS
     e.data[0] = 0x0000
+    reallysend(eio, ea, e)
 
-    ea = eaddr.TXDest()
-    for d in dspaddrs:
-        ea[d] = 1
-    
-    eio.sendEvent(ea, e)
     time.sleep(1)
 
     # load up the blocks and send
@@ -196,6 +187,7 @@ def main():
         for b in chunks:
             pos = 0
             while pos < len(b):
+                print "sending bytes ", pos, "-", pos+2
                 bytes = b[pos:pos+2]
 
                 words = struct.unpack(">H", bytes)
@@ -204,18 +196,19 @@ def main():
                 e.src = eaddr.NETWORK
                 e.cmd =  EVENTRXCMD_DATABUF
                 e.data[0] = words[0]
+                e.data[1] = pos / 2
 
                 ea = eaddr.TXDest()
                 for d in dspaddrs:
                     ea[d] = 1
 
-                eio.sendEvent(ea, e)
-
+                reallysend(eio, ea, e) # idempotent 
                 pos += 2
             e = Event()
             e.src = eaddr.NETWORK
             e.cmd =  EVENTRXCMD_DATABUFTX
-            e.data[0] = blockpos * 256 + cpos
+            #e.data[0] = blockpos * 256 + cpos
+            e.data[0] = pos/2
             ea = eaddr.TXDest()
             for d in dspaddrs:
                 ea[d] = 1

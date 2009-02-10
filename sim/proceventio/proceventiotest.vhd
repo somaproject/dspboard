@@ -199,7 +199,6 @@ architecture Behavioral of proceventiotest is
       CLK          : in  std_logic;
       RESET        : in  std_logic;
       CLKHI        : in  std_logic;
-      DEVICE       : in  std_logic_vector(7 downto 0);
       -- Event input
       ECYCLE       : in  std_logic;
       EARXBYTE     : in  std_logic_vector(7 downto 0);
@@ -217,7 +216,10 @@ architecture Behavioral of proceventiotest is
       DSPSPIMISO   : in  std_logic;
       DSPSPIMOSI   : out std_logic;
       DSPSPICLK    : out std_logic;
-      DSPSPIHOLD   : in  std_logic);
+      DSPSPIHOLD   : in  std_logic;
+      DSPUARTTX : out std_logic;
+      --  STATUS
+      LEDEVENT : out std_logic);
   end component;
 
   signal dreq   : std_logic                    := '0';
@@ -475,7 +477,6 @@ begin  -- Behavioral
       CLK          => clk,
       RESET        => RESET,
       CLKHI        => clk2x,
-      DEVICE       => devicea,
       ECYCLE       => ecycle,
       EARXBYTE     => EARXBYTEA,
       EARXBYTESEL  => EARXBYTESELA,
@@ -575,7 +576,6 @@ begin  -- Behavioral
       CLK          => clk,
       RESET        => RESET,
       CLKHI        => clk2x,
-      DEVICE       => deviceb,
       ECYCLE       => ecycle,
       EARXBYTE     => EARXBYTEB,
       EARXBYTESEL  => EARXBYTESELb,
@@ -675,7 +675,6 @@ begin  -- Behavioral
       CLK          => clk,
       RESET        => RESET,
       CLKHI        => clk2x,
-      DEVICE       => devicec,
       ECYCLE       => ecycle,
       EARXBYTE     => EARXBYTEC,
       EARXBYTESEL  => EARXBYTESELC,
@@ -775,7 +774,6 @@ begin  -- Behavioral
       CLK          => clk,
       RESET        => RESET,
       CLKHI        => clk2x,
-      DEVICE       => deviced,
       ECYCLE       => ecycle,
       EARXBYTE     => EARXBYTED,
       EARXBYTESEL  => EARXBYTESELD,

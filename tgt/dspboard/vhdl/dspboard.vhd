@@ -592,6 +592,8 @@ architecture Behavioral of dspboard is
   signal datafullcnta : std_logic_vector(15 downto 0) := (others => '0');
   signal datadebug : std_logic_vector(15 downto 0) := (others => '0');
   signal asdebug : std_logic_vector(47 downto 0) := (others => '0');
+
+  signal ledcnt : std_logic_vector(19 downto 0) := (others => '0');
   
 begin  -- Behavioral
 
@@ -1162,7 +1164,8 @@ begin  -- Behavioral
       if rising_edge(clk) then
         rxdatal <= rxdata;
         rxkl    <= rxk;
-        LEDPOWER <= datadebug(15);
+        LEDPOWER <= ledcnt(19);
+        ledcnt <= ledcnt + 1; 
         
         if datafulla = '1'  then
           datafullcnta <= datafullcnta + 1;

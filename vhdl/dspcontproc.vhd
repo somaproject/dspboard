@@ -144,8 +144,10 @@ architecture Behavioral of dspcontproc is
   component bootser
     port ( CLK   : in  std_logic;
            DIN   : in  std_logic_vector(15 downto 0);
+           ADDRIN : in std_logic_vector(15 downto 0); 
            WE    : in  std_logic;
            START : in  std_logic;
+           STARTLEN : in std_logic_vector(15 downto 0); 
            DONE  : out std_logic;
            MOSI  : out std_logic;
            HOLD  : in  std_logic;
@@ -154,9 +156,9 @@ architecture Behavioral of dspcontproc is
   end component;
 
   signal bootserwe      : std_logic := '0';
+  signal bootseraddrin : std_logic_vector(15 downto 0) := (others => '0');
+  signal bootserstartlen : std_logic_vector(15 downto 0) := (others => '0');
   signal bootserstart   : std_logic := '0';
-  signal bootserstartl  : std_logic := '0';
-  signal bootserstartll : std_logic := '0';
   signal bootserdone    : std_logic := '0';
 
 
@@ -220,8 +222,10 @@ begin  -- Behavioral
     port map (
       CLK   => clkhi,
       DIN   => oportdata,
+      ADDRIN => bootseraddrin, 
       WE    => bootserwe,
       START => bootserstart,
+      STARTLEN => bootserstartlen, 
       DONE  => bootserdone,
       MOSI  => DSPSPIMOSI,
       --MISO => DSPSPIMISO,
@@ -337,9 +341,11 @@ begin  -- Behavioral
 
   bootserwe <= '1' when oportaddr = X"02" and oportstrobe = '1' else '0';
 
+
   bootserstart <= '1' when oportaddr = X"03" and oportstrobe = '1' else '0';
 
   uarttxsend <= '1' when oportaddr = X"06" and oportstrobe = '1' else '0';
+  bootserstartlen <= oportdata(15 downto 0); 
   
   main : process(CLKHI)
   begin
@@ -354,8 +360,12 @@ begin  -- Behavioral
         DSPSPIEN  <= oportdata(0);
       elsif oportaddr = X"A0" and OPORTSTROBE = '1' then
         device    <= oportdata(7 downto 0);
+      elsif oportaddr = X"08" and OPORTSTROBE = '1' then
+        bootseraddrin    <= oportdata(15 downto 0);
       end if;
 
+
+      
       if oportaddr = X"06" and oportstrobe = '1' then
         uarttxdonel <= '0';
       else

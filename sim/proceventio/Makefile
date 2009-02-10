@@ -7,55 +7,55 @@ soma/somabackplane/body.dat: soma/touched ../../vhdl/somabackplane.vhd
 	mkdir -p soma
 	$(VHDLC) -work soma  ../../vhdl/somabackplane.vhd
 
-eproc/alu/behavioral.dat: eproc/touched ../../vhdl/somabackplane.vhd ../../vhdl/eproc/alu.vhd
+eproc/alu/behavioral.dat: eproc/touched ../../vhdl/somabackplane.vhd ../../vhdl/eproc/vhdl/alu.vhd
 	mkdir -p eproc
-	$(VHDLC) -work eproc  ../../vhdl/eproc/alu.vhd
+	$(VHDLC) -work eproc  ../../vhdl/eproc/vhdl/alu.vhd
 
-eproc/regfile/behavioral.dat: eproc/touched ../../vhdl/somabackplane.vhd ../../vhdl/eproc/alu.vhd ../../vhdl/eproc/regfile.vhd
+eproc/regfile/behavioral.dat: eproc/touched ../../vhdl/somabackplane.vhd ../../vhdl/eproc/vhdl/alu.vhd ../../vhdl/eproc/vhdl/regfile.vhd
 	mkdir -p eproc
-	$(VHDLC) -work eproc  ../../vhdl/eproc/regfile.vhd
+	$(VHDLC) -work eproc  ../../vhdl/eproc/vhdl/regfile.vhd
 
-eproc/ecore/behavioral.dat: eproc/touched ../../vhdl/somabackplane.vhd ../../vhdl/eproc/alu.vhd ../../vhdl/eproc/regfile.vhd ../../vhdl/eproc/ecore.vhd
+eproc/ecore/behavioral.dat: eproc/touched ../../vhdl/somabackplane.vhd ../../vhdl/eproc/vhdl/alu.vhd ../../vhdl/eproc/vhdl/regfile.vhd ../../vhdl/eproc/vhdl/ecore.vhd
 	mkdir -p eproc
-	$(VHDLC) -work eproc  ../../vhdl/eproc/ecore.vhd
+	$(VHDLC) -work eproc  ../../vhdl/eproc/vhdl/ecore.vhd
 
-eproc/eventtx/behavioral.dat: eproc/touched ../../vhdl/somabackplane.vhd ../../vhdl/eproc/alu.vhd ../../vhdl/eproc/regfile.vhd ../../vhdl/eproc/ecore.vhd ../../vhdl/eproc/eventtx.vhd
+eproc/eventtx/behavioral.dat: eproc/touched ../../vhdl/somabackplane.vhd ../../vhdl/eproc/vhdl/alu.vhd ../../vhdl/eproc/vhdl/regfile.vhd ../../vhdl/eproc/vhdl/ecore.vhd ../../vhdl/eproc/vhdl/eventtx.vhd
 	mkdir -p eproc
-	$(VHDLC) -work eproc  ../../vhdl/eproc/eventtx.vhd
+	$(VHDLC) -work eproc  ../../vhdl/eproc/vhdl/eventtx.vhd
 
-eproc/evtdnd/behavioral.dat: eproc/touched ../../vhdl/somabackplane.vhd ../../vhdl/eproc/alu.vhd ../../vhdl/eproc/regfile.vhd ../../vhdl/eproc/ecore.vhd ../../vhdl/eproc/eventtx.vhd ../../vhdl/eproc/evtdnd.vhd
+eproc/evtdnd/behavioral.dat: eproc/touched ../../vhdl/somabackplane.vhd ../../vhdl/eproc/vhdl/alu.vhd ../../vhdl/eproc/vhdl/regfile.vhd ../../vhdl/eproc/vhdl/ecore.vhd ../../vhdl/eproc/vhdl/eventtx.vhd ../../vhdl/eproc/vhdl/evtdnd.vhd
 	mkdir -p eproc
-	$(VHDLC) -work eproc  ../../vhdl/eproc/evtdnd.vhd
+	$(VHDLC) -work eproc  ../../vhdl/eproc/vhdl/evtdnd.vhd
 
-eproc/txreqeventbuffer/behavioral.dat: eproc/touched ../../vhdl/somabackplane.vhd ../../vhdl/eproc/alu.vhd ../../vhdl/eproc/regfile.vhd ../../vhdl/eproc/ecore.vhd ../../vhdl/eproc/eventtx.vhd ../../vhdl/eproc/evtdnd.vhd ../../vhdl/eproc/txreqeventbuffer.vhd
+eproc/txreqeventbuffer/behavioral.dat: eproc/touched ../../vhdl/somabackplane.vhd ../../vhdl/eproc/vhdl/alu.vhd ../../vhdl/eproc/vhdl/regfile.vhd ../../vhdl/eproc/vhdl/ecore.vhd ../../vhdl/eproc/vhdl/eventtx.vhd ../../vhdl/eproc/vhdl/evtdnd.vhd ../../vhdl/eproc/vhdl/txreqeventbuffer.vhd
 	mkdir -p eproc
-	$(VHDLC) -work eproc  ../../vhdl/eproc/txreqeventbuffer.vhd
+	$(VHDLC) -work eproc  ../../vhdl/eproc/vhdl/txreqeventbuffer.vhd
 
-eproc/txreqbrambuffer/behavioral.dat: eproc/touched ../../vhdl/somabackplane.vhd ../../vhdl/eproc/alu.vhd ../../vhdl/eproc/regfile.vhd ../../vhdl/eproc/ecore.vhd ../../vhdl/eproc/eventtx.vhd ../../vhdl/eproc/evtdnd.vhd ../../vhdl/eproc/txreqeventbuffer.vhd ../../vhdl/eproc/txreqbrambuffer.vhd
+eproc/txreqbrambuffer/behavioral.dat: eproc/touched ../../vhdl/somabackplane.vhd ../../vhdl/eproc/vhdl/alu.vhd ../../vhdl/eproc/vhdl/regfile.vhd ../../vhdl/eproc/vhdl/ecore.vhd ../../vhdl/eproc/vhdl/eventtx.vhd ../../vhdl/eproc/vhdl/evtdnd.vhd ../../vhdl/eproc/vhdl/txreqeventbuffer.vhd ../../vhdl/eproc/vhdl/txreqbrambuffer.vhd
 	mkdir -p eproc
-	$(VHDLC) -work eproc  ../../vhdl/eproc/txreqbrambuffer.vhd
+	$(VHDLC) -work eproc  ../../vhdl/eproc/vhdl/txreqbrambuffer.vhd
 
-eproc/eproc/behavioral.dat: eproc/touched ../../vhdl/somabackplane.vhd ../../vhdl/eproc/alu.vhd ../../vhdl/eproc/regfile.vhd ../../vhdl/eproc/ecore.vhd ../../vhdl/eproc/eventtx.vhd ../../vhdl/eproc/evtdnd.vhd ../../vhdl/eproc/txreqeventbuffer.vhd ../../vhdl/eproc/txreqbrambuffer.vhd ../../vhdl/eproc/eproc.vhd
+eproc/eproc/behavioral.dat: eproc/touched ../../vhdl/somabackplane.vhd ../../vhdl/eproc/vhdl/alu.vhd ../../vhdl/eproc/vhdl/regfile.vhd ../../vhdl/eproc/vhdl/ecore.vhd ../../vhdl/eproc/vhdl/eventtx.vhd ../../vhdl/eproc/vhdl/evtdnd.vhd ../../vhdl/eproc/vhdl/txreqeventbuffer.vhd ../../vhdl/eproc/vhdl/txreqbrambuffer.vhd ../../vhdl/eproc/vhdl/eproc.vhd
 	mkdir -p eproc
-	$(VHDLC) -work eproc  ../../vhdl/eproc/eproc.vhd
+	$(VHDLC) -work eproc  ../../vhdl/eproc/vhdl/eproc.vhd
 
-$(WORKDIR)/bootser/behavioral.dat: $(WORKDIR)/touched ../../vhdl/somabackplane.vhd ../../vhdl/eproc/alu.vhd ../../vhdl/eproc/regfile.vhd ../../vhdl/eproc/ecore.vhd ../../vhdl/eproc/eventtx.vhd ../../vhdl/eproc/evtdnd.vhd ../../vhdl/eproc/txreqeventbuffer.vhd ../../vhdl/eproc/txreqbrambuffer.vhd ../../vhdl/eproc/eproc.vhd ../../vhdl/bootser.vhd
+$(WORKDIR)/bootser/behavioral.dat: $(WORKDIR)/touched ../../vhdl/somabackplane.vhd ../../vhdl/eproc/vhdl/alu.vhd ../../vhdl/eproc/vhdl/regfile.vhd ../../vhdl/eproc/vhdl/ecore.vhd ../../vhdl/eproc/vhdl/eventtx.vhd ../../vhdl/eproc/vhdl/evtdnd.vhd ../../vhdl/eproc/vhdl/txreqeventbuffer.vhd ../../vhdl/eproc/vhdl/txreqbrambuffer.vhd ../../vhdl/eproc/vhdl/eproc.vhd ../../vhdl/bootser.vhd
 	mkdir -p $(WORKDIR)
 	$(VHDLC) ../../vhdl/bootser.vhd
 
-$(WORKDIR)/decodemux/behavioral.dat: $(WORKDIR)/touched ../../vhdl/somabackplane.vhd ../../vhdl/eproc/alu.vhd ../../vhdl/eproc/regfile.vhd ../../vhdl/eproc/ecore.vhd ../../vhdl/eproc/eventtx.vhd ../../vhdl/eproc/evtdnd.vhd ../../vhdl/eproc/txreqeventbuffer.vhd ../../vhdl/eproc/txreqbrambuffer.vhd ../../vhdl/eproc/eproc.vhd ../../vhdl/bootser.vhd ../../vhdl/bootser.vhd ../../vhdl/decodemux.vhd
+$(WORKDIR)/decodemux/behavioral.dat: $(WORKDIR)/touched ../../vhdl/somabackplane.vhd ../../vhdl/eproc/vhdl/alu.vhd ../../vhdl/eproc/vhdl/regfile.vhd ../../vhdl/eproc/vhdl/ecore.vhd ../../vhdl/eproc/vhdl/eventtx.vhd ../../vhdl/eproc/vhdl/evtdnd.vhd ../../vhdl/eproc/vhdl/txreqeventbuffer.vhd ../../vhdl/eproc/vhdl/txreqbrambuffer.vhd ../../vhdl/eproc/vhdl/eproc.vhd ../../vhdl/bootser.vhd ../../vhdl/bootser.vhd ../../vhdl/decodemux.vhd
 	mkdir -p $(WORKDIR)
 	$(VHDLC) ../../vhdl/decodemux.vhd
 
-$(WORKDIR)/encodemux/behavioral.dat: $(WORKDIR)/touched ../../vhdl/somabackplane.vhd ../../vhdl/eproc/alu.vhd ../../vhdl/eproc/regfile.vhd ../../vhdl/eproc/ecore.vhd ../../vhdl/eproc/eventtx.vhd ../../vhdl/eproc/evtdnd.vhd ../../vhdl/eproc/txreqeventbuffer.vhd ../../vhdl/eproc/txreqbrambuffer.vhd ../../vhdl/eproc/eproc.vhd ../../vhdl/bootser.vhd ../../vhdl/bootser.vhd ../../vhdl/decodemux.vhd ../../vhdl/decodemux.vhd ../../vhdl/encodemux.vhd
+$(WORKDIR)/encodemux/behavioral.dat: $(WORKDIR)/touched ../../vhdl/somabackplane.vhd ../../vhdl/eproc/vhdl/alu.vhd ../../vhdl/eproc/vhdl/regfile.vhd ../../vhdl/eproc/vhdl/ecore.vhd ../../vhdl/eproc/vhdl/eventtx.vhd ../../vhdl/eproc/vhdl/evtdnd.vhd ../../vhdl/eproc/vhdl/txreqeventbuffer.vhd ../../vhdl/eproc/vhdl/txreqbrambuffer.vhd ../../vhdl/eproc/vhdl/eproc.vhd ../../vhdl/bootser.vhd ../../vhdl/bootser.vhd ../../vhdl/decodemux.vhd ../../vhdl/decodemux.vhd ../../vhdl/encodemux.vhd
 	mkdir -p $(WORKDIR)
 	$(VHDLC) ../../vhdl/encodemux.vhd
 
-$(WORKDIR)/regfile/behavioral.dat: $(WORKDIR)/touched ../../vhdl/somabackplane.vhd ../../vhdl/eproc/alu.vhd ../../vhdl/eproc/regfile.vhd ../../vhdl/eproc/ecore.vhd ../../vhdl/eproc/eventtx.vhd ../../vhdl/eproc/evtdnd.vhd ../../vhdl/eproc/txreqeventbuffer.vhd ../../vhdl/eproc/txreqbrambuffer.vhd ../../vhdl/eproc/eproc.vhd ../../vhdl/bootser.vhd ../../vhdl/bootser.vhd ../../vhdl/decodemux.vhd ../../vhdl/decodemux.vhd ../../vhdl/encodemux.vhd ../../vhdl/encodemux.vhd ../../vhdl/regfile.vhd
+$(WORKDIR)/regfile/behavioral.dat: $(WORKDIR)/touched ../../vhdl/somabackplane.vhd ../../vhdl/eproc/vhdl/alu.vhd ../../vhdl/eproc/vhdl/regfile.vhd ../../vhdl/eproc/vhdl/ecore.vhd ../../vhdl/eproc/vhdl/eventtx.vhd ../../vhdl/eproc/vhdl/evtdnd.vhd ../../vhdl/eproc/vhdl/txreqeventbuffer.vhd ../../vhdl/eproc/vhdl/txreqbrambuffer.vhd ../../vhdl/eproc/vhdl/eproc.vhd ../../vhdl/bootser.vhd ../../vhdl/bootser.vhd ../../vhdl/decodemux.vhd ../../vhdl/decodemux.vhd ../../vhdl/encodemux.vhd ../../vhdl/encodemux.vhd ../../vhdl/regfile.vhd
 	mkdir -p $(WORKDIR)
 	$(VHDLC) ../../vhdl/regfile.vhd
 
-$(WORKDIR)/dspcontproc/behavioral.dat: $(WORKDIR)/touched ../../vhdl/somabackplane.vhd ../../vhdl/eproc/alu.vhd ../../vhdl/eproc/regfile.vhd ../../vhdl/eproc/ecore.vhd ../../vhdl/eproc/eventtx.vhd ../../vhdl/eproc/evtdnd.vhd ../../vhdl/eproc/txreqeventbuffer.vhd ../../vhdl/eproc/txreqbrambuffer.vhd ../../vhdl/eproc/eproc.vhd ../../vhdl/bootser.vhd ../../vhdl/bootser.vhd ../../vhdl/decodemux.vhd ../../vhdl/decodemux.vhd ../../vhdl/encodemux.vhd ../../vhdl/encodemux.vhd ../../vhdl/regfile.vhd ../../vhdl/regfile.vhd ../../vhdl/dspcontproc.vhd
+$(WORKDIR)/dspcontproc/behavioral.dat: $(WORKDIR)/touched ../../vhdl/somabackplane.vhd ../../vhdl/eproc/vhdl/alu.vhd ../../vhdl/eproc/vhdl/regfile.vhd ../../vhdl/eproc/vhdl/ecore.vhd ../../vhdl/eproc/vhdl/eventtx.vhd ../../vhdl/eproc/vhdl/evtdnd.vhd ../../vhdl/eproc/vhdl/txreqeventbuffer.vhd ../../vhdl/eproc/vhdl/txreqbrambuffer.vhd ../../vhdl/eproc/vhdl/eproc.vhd ../../vhdl/bootser.vhd ../../vhdl/bootser.vhd ../../vhdl/decodemux.vhd ../../vhdl/decodemux.vhd ../../vhdl/encodemux.vhd ../../vhdl/encodemux.vhd ../../vhdl/regfile.vhd ../../vhdl/regfile.vhd ../../vhdl/dspcontproc.vhd
 	mkdir -p $(WORKDIR)
 	$(VHDLC) ../../vhdl/dspcontproc.vhd
 
