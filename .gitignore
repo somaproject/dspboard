@@ -14,3 +14,14 @@ xlnx_auto_0_xdb/
 *.imem
 #*#
 runner
+behavioral.dat
+behavioral.dbs
+_primary.dbs
+_primary.dat
+_info
+\#*\#
+body.dat
+body.dbs
+touched
+disassem.out
+*.dump
