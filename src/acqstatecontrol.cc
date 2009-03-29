@@ -92,29 +92,29 @@ void AcqStateControl::serialCommandSend()
     
   case CMD_HPF_SET: 
     {
-    AcqCommand hcmd; 
-    char cmdid = getNextCMDID(); 
-    hcmd.cmdid = cmdid; 
-    hcmd.cmd = 2; 
-    hcmd.data = (currentMaskPos_ << 24) | cmdCurrentVal_ << 16; 
-
-    pendingSerialCMDID_ = cmdid; 
-    pAcqSerial_->sendCommand(&hcmd); 
-    break; 
+      AcqCommand hcmd; 
+      char cmdid = getNextCMDID(); 
+      hcmd.cmdid = cmdid; 
+      hcmd.cmd = 2; 
+      hcmd.data = (currentMaskPos_ << 24) | cmdCurrentVal_ << 16; 
+      
+      pendingSerialCMDID_ = cmdid; 
+      pAcqSerial_->sendCommand(&hcmd); 
+      break; 
     }
-
+    
   case CMD_INSEL_SET: 
     {
-    AcqCommand icmd; 
-    char cmdid = getNextCMDID(); 
-    char chan = cmdCurrentVal_; 
-    icmd.cmdid = cmdid; 
-    icmd.cmd = 3; 
-    icmd.data = chan; 
-    icmd.data = icmd.data << 24; 
-    pendingSerialCMDID_ = cmdid; 
-    pAcqSerial_->sendCommand(&icmd); 
-    break; 
+      AcqCommand icmd; 
+      char cmdid = getNextCMDID(); 
+      char chan = cmdCurrentVal_; 
+      icmd.cmdid = cmdid; 
+      icmd.cmd = 3; 
+      icmd.data = chan; 
+      icmd.data = icmd.data << 24; 
+      pendingSerialCMDID_ = cmdid; 
+      pAcqSerial_->sendCommand(&icmd); 
+      break; 
     }
   }
   

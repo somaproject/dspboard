@@ -104,10 +104,8 @@ void AcqDataSourceControl::sendLinkStatusEvent()
   } else {
     bcastEventTX_.event.data[1] = 0;
   }
-  bcastEventTX_.event.data[2] = pAcqStateControl_->isReady(); 
-  bcastEventTX_.event.data[3] = pAcqStateControl_->pendingSerialCMDID_; 
-  bcastEventTX_.event.data[3] =  (bcastEventTX_.event.data[3] << 8) | 
-    pAcqStateControl_->mostRecentReceivedCMDID_; 
+  bcastEventTX_.event.data[2] = pAcqStateControl_->pendingSerialCMDID_; 
+  bcastEventTX_.event.data[3] = pAcqStateControl_->mostRecentReceivedCMDID_; 
     
   bcastEventTX_.event.data[4] = pAcqStateControl_->controlstate_; 
   bcastEventTX_.event.data[4] = bcastEventTX_.event.data[4]  << 8 | 

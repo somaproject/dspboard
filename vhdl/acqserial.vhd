@@ -27,7 +27,7 @@ entity acqserial is
     -- link status
     DSPALINKUP : out std_logic;
     DSPBLINKUP : out std_logic;
-    DEBUG      : out std_logic_vector(47 downto 0)
+    DEBUG      : out std_logic_vector(31 downto 0)
     );
 end acqserial;
 
@@ -72,6 +72,14 @@ architecture Behavioral of acqserial is
   signal cmdsts, cmdid : std_logic_vector(3 downto 0) := (others => '0');
   signal success       : std_logic                    := '0';
 
+  -- debug
+  signal cmdidl, cmdidll : std_logic_vector(3 downto 0) := (others => '0');
+  signal cmdoutl, cmdoutll : std_logic_vector(7 downto 0) := (others => '0');
+  signal cmdina_cmdidl : std_logic_vector(3 downto 0) := (others => '0');
+  signal cmdinb_cmdidl : std_logic_vector(3 downto 0) := (others => '0');
+  signal successl       : std_logic                    := '0';
+  signal successll      : std_logic                    := '0';
+  
 
   -- input componnets
   component fiberrx
@@ -227,16 +235,22 @@ begin  -- Behavioral
 
 
   process(CLK)
-    variable debugcnt : std_logic_vector(15 downto 0) := (others => '0');
-
   begin
     if rising_edge(CLK) then
-      if newcmda = '1' then
-
-        debugcnt := debugcnt + 1;
-      end if;
-      DEBUG <= X"000" & cmdid & X"000" & cmdsts  & debugcnt;
-
+      cmdidl <= cmdid;
+      cmdidll <= cmdidl; 
+      cmdoutl <= cmdout(7 downto 0);
+      cmdoutll <= cmdoutl;
+      successl <= success;
+      successll <= successl;
+      
+--      if newcmdb = '1' then
+--        cmdinb_cmdidl <= cmdinb(7 downto 4); 
+--      end if;
+--      if newcmda = '1' then
+--        cmdina_cmdidl <= cmdina(7 downto 4); 
+--      end if;
+      DEBUG <= X"0000" & cmdoutll &  "000" & successll & cmdidll ;  --  & cmdinb_cmdidl & cmdina_cmdidl & lcmdid  & lcmdsts;
     end if;
   end process;
 

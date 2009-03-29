@@ -26,6 +26,8 @@ OUTPUT_UARTTX = 0x06
 OUTPUT_DEVICE = 0xA0
 
 INPUT_BOOTSERDONE = 0x03
+INPUT_DEBUGINLOW = 0x09
+INPUT_DEBUGINHIGH = 0x0A
 
 EVENTRXCMD_PING = 0x08
 
@@ -36,11 +38,13 @@ EVENTRXCMD_DSPSPISS = 0x34
 EVENTRXCMD_DSPSPIEN = 0x35
 EVENTRXCMD_DSPRESET = 0x36
 EVENTRXCMD_UARTTX = 0x37
+EVENTRXCMD_DEBUG = 0x38
 
 EVENTRXCMD_YOUARE = 0x01
 
 
 EVENTTXCMD_PING_RESPONSE = 0x09
+EVENTTXCMD_DEBUG_RESPONSE = 0x38
 
 env = createEnvironment()
 counter = env.createVariable("counter")
@@ -49,6 +53,7 @@ pendingDataBufTXSrc = env.createVariable("pendingDataBufTXSrc")
 pendingDataBufTXNonce = env.createVariable("pendingDataBufTXNonce")
 
 # state variables are used for persistence across ECYCLEs
+
 
 def createEventCycleProc():
   proc = env.createECycleProc()
@@ -105,6 +110,22 @@ def pingResponseEvent():
   proc.output(EVENTOUT_DATA4, tmp)
 
   proc.load(tmp, EVENTTXCMD_PING_RESPONSE)
+  proc.output(EVENTOUT_CMD, tmp)
+
+def debugResponseEvent():
+  proc = env.createEProc((EVENTRXCMD_DEBUG, EVENTRXCMD_DEBUG), (0, 255))
+  tmp = proc.createVariable("tmp")
+
+  proc.move(tmp, ereg.src)
+  proc.output(EVENTOUT_DEST, tmp)
+
+  proc.input(INPUT_DEBUGINLOW, tmp)
+  proc.output(EVENTOUT_DATA1, tmp)
+
+  proc.input(INPUT_DEBUGINHIGH, tmp)
+  proc.output(EVENTOUT_DATA0, tmp)
+
+  proc.load(tmp, EVENTTXCMD_DEBUG_RESPONSE)
   proc.output(EVENTOUT_CMD, tmp)
 
 
@@ -169,6 +190,7 @@ def proc_uarttx():
 
 createEnableEventCycleProc()
 createEventCycleProc()
+debugResponseEvent()
 pingResponseEvent()
 pingSetLT()
 

@@ -140,9 +140,9 @@ int main_loop()
 					  config.getEventDevice()); 
   
 
-  //RawMainLoop * pMainLoop = new RawMainLoop(); 
+  RawMainLoop * pMainLoop = new RawMainLoop(); 
   //MemTestProc * mtp = new MemTestProc(ed, etx, config.getEventDevice()); 
-  SomaMainLoop * pMainLoop = new SomaMainLoop();
+  //SomaMainLoop * pMainLoop = new SomaMainLoop();
   pMainLoop->setup(ed, etx, acqserial, timer, eep, dataout, &config); 
   acqserial->start(); 
 

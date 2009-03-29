@@ -111,7 +111,9 @@ entity dspcontproc is
     DSPSPIHOLD   : in  std_logic;
     DSPUARTTX    : out std_logic;
     -- STATUS
-    LEDEVENT     : out std_logic
+    LEDEVENT     : out std_logic;
+    DEBUGIN : in std_logic_vector(31 downto 0)
+    
     );
 end dspcontproc;
 
@@ -138,7 +140,9 @@ architecture Behavioral of dspcontproc is
   signal lledevent : std_logic := '0';
 
   signal eventtxwe : std_logic := '0';
-
+  signal debuginl : std_logic_vector(31 downto 0) := (others => '0');
+  signal debuginll : std_logic_vector(31 downto 0) := (others => '0');
+  
   signal device : std_logic_vector(7 downto 0) := (others => '1');  -- not set
 
   component bootser
@@ -379,6 +383,10 @@ begin  -- Behavioral
           iportdata <= X"000" & "000" & bootserdone;
         elsif iportaddr = X"07" then
           iportdata <= X"000" & "000" & uarttxdonel;
+        elsif iportaddr = X"09" then
+          iportdata <= debuginll(15 downto 0); 
+--        elsif iportaddr = X"0A" then
+--          iportdata <= debuginll(31 downto 16); 
         end if;
       end if;
 
@@ -387,10 +395,19 @@ begin  -- Behavioral
       enewoutl <= enewout;
       enewoutd <= enewoutl or enewout;
 
+      debuginll <= debuginl; 
+
 
     end if;
 
   end process main;
 
+  debugproc: process(CLK)
+    begin
+      if rising_edge(CLK) then
+        debuginl <= DEBUGIN;
+      end if;
+    end process debugproc;
 
+    
 end Behavioral;
