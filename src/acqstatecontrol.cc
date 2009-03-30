@@ -286,7 +286,7 @@ void AcqStateControl::controlStateAdvance(AcqFrame * af)
   chanmask[2] = 1; 
   chanmask[3] = 1; 
   chanmask[4] = 1; 
-
+  acqboardversion_ = af->version; 
   mostRecentReceivedCMDID_ = af->cmdid; 
 
   switch(controlstate_) {

@@ -21,6 +21,7 @@ entity framedis is
          SAMPLESEL  : in  std_logic_vector(3 downto 0);
          CMDID      : out std_logic_vector(3 downto 0);
          CMDST      : out std_logic_vector(3 downto 0);
+         VERSION : out std_logic_vector(7 downto 0); 
          SUCCESS : out std_logic);
 end framedis;
 
@@ -148,6 +149,7 @@ begin
           samplein(7 downto 0) <= DIN;
         end if;
 
+        
         -- COMMAND-STATUS related registers
         if incnt = 21 and inwe = '1' then
           lcmdid <= DIN(4 downto 1);
@@ -157,7 +159,10 @@ begin
         if incnt = 0 and inwe = '1' then
           lcmdst <= DIN(3 downto 0);
         end if;
-
+        
+         if incnt = 24 and inwel = '1' then
+           VERSION <= DIN; 
+         end if;
 
         --- final latching
         if donef = '1' then

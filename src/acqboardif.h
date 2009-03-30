@@ -12,6 +12,7 @@ class AcqFrame
   bool loading; 
   unsigned char chksum; 
   short samples[10]; 
+  unsigned char version; 
 }; 
 
 class AcqCommand

@@ -45,6 +45,8 @@ public:
   unsigned char sequentialCMDID_;  
   // This is the current pending cmdid
   unsigned char mostRecentReceivedCMDID_;  
+
+  unsigned char acqboardversion_; 
   
   bool isReady(); 
   

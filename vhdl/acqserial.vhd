@@ -22,12 +22,12 @@ entity acqserial is
     DSPBSERDT   : out std_logic;
     DSPBSERTFS  : out std_logic;
     -- uart interfaces
-    DSPAUARTRX : in  std_logic;
-    DSPBUARTRX : in  std_logic;
+    DSPAUARTRX  : in  std_logic;
+    DSPBUARTRX  : in  std_logic;
     -- link status
-    DSPALINKUP : out std_logic;
-    DSPBLINKUP : out std_logic;
-    DEBUG      : out std_logic_vector(31 downto 0)
+    DSPALINKUP  : out std_logic;
+    DSPBLINKUP  : out std_logic;
+    DEBUG       : out std_logic_vector(31 downto 0)
     );
 end acqserial;
 
@@ -59,6 +59,7 @@ architecture Behavioral of acqserial is
 
   signal serrfsa, serrfsb : std_logic := '0';
 
+  signal version : std_logic_vector(7 downto 0) := (others => '0');
 
   -- outputs
   signal cmdout  : std_logic_vector(47 downto 0) := (others => '0');
@@ -73,17 +74,17 @@ architecture Behavioral of acqserial is
   signal success       : std_logic                    := '0';
 
   -- debug
-  signal cmdidl, cmdidll : std_logic_vector(3 downto 0) := (others => '0');
+  signal cmdidl, cmdidll   : std_logic_vector(3 downto 0) := (others => '0');
   signal cmdoutl, cmdoutll : std_logic_vector(7 downto 0) := (others => '0');
-  signal cmdina_cmdidl : std_logic_vector(3 downto 0) := (others => '0');
-  signal cmdinb_cmdidl : std_logic_vector(3 downto 0) := (others => '0');
-  signal successl       : std_logic                    := '0';
-  signal successll      : std_logic                    := '0';
-  
+  signal cmdina_cmdidl     : std_logic_vector(3 downto 0) := (others => '0');
+  signal cmdinb_cmdidl     : std_logic_vector(3 downto 0) := (others => '0');
+  signal successl          : std_logic                    := '0';
+  signal successll         : std_logic                    := '0';
+
 
   -- input componnets
   component fiberrx
-    port ( CLK      : in  std_logic;
+    port (CLK       : in  std_logic;
            DIN      : in  std_logic;
            DATAOUT  : out std_logic_vector(7 downto 0);
            KOUT     : out std_logic;
@@ -95,7 +96,7 @@ architecture Behavioral of acqserial is
 
 
   component framedis
-    port ( CLK        : in  std_logic;
+    port (CLK         : in  std_logic;
            RESET      : in  std_logic;
            DIN        : in  std_logic_vector(7 downto 0);
            INWE       : in  std_logic;
@@ -107,7 +108,8 @@ architecture Behavioral of acqserial is
            SAMPLESEL  : in  std_logic_vector(3 downto 0);
            CMDID      : out std_logic_vector(3 downto 0);
            CMDST      : out std_logic_vector(3 downto 0);
-           SUCCESS    : out std_logic);
+           SUCCESS    : out std_logic;
+           VERSION    : out std_logic_vector(7 downto 0));
   end component;
 
   component acqcmdmux
@@ -136,13 +138,14 @@ architecture Behavioral of acqserial is
       SAMPLESEL : out std_logic_vector(3 downto 0);
       CMDSTS    : in  std_logic_vector(3 downto 0);
       CMDID     : in  std_logic_vector(3 downto 0);
-      SUCCESS   : in  std_logic
+      SUCCESS   : in  std_logic;
+      VERSION : in std_logic_vector(7 downto 0)
       );
   end component;
 
 -- output
   component fibertx
-    port ( CLK      : in  std_logic;
+    port (CLK       : in  std_logic;
            CMDIN    : in  std_logic_vector(47 downto 0);
            SENDCMD  : in  std_logic;
            FIBEROUT : out std_logic);
@@ -185,7 +188,8 @@ begin  -- Behavioral
       CMDST      => cmdsts,
       SAMPLESEL  => samplesel,
       SAMPLE     => sample,
-      success    => success);
+      success    => success,
+      VERSION => version);
 
 
   sportacqser_inst : sportacqser
@@ -200,7 +204,8 @@ begin  -- Behavioral
       SAMPLESEL => samplesel,
       CMDSTS    => cmdsts,
       CMDID     => cmdid,
-      SUCCESS   => success);
+      SUCCESS   => success,
+      VERSION => version);
 
 
   acqcmdmux_inst : acqcmdmux
@@ -237,20 +242,20 @@ begin  -- Behavioral
   process(CLK)
   begin
     if rising_edge(CLK) then
-      cmdidl <= cmdid;
-      cmdidll <= cmdidl; 
-      cmdoutl <= cmdout(7 downto 0);
-      cmdoutll <= cmdoutl;
-      successl <= success;
+      cmdidl    <= cmdid;
+      cmdidll   <= cmdidl;
+      cmdoutl   <= cmdout(7 downto 0);
+      cmdoutll  <= cmdoutl;
+      successl  <= success;
       successll <= successl;
-      
+
 --      if newcmdb = '1' then
 --        cmdinb_cmdidl <= cmdinb(7 downto 4); 
 --      end if;
 --      if newcmda = '1' then
 --        cmdina_cmdidl <= cmdina(7 downto 4); 
 --      end if;
-      DEBUG <= X"0000" & cmdoutll &  "000" & successll & cmdidll ;  --  & cmdinb_cmdidl & cmdina_cmdidl & lcmdid  & lcmdsts;
+      DEBUG <= X"0000" & cmdoutll & "000" & successll & cmdidll;  --  & cmdinb_cmdidl & cmdina_cmdidl & lcmdid  & lcmdsts;
     end if;
   end process;
 
@@ -259,7 +264,7 @@ begin  -- Behavioral
   fibertx_inst : fibertx
     port map (
       CLK      => clkhi,
-      CMDIN    => cmdout,              
+      CMDIN    => cmdout,
       SENDCMD  => sendcmd,
       FIBEROUT => FIBEROUT);
 

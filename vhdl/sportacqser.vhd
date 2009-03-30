@@ -15,7 +15,8 @@ entity sportacqser is
     SAMPLESEL   : out std_logic_vector(3 downto 0);
     CMDSTS      : in  std_logic_vector(3 downto 0);
     CMDID       : in  std_logic_vector(3 downto 0);
-    SUCCESS : in std_logic
+    SUCCESS : in std_logic;
+    VERSION : in std_logic_vector(7 downto 0)
     );
 
 end sportacqser;
@@ -47,10 +48,12 @@ architecture Behavioral of sportacqser is
   signal doutbit, ldoutbit : std_logic                     := '0';
   signal doutword          : std_logic_vector(15 downto 0) := (others => '0');
 
-
+  signal versionl : std_logic_vector(7 downto 0);
+  
 begin  -- Behavioral
 
-  doutword <= successl & "000" & cmdidl & "0000" & cmdstsl when bitpos(7 downto 4) = "0000"
+  doutword <= successl & "000" & cmdidl & "0000" & cmdstsl when bitpos(7 downto 4) = X"0"
+              else X"00" & versionl when bitpos(7 downto 4) = X"C"
               else SAMPLEIN;
 
   ldoutbit  <= doutword(0)  when bitpos(3 downto 0) = "0000" else
@@ -118,7 +121,8 @@ begin  -- Behavioral
       end if;
 
       inenll <= inenl;
-
+      versionl <= VERSION;
+      
     end if;
   end process main;
 
@@ -171,8 +175,6 @@ begin  -- Behavioral
         else
           ns <= clkl;
         end if;
-
-
 
       when dones =>
         lsclk <= '0';

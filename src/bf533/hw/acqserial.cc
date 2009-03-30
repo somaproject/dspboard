@@ -130,6 +130,8 @@ void AcqSerial::getNextFrame(AcqFrame * af)
     af->samples[i] = RXbuffer_[curReadPos_ * 16 + i +1]; 
   }
   
+  af->version = RXbuffer_[curReadPos_ * 16 + 12]; 
+
   curReadPos_ = (curReadPos_ +1) % RXBUFLEN_; 
   
   

@@ -116,7 +116,7 @@ begin
           yout(9)(7 downto 0)  when bcnt = 21 else
           cll                  when bcnt = 22 else
           ckll                 when bcnt = 23 else
-          X"00";
+          X"57";                        -- fake version number
 
 
   main : process(clk, reset)
