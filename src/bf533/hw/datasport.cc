@@ -63,8 +63,6 @@ void DataSPORT::sendPending()
     if (isDMADone()) {
       txPending_ = false; 
       // FIXME DEBUGGING LED flashes when DMA is done
-      *pFIO_DIR    |= 0x0100;
-      *pFIO_FLAG_D |= 0x0100;
       delay_ = 9; 
     } else {
       return;  // DMA still pending
@@ -77,8 +75,6 @@ void DataSPORT::sendPending()
   if (!isSPORTHoldRegEmpty()) {
     return; 
   }
-
-  *pFIO_FLAG_D &= ~0x0100;
 
   if (isFPGAFIFOFull() ) {
     return; 
