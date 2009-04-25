@@ -39,12 +39,14 @@ EVENTRXCMD_DSPSPIEN = 0x35
 EVENTRXCMD_DSPRESET = 0x36
 EVENTRXCMD_UARTTX = 0x37
 EVENTRXCMD_DEBUG = 0x38
+EVENTRXCMD_DEBUG2 = 0x39
 
 EVENTRXCMD_YOUARE = 0x01
 
 
 EVENTTXCMD_PING_RESPONSE = 0x09
 EVENTTXCMD_DEBUG_RESPONSE = 0x38
+EVENTTXCMD_DEBUG2_RESPONSE = 0x39
 
 env = createEnvironment()
 counter = env.createVariable("counter")
@@ -129,6 +131,23 @@ def debugResponseEvent():
   proc.output(EVENTOUT_CMD, tmp)
 
 
+def debug2ResponseEvent():
+  proc = env.createEProc((EVENTRXCMD_DEBUG2, EVENTRXCMD_DEBUG2), (0, 255))
+  tmp = proc.createVariable("tmp")
+
+  proc.move(tmp, ereg.src)
+  proc.output(EVENTOUT_DEST, tmp)
+
+  proc.input(INPUT_BOOTSERDONE, tmp)
+  proc.output(EVENTOUT_DATA0, tmp)
+
+  proc.move(tmp, env.pendingDataBufTXNonce)
+  proc.output(EVENTOUT_DATA1, tmp)
+
+  proc.load(tmp, EVENTTXCMD_DEBUG2_RESPONSE)
+  proc.output(EVENTOUT_CMD, tmp)
+
+
 def pingSetLT():
   proc = env.createEProc((EVENTRXCMD_LEDSET, EVENTRXCMD_LEDSET ), (0, 255))
 
@@ -149,9 +168,9 @@ def proc_databuftx():
   proc = env.createEProc((EVENTRXCMD_DATABUFTX, EVENTRXCMD_DATABUFTX), (0, 255))
   tmp = proc.createVariable("tmp")
   proc.move(env.pendingDataBufTXSrc, ereg.src)
-  proc.move(env.pendingDataBufTXNonce, ereg.edata[0])
+  proc.move(env.pendingDataBufTXNonce, ereg.edata[1])
   
-  proc.move(tmp, ereg.edata[0])
+  proc.move(tmp, ereg.edata[0]) # this is the length of the buffer / packet
   proc.output(OUTPUT_BOOTSTART, tmp)
   proc.load(tmp, 1)
   proc.add(env.buftxcounter, tmp)
@@ -191,6 +210,7 @@ def proc_uarttx():
 createEnableEventCycleProc()
 createEventCycleProc()
 debugResponseEvent()
+#debug2ResponseEvent()
 pingResponseEvent()
 pingSetLT()
 

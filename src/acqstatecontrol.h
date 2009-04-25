@@ -84,7 +84,7 @@ public:
   char pendingSerialCMDID_; 
 
   uint16_t startup_holdoff_; // fix bug? 
-
+  uint16_t retry_delay_; 
   // callbacks 
 
   void resetAll(); 

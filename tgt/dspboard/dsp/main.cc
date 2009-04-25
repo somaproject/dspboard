@@ -18,6 +18,7 @@
 #include <acqdatasource.h>
 #include <acqdatasourcecontrol.h>
 #include <fakesource.h>
+#include <mainloops/noopmainloop.h>
 #include <mainloops/rawmainloop.h>
 #include <mainloops/somamainloop.h>
 #include <sinks/rawsink.h>
@@ -140,7 +141,7 @@ int main_loop()
 					  config.getEventDevice()); 
   
 
-  RawMainLoop * pMainLoop = new RawMainLoop(); 
+  NoOpMainLoop * pMainLoop = new NoOpMainLoop(); 
   //MemTestProc * mtp = new MemTestProc(ed, etx, config.getEventDevice()); 
   //SomaMainLoop * pMainLoop = new SomaMainLoop();
   pMainLoop->setup(ed, etx, acqserial, timer, eep, dataout, &config); 
@@ -160,7 +161,7 @@ int main_loop()
     // ------------------------------------------------------------------
 
     bm->start(4); 
-
+    //    setEventLED(true); 
     if (eventbuf == 0 and ! eventrx->empty()){ 
       eventbuf = eventrx->getReadBuffer(); 
       ed->parseECycleBuffer(eventbuf); 
@@ -179,6 +180,8 @@ int main_loop()
 	  }
       }
     }
+    //setEventLED(false); 
+
     eep->erx_errors = eventrx->errorCount; 
     bm->stop(4); 
     bm->start(5); 

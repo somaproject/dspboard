@@ -885,7 +885,7 @@ begin  -- Behavioral
       DSPUARTTX   => DSPUARTTXC,
 
       LEDEVENT => LEDEVENTC,
-      DEBUGIN => X"ABCDEF12");
+      DEBUGIN => asdebugb);
 
   DSPRESETC     <= dspresetcint;
   dspresetcintn <= not dspresetcint;
@@ -974,7 +974,7 @@ begin  -- Behavioral
       DSPUARTTX   => DSPUARTTXD,
 
       LEDEVENT => LEDEVENTD,
-      DEBUGIN => X"ABCDEF12");
+      DEBUGIN => X"00000000");
 
   DSPRESETd     <= dspresetdint;
   dspresetdintn <= not dspresetdint;

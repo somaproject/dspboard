@@ -1,5 +1,5 @@
-#ifndef DEFAULTMAINLOOP_H
-#define DEFAULTMAINLOOP_H
+#ifndef NOOPMAINLOOP_H
+#define NOOPMAINLOOP_H
 
 #include "mainloop.h"
 #include <systemtimer.h>
@@ -10,7 +10,7 @@
 #include <sinks/rawsink.h>
 #include <dsp.h>
 
-class RawMainLoop : public MainLoop
+class NoOpMainLoop : public MainLoop
 {
  public:  
   void setup(EventDispatch * ed, EventTX * etx, AcqSerial * as, 
@@ -39,10 +39,6 @@ class RawMainLoop : public MainLoop
   AcqDataSource * pAcqDataSource_; 
 
  private:  
-  RawSink * pRawSinkA_; 
-  RawSink * pRawSinkB_; 
-  RawSink * pRawSinkC_;  
-  RawSink * pRawSinkD_;  
   
 }; 
 

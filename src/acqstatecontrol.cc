@@ -312,7 +312,7 @@ void AcqStateControl::controlStateAdvance(AcqFrame * af)
       pAcqStateReceiver_->onLinkChange(true); 
     
       controlstate_ = STATE_INIT_HOLDOFF; 
-      startup_holdoff_ = 100; 
+      startup_holdoff_ = 1000; 
     }
     break; 
   case STATE_INIT_HOLDOFF:
@@ -331,14 +331,21 @@ void AcqStateControl::controlStateAdvance(AcqFrame * af)
       //std::cout << "STATE_INIT_GAINS" << std::endl;
       send_setGain(chanmask, 0); 
       controlstate_ = STATE_INIT_GAINS_WAIT; 
+      retry_delay_ = 10000; 
     }
     break; 
   case STATE_INIT_GAINS_WAIT:
     {
       //std::cout << "STATE_INIT_GAINS_WAIT" << std::endl;
-
+      
       if (cmdstate_ == CMD_GAIN_DONE) {
 	controlstate_ = STATE_INIT_HPFS; // /STATE_INIT_HPFS; 
+      } else {
+	retry_delay_ -= 1;
+	if (retry_delay_ == 0)
+	  {
+	    controlstate_ = STATE_INIT_GAINS; 
+	  }
       }
     }
     break; 

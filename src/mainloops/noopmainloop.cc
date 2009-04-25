@@ -1,6 +1,6 @@
-#include "rawmainloop.h"
+#include "noopmainloop.h"
 
-void RawMainLoop::setup(EventDispatch * ed, EventTX * etx, 
+void NoOpMainLoop::setup(EventDispatch * ed, EventTX * etx, 
 			AcqSerial * as, 
 			SystemTimer * timer, EventEchoProc * eep, 
 			DataOut * dout, 
@@ -29,21 +29,9 @@ void RawMainLoop::setup(EventDispatch * ed, EventTX * etx,
   
   pAcqStateControl_->setAcqStateReceiver(pAcqDataSourceControl_); 
 
-
-  RawSink * pRawSinkA_ = new RawSink(timer_, pDataOut_, pConfig_->getDataSrc(), 0); 
-  RawSink * pRawSinkB_ = new RawSink(timer_, pDataOut_, pConfig_->getDataSrc(), 1); 
-  RawSink * pRawSinkC_ = new RawSink(timer_, pDataOut_, pConfig_->getDataSrc(), 2); 
-  RawSink * pRawSinkD_ = new RawSink(timer_, pDataOut_, pConfig_->getDataSrc(), 3); 
-
-  pAcqDataSource_->sourceA.connect(pRawSinkA_->sink); 
-  pAcqDataSource_->sourceB.connect(pRawSinkB_->sink); 
-  pAcqDataSource_->sourceC.connect(pRawSinkC_->sink); 
-  pAcqDataSource_->sourceD.connect(pRawSinkD_->sink); 
-
-
 }
 
-void RawMainLoop::runloop()
+void NoOpMainLoop::runloop()
 {
   eep_->benchStart(0); 
   bool linkup = pAcqSerial_->checkLinkUp(); 
