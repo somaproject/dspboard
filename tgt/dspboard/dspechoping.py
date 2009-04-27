@@ -14,9 +14,20 @@ import time
 
 eio = NetEventIO("10.0.0.2")
 
-dspboardaddrs =  [int(x) for x in sys.argv[1:]]
+pingtgts = set()
+for who in sys.argv[1:]:
+    if '-' in who:
+        # this is a range
+        (startstr, endstr) = who.split("-")
+        for r in range(int(startstr), int(endstr)+1):
+            pingtgts.add(r)
+    else:
+        pingtgts.add(int(who))
 
-eio.addRXMask(0xF1, xrange(256))
+for i in pingtgts:
+    eio.addRXMask(xrange(256), i)
+eio.addRXMask(xrange(256), xrange(1, 0x4c))
+
 
 eio.start()
 
@@ -27,15 +38,54 @@ e.cmd =  0xF0
 e.data[0] = 0x1234
 
 ea = eaddr.TXDest()
-for d in dspboardaddrs:
-    ea[d] = 1
+for i in pingtgts:
+    ea[i] = 1
 
 eio.sendEvent(ea, e)
 
-erx = eio.getEvents()
-for q in erx:
-    print q
+starttime = time.time()
+PINGWAIT = 1.0
+eventsrxed = []
+while len(eventsrxed) < len(pingtgts):
+    erx = eio.getEvents(blocking=False)
+    if erx != None:
+        eventsrxed += erx
+    if time.time() > starttime + PINGWAIT:
+        break
 eio.stop()
+
+rxset = set()
+
+for e in eventsrxed:
+    rxset.add(e.src)
+missing =  pingtgts.difference(rxset)
+print "Heard from",
+for r in rxset:
+    print r,
+print
+
+print "Did not hear from:",
+
+if len(missing) == 0:
+    print "None",
+else:
+    for m in missing:
+        print m,
+print
+for r in eventsrxed:
+    print r
+    
+    
+## ea = eaddr.TXDest()
+## for d in pingtgts:
+##     ea[d] = 1
+
+## eio.sendEvent(ea, e)
+
+## erx = eio.getEvents()
+## for q in erx:
+##     print q
+## eio.stop()
 
     
     

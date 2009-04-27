@@ -47,9 +47,10 @@ PINGWAIT = 1.0
 eventsrxed = []
 while len(eventsrxed) < len(pingtgts):
     erx = eio.getEvents(blocking=False)
-    eventsrxed += erx
+    if erx != None:
+        eventsrxed += erx
     if time.time() > starttime + PINGWAIT:
-        break; 
+        break
 eio.stop()
 
 rxset = set()
