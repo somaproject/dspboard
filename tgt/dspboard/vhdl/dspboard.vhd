@@ -595,6 +595,10 @@ architecture Behavioral of dspboard is
   signal asdebuga, asdebugb      : std_logic_vector(31 downto 0) := (others => '0');
 
   signal ledcnt : std_logic_vector(19 downto 0) := (others => '0');
+
+  signal rxlockedl  : std_logic := '0';
+  signal linkdropcnt : std_logic_vector(7 downto 0) := (others => '0');
+  signal linkdebug : std_logic_vector(31 downto 0) := (others => '0');
   
 begin  -- Behavioral
 
@@ -705,7 +709,7 @@ begin  -- Behavioral
       DSPSPIHOLD  => dspspiholda,
       DSPUARTTX   => DSPUARTTXA,
       LEDEVENT    => LEDEVENTA,
-      DEBUGIN => asdebuga);
+      DEBUGIN => linkdebug);
 
   DSPRESETA     <= dspresetaint;
   dspresetaintn <= not dspresetaint;
@@ -1155,8 +1159,17 @@ begin  -- Behavioral
 
 
 
-
-
+--  process(REFCLKIN)
+--    begin
+--      if rising_edge(REFCLKIN) then
+--        rxlockedl <= rxlocked;
+--        -- i'm pretty sure rxlocked is active low
+--        if rxlockedl = '1' and rxlocked  = '0'then
+--          linkdropcnt <= linkdropcnt + 1;
+--        end if;
+--      end if;
+--    end process;
+    
 
 --  jtagwordout(47 downto 0) <= asdebug;
 
@@ -1171,9 +1184,18 @@ begin  -- Behavioral
       if rising_edge(clk) then
         rxdatal  <= rxdata;
         rxkl     <= rxk;
-        LEDPOWER <= ledcnt(19);
+        LEDPOWER <= decodeerrint; -- ledcnt(19);
         ledcnt   <= ledcnt + 1;
 
+        rxlockedl <= rxlocked;
+        -- i'm pretty sure rxlocked is active low
+        if rxlockedl = '1' and rxlocked  = '0'then
+          linkdropcnt <= linkdropcnt + 1;
+        end if;
+
+        linkdebug(31 downto 16) <= X"ABCD"; 
+        linkdebug(7 downto 0) <= linkdropcnt;
+        
         if datafulla = '1' then
           datafullcnta <= datafullcnta + 1;
         end if;
