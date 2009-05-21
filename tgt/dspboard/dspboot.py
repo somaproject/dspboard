@@ -26,7 +26,6 @@ def reallysend(eio, ea, e):
             eio.sendEvent(ea, e)
             break
         except IOError:
-            print "Whoa, we didn't hear the answer" 
             pass
         
     
@@ -121,8 +120,18 @@ def chunk(string, maxlen):
     return chunks
 
 def main():
-    dspaddrs = [int(x) for x in sys.argv[2:]]
-               
+
+    dspaddrs = set()
+    for who in sys.argv[2:]:
+        if '-' in who:
+            # this is a range
+            (startstr, endstr) = who.split("-")
+            for r in range(int(startstr), int(endstr)+1):
+                dspaddrs.add(r)
+        else:
+            dspaddrs.add(int(who))
+    if len(dspaddrs) == 0:
+        raise Exception("Must specify at least one dsp board target")
     eio = NetEventIO("10.0.0.2")
 
     #DSPBOARDADDR = tgt
@@ -187,7 +196,6 @@ def main():
         for b in chunks:
             pos = 0
             while pos < len(b):
-                print "sending bytes ", pos, "-", pos+2
                 bytes = b[pos:pos+2]
 
                 words = struct.unpack(">H", bytes)
@@ -207,13 +215,15 @@ def main():
             e = Event()
             e.src = eaddr.NETWORK
             e.cmd =  EVENTRXCMD_DATABUFTX
-            #e.data[0] = blockpos * 256 + cpos
+            # this is the length 
             e.data[0] = pos/2
+            # now the nonce
+            e.data[1] = cpos * 256 + pos 
             ea = eaddr.TXDest()
             for d in dspaddrs:
                 ea[d] = 1
 
-            eio.sendEvent(ea, e)
+            reallysend(eio, ea, e)
             print "sent databuftx event, blockpos =%d,  block len = %d, chunk number %d" % (blockpos, len(b), cpos)
 
             # we need to get events from everyone
@@ -222,6 +232,7 @@ def main():
                 erx = eio.getEvents()
                 for q in erx:
                     ecnt += 1
+		    print "Heard back from ", q.src, q
             
 
             cpos += 1
@@ -234,7 +245,7 @@ def main():
     ea = eaddr.TXDest()
     for d in dspaddrs:
         ea[d] = 1
-    eio.sendEvent(ea, e)
+    reallysend(eio, ea, e)
 
 
     # Give DSP control of SPI interface
@@ -248,7 +259,7 @@ def main():
     for d in dspaddrs:
         ea[d] = 1
 
-    eio.sendEvent(ea, e)
+    reallysend(eio, ea, e)
 
     time.sleep(1)
     # now send all of the UART settings
@@ -264,7 +275,7 @@ def main():
         ea = eaddr.TXDest()
         ea[d] = 1
 
-        eio.sendEvent(ea, e)
+        reallysend(eio, ea, e)
         
     
     eio.stop()

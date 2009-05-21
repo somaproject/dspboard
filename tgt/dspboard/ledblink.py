@@ -10,9 +10,19 @@ import struct
 import time
 
 eio = NetEventIO("10.0.0.2")
+dspaddrs = set()
+delay = float(sys.argv[1])
+for who in sys.argv[2:]:
+    if '-' in who:
+        # this is a range
+        (startstr, endstr) = who.split("-")
+        for r in range(int(startstr), int(endstr)+1):
+            dspaddrs.add(r)
+    else:
+        dspaddrs.add(int(who))
+if len(dspaddrs) == 0:
+    raise Exception("Must specify at least one dsp board target")
 
-DSPBOARDADDRS = [int(x) for x in sys.argv[1:]]
-eio.addRXMask(xrange(256), 8)
 
 eio.start()
 
@@ -26,11 +36,12 @@ while(1) :
     e.data[0] = 0xFFFF
 
     ea = eaddr.TXDest()
-    for i in DSPBOARDADDRS:
+    for i in dspaddrs:
         ea[i] = 1
     eio.sendEvent(ea, e)
-    print "on"
-    time.sleep(1)
+    
+#rint "on"
+    time.sleep(delay)
 
     e = Event()
     e.src = eaddr.NETWORK
@@ -38,11 +49,11 @@ while(1) :
     e.data[0] = 0x0
 
     ea = eaddr.TXDest()
-    for i in DSPBOARDADDRS:
+    for i in dspaddrs:
         ea[i] = 1
     eio.sendEvent(ea, e)
-    print "off"
-    time.sleep(1)
+    #          print "off"
+    time.sleep(delay)
 
 
 eio.stop()
