@@ -9,6 +9,7 @@ set(somadspio_HEADERS
 
 include_directories(${Boost_INCLUDE_DIRS})
 include_directories(${SIGC++_INCLUDE_DIRS})
+include_directories(${SOMADEPS_INCLUDE_DIRS})
 
 ADD_LIBRARY(${PROJECT_NAME} SHARED
   ${dspiolib_SRCS})
@@ -24,6 +25,6 @@ SET_TARGET_PROPERTIES(${PROJECT_NAME}
 install( TARGETS ${PROJECT_NAME} LIBRARY
   DESTINATION lib)
 
-install(FILES ${somadspiolib_HEADERS}
+install(FILES ${somadspio_HEADERS}
   DESTINATION
   include/${PROJECT_NAME}-${LIBRARY_VERSION}/${PROJECT_NAME})

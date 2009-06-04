@@ -12,17 +12,22 @@ find_package(Boost 1.37.0 COMPONENTS unit_test_framework system REQUIRED)
 find_package(PkgConfig)
 
 pkg_check_modules(SIGC++ REQUIRED sigc++-2.0>=2.0)
-pkg_check_modules(BENCHMARKS REQUIRED 
-  sigc++-2.0>=2.0 
-  glibmm-2.4>=2.13.0
-  gtkmm-2.4>=2.10)
+pkg_check_modules(SOMADEPS REQUIRED 
+  somanetwork-1.0>=1.0)
+
 
 ENABLE_TESTING()
 
-include_directories(.)
+include_directories(src)
 
+add_subdirectory(src)
 add_subdirectory(tests)
 
-configure_file(somadspio-1.0.pc.in somadspio-1.0.pc)
+set(PKG_FILE_NAME somadspio-1.0.pc)
 
-install(FILES somanetwork-1.0.pc DESTINATION lib/pkgconfig)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${PKG_FILE_NAME}.in 
+  ${CMAKE_CURRENT_BINARY_DIR}/${PKG_FILE_NAME})
+
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PKG_FILE_NAME} 
+  DESTINATION lib/pkgconfig)
+

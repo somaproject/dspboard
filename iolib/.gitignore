@@ -21,3 +21,5 @@ depcomp
 install-sh
 libtool
 ltmain.sh
+CMakeCache*
+CMakeFiles/
