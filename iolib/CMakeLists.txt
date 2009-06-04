@@ -18,9 +18,9 @@ pkg_check_modules(SOMADEPS REQUIRED
 
 ENABLE_TESTING()
 
-include_directories(src)
+include_directories(.)
 
-add_subdirectory(src)
+add_subdirectory(somadspio)
 add_subdirectory(tests)
 
 set(PKG_FILE_NAME somadspio-1.0.pc)

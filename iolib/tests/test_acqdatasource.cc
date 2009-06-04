@@ -7,7 +7,7 @@
 
 
 #include "mockdspboard.h"
-#include "dspcontrol.h"
+#include <somadspio/dspcontrol.h>
 
 BOOST_AUTO_TEST_SUITE(test_acqdatasource); 
 

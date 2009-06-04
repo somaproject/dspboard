@@ -159,7 +159,7 @@ somadspio: cmake_check_build_system
 
 # fast build rule for target.
 somadspio/fast:
-	$(MAKE) -f src/CMakeFiles/somadspio.dir/build.make src/CMakeFiles/somadspio.dir/build
+	$(MAKE) -f somadspio/CMakeFiles/somadspio.dir/build.make somadspio/CMakeFiles/somadspio.dir/build
 .PHONY : somadspio/fast
 
 #=============================================================================

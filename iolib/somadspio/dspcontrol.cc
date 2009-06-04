@@ -1,4 +1,4 @@
-#include "dspcontrol.h"
+#include <somadspio/dspcontrol.h>
 
 
 namespace dspiolib {

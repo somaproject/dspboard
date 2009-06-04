@@ -3,7 +3,7 @@
 
 #include <sigc++/sigc++.h>
 #include <somanetwork/network.h>
-#include "eventcodec.h"
+#include <somadspio/eventcodec.h>
 
 /*
   caching of DSPboard state, event parsing and signal dispatch

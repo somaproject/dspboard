@@ -1,11 +1,6 @@
-prefix=@prefix@
-exec_prefix=@exec_prefix@
-libdir=@libdir@
-includedir=@includedir@
-
 Name: somadspio
 Description: Soma DSP hardware IO Library
 Requires: 
-Version: @VERSION@
-Libs: -L${libdir} -lsomadspio-1.0
-Cflags: -I${includedir}/somadspio-1.0 -I${libdir}/somadspio-1.0/include
+Version: ${LIBRARY_VERSION}
+Libs: -L${CMAKE_INSTALL_PREFIX}/lib -lsomadspio-1.0
+Cflags: -I${CMAKE_INSTALL_PREFIX}/include/somadspio-1.0 -I${CMAKE_INSTALL_PREFIX}/somadspio-1.0/include
