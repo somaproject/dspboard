@@ -4,6 +4,7 @@
 #include <acqboardif.h>
 #include <vector>
 #include <list>
+#include <types.h>
 
 /*
   if autosend = 1, then we always have data to send, 

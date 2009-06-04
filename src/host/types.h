@@ -7,4 +7,6 @@
 HOST Types
 
 */
+typedef short int16_t; 
+
 #endif
