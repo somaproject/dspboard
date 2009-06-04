@@ -18,6 +18,14 @@ target_link_libraries(${PROJECT_NAME}
   ${Boost_LIBRARIES} 
   ${SIGC++_LIBRARIES})
 
+
+ADD_LIBRARY(${PROJECT_NAME}_test
+  ${dspiolib_SRCS})
+
+target_link_libraries(${PROJECT_NAME}_test
+  ${Boost_LIBRARIES} 
+  ${SIGC++_LIBRARIES})
+
 SET_TARGET_PROPERTIES(${PROJECT_NAME}
   PROPERTIES VERSION ${LIBRARY_VERSION}
   SOVERSION ${LIBRARY_SOVERSION})
