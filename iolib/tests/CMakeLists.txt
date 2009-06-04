@@ -54,7 +54,7 @@ set(testlist
 foreach(testname ${testlist})
     target_link_libraries(${testname}
       mockdsp
-      ${PROJECT_NAME}
+      ${PROJECT_NAME}_test
       somanetwork)
   
   ADD_TEST(${testname} ${testname})
