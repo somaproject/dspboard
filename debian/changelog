@@ -1,0 +1,17 @@
+libsomadspio (0.9~soma3) jaunty; urgency=low
+
+  * 3rd attempt, added libboost-system
+
+ -- Stuart Layton <slayton@mit.edu>  Thu, 04 Jun 2009 18:59:04 -0400
+
+libsomadspio (0.9~soma2) jaunty; urgency=low
+
+  * 2nd attempt at a build, included libboost-test library in build depends
+
+ -- Stuart Layton <slayton@mit.edu>  Thu, 04 Jun 2009 18:46:23 -0400
+
+libsomadspio (0.9~soma1) jaunty; urgency=low
+
+  * Initial test build
+
+ -- Stuart Layton <slayton@mit.edu>  Thu, 04 Jun 2009 16:45:27 -0400
