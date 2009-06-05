@@ -1,29 +1,5 @@
-libsomadspio (0.9~soma5) jaunty; urgency=low
+libsomadspio (0.9~soma-ubuntu1) jaunty; urgency=low
 
-  * told cmake not to compile unit tests
+  * Initial checkin using new naming scheme
 
  -- Stuart Layton <slayton@mit.edu>  Thu, 04 Jun 2009 21:50:16 -0400
-
-libsomadspio (0.9~soma4) jaunty; urgency=low
-
-  * removed unit tests until they can be fixed
-
- -- Stuart Layton <slayton@mit.edu>  Thu, 04 Jun 2009 21:32:40 -0400
-
-libsomadspio (0.9~soma3) jaunty; urgency=low
-
-  * 3rd attempt, added libboost-system
-
- -- Stuart Layton <slayton@mit.edu>  Thu, 04 Jun 2009 18:59:04 -0400
-
-libsomadspio (0.9~soma2) jaunty; urgency=low
-
-  * 2nd attempt at a build, included libboost-test library in build depends
-
- -- Stuart Layton <slayton@mit.edu>  Thu, 04 Jun 2009 18:46:23 -0400
-
-libsomadspio (0.9~soma1) jaunty; urgency=low
-
-  * Initial test build
-
- -- Stuart Layton <slayton@mit.edu>  Thu, 04 Jun 2009 16:45:27 -0400
