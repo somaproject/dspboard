@@ -16,12 +16,10 @@ pkg_check_modules(SOMADEPS REQUIRED
   somanetwork-1.0>=1.0)
 
 
-ENABLE_TESTING()
 
 include_directories(.)
 
 add_subdirectory(somadspio)
-add_subdirectory(tests)
 
 set(PKG_FILE_NAME somadspio-1.0.pc)
 
