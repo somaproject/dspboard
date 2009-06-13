@@ -1,7 +1,7 @@
 ##############################################################
 #
-# Xilinx Core Generator version J.37
-# Date: Sun Feb 10 02:35:56 2008
+# Xilinx Core Generator version 11.1
+# Date: Sat Jun 13 00:23:58 2009
 #
 ##############################################################
 #
@@ -23,11 +23,11 @@ SET devicefamily = spartan3
 SET flowvendor = Other
 SET formalverification = False
 SET foundationsym = False
-SET implementationfiletype = Edif
-SET package = ff668
+SET implementationfiletype = Ngc
+SET package = ft256
 SET removerpms = False
 SET simulationfiles = Behavioral
-SET speedgrade = -10
+SET speedgrade = -4
 SET verilogsim = False
 SET vhdlsim = True
 # END Project Options
@@ -54,5 +54,4 @@ CSET new_data=false
 CSET secondary_encoder=false
 # END Parameters
 GENERATE
-# CRC: ae06fe10
-
+# CRC: 328e2595

@@ -1,7 +1,7 @@
 ##############################################################
 #
-# Xilinx Core Generator version K.31
-# Date: Sat Mar 29 19:33:17 2008
+# Xilinx Core Generator version 11.1
+# Date: Sat Jun 13 00:30:05 2009
 #
 ##############################################################
 #
@@ -23,16 +23,16 @@ SET devicefamily = spartan3
 SET flowvendor = Foundation_iSE
 SET formalverification = False
 SET foundationsym = False
-SET implementationfiletype = Edif
+SET implementationfiletype = Ngc
 SET package = ft256
 SET removerpms = False
 SET simulationfiles = Behavioral
-SET speedgrade = -6
+SET speedgrade = -4
 SET verilogsim = True
 SET vhdlsim = True
 # END Project Options
 # BEGIN Select
-SELECT Decode_8b/10b family Xilinx,_Inc. 5.0
+SELECT Decode_8b/10b family Xilinx,_Inc. 7.1
 # END Select
 # BEGIN Parameters
 CSET b_clock_enable=false
@@ -58,5 +58,4 @@ CSET synchronous_reset=false
 CSET synchronous_reset_value=D_0_0_pos
 # END Parameters
 GENERATE
-# CRC:  2bdc7c0
-
+# CRC: e4863226

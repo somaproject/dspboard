@@ -1,7 +1,7 @@
 ##############################################################
 #
-# Xilinx Core Generator version J.37
-# Date: Sun Feb 10 02:36:32 2008
+# Xilinx Core Generator version 11.1
+# Date: Sat Jun 13 00:24:20 2009
 #
 ##############################################################
 #
@@ -23,11 +23,11 @@ SET devicefamily = spartan3
 SET flowvendor = Other
 SET formalverification = False
 SET foundationsym = False
-SET implementationfiletype = Edif
-SET package = ff668
+SET implementationfiletype = Ngc
+SET package = ft256
 SET removerpms = False
 SET simulationfiles = Behavioral
-SET speedgrade = -10
+SET speedgrade = -4
 SET verilogsim = False
 SET vhdlsim = True
 # END Project Options
@@ -58,5 +58,4 @@ CSET synchronous_reset=false
 CSET synchronous_reset_value=D_0_0_pos
 # END Parameters
 GENERATE
-# CRC: e12e8cb8
-
+# CRC: e66eaeff
