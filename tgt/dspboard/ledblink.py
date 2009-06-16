@@ -1,5 +1,5 @@
 """
-Try and PING the DSPboard
+Try and flash the DSPboard LED
 """
 import sys
 from somapynet.event import Event
