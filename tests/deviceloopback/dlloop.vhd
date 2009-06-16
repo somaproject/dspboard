@@ -19,6 +19,11 @@ entity dlloop is
     LEDPOWER  : out std_logic;
     LEDLOCKED : out std_logic;
     LEDVALID  : out std_logic;
+    DSPRESETA : out std_logic;
+    DSPRESETB : out std_logic;
+    DSPRESETC : out std_logic;
+    DSPRESETD : out std_logic;
+
     DECODEERR : out std_logic
     );
 
@@ -79,7 +84,7 @@ begin  -- Behavioral
   begin  -- process ledpowerproc
     if rising_edge(clk) then
       pcnt      <= pcnt + 1;
-      LEDVALID  <=  not decodeerrint;
+      LEDVALID  <= not decodeerrint;
       LEDPOWER  <= pcnt(21);
       DECODEERR <= decodeerrint;
     end if;
@@ -87,5 +92,11 @@ begin  -- Behavioral
 
   REFCLKOUT <= REFCLKIN;
   LEDLOCKED <= not RXLOCKED;
+
+  DSPRESETA <= '1'; 
+  DSPRESETB <= '1'; 
+  DSPRESETC <= '1'; 
+  DSPRESETD <= '1'; 
+
 
 end Behavioral;
