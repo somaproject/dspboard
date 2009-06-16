@@ -211,7 +211,7 @@ architecture Behavioral of dspboard is
       EPROCDATAB : in  std_logic_vector(7 downto 0);
       EPROCDATAC : in  std_logic_vector(7 downto 0);
       EPROCDATAD : in  std_logic_vector(7 downto 0);
-      DEBUG      : out std_logic_vector(15 downto 0));
+      DEBUG      : out std_logic_vector(63 downto 0));
   end component;
 
   component datamux
@@ -577,8 +577,8 @@ architecture Behavioral of dspboard is
   signal jtagtdo2    : std_logic := '0';
   signal jtagupdate  : std_logic := '0';
 
-  signal jtagwordout : std_logic_vector(47 downto 0) := (others => '0');
-  signal jtagout     : std_logic_vector(63 downto 0) := (others => '0');
+  signal jtagwordout : std_logic_vector(63 downto 0) := (others => '0');
+  signal jtagout     : std_logic_vector(79 downto 0) := (others => '0');
 
   signal inword, inwordl : std_logic_vector(15 downto 0) := (others => '0');
   signal fifofullcnta    : std_logic_vector(7 downto 0)  := (others => '0');
@@ -599,6 +599,8 @@ architecture Behavioral of dspboard is
   signal rxlockedl  : std_logic := '0';
   signal linkdropcnt : std_logic_vector(7 downto 0) := (others => '0');
   signal linkdebug : std_logic_vector(31 downto 0) := (others => '0');
+
+  signal encode_debug : std_logic_vector(63 downto 0) := (others => '0');
   
 begin  -- Behavioral
 
@@ -1063,7 +1065,8 @@ begin  -- Behavioral
       EPROCDATAA => eprocdataa,
       EPROCDATAB => eprocdatab,
       EPROCDATAC => eprocdatac,
-      EPROCDATAD => eprocdatad);
+      EPROCDATAD => eprocdatad,
+      DEBUG => encode_debug);
 
   datamux_inst : datamux
     port map (
@@ -1136,7 +1139,7 @@ begin  -- Behavioral
       jtagout <= X"1234" & jtagwordout;
     else
       if rising_edge(jtagDRCK1) then
-        jtagout  <= '0' & jtagout(63 downto 1);
+        jtagout  <= '0' & jtagout(79 downto 1);
         jtagtdo1 <= jtagout(0);
       end if;
 
@@ -1171,7 +1174,7 @@ begin  -- Behavioral
 --    end process;
     
 
---  jtagwordout(47 downto 0) <= asdebug;
+  jtagwordout(63 downto 0) <= encode_debug; 
 
   process(CLK)
     variable scnt   : integer range 0 to 2 := 0;

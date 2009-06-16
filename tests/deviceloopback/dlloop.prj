@@ -1,2 +1,2 @@
 vhdl work "dlloop.vhd"
-vhdl work "../../vhdl/deviceio/devicelink.vhd"
+vhdl work "../../vhdl/serial-deviceio/vhdl/devicelink.vhd"

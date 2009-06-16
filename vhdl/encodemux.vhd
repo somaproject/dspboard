@@ -8,11 +8,11 @@ entity encodemux is
     CLK        : in  std_logic;
     ECYCLE     : in  std_logic;
     DOUT       : out std_logic_vector(7 downto 0);
-    KOUT      : out std_logic;
+    KOUT       : out std_logic;
     -- data interface
-    DREQ       : in  std_logic; 
-    DGRANT     : out std_logic; 
-    DDONE      : in  std_logic; 
+    DREQ       : in  std_logic;
+    DGRANT     : out std_logic;
+    DDONE      : in  std_logic;
     DDATA      : in  std_logic_vector(7 downto 0);
     -- event interface for DSPs
     EDSPREQ    : in  std_logic_vector(3 downto 0);
@@ -30,7 +30,7 @@ entity encodemux is
     EPROCDATAB : in  std_logic_vector(7 downto 0);
     EPROCDATAC : in  std_logic_vector(7 downto 0);
     EPROCDATAD : in  std_logic_vector(7 downto 0);
-    DEBUG : out std_logic_vector(15 downto 0));
+    DEBUG      : out std_logic_vector(63 downto 0));
 end encodemux;
 
 architecture Behavioral of encodemux is
@@ -41,7 +41,7 @@ architecture Behavioral of encodemux is
   signal edatad : std_logic_vector(7 downto 0) := (others => '0');
 
   signal ereq : std_logic_vector(3 downto 0) := (others => '0');
-  
+
   signal esel : std_logic_vector(3 downto 0) := (others => '0');
 
   signal edone : std_logic_vector(3 downto 0) := (others => '0');
@@ -76,24 +76,30 @@ architecture Behavioral of encodemux is
   signal cs, ns : states := none;
 
   signal epos : integer range 0 to 1023 := 0;
+
+
+  -- debugging counters
+  constant CNTSIZE             : integer   := 8;
+  type     cnt_array is array (0 to 3) of std_logic_vector(CNTSIZE-1 downto 0);
+  signal   eproc_cnt, edsp_cnt : cnt_array := (others => (others => '0'));
   
 begin  -- Behavioral
 
   -- output muxes
   kd    <= kdatastart when kdsel = '0' else kdataend;
   kdout <= kd         when osel = 0    else
-           keventa    when osel = 1    else
-           keventb    when osel = 2    else
-           keventc    when osel = 3    else
+           keventa when osel = 1 else
+           keventb when osel = 2 else
+           keventc when osel = 3 else
            keventd;
 
-  edout <= ddata  when osel = 0 else
+  edout <= ddata when osel = 0 else
            edataa when osel = 1 else
            edatab when osel = 2 else
            edatac when osel = 3 else
            edatad;
   KOUT <= ken;
-  
+
   DOUT <= kdout when ken = '1' else edout;
 
   EDATAA <= EPROCDATAA when esel(0) = '0' else EDSPDATAA;
@@ -113,18 +119,22 @@ begin  -- Behavioral
 
   DGRANT <= '1' when cs = dsend else '0';
 
-  EDSPGRANT(0) <= '1' when cs = esenda and esel(0) ='1' else '0';
-  EDSPGRANT(1) <= '1' when cs = esendb and esel(1) ='1' else '0';
-  EDSPGRANT(2) <= '1' when cs = esendc and esel(2) ='1' else '0';
-  EDSPGRANT(3) <= '1' when cs = esendd and esel(3) ='1' else '0';
+  EDSPGRANT(0) <= '1' when cs = esenda and esel(0) = '1' else '0';
+  EDSPGRANT(1) <= '1' when cs = esendb and esel(1) = '1' else '0';
+  EDSPGRANT(2) <= '1' when cs = esendc and esel(2) = '1' else '0';
+  EDSPGRANT(3) <= '1' when cs = esendd and esel(3) = '1' else '0';
 
-  EPROCGRANT(0) <= '1' when cs = esenda and esel(0) ='0' else '0';
-  EPROCGRANT(1) <= '1' when cs = esendb and esel(1) ='0' else '0';
-  EPROCGRANT(2) <= '1' when cs = esendc and esel(2) ='0' else '0';
-  EPROCGRANT(3) <= '1' when cs = esendd and esel(3) ='0' else '0';
+  EPROCGRANT(0) <= '1' when cs = esenda and esel(0) = '0' else '0';
+  EPROCGRANT(1) <= '1' when cs = esendb and esel(1) = '0' else '0';
+  EPROCGRANT(2) <= '1' when cs = esendc and esel(2) = '0' else '0';
+  EPROCGRANT(3) <= '1' when cs = esendd and esel(3) = '0' else '0';
 
-  DEBUG <= esel & edspreq & sentthiscycle & X"A";
+  DEBUG <= eproc_cnt(0) & edsp_cnt(0) & 
+           eproc_cnt(1) & edsp_cnt(1) & 
+           eproc_cnt(2) & edsp_cnt(2) &
+           eproc_cnt(3) & edsp_cnt(3);
   
+
   main : process(CLK)
   begin
     if rising_edge(CLK) then
@@ -136,11 +146,11 @@ begin  -- Behavioral
         if epos = 1023 then
           epos <= 0;
         else
-          epos <= epos + 1; 
+          epos <= epos + 1;
         end if;
       end if;
 
-      
+
       if cs = enexta then
         esel(0) <= not esel(0);
       end if;
@@ -158,7 +168,7 @@ begin  -- Behavioral
       end if;
 
       if cs = esenda then
-        sentthiscycle(0)   <= '1';
+        sentthiscycle(0) <= '1';
       else
         if cs = none then
           sentthiscycle(0) <= '0';
@@ -166,7 +176,7 @@ begin  -- Behavioral
       end if;
 
       if cs = esendb then
-        sentthiscycle(1)   <= '1';
+        sentthiscycle(1) <= '1';
       else
         if cs = none then
           sentthiscycle(1) <= '0';
@@ -174,7 +184,7 @@ begin  -- Behavioral
       end if;
 
       if cs = esendc then
-        sentthiscycle(2)   <= '1';
+        sentthiscycle(2) <= '1';
       else
         if cs = none then
           sentthiscycle(2) <= '0';
@@ -182,238 +192,271 @@ begin  -- Behavioral
       end if;
 
       if cs = esendd then
-        sentthiscycle(3)   <= '1';
+        sentthiscycle(3) <= '1';
       else
         if cs = none then
           sentthiscycle(3) <= '0';
         end if;
       end if;
 
+      -- debug_counters
+      if eprocdone(0) = '1' then
+        eproc_cnt(0) <= eproc_cnt(0) + 1;
+      end if;
+
+      if edspdone(0) = '1' then
+        edsp_cnt(0) <= edsp_cnt(0) + 1;
+      end if;
+
+      if eprocdone(1) = '1' then
+        eproc_cnt(1) <= eproc_cnt(1) + 1;
+      end if;
+
+      if edspdone(1) = '1' then
+        edsp_cnt(1) <= edsp_cnt(1) + 1;
+      end if;
+
+      if eprocdone(2) = '1' then
+        eproc_cnt(2) <= eproc_cnt(2) + 1;
+      end if;
+
+      if edspdone(2) = '1' then
+        edsp_cnt(2) <= edsp_cnt(2) + 1;
+      end if;
+
+      if eprocdone(3) = '1' then
+        eproc_cnt(3) <= eproc_cnt(3) + 1;
+      end if;
+
+      if edspdone(3) = '1' then
+        edsp_cnt(3) <= edsp_cnt(3) + 1;
+      end if;
+
     end if;
   end process main;
 
 
-  fsm : process(cs, ECYCLE, sentthiscycle, ereq, edone, DREQ,  DDONE, epos)
+  fsm : process(cs, ECYCLE, sentthiscycle, ereq, edone, DREQ, DDONE, epos)
   begin
     case cs is
       when none =>
-        osel <= 0;
-        ken <= '0';
+        osel  <= 0;
+        ken   <= '0';
         kdsel <= '0';
         if epos = 49 then
           ns <= dcheck;
         else
-          ns <= none; 
+          ns <= none;
         end if;
 
-      -----------------------------------------------------------------------
-      -- DATA SEND
-      -----------------------------------------------------------------------
+        -----------------------------------------------------------------------
+        -- DATA SEND
+        -----------------------------------------------------------------------
       when dcheck =>
-        osel <= 0;
-        ken <= '0';
+        osel  <= 0;
+        ken   <= '0';
         kdsel <= '0';
         if DREQ = '1' then
-          ns <= dsend; 
+          ns <= dsend;
         else
-          ns <= echecka; 
+          ns <= echecka;
         end if;
         
       when dsend =>
-        osel <= 0;
-        ken <= '1';
+        osel  <= 0;
+        ken   <= '1';
         kdsel <= '0';
-        ns <= dwait;
+        ns    <= dwait;
 
       when dwait =>
-        osel <= 0;
-        ken <= '0';
+        osel  <= 0;
+        ken   <= '0';
         kdsel <= '0';
         if ddone = '1' then
           ns <= ddones;
         else
-          ns <= dwait; 
+          ns <= dwait;
         end if;
 
       when ddones =>
-        osel <= 0;
-        ken <= '1';
+        osel  <= 0;
+        ken   <= '1';
         kdsel <= '1';
-        ns <= echecka;
-        
-      -----------------------------------------------------------------------
-      -- EVENT A SEND
-      -----------------------------------------------------------------------
+        ns    <= echecka;
+
+        -----------------------------------------------------------------------
+        -- EVENT A SEND
+        -----------------------------------------------------------------------
       when echecka =>
-        osel <= 1;
-        ken <= '0';
+        osel  <= 1;
+        ken   <= '0';
         kdsel <= '0';
-        if sentthiscycle(0) = '1'  then
+        if sentthiscycle(0) = '1' then
           ns <= echeckb;
         else
-          if ereq(0) = '1'  then
+          if ereq(0) = '1' then
             ns <= esenda;
           else
-            ns <= enexta; 
+            ns <= enexta;
           end if;
         end if;
 
       when esenda =>
-        osel <= 1;
-        ken <= '1';
+        osel  <= 1;
+        ken   <= '1';
         kdsel <= '0';
-        ns <= esendaw;
+        ns    <= esendaw;
 
       when esendaw =>
-        osel <= 1;
-        ken <= '0';
+        osel  <= 1;
+        ken   <= '0';
         kdsel <= '0';
         if edone(0) = '1' then
           ns <= enexta;
         else
-          ns <= esendaw; 
+          ns <= esendaw;
         end if;
 
       when enexta =>
-        osel <= 1;
-        ken <= '0';
+        osel  <= 1;
+        ken   <= '0';
         kdsel <= '0';
-        ns <= echeckb;
-        
-      -----------------------------------------------------------------------
-      -- EVENT B SEND
-      -----------------------------------------------------------------------
+        ns    <= echeckb;
+
+        -----------------------------------------------------------------------
+        -- EVENT B SEND
+        -----------------------------------------------------------------------
       when echeckb =>
-        osel <= 2;
-        ken <= '0';
+        osel  <= 2;
+        ken   <= '0';
         kdsel <= '0';
-        if sentthiscycle(1) = '1'  then
+        if sentthiscycle(1) = '1' then
           ns <= echeckc;
         else
-          if ereq(1) = '1'  then
+          if ereq(1) = '1' then
             ns <= esendb;
           else
-            ns <= enextb; 
+            ns <= enextb;
           end if;
         end if;
 
 
       when esendb =>
-        osel <= 2;
-        ken <= '1';
+        osel  <= 2;
+        ken   <= '1';
         kdsel <= '0';
-        ns <= esendbw;
+        ns    <= esendbw;
 
       when esendbw =>
-        osel <= 2;
-        ken <= '0';
+        osel  <= 2;
+        ken   <= '0';
         kdsel <= '0';
         if edone(1) = '1' then
           ns <= enextb;
         else
-          ns <= esendbw; 
+          ns <= esendbw;
         end if;
 
       when enextb =>
-        osel <= 2;
-        ken <= '0';
+        osel  <= 2;
+        ken   <= '0';
         kdsel <= '0';
-        ns <= echeckc;
-        
-      -----------------------------------------------------------------------
-      -- EVENT C SEND
-      -----------------------------------------------------------------------
+        ns    <= echeckc;
+
+        -----------------------------------------------------------------------
+        -- EVENT C SEND
+        -----------------------------------------------------------------------
       when echeckc =>
-        osel <= 3;
-        ken <= '0';
+        osel  <= 3;
+        ken   <= '0';
         kdsel <= '0';
-        if sentthiscycle(2) = '1'  then
+        if sentthiscycle(2) = '1' then
           ns <= echeckd;
         else
-          if ereq(2) = '1'  then
+          if ereq(2) = '1' then
             ns <= esendc;
           else
-            ns <= enextc; 
+            ns <= enextc;
           end if;
         end if;
 
       when esendc =>
-        osel <= 3;
-        ken <= '1';
+        osel  <= 3;
+        ken   <= '1';
         kdsel <= '0';
-        ns <= esendcw;
+        ns    <= esendcw;
 
       when esendcw =>
-        osel <= 3;
-        ken <= '0';
+        osel  <= 3;
+        ken   <= '0';
         kdsel <= '0';
         if edone(2) = '1' then
           ns <= enextc;
         else
-          ns <= esendcw; 
+          ns <= esendcw;
         end if;
 
       when enextc =>
-        osel <= 3;
-        ken <= '0';
+        osel  <= 3;
+        ken   <= '0';
         kdsel <= '0';
-        ns <= echeckd;
-        
-      -----------------------------------------------------------------------
-      -- EVENT D SEND
-      -----------------------------------------------------------------------
+        ns    <= echeckd;
+
+        -----------------------------------------------------------------------
+        -- EVENT D SEND
+        -----------------------------------------------------------------------
       when echeckd =>
-        osel <= 4;
-        ken <= '0';
+        osel  <= 4;
+        ken   <= '0';
         kdsel <= '0';
 
-        if sentthiscycle(3) = '1'  then
+        if sentthiscycle(3) = '1' then
           ns <= timechk;
         else
-          if ereq(3) = '1'  then
+          if ereq(3) = '1' then
             ns <= esendd;
           else
-            ns <= enextd; 
+            ns <= enextd;
           end if;
         end if;
 
       when esendd =>
-        osel <= 4;
-        ken <= '1';
+        osel  <= 4;
+        ken   <= '1';
         kdsel <= '0';
-        ns <= esenddw;
+        ns    <= esenddw;
 
       when esenddw =>
-        osel <= 4;
-        ken <= '0';
+        osel  <= 4;
+        ken   <= '0';
         kdsel <= '0';
         if edone(3) = '1' then
           ns <= enextd;
         else
-          ns <= esenddw; 
+          ns <= esenddw;
         end if;
 
       when enextd =>
-        osel <= 4;
-        ken <= '0';
+        osel  <= 4;
+        ken   <= '0';
         kdsel <= '0';
-        ns <= timechk;
+        ns    <= timechk;
         
       when timechk =>
-        osel <= 0;
-        ken <= '0';
+        osel  <= 0;
+        ken   <= '0';
         kdsel <= '0';
         if epos < 900 then
           ns <= echecka;
         else
-          ns <= none; 
+          ns <= none;
         end if;
 
       when others =>
-        osel <= 0;
-        ken <= '0';
+        osel  <= 0;
+        ken   <= '0';
         kdsel <= '0';
-        ns <= none;
+        ns    <= none;
         
     end case;
   end process fsm;
