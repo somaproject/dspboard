@@ -1,2 +1,3 @@
 vhdl work "dlloop.vhd"
+vhdl work "jtaginterface.vhd"
 vhdl work "../../vhdl/serial-deviceio/vhdl/devicelink.vhd"
