@@ -1,29 +1,36 @@
-VHDLC=vhdlp
-VHDLS=vhdle
-WORKDIR=work.sym
+VHDLC=vcom
+VHDLS=vsim
+WORKDIR=work
 all: hw comp sim
 
-$(WORKDIR)/senddata/_behavioral.var: ../../vhdl/senddata.vhd
+$(WORKDIR)/senddata/behavioral.dat: $(WORKDIR)/touched ../../vhdl/senddata.vhd
+	mkdir -p $(WORKDIR)
 	$(VHDLC) ../../vhdl/senddata.vhd
 
-$(WORKDIR)/sendevent/_behavioral.var: ../../vhdl/senddata.vhd ../../vhdl/sendevent.vhd
+$(WORKDIR)/sendevent/behavioral.dat: $(WORKDIR)/touched ../../vhdl/senddata.vhd ../../vhdl/senddata.vhd ../../vhdl/sendevent.vhd
+	mkdir -p $(WORKDIR)
 	$(VHDLC) ../../vhdl/sendevent.vhd
 
-$(WORKDIR)/devicemuxtx/_behavioral.var: ../../vhdl/senddata.vhd ../../vhdl/sendevent.vhd ../../vhdl/devicemuxtx.vhd
+$(WORKDIR)/devicemuxtx/behavioral.dat: $(WORKDIR)/touched ../../vhdl/senddata.vhd ../../vhdl/senddata.vhd ../../vhdl/sendevent.vhd ../../vhdl/sendevent.vhd ../../vhdl/devicemuxtx.vhd
+	mkdir -p $(WORKDIR)
 	$(VHDLC) ../../vhdl/devicemuxtx.vhd
 
-hw: $(WORKDIR)/senddata/_behavioral.var $(WORKDIR)/sendevent/_behavioral.var $(WORKDIR)/devicemuxtx/_behavioral.var 
+hw: $(WORKDIR)/senddata/behavioral.dat $(WORKDIR)/sendevent/behavioral.dat $(WORKDIR)/devicemuxtx/behavioral.dat 
 
 comp: 
 
-$(WORKDIR)/devicemuxtxtest/_behavioral.var: devicemuxtxtest.vhd
+$(WORKDIR)/devicemuxtxtest/behavioral.dat: $(WORKDIR)/touched devicemuxtxtest.vhd
+	mkdir -p $(WORKDIR)
 	$(VHDLC) devicemuxtxtest.vhd
 
-sim: $(WORKDIR)/devicemuxtxtest/_behavioral.var 
+sim: $(WORKDIR)/devicemuxtxtest/behavioral.dat 
 runsim: all
 	$(VHDLS) devicemuxtxtest
 
 
 clean:
-	rm -Rf $(WORKDIR)$
+	rm -Rf work 
 
+work/touched:
+	vlib  work
+	touch  work/touched

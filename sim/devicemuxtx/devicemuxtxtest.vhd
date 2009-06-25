@@ -78,6 +78,8 @@ architecture Behavioral of devicemuxtxtest is
   signal dlgrant : std_logic_vector(3 downto 0) := (others => '0');
   signal evalidl : std_logic_vector(3 downto 0) := (others => '0');
 
+  signal douten : std_logic := '0';
+  
 begin  -- Behavioral
 
   CLK <= not CLK after 10 ns;
@@ -175,35 +177,35 @@ begin  -- Behavioral
 
 
   EDATAA <= X"00" when EADDR = "00000" else
-            ecnt  when EADDR = "00001" else
+            ecnt when EADDR = "00001" else
             "000" & EADDR;
 
   EDATAB <= X"01" when EADDR = "00000" else
-            ecnt  when EADDR = "00001" else
+            ecnt when EADDR = "00001" else
             "000" & EADDR;
 
   EDATAC <= X"02" when EADDR = "00000" else
-            ecnt  when EADDR = "00001" else
+            ecnt when EADDR = "00001" else
             "000" & EADDR;
 
   EDATAD <= X"03" when EADDR = "00000" else
-            ecnt  when EADDR = "00001" else
+            ecnt when EADDR = "00001" else
             "000" & EADDR;
 
 
-  DDATAA <= ecnt  when DADDR = "0000000000" else
+  DDATAA <= ecnt when DADDR = "0000000000" else
             X"00" when DADDR = "0000000001" else
             DADDR(7 downto 0);
 
-  DDATAB <= ecnt  when DADDR = "0000000000" else
+  DDATAB <= ecnt when DADDR = "0000000000" else
             X"01" when DADDR = "0000000001" else
             DADDR(7 downto 0);
 
-  DDATAC <= ecnt  when DADDR = "0000000000" else
+  DDATAC <= ecnt when DADDR = "0000000000" else
             X"02" when DADDR = "0000000001" else
             DADDR(7 downto 0);
 
-  DDATAD <= ecnt  when DADDR = "0000000000" else
+  DDATAD <= ecnt when DADDR = "0000000000" else
             X"03" when DADDR = "0000000001" else
             DADDR(7 downto 0);
 
@@ -215,6 +217,7 @@ begin  -- Behavioral
         EVALID  <= EVALID + 1;
         evalidl <= evalid;
       end if;
+      douten <= not douten;
     end if;
   end process eventsend;
 
@@ -235,31 +238,71 @@ begin  -- Behavioral
   begin
     for i in 0 to 15 loop
       wait until rising_edge(CLK) and ECYCLE = '1';
-      
-      if evalid(0) = '1'  then
-        wait until rising_edge(CLK) and DOUT = X"1C" and KOUT = '1';
-        report "read event 0";
+
+      if evalid(0) = '1' then
+        wait until rising_edge(CLK) and DOUT = X"1C" and KOUT = '1' and douten = '1';
+        for ei in 1 to 21 loop
+          wait until rising_edge(CLK) and douten = '1';
+          assert kout = '0' report "Error reading Event A kout" severity error;
+          if ei = 1 then
+            assert dout = ecnt report "Error reading first byte" severity error;
+          else
+            assert dout = std_logic_vector(TO_UNSIGNED(ei, 8))
+              report "Error reading event A byte" severity error;
+          end if;
+        end loop;  -- ei
+        --report "read event 0";
       end if;
 
-      if evalid(1) = '1'  then
-        wait until rising_edge(CLK) and DOUT = X"3C" and KOUT = '1';        
-        report "read event 1";
+      if evalid(1) = '1' then
+        wait until rising_edge(CLK) and DOUT = X"3C" and KOUT = '1' and douten = '1';
+        for ei in 1 to 21 loop
+          wait until rising_edge(CLK) and douten = '1';
+          assert kout = '0' report "Error reading Event B kout" severity error;
+          if ei = 1 then
+            assert dout = ecnt report "Error reading first byte" severity error;
+          else
+            assert dout = std_logic_vector(TO_UNSIGNED(ei, 8))
+              report "Error reading event B byte" severity error;
+          end if;
+        end loop;  -- ei
+--              report "read event 1";
       end if;
 
-      if evalid(2) = '1'  then
-        wait until rising_edge(CLK) and DOUT = X"5C" and KOUT='1';        
-        report "read event 2";
+      if evalid(2) = '1' then
+        wait until rising_edge(CLK) and DOUT = X"5C" and KOUT = '1' and douten = '1';
+        for ei in 1 to 21 loop
+          wait until rising_edge(CLK) and douten = '1';
+          assert kout = '0' report "Error reading Event C kout" severity error;
+          if ei = 1 then
+            assert dout = ecnt report "Error reading first byte" severity error;
+          else
+            assert dout = std_logic_vector(TO_UNSIGNED(ei, 8))
+              report "Error reading event C byte" severity error;
+          end if;
+        end loop;  -- ei
+        --report "read event 2";
       end if;
 
-      if evalid(3) = '1'  then
-        wait until rising_edge(CLK) and DOUT = X"7C" and KOUT = '1';        
-        report "read event 3";
+      if evalid(3) = '1' then
+        wait until rising_edge(CLK) and DOUT = X"7C" and KOUT = '1' and douten = '1';
+        for ei in 1 to 21 loop
+          wait until rising_edge(CLK) and douten = '1';
+          assert kout = '0' report "Error reading Event D kout" severity error;
+          if ei = 1 then
+            assert dout = ecnt report "Error reading first byte" severity error;
+          else
+            assert dout = std_logic_vector(TO_UNSIGNED(ei, 8))
+              report "Error reading event D byte" severity error;
+          end if;
+        end loop;  -- ei
+        --report "read event 3";
       end if;
 
 
     end loop;  -- i
 
-    report "End of Simulation" severity Failure;
+    report "End of Simulation" severity failure;
     
   end process;
 

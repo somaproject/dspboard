@@ -1,22 +1,31 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
+
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    sodipodi:docname="encodemux.svg"
-   sodipodi:docbase="/home/jonas/soma/dspboard/docs/devicemux"
-   inkscape:version="0.44.1"
+   inkscape:version="0.46+devel r21521"
    sodipodi:version="0.32"
    id="svg1996"
    height="792.00000pt"
-   width="612.00000pt">
+   width="612.00000pt"
+   version="1.1"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape">
   <defs
      id="defs3">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 495 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="765 : 495 : 1"
+       inkscape:persp3d-origin="382.5 : 330 : 1"
+       id="perspective448" />
     <marker
        inkscape:stockid="TriangleInM"
        orient="auto"
@@ -54,17 +63,13 @@
      guidetolerance="2.5000000pt"
      inkscape:grid-bbox="false"
      gridtolerance="10000"
-     gridoriginx="0.0000000pt"
-     gridoriginy="0.0000000pt"
-     gridspacingx="2.5000000pt"
-     gridspacingy="2.5000000pt"
      inkscape:grid-points="true"
      showgrid="true"
      inkscape:current-layer="layer1"
      inkscape:document-units="pt"
-     inkscape:cy="-88.154297"
-     inkscape:cx="193.91456"
-     inkscape:zoom="3.959798"
+     inkscape:cy="394.42412"
+     inkscape:cx="556.03688"
+     inkscape:zoom="0.70000001"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
      borderopacity="1.0"
@@ -73,7 +78,21 @@
      id="base"
      showguides="true"
      inkscape:guide-bbox="false"
-     inkscape:object-paths="false" />
+     inkscape:object-paths="false"
+     inkscape:window-maximized="0">
+    <inkscape:grid
+       id="GridFromPre046Settings"
+       type="xygrid"
+       originx="0px"
+       originy="0.0000000pt"
+       spacingx="2.5000000pt"
+       spacingy="2.5000000pt"
+       color="#0000ff"
+       empcolor="#0000ff"
+       opacity="0.2"
+       empopacity="0.4"
+       empspacing="5" />
+  </sodipodi:namedview>
   <metadata
      id="metadata4">
     <rdf:RDF>
@@ -338,7 +357,7 @@
        id="g2869"
        transform="matrix(-0.5,0,0,0.5,50,102.8293)">
       <path
-         d="M 146.875 108.75 A 3.125 3.125 0 1 1  140.625,108.75 A 3.125 3.125 0 1 1  146.875 108.75 z"
+         d="m 146.875,108.75 c 0,1.72589 -1.39911,3.125 -3.125,3.125 -1.72589,0 -3.125,-1.39911 -3.125,-3.125 0,-1.72589 1.39911,-3.125 3.125,-3.125 1.72589,0 3.125,1.39911 3.125,3.125 z"
          sodipodi:ry="3.125"
          sodipodi:rx="3.125"
          sodipodi:cy="108.75"
@@ -434,7 +453,7 @@
        id="g5030"
        transform="matrix(0.5,0,0,0.5,131.25,101.25)">
       <path
-         d="M 275 208.75 A 3.125 3.125 0 1 1  268.75,208.75 A 3.125 3.125 0 1 1  275 208.75 z"
+         d="m 275,208.75 c 0,1.72589 -1.39911,3.125 -3.125,3.125 -1.72589,0 -3.125,-1.39911 -3.125,-3.125 0,-1.72589 1.39911,-3.125 3.125,-3.125 1.72589,0 3.125,1.39911 3.125,3.125 z"
          sodipodi:ry="3.125"
          sodipodi:rx="3.125"
          sodipodi:cy="208.75"
@@ -532,7 +551,7 @@
        id="g5072"
        transform="matrix(-0.5,0,0,0.5,368.75,151.25)">
       <path
-         d="M 146.875 108.75 A 3.125 3.125 0 1 1  140.625,108.75 A 3.125 3.125 0 1 1  146.875 108.75 z"
+         d="m 146.875,108.75 c 0,1.72589 -1.39911,3.125 -3.125,3.125 -1.72589,0 -3.125,-1.39911 -3.125,-3.125 0,-1.72589 1.39911,-3.125 3.125,-3.125 1.72589,0 3.125,1.39911 3.125,3.125 z"
          sodipodi:ry="3.125"
          sodipodi:rx="3.125"
          sodipodi:cy="108.75"
@@ -552,7 +571,7 @@
        id="g5078"
        transform="matrix(-0.5,0,0,0.5,368.75,113.75)">
       <path
-         d="M 146.875 108.75 A 3.125 3.125 0 1 1  140.625,108.75 A 3.125 3.125 0 1 1  146.875 108.75 z"
+         d="m 146.875,108.75 c 0,1.72589 -1.39911,3.125 -3.125,3.125 -1.72589,0 -3.125,-1.39911 -3.125,-3.125 0,-1.72589 1.39911,-3.125 3.125,-3.125 1.72589,0 3.125,1.39911 3.125,3.125 z"
          sodipodi:ry="3.125"
          sodipodi:rx="3.125"
          sodipodi:cy="108.75"
@@ -2393,5 +2412,15 @@
        style="opacity:1;color:black;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.25;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible"
        d="M 278.125,1083.75 L 278.125,1090 C 278.125,1090 278.125,1102.5 265.625,1102.5 C 253.125,1102.5 228.125,1102.5 228.125,1102.5 C 228.125,1102.5 215.625,1102.5 215.625,1115 C 215.625,1127.5 215.625,1130.625 215.625,1130.625 C 215.625,1130.625 215.625,1143.125 203.125,1143.125 C 190.625,1143.125 193.75,1143.125 193.75,1143.125"
        id="path3213" />
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="643.57141"
+       y="730.71429"
+       id="text3254"><tspan
+         sodipodi:role="line"
+         id="tspan3256"
+         x="643.57141"
+         y="730.71429">Add ESENDB2, etc. </tspan></text>
   </g>
 </svg>

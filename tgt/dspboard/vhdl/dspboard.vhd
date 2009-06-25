@@ -186,32 +186,34 @@ architecture Behavioral of dspboard is
 
   component encodemux
     port (
-      CLK        : in  std_logic;
-      ECYCLE     : in  std_logic;
-      DOUT       : out std_logic_vector(7 downto 0);
-      KOUT       : out std_logic;
+      CLK         : in  std_logic;
+      ECYCLE      : in  std_logic;
+      DOUT        : out std_logic_vector(7 downto 0);
+      KOUT        : out std_logic;
       -- data interface
-      DREQ       : in  std_logic;
-      DGRANT     : out std_logic;
-      DDONE      : in  std_logic;
-      DDATA      : in  std_logic_vector(7 downto 0);
+      DREQ        : in  std_logic;
+      DGRANT      : out std_logic;
+      DDONE       : in  std_logic;
+      DDATA       : in  std_logic_vector(7 downto 0);
       -- event interface for DSPs
-      EDSPREQ    : in  std_logic_vector(3 downto 0);
-      EDSPGRANT  : out std_logic_vector(3 downto 0);
-      EDSPDONE   : in  std_logic_vector(3 downto 0);
-      EDSPDATAA  : in  std_logic_vector(7 downto 0);
-      EDSPDATAB  : in  std_logic_vector(7 downto 0);
-      EDSPDATAC  : in  std_logic_vector(7 downto 0);
-      EDSPDATAD  : in  std_logic_vector(7 downto 0);
+      EDSPREQ     : in  std_logic_vector(3 downto 0);
+      EDSPGRANT   : out std_logic_vector(3 downto 0);
+      EDSPDONE    : in  std_logic_vector(3 downto 0);
+      EDSPDATAEN  : out std_logic;
+      EDSPDATAA   : in  std_logic_vector(7 downto 0);
+      EDSPDATAB   : in  std_logic_vector(7 downto 0);
+      EDSPDATAC   : in  std_logic_vector(7 downto 0);
+      EDSPDATAD   : in  std_logic_vector(7 downto 0);
       -- event interface for EPROCs
-      EPROCREQ   : in  std_logic_vector(3 downto 0);
-      EPROCGRANT : out std_logic_vector(3 downto 0);
-      EPROCDONE  : in  std_logic_vector(3 downto 0);
-      EPROCDATAA : in  std_logic_vector(7 downto 0);
-      EPROCDATAB : in  std_logic_vector(7 downto 0);
-      EPROCDATAC : in  std_logic_vector(7 downto 0);
-      EPROCDATAD : in  std_logic_vector(7 downto 0);
-      DEBUG      : out std_logic_vector(63 downto 0));
+      EPROCREQ    : in  std_logic_vector(3 downto 0);
+      EPROCGRANT  : out std_logic_vector(3 downto 0);
+      EPROCDONE   : in  std_logic_vector(3 downto 0);
+      EPROCDATAEN : out std_logic;
+      EPROCDATAA  : in  std_logic_vector(7 downto 0);
+      EPROCDATAB  : in  std_logic_vector(7 downto 0);
+      EPROCDATAC  : in  std_logic_vector(7 downto 0);
+      EPROCDATAD  : in  std_logic_vector(7 downto 0);
+      DEBUG       : out std_logic_vector(63 downto 0));
   end component;
 
   component datamux
@@ -361,6 +363,7 @@ architecture Behavioral of dspboard is
       ESENDGRANT  : in  std_logic;
       ESENDDONE   : out std_logic;
       ESENDDATA   : out std_logic_vector(7 downto 0);
+      ESENDDATAEN : in  std_logic;
       -- DSP interface
       DSPRESET    : out std_logic;
       DSPSPIEN    : out std_logic;
@@ -453,7 +456,6 @@ architecture Behavioral of dspboard is
       DOUTEN : out std_logic);
   end component;
 
-
   signal dreq   : std_logic_vector(3 downto 0) := (others => '0');
   signal dgrant : std_logic_vector(3 downto 0) := (others => '0');
   signal ddone  : std_logic_vector(3 downto 0) := (others => '0');
@@ -472,15 +474,18 @@ architecture Behavioral of dspboard is
   signal eprocgrant : std_logic_vector(3 downto 0) := (others => '0');
   signal eprocdone  : std_logic_vector(3 downto 0) := (others => '0');
 
+  signal eprocdataen : std_logic := '0';
+
   signal eprocdataa : std_logic_vector(7 downto 0) := (others => '0');
   signal eprocdatab : std_logic_vector(7 downto 0) := (others => '0');
   signal eprocdatac : std_logic_vector(7 downto 0) := (others => '0');
   signal eprocdatad : std_logic_vector(7 downto 0) := (others => '0');
 
-  signal edspdataa : std_logic_vector(7 downto 0) := (others => '0');
-  signal edspdatab : std_logic_vector(7 downto 0) := (others => '0');
-  signal edspdatac : std_logic_vector(7 downto 0) := (others => '0');
-  signal edspdatad : std_logic_vector(7 downto 0) := (others => '0');
+  signal edspdataen : std_logic                    := '0';
+  signal edspdataa  : std_logic_vector(7 downto 0) := (others => '0');
+  signal edspdatab  : std_logic_vector(7 downto 0) := (others => '0');
+  signal edspdatac  : std_logic_vector(7 downto 0) := (others => '0');
+  signal edspdatad  : std_logic_vector(7 downto 0) := (others => '0');
 
   signal procdspspiena   : std_logic := '0';
   signal procdspspissa   : std_logic := '0';
@@ -565,21 +570,6 @@ architecture Behavioral of dspboard is
   signal dspresetdint  : std_logic := '0';
   signal dspresetdintn : std_logic := '0';
 
-
-  signal jtagcapture : std_logic := '0';
-  signal jtagdrck1   : std_logic := '0';
-  signal jtagdrck2   : std_logic := '0';
-  signal jtagsel1    : std_logic := '0';
-  signal jtagsel2    : std_logic := '0';
-  signal jtagshift   : std_logic := '0';
-  signal jtagtdi     : std_logic := '0';
-  signal jtagtdo1    : std_logic := '0';
-  signal jtagtdo2    : std_logic := '0';
-  signal jtagupdate  : std_logic := '0';
-
-  signal jtagwordout : std_logic_vector(63 downto 0) := (others => '0');
-  signal jtagout     : std_logic_vector(79 downto 0) := (others => '0');
-
   signal inword, inwordl : std_logic_vector(15 downto 0) := (others => '0');
   signal fifofullcnta    : std_logic_vector(7 downto 0)  := (others => '0');
   signal procspienacnt   : std_logic_vector(7 downto 0)  := (others => '0');
@@ -590,18 +580,70 @@ architecture Behavioral of dspboard is
   signal reql            : std_logic                     := '0';
   signal reqll           : std_logic                     := '0';
 
-  signal datafullcnta : std_logic_vector(15 downto 0) := (others => '0');
-  signal datadebug    : std_logic_vector(15 downto 0) := (others => '0');
-  signal asdebuga, asdebugb      : std_logic_vector(31 downto 0) := (others => '0');
+  signal datafullcnta       : std_logic_vector(15 downto 0) := (others => '0');
+  signal datadebug          : std_logic_vector(15 downto 0) := (others => '0');
+  signal asdebuga, asdebugb : std_logic_vector(31 downto 0) := (others => '0');
 
   signal ledcnt : std_logic_vector(19 downto 0) := (others => '0');
 
-  signal rxlockedl  : std_logic := '0';
-  signal linkdropcnt : std_logic_vector(7 downto 0) := (others => '0');
-  signal linkdebug : std_logic_vector(31 downto 0) := (others => '0');
+  signal rxlockedl   : std_logic                     := '0';
+  signal linkdropcnt : std_logic_vector(7 downto 0)  := (others => '0');
+  signal linkdebug   : std_logic_vector(31 downto 0) := (others => '0');
 
   signal encode_debug : std_logic_vector(63 downto 0) := (others => '0');
+
+  -----------------------------------------------------------------------------
+  -- JTAG DEBUGGING
+  -----------------------------------------------------------------------------
+
+--  component jtaginterface
+--    generic (
+--      JTAG1N : integer := 32;
+--      JTAG2N : integer := 32);
+--    port (
+--      CLK     : in  std_logic;
+--      DIN1    : in  std_logic_vector(JTAG1N-1 downto 0);
+--      DOUT1   : out std_logic_vector(JTAG1N-1 downto 0);
+--      DOUT1EN : out std_logic;
+--      DIN2    : in  std_logic_vector(JTAG2N-1 downto 0);
+--      DOUT2   : out std_logic_vector(JTAG2N-1 downto 0);
+--      DOUT2EN : out std_logic
+--      );
+--  end component;
+
+--  component bufcapture
+--    port (
+--      CLKA     : in  std_logic;
+--      DIN      : in  std_logic_vector(31 downto 0);
+--      DINEN    : in  std_logic;
+--      NEXTBUF  : in  std_logic;
+--      -- readout side
+--      CLKB     : in  std_logic;
+--      READADDR : in  std_logic_vector(11 downto 0);
+--      DOUT     : out std_logic_vector(35 downto 0)
+--      );
+--  end component;
+
+--  signal txkl : std_logic := '0';
+
   
+  
+--  signal jtag_din1 : std_logic_vector(63 downto 0) := (others => '0');
+--  signal jtag_dout1 : std_logic_vector(63 downto 0) := (others => '0');
+--  signal jtag_dout1en : std_logic := '0';
+
+--  signal jtag_din2 : std_logic_vector(63 downto 0) := (others => '0');
+--  signal jtag_dout2 : std_logic_vector(63 downto 0) := (others => '0');
+--  signal jtag_dout2en : std_logic := '0';
+  
+--  signal capture_din : std_logic_vector(31 downto 0) := (others => '0');
+--  signal capture_dinl : std_logic_vector(31 downto 0) := (others => '0');
+--  signal capture_dinll : std_logic_vector(31 downto 0) := (others => '0');
+--  signal capture_dinen, capture_nextbuf : std_logic := '0';
+
+
+
+    
 begin  -- Behavioral
 
 
@@ -701,6 +743,7 @@ begin  -- Behavioral
       ESENDGRANT  => eprocgrant(0),
       ESENDDONE   => eprocdone(0),
       ESENDDATA   => eprocdataa,
+      ESENDDATAEN => eprocdataen,
       -- dsp interface
       DSPRESET    => dspresetaint,
       DSPSPIEN    => procdspspiena,
@@ -711,7 +754,7 @@ begin  -- Behavioral
       DSPSPIHOLD  => dspspiholda,
       DSPUARTTX   => DSPUARTTXA,
       LEDEVENT    => LEDEVENTA,
-      DEBUGIN => linkdebug);
+      DEBUGIN     => linkdebug);
 
   DSPRESETA     <= dspresetaint;
   dspresetaintn <= not dspresetaint;
@@ -789,6 +832,7 @@ begin  -- Behavioral
       ESENDGRANT  => eprocgrant(1),
       ESENDDONE   => eprocdone(1),
       ESENDDATA   => eprocdatab,
+      ESENDDATAEN => eprocdataen,
       -- dsp interface
       DSPRESET    => dspresetbint,
       DSPSPIEN    => procdspspienb,
@@ -800,7 +844,7 @@ begin  -- Behavioral
       DSPUARTTX   => DSPUARTTXB,
 
       LEDEVENT => LEDEVENTB,
-      DEBUGIN => X"00000000");
+      DEBUGIN  => X"00000000");
 
 
   DSPRESETb     <= dspresetbint;
@@ -879,6 +923,7 @@ begin  -- Behavioral
       ESENDGRANT  => eprocgrant(2),
       ESENDDONE   => eprocdone(2),
       ESENDDATA   => eprocdatac,
+      ESENDDATAEN => eprocdataen,
       -- dsp interface
       DSPRESET    => DSPRESETCint,
       DSPSPIEN    => procdspspienc,
@@ -891,7 +936,7 @@ begin  -- Behavioral
       DSPUARTTX   => DSPUARTTXC,
 
       LEDEVENT => LEDEVENTC,
-      DEBUGIN => asdebugb);
+      DEBUGIN  => asdebugb);
 
   DSPRESETC     <= dspresetcint;
   dspresetcintn <= not dspresetcint;
@@ -969,6 +1014,7 @@ begin  -- Behavioral
       ESENDGRANT  => eprocgrant(3),
       ESENDDONE   => eprocdone(3),
       ESENDDATA   => eprocdatad,
+      ESENDDATAEN => eprocdataen,
       -- dsp interface
       DSPRESET    => DSPRESETDint,
       DSPSPIEN    => procdspspiend,
@@ -980,7 +1026,7 @@ begin  -- Behavioral
       DSPUARTTX   => DSPUARTTXD,
 
       LEDEVENT => LEDEVENTD,
-      DEBUGIN => X"00000000");
+      DEBUGIN  => X"00000000");
 
   DSPRESETd     <= dspresetdint;
   dspresetdintn <= not dspresetdint;
@@ -1044,29 +1090,31 @@ begin  -- Behavioral
 
   encodemux_inst : encodemux
     port map (
-      CLK        => CLK,
-      ECYCLE     => ECYCLE,
-      DOUT       => txdata,
-      KOUT       => txk,
-      DREQ       => encdreq,
-      DGRANT     => encdgrant,
-      DDONE      => encddone,
-      DDATA      => encddata,
-      EDSPREQ    => EDSPREQ,
-      EDSPGRANT  => edspgrant,
-      EDSPDONE   => edspdone,
-      EDSPDATAA  => edspdataa,
-      EDSPDATAB  => edspdatab,
-      EDSPDATAC  => edspdatac,
-      EDSPDATAD  => edspdatad,
-      EPROCREQ   => EPROCREQ,
-      EPROCGRANT => eprocgrant,
-      EPROCDONE  => eprocdone,
-      EPROCDATAA => eprocdataa,
-      EPROCDATAB => eprocdatab,
-      EPROCDATAC => eprocdatac,
-      EPROCDATAD => eprocdatad,
-      DEBUG => encode_debug);
+      CLK         => CLK,
+      ECYCLE      => ECYCLE,
+      DOUT        => txdata,
+      KOUT        => txk,
+      DREQ        => encdreq,
+      DGRANT      => encdgrant,
+      DDONE       => encddone,
+      DDATA       => encddata,
+      EDSPREQ     => EDSPREQ,
+      EDSPGRANT   => edspgrant,
+      EDSPDONE    => edspdone,
+      EDSPDATAA   => edspdataa,
+      EDSPDATAB   => edspdatab,
+      EDSPDATAC   => edspdatac,
+      EDSPDATAD   => edspdatad,
+      EDSPDATAEN  => edspdataen,
+      EPROCREQ    => EPROCREQ,
+      EPROCGRANT  => eprocgrant,
+      EPROCDONE   => eprocdone,
+      EPROCDATAA  => eprocdataa,
+      EPROCDATAB  => eprocdatab,
+      EPROCDATAC  => eprocdatac,
+      EPROCDATAD  => eprocdatad,
+      EPROCDATAEN => eprocdataen,
+      DEBUG       => encode_debug);
 
   datamux_inst : datamux
     port map (
@@ -1122,7 +1170,7 @@ begin  -- Behavioral
       DSPBUARTRX  => DSPUARTRXD,
       DSPALINKUP  => fiberlinkupc,
       DSPBLINKUP  => fiberlinkupd,
-    DEBUG =>asdebugb );
+      DEBUG       => asdebugb);
 
   evtendianrev_inst : evtendianrev
     port map (
@@ -1131,34 +1179,6 @@ begin  -- Behavioral
       DINEN  => ecycle,
       DOUT   => ppiedata,
       DOUTEN => ppifs1);
-
-
-  process(jtagDRCK1, clk)
-  begin
-    if jtagupdate = '1' then
-      jtagout <= X"1234" & jtagwordout;
-    else
-      if rising_edge(jtagDRCK1) then
-        jtagout  <= '0' & jtagout(79 downto 1);
-        jtagtdo1 <= jtagout(0);
-      end if;
-
-    end if;
-  end process;
-
-  BSCAN_SPARTAN3_inst : BSCAN_SPARTAN3
-    port map (
-      CAPTURE => jtagcapture,
-      DRCK1   => jtagdrck1,
-      DRCK2   => jtagDRCK2,
-      SEL1    => jtagSEL1,
-      SEL2    => jtagSEL2,
-      SHIFT   => jtagSHIFT,
-      TDI     => jtagTDI,
-      UPDATE  => jtagUPDATE,
-      TDO1    => jtagtdo1,
-      TDO2    => jtagtdo2
-      );
 
 
 
@@ -1172,9 +1192,7 @@ begin  -- Behavioral
 --        end if;
 --      end if;
 --    end process;
-    
-
-  jtagwordout(63 downto 0) <= encode_debug; 
+  
 
   process(CLK)
     variable scnt   : integer range 0 to 2 := 0;
@@ -1187,18 +1205,18 @@ begin  -- Behavioral
       if rising_edge(clk) then
         rxdatal  <= rxdata;
         rxkl     <= rxk;
-        LEDPOWER <= decodeerrint; -- ledcnt(19);
+        LEDPOWER <= decodeerrint;       -- ledcnt(19);
         ledcnt   <= ledcnt + 1;
 
         rxlockedl <= rxlocked;
         -- i'm pretty sure rxlocked is active low
-        if rxlockedl = '1' and rxlocked  = '0'then
+        if rxlockedl = '1' and rxlocked = '0'then
           linkdropcnt <= linkdropcnt + 1;
         end if;
 
-        linkdebug(31 downto 16) <= X"ABCD"; 
-        linkdebug(7 downto 0) <= linkdropcnt;
-        
+        linkdebug(31 downto 16) <= X"ABCD";
+        linkdebug(7 downto 0)   <= linkdropcnt;
+
         if datafulla = '1' then
           datafullcnta <= datafullcnta + 1;
         end if;
@@ -1245,5 +1263,48 @@ begin  -- Behavioral
     end if;
   end process;
 
+--  -----------------------------------------------------------------------------
+--  -- JTAG DEBUGGING
+--  -----------------------------------------------------------------------------
+--  jtagif_inst : jtaginterface
+--    generic map (
+--      JTAG1N => 64,
+--      JTAG2N => 64)
+--    port map (
+--      CLK     => clk,
+--      DIN1    => jtag_din1,
+--      DOUT1   => jtag_dout1,
+--      DOUT1EN => jtag_dout1en,
+--      DIN2    => jtag_din2,
+--      DOUT2   => jtag_dout2,
+--      DOUT2EN => jtag_dout2en);
 
+--  bufcapture_inst: bufcapture
+--    port map (
+--      CLKA     => CLK,
+--      DIN      => capture_dinll,
+--      DINEN    => capture_dinen,
+--      NEXTBUF  => capture_nextbuf,
+--      CLKB     => CLK,
+--      READADDR => jtag_dout1(11 downto 0),
+--      DOUT     => jtag_din1(35 downto 0));
+
+--  jtag_din1(11 + 48 downto 48) <= jtag_dout1(11 downto 0);
+  
+
+--  capture_dinen <= '1';
+
+--  capture_nextbuf <= '1' when txk = '1' and txkl = '0' else '0';
+  
+--  process(CLK)
+--    begin
+--      if rising_edge(CLK) then
+--        txkl <= txk; 
+--        capture_din <= X"00000" & txk & "000" & txdata;
+--        capture_dinl <= capture_din; 
+--        capture_dinll <= capture_dinl; 
+--      end if;
+--    end process ;
+  
+  
 end Behavioral;

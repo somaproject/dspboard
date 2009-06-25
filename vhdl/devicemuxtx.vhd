@@ -59,28 +59,32 @@ architecture Behavioral of devicemuxtx is
                   echk3, esend3, echk4, esend4);
   signal cs, ns : states := none;
 
+  signal douten : std_logic := '0';
+
   component senddata
     port (
-      CLK   : in  std_logic;
-      DIN   : in  std_logic_vector(7 downto 0);
-      ADDR  : out std_logic_vector(9 downto 0);
-      DOUT  : out std_logic_vector(7 downto 0);
-      KOUT  : out std_logic;
-      START : in  std_logic;
-      DONE  : out std_logic
+      CLK    : in  std_logic;
+      DIN    : in  std_logic_vector(7 downto 0);
+      ADDR   : out std_logic_vector(9 downto 0);
+      DOUT   : out std_logic_vector(7 downto 0);
+      KOUT   : out std_logic;
+      DOUTEN : in  std_logic;
+      START  : in  std_logic;
+      DONE   : out std_logic
       );
   end component;
 
   component sendevent
     port (
-      CLK   : in  std_logic;
-      ESEND : in  std_logic_vector(1 downto 0);
-      DIN   : in  std_logic_vector(7 downto 0);
-      ADDR  : out std_logic_vector(4 downto 0);
-      DOUT  : out std_logic_vector(7 downto 0);
-      KOUT  : out std_logic;
-      START : in  std_logic;
-      DONE  : out std_logic
+      CLK    : in  std_logic;
+      ESEND  : in  std_logic_vector(1 downto 0);
+      DIN    : in  std_logic_vector(7 downto 0);
+      ADDR   : out std_logic_vector(4 downto 0);
+      DOUT   : out std_logic_vector(7 downto 0);
+      KOUT   : out std_logic;
+      DOUTEN : in  std_logic;           -- high during the cycle that samples
+      START  : in  std_logic;
+      DONE   : out std_logic
       );
   end component;
 
@@ -89,25 +93,27 @@ begin  -- Behavioral
 
   senddata_inst : senddata
     port map (
-      CLK   => CLK,
-      DIN   => ddata,
-      ADDR  => daddr,
-      DOUT  => ddout,
-      KOUT  => dkout,
-      START => dstart,
-      DONE  => ddone);
+      CLK    => CLK,
+      DIN    => ddata,
+      ADDR   => daddr,
+      DOUT   => ddout,
+      KOUT   => dkout,
+      DOUTEN => douten,
+      START  => dstart,
+      DONE   => ddone);
 
-  sendevent_inst: sendevent
+  sendevent_inst : sendevent
     port map (
-      CLK   => CLK,
-      ESEND => esend,
-      DIN   => edata,
-      ADDR  => EADDR,
-      DOUT  => edout,
-      KOUT  => ekout,
-      START => estart,
-      DONE  => edone); 
-    
+      CLK    => CLK,
+      ESEND  => esend,
+      DIN    => edata,
+      ADDR   => EADDR,
+      DOUT   => edout,
+      DOUTEN => douten,
+      KOUT   => ekout,
+      START  => estart,
+      DONE   => edone); 
+
 
   -- muxes
   ddata <= DDATAA when curgrant = 0 else
@@ -120,8 +126,6 @@ begin  -- Behavioral
            EDATAC when esend = "10" else
            EDATAD;
 
-  DOUT <= ddout when osel = 0 else edout;
-  KOUT <= ekout when osel = 0 else ekout;
 
 
   curgrant <= 0 when dgrant(0) = '1' else
@@ -134,17 +138,28 @@ begin  -- Behavioral
   enext(1) <= '1' when edone = '1' and esend = "01" else '0';
   enext(2) <= '1' when edone = '1' and esend = "10" else '0';
   enext(3) <= '1' when edone = '1' and esend = "11" else '0';
-  
+
   dnext(0) <= '1' when ddone = '1' and curgrant = 0 else '0';
   dnext(1) <= '1' when ddone = '1' and curgrant = 1 else '0';
   dnext(2) <= '1' when ddone = '1' and curgrant = 2 else '0';
   dnext(3) <= '1' when ddone = '1' and curgrant = 3 else '0';
-  
+
 
   main : process(CLK)
   begin
     if rising_edge(CLK) then
       cs <= ns;
+
+      douten <= not douten;
+      if douten = '1' then
+        if osel = 0 then
+          DOUT <= ddout;
+          KOUT <= dkout;
+        else
+          DOUT <= edout;
+          KOUT <= ekout;
+        end if;
+      end if;
 
       -- main count
       if ECYCLE = '1' then
@@ -186,9 +201,9 @@ begin  -- Behavioral
         esend  <= "00";
         estart <= '0';
         if ecycle = '1' then
-          ns   <= hdrw;
+          ns <= hdrw;
         else
-          ns   <= none;
+          ns <= none;
         end if;
 
       when hdrw =>
@@ -198,9 +213,9 @@ begin  -- Behavioral
         esend  <= "00";
         estart <= '0';
         if bpos = 48 then
-          ns   <= dvalidch;
+          ns <= dvalidch;
         else
-          ns   <= hdrw;
+          ns <= hdrw;
         end if;
 
 
@@ -211,13 +226,9 @@ begin  -- Behavioral
         esend  <= "00";
         estart <= '0';
         if dvalid(curgrant) = '1' then
-          ns   <= dsend;
+          ns <= dsend;
         else
-          if bpos = 200 then
-            ns <= echk1;
-          else
-            ns <= dvalidch;
-          end if;
+          ns <= echk1;
         end if;
 
       when dsend =>
@@ -227,9 +238,9 @@ begin  -- Behavioral
         esend  <= "00";
         estart <= '0';
         if ddone = '1' then
-          ns   <= echk1;
+          ns <= echk1;
         else
-          ns   <= dsend;
+          ns <= dsend;
         end if;
 
       when echk1 =>
@@ -239,9 +250,9 @@ begin  -- Behavioral
         esend  <= "00";
         estart <= '0';
         if evalid(0) = '1' then
-          ns   <= esend1;
+          ns <= esend1;
         else
-          ns   <= echk2;
+          ns <= echk2;
         end if;
 
       when esend1 =>
@@ -251,9 +262,9 @@ begin  -- Behavioral
         esend  <= "00";
         estart <= '1';
         if edone = '1' then
-          ns   <= echk2;
+          ns <= echk2;
         else
-          ns   <= esend1;
+          ns <= esend1;
         end if;
 
       when echk2 =>
@@ -263,9 +274,9 @@ begin  -- Behavioral
         esend  <= "01";
         estart <= '0';
         if evalid(1) = '1' then
-          ns   <= esend2;
+          ns <= esend2;
         else
-          ns   <= echk3;
+          ns <= echk3;
         end if;
 
       when esend2 =>
@@ -275,9 +286,9 @@ begin  -- Behavioral
         esend  <= "01";
         estart <= '1';
         if edone = '1' then
-          ns   <= echk3;
+          ns <= echk3;
         else
-          ns   <= esend2;
+          ns <= esend2;
         end if;
 
 
@@ -289,9 +300,9 @@ begin  -- Behavioral
         esend  <= "10";
         estart <= '0';
         if evalid(2) = '1' then
-          ns   <= esend3;
+          ns <= esend3;
         else
-          ns   <= echk4;
+          ns <= echk4;
         end if;
 
       when esend3 =>
@@ -301,9 +312,9 @@ begin  -- Behavioral
         esend  <= "10";
         estart <= '1';
         if edone = '1' then
-          ns   <= echk4;
+          ns <= echk4;
         else
-          ns   <= esend3;
+          ns <= esend3;
         end if;
 
 
@@ -315,9 +326,9 @@ begin  -- Behavioral
         esend  <= "11";
         estart <= '0';
         if evalid(3) = '1' then
-          ns   <= esend4;
+          ns <= esend4;
         else
-          ns   <= none;
+          ns <= none;
         end if;
 
       when esend4 =>
@@ -327,9 +338,9 @@ begin  -- Behavioral
         esend  <= "11";
         estart <= '1';
         if edone = '1' then
-          ns   <= none;
+          ns <= none;
         else
-          ns   <= esend4;
+          ns <= esend4;
         end if;
 
 

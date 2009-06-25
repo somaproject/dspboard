@@ -38,6 +38,9 @@ vhdl work "../../../vhdl/datamux.vhd"
 vhdl work "../../../vhdl/encodemux.vhd"
 vhdl work "../../../vhdl/uartbyteout.vhd"
 vhdl work "../../../vhdl/dspcontproc.vhd"
+vhdl work "../../../tests/deviceloopback/jtaginterface.vhd"
+
+vhdl work "bufcapture.vhd"
 vhdl work "dspboard.vhd"
 
 #

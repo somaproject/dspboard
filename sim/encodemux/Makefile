@@ -7,7 +7,11 @@ $(WORKDIR)/encodemux/behavioral.dat: $(WORKDIR)/touched ../../vhdl/encodemux.vhd
 	mkdir -p $(WORKDIR)
 	$(VHDLC) ../../vhdl/encodemux.vhd
 
-hw: $(WORKDIR)/encodemux/behavioral.dat 
+eproc/txreqbrambuffer/behavioral.dat: eproc/touched ../../vhdl/encodemux.vhd ../../vhdl/encodemux.vhd ../../vhdl/eproc/vhdl/txreqbrambuffer.vhd
+	mkdir -p eproc
+	$(VHDLC) -work eproc  ../../vhdl/eproc/vhdl/txreqbrambuffer.vhd
+
+hw: $(WORKDIR)/encodemux/behavioral.dat eproc/txreqbrambuffer/behavioral.dat 
 
 comp: 
 
@@ -21,8 +25,11 @@ runsim: all
 
 
 clean:
-	rm -Rf work 
+	rm -Rf eproc work 
 
+eproc/touched:
+	vlib  eproc
+	touch  eproc/touched
 work/touched:
 	vlib  work
 	touch  work/touched

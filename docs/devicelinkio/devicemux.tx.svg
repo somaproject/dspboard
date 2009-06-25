@@ -1,22 +1,31 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
+
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    sodipodi:docname="devicemux.tx.svg"
-   sodipodi:docbase="/home/jonas/soma/DSPboard/docs"
-   inkscape:version="0.44"
+   inkscape:version="0.46+devel r21521"
    sodipodi:version="0.32"
    id="svg1996"
    height="792.00000pt"
-   width="612.00000pt">
+   width="612.00000pt"
+   version="1.1"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape">
   <defs
      id="defs3">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 495 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="765 : 495 : 1"
+       inkscape:persp3d-origin="382.5 : 330 : 1"
+       id="perspective411" />
     <marker
        inkscape:stockid="TriangleInM"
        orient="auto"
@@ -47,24 +56,20 @@
     </marker>
   </defs>
   <sodipodi:namedview
-     inkscape:window-y="25"
-     inkscape:window-x="0"
-     inkscape:window-height="977"
-     inkscape:window-width="1277"
+     inkscape:window-y="0"
+     inkscape:window-x="1600"
+     inkscape:window-height="1177"
+     inkscape:window-width="1600"
      guidetolerance="2.5000000pt"
      inkscape:grid-bbox="false"
      gridtolerance="10000"
-     gridoriginx="0.0000000pt"
-     gridoriginy="0.0000000pt"
-     gridspacingx="2.5000000pt"
-     gridspacingy="2.5000000pt"
      inkscape:grid-points="true"
      showgrid="true"
      inkscape:current-layer="layer1"
      inkscape:document-units="pt"
-     inkscape:cy="647.61988"
-     inkscape:cx="583.49097"
-     inkscape:zoom="0.70710678"
+     inkscape:cy="365.9677"
+     inkscape:cx="592.24728"
+     inkscape:zoom="2"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
      borderopacity="1.0"
@@ -73,7 +78,21 @@
      id="base"
      showguides="true"
      inkscape:guide-bbox="false"
-     inkscape:object-paths="false" />
+     inkscape:object-paths="false"
+     inkscape:window-maximized="1">
+    <inkscape:grid
+       id="GridFromPre046Settings"
+       type="xygrid"
+       originx="0px"
+       originy="0.0000000pt"
+       spacingx="2.5000000pt"
+       spacingy="2.5000000pt"
+       color="#0000ff"
+       empcolor="#0000ff"
+       opacity="0.2"
+       empopacity="0.4"
+       empspacing="5" />
+  </sodipodi:namedview>
   <metadata
      id="metadata4">
     <rdf:RDF>
@@ -255,7 +274,7 @@
        id="g2869"
        transform="matrix(-0.5,0,0,0.5,212.5,51.25)">
       <path
-         d="M 146.875 108.75 A 3.125 3.125 0 1 1  140.625,108.75 A 3.125 3.125 0 1 1  146.875 108.75 z"
+         d="m 146.875,108.75 c 0,1.72589 -1.39911,3.125 -3.125,3.125 -1.72589,0 -3.125,-1.39911 -3.125,-3.125 0,-1.72589 1.39911,-3.125 3.125,-3.125 1.72589,0 3.125,1.39911 3.125,3.125 z"
          sodipodi:ry="3.125"
          sodipodi:rx="3.125"
          sodipodi:cy="108.75"
@@ -1212,39 +1231,15 @@
            id="tspan3296"
            sodipodi:role="line">DVALIDCH</tspan></text>
     </g>
-    <text
-       xml:space="preserve"
-       style="font-size:7px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
-       x="371.875"
-       y="571.25"
-       id="text3298"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         id="tspan3300"
-         x="371.875"
-         y="571.25">BPOS=200</tspan></text>
     <path
        id="path3302"
        d="M 353.12503,565.00018 L 353.12503,565.00018"
        style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:black;stroke-width:1pt;stroke-linecap:butt;stroke-linejoin:miter;marker-end:none;stroke-opacity:1" />
-    <path
-       transform="matrix(-0.999935,1.145556e-2,-1.145556e-2,-0.999935,523.0382,656.185)"
-       sodipodi:open="true"
-       d="M 180.21352,107.48374 A 12.5,12.5 0 1 1 168.62925,90.000583"
-       sodipodi:end="4.7027288"
-       sodipodi:start="0.41009825"
-       sodipodi:ry="12.5"
-       sodipodi:rx="12.5"
-       sodipodi:cy="102.5"
-       sodipodi:cx="168.75"
-       id="path3304"
-       style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:black;stroke-width:1.25;marker-start:url(#TriangleInM);marker-end:none"
-       sodipodi:type="arc" />
     <text
        sodipodi:linespacing="100%"
        id="text3306"
-       y="540"
-       x="366.47754"
+       y="568.125"
+       x="382.10254"
        style="font-size:7px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:100%;writing-mode:lr-tb;text-anchor:middle;stroke-width:1.25;font-family:Bitstream Vera Sans"
        xml:space="preserve"><tspan
          id="tspan3308">else</tspan></text>
@@ -2135,7 +2130,7 @@
        id="g3788"
        transform="matrix(-0.5,0,0,0.5,887.5,138.75)">
       <path
-         d="M 146.875 108.75 A 3.125 3.125 0 1 1  140.625,108.75 A 3.125 3.125 0 1 1  146.875 108.75 z"
+         d="m 146.875,108.75 c 0,1.72589 -1.39911,3.125 -3.125,3.125 -1.72589,0 -3.125,-1.39911 -3.125,-3.125 0,-1.72589 1.39911,-3.125 3.125,-3.125 1.72589,0 3.125,1.39911 3.125,3.125 z"
          sodipodi:ry="3.125"
          sodipodi:rx="3.125"
          sodipodi:cy="108.75"

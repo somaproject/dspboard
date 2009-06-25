@@ -18,6 +18,7 @@ entity encodemux is
     EDSPREQ    : in  std_logic_vector(3 downto 0);
     EDSPGRANT  : out std_logic_vector(3 downto 0);
     EDSPDONE   : in  std_logic_vector(3 downto 0);
+    EDSPDATAEN : out std_logic; 
     EDSPDATAA  : in  std_logic_vector(7 downto 0);
     EDSPDATAB  : in  std_logic_vector(7 downto 0);
     EDSPDATAC  : in  std_logic_vector(7 downto 0);
@@ -26,6 +27,7 @@ entity encodemux is
     EPROCREQ   : in  std_logic_vector(3 downto 0);
     EPROCGRANT : out std_logic_vector(3 downto 0);
     EPROCDONE  : in  std_logic_vector(3 downto 0);
+    EPROCDATAEN : out std_logic; 
     EPROCDATAA : in  std_logic_vector(7 downto 0);
     EPROCDATAB : in  std_logic_vector(7 downto 0);
     EPROCDATAC : in  std_logic_vector(7 downto 0);
@@ -67,10 +69,10 @@ architecture Behavioral of encodemux is
 
 
   type states is (none, dcheck, dsend, dwait, ddones,
-                  echecka, esenda, esendaw, enexta,
-                  echeckb, esendb, esendbw, enextb,
-                  echeckc, esendc, esendcw, enextc,
-                  echeckd, esendd, esenddw, enextd,
+                  echecka, esenda, esenda2, esendaw, enexta,
+                  echeckb, esendb, esendb2, esendbw, enextb,
+                  echeckc, esendc, esendc2, esendcw, enextc,
+                  echeckd, esendd, esendd2, esenddw, enextd,
                   timechk);
 
   signal cs, ns : states := none;
@@ -82,25 +84,24 @@ architecture Behavioral of encodemux is
   constant CNTSIZE             : integer   := 8;
   type     cnt_array is array (0 to 3) of std_logic_vector(CNTSIZE-1 downto 0);
   signal   eproc_cnt, edsp_cnt : cnt_array := (others => (others => '0'));
+
+  signal douten : std_logic := '0';
   
 begin  -- Behavioral
 
   -- output muxes
-  kd    <= kdatastart when kdsel = '0' else kdataend;
+  kd    <= KDATASTART when kdsel = '0' else KDATAEND;
   kdout <= kd         when osel = 0    else
-           keventa when osel = 1 else
-           keventb when osel = 2 else
-           keventc when osel = 3 else
-           keventd;
+           KEVENTA when osel = 1 else
+           KEVENTB when osel = 2 else
+           KEVENTC when osel = 3 else
+           KEVENTC;
 
   edout <= ddata when osel = 0 else
            edataa when osel = 1 else
            edatab when osel = 2 else
            edatac when osel = 3 else
            edatad;
-  KOUT <= ken;
-
-  DOUT <= kdout when ken = '1' else edout;
 
   EDATAA <= EPROCDATAA when esel(0) = '0' else EDSPDATAA;
   EDATAB <= EPROCDATAB when esel(1) = '0' else EDSPDATAB;
@@ -119,35 +120,49 @@ begin  -- Behavioral
 
   DGRANT <= '1' when cs = dsend else '0';
 
-  EDSPGRANT(0) <= '1' when cs = esenda and esel(0) = '1' else '0';
-  EDSPGRANT(1) <= '1' when cs = esendb and esel(1) = '1' else '0';
-  EDSPGRANT(2) <= '1' when cs = esendc and esel(2) = '1' else '0';
-  EDSPGRANT(3) <= '1' when cs = esendd and esel(3) = '1' else '0';
+  EDSPGRANT(0) <= '1' when (cs = esenda or cs = esenda2) and esel(0) = '1' else '0';
+  EDSPGRANT(1) <= '1' when (cs = esendb or cs = esendb2) and esel(1) = '1' else '0';
+  EDSPGRANT(2) <= '1' when (cs = esendc or cs = esendc2) and esel(2) = '1' else '0';
+  EDSPGRANT(3) <= '1' when (cs = esendd or cs = esendd2)and esel(3) = '1' else '0';
 
-  EPROCGRANT(0) <= '1' when cs = esenda and esel(0) = '0' else '0';
-  EPROCGRANT(1) <= '1' when cs = esendb and esel(1) = '0' else '0';
-  EPROCGRANT(2) <= '1' when cs = esendc and esel(2) = '0' else '0';
-  EPROCGRANT(3) <= '1' when cs = esendd and esel(3) = '0' else '0';
+  EPROCGRANT(0) <= '1' when (cs = esenda and douten = '1') and esel(0) = '0' else '0';
+  EPROCGRANT(1) <= '1' when (cs = esendb and douten = '1') and esel(1) = '0' else '0';
+  EPROCGRANT(2) <= '1' when (cs = esendc and douten = '1') and esel(2) = '0' else '0';
+  EPROCGRANT(3) <= '1' when (cs = esendd and douten = '1') and esel(3) = '0' else '0';
 
   DEBUG <= eproc_cnt(0) & edsp_cnt(0) & 
            eproc_cnt(1) & edsp_cnt(1) & 
            eproc_cnt(2) & edsp_cnt(2) &
            eproc_cnt(3) & edsp_cnt(3);
   
-
+  EPROCDATAEN <= douten;
+  EDSPDATAEN <= douten;
+  
   main : process(CLK)
   begin
     if rising_edge(CLK) then
       cs <= ns;
 
+      if douten = '1'  then
+        KOUT <= ken;
+        if ken = '1'  then
+          DOUT <= kdout ;
+        else
+          DOUT <=  edout;          
+        end if;
+      end if;
+
+      
       if ECYCLE = '1' then
         epos <= 0;
+        douten <= '0'; 
       else
         if epos = 1023 then
           epos <= 0;
         else
           epos <= epos + 1;
         end if;
+        douten <= not douten;     
       end if;
 
 
@@ -204,7 +219,7 @@ begin  -- Behavioral
         eproc_cnt(0) <= eproc_cnt(0) + 1;
       end if;
 
-      if edspdone(0) = '1' then
+      if eprocreq(0) = '1' then
         edsp_cnt(0) <= edsp_cnt(0) + 1;
       end if;
 
@@ -212,7 +227,7 @@ begin  -- Behavioral
         eproc_cnt(1) <= eproc_cnt(1) + 1;
       end if;
 
-      if edspdone(1) = '1' then
+      if eprocreq(1) = '1' then
         edsp_cnt(1) <= edsp_cnt(1) + 1;
       end if;
 
@@ -220,7 +235,7 @@ begin  -- Behavioral
         eproc_cnt(2) <= eproc_cnt(2) + 1;
       end if;
 
-      if edspdone(2) = '1' then
+      if eprocreq(2) = '1' then
         edsp_cnt(2) <= edsp_cnt(2) + 1;
       end if;
 
@@ -228,7 +243,7 @@ begin  -- Behavioral
         eproc_cnt(3) <= eproc_cnt(3) + 1;
       end if;
 
-      if edspdone(3) = '1' then
+      if eprocreq(3) = '1' then
         edsp_cnt(3) <= edsp_cnt(3) + 1;
       end if;
 
@@ -256,8 +271,9 @@ begin  -- Behavioral
         osel  <= 0;
         ken   <= '0';
         kdsel <= '0';
-        if DREQ = '1' then
-          ns <= dsend;
+        if DREQ = '1' then              -- FIXME data disable for test
+          ns <= echecka; 
+--          ns <= dsend;
         else
           ns <= echecka;
         end if;
@@ -305,7 +321,11 @@ begin  -- Behavioral
         osel  <= 1;
         ken   <= '1';
         kdsel <= '0';
-        ns    <= esendaw;
+        if douten = '1'  then
+          ns <= esendaw;
+        else
+          ns    <= esenda;
+        end if;
 
       when esendaw =>
         osel  <= 1;
@@ -345,7 +365,11 @@ begin  -- Behavioral
         osel  <= 2;
         ken   <= '1';
         kdsel <= '0';
-        ns    <= esendbw;
+        if douten = '1'  then
+          ns    <= esendbw;
+        else
+          ns <= esendb; 
+        end if;
 
       when esendbw =>
         osel  <= 2;
@@ -384,7 +408,12 @@ begin  -- Behavioral
         osel  <= 3;
         ken   <= '1';
         kdsel <= '0';
-        ns    <= esendcw;
+        if douten = '1'  then
+          ns    <= esendcw;
+        else
+          ns <= esendc; 
+        end if;
+
 
       when esendcw =>
         osel  <= 3;
@@ -424,7 +453,11 @@ begin  -- Behavioral
         osel  <= 4;
         ken   <= '1';
         kdsel <= '0';
-        ns    <= esenddw;
+        if douten = '1' then
+          ns    <= esenddw;
+        else
+          ns <= esendd;
+        end if; 
 
       when esenddw =>
         osel  <= 4;

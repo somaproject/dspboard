@@ -79,41 +79,42 @@ entity dspcontproc is
     RAM_INIT_3E : bit_vector(0 to 255) := (others => '0');
     RAM_INIT_3F : bit_vector(0 to 255) := (others => '0');
 
-    RAM_INITP_00 :     bit_vector(0 to 255) := (others => '0');
-    RAM_INITP_01 :     bit_vector(0 to 255) := (others => '0');
-    RAM_INITP_02 :     bit_vector(0 to 255) := (others => '0');
-    RAM_INITP_03 :     bit_vector(0 to 255) := (others => '0');
-    RAM_INITP_04 :     bit_vector(0 to 255) := (others => '0');
-    RAM_INITP_05 :     bit_vector(0 to 255) := (others => '0');
-    RAM_INITP_06 :     bit_vector(0 to 255) := (others => '0');
-    RAM_INITP_07 :     bit_vector(0 to 255) := (others => '0') );
+    RAM_INITP_00 : bit_vector(0 to 255) := (others => '0');
+    RAM_INITP_01 : bit_vector(0 to 255) := (others => '0');
+    RAM_INITP_02 : bit_vector(0 to 255) := (others => '0');
+    RAM_INITP_03 : bit_vector(0 to 255) := (others => '0');
+    RAM_INITP_04 : bit_vector(0 to 255) := (others => '0');
+    RAM_INITP_05 : bit_vector(0 to 255) := (others => '0');
+    RAM_INITP_06 : bit_vector(0 to 255) := (others => '0');
+    RAM_INITP_07 : bit_vector(0 to 255) := (others => '0'));
   port (
-    CLK          : in  std_logic;
-    CLKHI        : in  std_logic;
-    RESET        : in  std_logic;
+    CLK         : in  std_logic;
+    CLKHI       : in  std_logic;
+    RESET       : in  std_logic;
     -- Event input
-    ECYCLE       : in  std_logic;
-    EARXBYTE     : in  std_logic_vector(7 downto 0);
-    EARXBYTESEL  : out std_logic_vector(3 downto 0);
-    EDRX         : in  std_logic_vector(7 downto 0);
+    ECYCLE      : in  std_logic;
+    EARXBYTE    : in  std_logic_vector(7 downto 0);
+    EARXBYTESEL : out std_logic_vector(3 downto 0);
+    EDRX        : in  std_logic_vector(7 downto 0);
     -- Event output 
-    ESENDREQ     : out std_logic;
-    ESENDGRANT   : in  std_logic;
-    ESENDDONE    : out std_logic;
-    ESENDDATA    : out std_logic_vector(7 downto 0);
+    ESENDREQ    : out std_logic;
+    ESENDGRANT  : in  std_logic;
+    ESENDDONE   : out std_logic;
+    ESENDDATA   : out std_logic_vector(7 downto 0);
+    ESENDDATAEN : in  std_logic;
     -- DSP interface
-    DSPRESET     : out std_logic            := '0';
-    DSPSPIEN     : out std_logic            := '1';
-    DSPSPISS     : out std_logic            := '1';
-    DSPSPIMISO   : in  std_logic;
-    DSPSPIMOSI   : out std_logic;
-    DSPSPICLK    : out std_logic            := '0';
-    DSPSPIHOLD   : in  std_logic;
-    DSPUARTTX    : out std_logic;
+    DSPRESET    : out std_logic := '0';
+    DSPSPIEN    : out std_logic := '1';
+    DSPSPISS    : out std_logic := '1';
+    DSPSPIMISO  : in  std_logic;
+    DSPSPIMOSI  : out std_logic;
+    DSPSPICLK   : out std_logic := '0';
+    DSPSPIHOLD  : in  std_logic;
+    DSPUARTTX   : out std_logic;
     -- STATUS
-    LEDEVENT     : out std_logic;
-    DEBUGIN : in std_logic_vector(31 downto 0)
-    
+    LEDEVENT    : out std_logic;
+    DEBUGIN     : in  std_logic_vector(31 downto 0)
+
     );
 end dspcontproc;
 
@@ -139,52 +140,52 @@ architecture Behavioral of dspcontproc is
 
   signal lledevent : std_logic := '0';
 
-  signal eventtxwe : std_logic := '0';
-  signal debuginl : std_logic_vector(31 downto 0) := (others => '0');
+  signal eventtxwe : std_logic                     := '0';
+  signal debuginl  : std_logic_vector(31 downto 0) := (others => '0');
   signal debuginll : std_logic_vector(31 downto 0) := (others => '0');
-  
+
   signal device : std_logic_vector(7 downto 0) := (others => '1');  -- not set
 
   component bootser
-    port ( CLK   : in  std_logic;
-           DIN   : in  std_logic_vector(15 downto 0);
-           ADDRIN : in std_logic_vector(15 downto 0); 
-           WE    : in  std_logic;
-           START : in  std_logic;
-           STARTLEN : in std_logic_vector(15 downto 0); 
-           DONE  : out std_logic;
-           MOSI  : out std_logic;
-           HOLD  : in  std_logic;
-           SCLK  : out std_logic
+    port (CLK       : in  std_logic;
+           DIN      : in  std_logic_vector(15 downto 0);
+           ADDRIN   : in  std_logic_vector(15 downto 0);
+           WE       : in  std_logic;
+           START    : in  std_logic;
+           STARTLEN : in  std_logic_vector(15 downto 0);
+           DONE     : out std_logic;
+           MOSI     : out std_logic;
+           HOLD     : in  std_logic;
+           SCLK     : out std_logic
            );
   end component;
 
-  signal bootserwe      : std_logic := '0';
-  signal bootseraddrin : std_logic_vector(15 downto 0) := (others => '0');
+  signal bootserwe       : std_logic                     := '0';
+  signal bootseraddrin   : std_logic_vector(15 downto 0) := (others => '0');
   signal bootserstartlen : std_logic_vector(15 downto 0) := (others => '0');
-  signal bootserstart   : std_logic := '0';
-  signal bootserdone    : std_logic := '0';
+  signal bootserstart    : std_logic                     := '0';
+  signal bootserdone     : std_logic                     := '0';
 
 
   component uartbyteout
     port (
-      CLK         : in  std_logic;      -- '0'
-      DIN         : in  std_logic_vector(7 downto 0);
-      SEND        : in  std_logic;
-      DONE        : out std_logic;
-      UARTTX      : out std_logic
+      CLK    : in  std_logic;           -- '0'
+      DIN    : in  std_logic_vector(7 downto 0);
+      SEND   : in  std_logic;
+      DONE   : out std_logic;
+      UARTTX : out std_logic
       );
   end component;
 
-  signal uarttxsend : std_logic := '0';
+  signal uarttxsend              : std_logic := '0';
   signal uarttxdone, uarttxdonel : std_logic := '0';
   
 begin  -- Behavioral
 
   eproc_inst : entity eproc.eproc
     generic map (
-      EATXMUX     => true,
-      DEMUXEOUT   => false)
+      EATXMUX   => true,
+      DEMUXEOUT => false)
     port map (
       CLK         => CLK,
       CLKHI       => CLKHI,
@@ -218,25 +219,26 @@ begin  -- Behavioral
       SENDREQ   => ESENDREQ,
       SENDGRANT => ESENDGRANT,
       SENDDONE  => ESENDDONE,
-      DOUT      => ESENDDATA);
+      DOUT      => ESENDDATA,
+      DOUTEN    => ESENDDATAEN);
 
-  eventtxwe <= '1' when oportstrobe = '1' and oportaddr(7 downto 4) = X"8" else '0';
+  eventtxwe <= '1' when oportstrobe = '1' and oportaddr(7 downto 3) = "10000" else '0';
 
   bootser_inst : bootser
     port map (
-      CLK   => clkhi,
-      DIN   => oportdata,
-      ADDRIN => bootseraddrin, 
-      WE    => bootserwe,
-      START => bootserstart,
-      STARTLEN => bootserstartlen, 
-      DONE  => bootserdone,
-      MOSI  => DSPSPIMOSI,
+      CLK      => clkhi,
+      DIN      => oportdata,
+      ADDRIN   => bootseraddrin,
+      WE       => bootserwe,
+      START    => bootserstart,
+      STARTLEN => bootserstartlen,
+      DONE     => bootserdone,
+      MOSI     => DSPSPIMOSI,
       --MISO => DSPSPIMISO,
-      HOLD  => DSPSPIHOLD,
-      SCLK  => DSPSPICLK);
+      HOLD     => DSPSPIHOLD,
+      SCLK     => DSPSPICLK);
 
-  uartbyteout_inst: uartbyteout
+  uartbyteout_inst : uartbyteout
     port map (
       CLK    => clkhi,
       DIN    => oportdata(7 downto 0),
@@ -244,7 +246,7 @@ begin  -- Behavioral
       DONE   => uarttxdone,
       UARTTX => DSPUARTTX); 
 
-  instruction_ram :     RAMB16_S18_S18
+  instruction_ram : RAMB16_S18_S18
     generic map (
       INIT_00 => RAM_INIT_00,
       INIT_01 => RAM_INIT_01,
@@ -348,35 +350,35 @@ begin  -- Behavioral
 
   bootserstart <= '1' when oportaddr = X"03" and oportstrobe = '1' else '0';
 
-  uarttxsend <= '1' when oportaddr = X"06" and oportstrobe = '1' else '0';
-  bootserstartlen <= oportdata(15 downto 0); 
-  
+  uarttxsend      <= '1' when oportaddr = X"06" and oportstrobe = '1' else '0';
+  bootserstartlen <= oportdata(15 downto 0);
+
   main : process(CLKHI)
   begin
     if rising_edge(CLkHI) then
       if oportaddr = X"00" and OPORTSTROBE = '1' then
-        DSPRESET  <= oportdata(0);
+        DSPRESET <= oportdata(0);
       elsif oportaddr = X"01" and OPORTSTROBE = '1' then
         lledevent <= oportdata(0);
       elsif oportaddr = X"04" and OPORTSTROBE = '1' then
-        DSPSPISS  <= oportdata(0);
+        DSPSPISS <= oportdata(0);
       elsif oportaddr = X"05" and OPORTSTROBE = '1' then
-        DSPSPIEN  <= oportdata(0);
+        DSPSPIEN <= oportdata(0);
       elsif oportaddr = X"A0" and OPORTSTROBE = '1' then
-        device    <= oportdata(7 downto 0);
+        device <= oportdata(7 downto 0);
       elsif oportaddr = X"08" and OPORTSTROBE = '1' then
-        bootseraddrin    <= oportdata(15 downto 0);
+        bootseraddrin <= oportdata(15 downto 0);
       end if;
 
 
-      
+
       if oportaddr = X"06" and oportstrobe = '1' then
         uarttxdonel <= '0';
       else
-        if uarttxdone = '1'  then
-          uarttxdonel <= '1'; 
+        if uarttxdone = '1' then
+          uarttxdonel <= '1';
         end if;
-      end if; 
+      end if;
 
       if iportstrobe = '1' then
         if iportaddr = X"03" then
@@ -384,7 +386,7 @@ begin  -- Behavioral
         elsif iportaddr = X"07" then
           iportdata <= X"000" & "000" & uarttxdonel;
         elsif iportaddr = X"09" then
-          iportdata <= debuginll(15 downto 0); 
+          iportdata <= debuginll(15 downto 0);
 --        elsif iportaddr = X"0A" then
 --          iportdata <= debuginll(31 downto 16); 
         end if;
@@ -395,19 +397,19 @@ begin  -- Behavioral
       enewoutl <= enewout;
       enewoutd <= enewoutl or enewout;
 
-      debuginll <= debuginl; 
+      debuginll <= debuginl;
 
 
     end if;
 
   end process main;
 
-  debugproc: process(CLK)
-    begin
-      if rising_edge(CLK) then
-        debuginl <= DEBUGIN;
-      end if;
-    end process debugproc;
+  debugproc : process(CLK)
+  begin
+    if rising_edge(CLK) then
+      debuginl <= DEBUGIN;
+    end if;
+  end process debugproc;
 
-    
+  
 end Behavioral;
