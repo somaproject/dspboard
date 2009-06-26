@@ -69,10 +69,10 @@ architecture Behavioral of encodemux is
 
 
   type states is (none, dcheck, dsend, dwait, ddones,
-                  echecka, esenda, esenda2, esendaw, enexta,
-                  echeckb, esendb, esendb2, esendbw, enextb,
-                  echeckc, esendc, esendc2, esendcw, enextc,
-                  echeckd, esendd, esendd2, esenddw, enextd,
+                  echecka, esenda, esendaw, enexta,
+                  echeckb, esendb, esendbw, enextb,
+                  echeckc, esendc, esendcw, enextc,
+                  echeckd, esendd, esenddw, enextd,
                   timechk);
 
   signal cs, ns : states := none;
@@ -95,7 +95,7 @@ begin  -- Behavioral
            KEVENTA when osel = 1 else
            KEVENTB when osel = 2 else
            KEVENTC when osel = 3 else
-           KEVENTC;
+           KEVENTD;
 
   edout <= ddata when osel = 0 else
            edataa when osel = 1 else
@@ -120,10 +120,10 @@ begin  -- Behavioral
 
   DGRANT <= '1' when cs = dsend else '0';
 
-  EDSPGRANT(0) <= '1' when (cs = esenda or cs = esenda2) and esel(0) = '1' else '0';
-  EDSPGRANT(1) <= '1' when (cs = esendb or cs = esendb2) and esel(1) = '1' else '0';
-  EDSPGRANT(2) <= '1' when (cs = esendc or cs = esendc2) and esel(2) = '1' else '0';
-  EDSPGRANT(3) <= '1' when (cs = esendd or cs = esendd2)and esel(3) = '1' else '0';
+  EDSPGRANT(0) <= '1' when (cs = esenda) and esel(0) = '1' else '0';
+  EDSPGRANT(1) <= '1' when (cs = esendb) and esel(1) = '1' else '0';
+  EDSPGRANT(2) <= '1' when (cs = esendc) and esel(2) = '1' else '0';
+  EDSPGRANT(3) <= '1' when (cs = esendd)and esel(3) = '1' else '0';
 
   EPROCGRANT(0) <= '1' when (cs = esenda and douten = '1') and esel(0) = '0' else '0';
   EPROCGRANT(1) <= '1' when (cs = esendb and douten = '1') and esel(1) = '0' else '0';
@@ -219,7 +219,7 @@ begin  -- Behavioral
         eproc_cnt(0) <= eproc_cnt(0) + 1;
       end if;
 
-      if eprocreq(0) = '1' then
+      if ecycle = '1' and cs /= none then
         edsp_cnt(0) <= edsp_cnt(0) + 1;
       end if;
 
@@ -227,25 +227,14 @@ begin  -- Behavioral
         eproc_cnt(1) <= eproc_cnt(1) + 1;
       end if;
 
-      if eprocreq(1) = '1' then
-        edsp_cnt(1) <= edsp_cnt(1) + 1;
-      end if;
-
       if eprocdone(2) = '1' then
         eproc_cnt(2) <= eproc_cnt(2) + 1;
-      end if;
-
-      if eprocreq(2) = '1' then
-        edsp_cnt(2) <= edsp_cnt(2) + 1;
       end if;
 
       if eprocdone(3) = '1' then
         eproc_cnt(3) <= eproc_cnt(3) + 1;
       end if;
 
-      if eprocreq(3) = '1' then
-        edsp_cnt(3) <= edsp_cnt(3) + 1;
-      end if;
 
     end if;
   end process main;
@@ -479,7 +468,7 @@ begin  -- Behavioral
         osel  <= 0;
         ken   <= '0';
         kdsel <= '0';
-        if epos < 900 then
+        if epos < 700 then
           ns <= echecka;
         else
           ns <= none;

@@ -39,7 +39,7 @@ architecture Behavioral of bufcapture is
   signal dipa, dipb : std_logic_vector(3 downto 0) := (others => '0');
   
 begin  -- Behavioral
-  rambuf : for i in 0 to 5 generate
+  rambuf : for i in 0 to 7 generate
     
     bufferA_inst : RAMB16_S36_S36
       generic map (

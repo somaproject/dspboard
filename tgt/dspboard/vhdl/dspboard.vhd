@@ -592,54 +592,54 @@ architecture Behavioral of dspboard is
 
   signal encode_debug : std_logic_vector(63 downto 0) := (others => '0');
 
-  -----------------------------------------------------------------------------
-  -- JTAG DEBUGGING
-  -----------------------------------------------------------------------------
+--  -----------------------------------------------------------------------------
+--  -- JTAG DEBUGGING
+--  -----------------------------------------------------------------------------
 
---  component jtaginterface
---    generic (
---      JTAG1N : integer := 32;
---      JTAG2N : integer := 32);
---    port (
---      CLK     : in  std_logic;
---      DIN1    : in  std_logic_vector(JTAG1N-1 downto 0);
---      DOUT1   : out std_logic_vector(JTAG1N-1 downto 0);
---      DOUT1EN : out std_logic;
---      DIN2    : in  std_logic_vector(JTAG2N-1 downto 0);
---      DOUT2   : out std_logic_vector(JTAG2N-1 downto 0);
---      DOUT2EN : out std_logic
---      );
---  end component;
+  component jtaginterface
+    generic (
+      JTAG1N : integer := 32;
+      JTAG2N : integer := 32);
+    port (
+      CLK     : in  std_logic;
+      DIN1    : in  std_logic_vector(JTAG1N-1 downto 0);
+      DOUT1   : out std_logic_vector(JTAG1N-1 downto 0);
+      DOUT1EN : out std_logic;
+      DIN2    : in  std_logic_vector(JTAG2N-1 downto 0);
+      DOUT2   : out std_logic_vector(JTAG2N-1 downto 0);
+      DOUT2EN : out std_logic
+      );
+  end component;
 
---  component bufcapture
---    port (
---      CLKA     : in  std_logic;
---      DIN      : in  std_logic_vector(31 downto 0);
---      DINEN    : in  std_logic;
---      NEXTBUF  : in  std_logic;
---      -- readout side
---      CLKB     : in  std_logic;
---      READADDR : in  std_logic_vector(11 downto 0);
---      DOUT     : out std_logic_vector(35 downto 0)
---      );
---  end component;
+  component bufcapture
+    port (
+      CLKA     : in  std_logic;
+      DIN      : in  std_logic_vector(31 downto 0);
+      DINEN    : in  std_logic;
+      NEXTBUF  : in  std_logic;
+      -- readout side
+      CLKB     : in  std_logic;
+      READADDR : in  std_logic_vector(11 downto 0);
+      DOUT     : out std_logic_vector(35 downto 0)
+      );
+  end component;
 
---  signal txkl : std_logic := '0';
+  signal txkl : std_logic := '0';
 
   
   
---  signal jtag_din1 : std_logic_vector(63 downto 0) := (others => '0');
---  signal jtag_dout1 : std_logic_vector(63 downto 0) := (others => '0');
---  signal jtag_dout1en : std_logic := '0';
+  signal jtag_din1 : std_logic_vector(63 downto 0) := (others => '0');
+  signal jtag_dout1 : std_logic_vector(63 downto 0) := (others => '0');
+  signal jtag_dout1en : std_logic := '0';
 
---  signal jtag_din2 : std_logic_vector(63 downto 0) := (others => '0');
---  signal jtag_dout2 : std_logic_vector(63 downto 0) := (others => '0');
---  signal jtag_dout2en : std_logic := '0';
+  signal jtag_din2 : std_logic_vector(63 downto 0) := (others => '0');
+  signal jtag_dout2 : std_logic_vector(63 downto 0) := (others => '0');
+  signal jtag_dout2en : std_logic := '0';
   
---  signal capture_din : std_logic_vector(31 downto 0) := (others => '0');
---  signal capture_dinl : std_logic_vector(31 downto 0) := (others => '0');
---  signal capture_dinll : std_logic_vector(31 downto 0) := (others => '0');
---  signal capture_dinen, capture_nextbuf : std_logic := '0';
+  signal capture_din : std_logic_vector(31 downto 0) := (others => '0');
+  signal capture_dinl : std_logic_vector(31 downto 0) := (others => '0');
+  signal capture_dinll : std_logic_vector(31 downto 0) := (others => '0');
+  signal capture_dinen, capture_nextbuf : std_logic := '0';
 
 
 
@@ -1263,22 +1263,23 @@ begin  -- Behavioral
     end if;
   end process;
 
---  -----------------------------------------------------------------------------
---  -- JTAG DEBUGGING
---  -----------------------------------------------------------------------------
---  jtagif_inst : jtaginterface
---    generic map (
---      JTAG1N => 64,
---      JTAG2N => 64)
---    port map (
---      CLK     => clk,
---      DIN1    => jtag_din1,
---      DOUT1   => jtag_dout1,
---      DOUT1EN => jtag_dout1en,
---      DIN2    => jtag_din2,
---      DOUT2   => jtag_dout2,
---      DOUT2EN => jtag_dout2en);
+  -----------------------------------------------------------------------------
+  -- JTAG DEBUGGING
+  -----------------------------------------------------------------------------
+  jtagif_inst : jtaginterface
+    generic map (
+      JTAG1N => 64,
+      JTAG2N => 64)
+    port map (
+      CLK     => clk,
+      DIN1    => jtag_din1,
+      DOUT1   => jtag_dout1,
+      DOUT1EN => jtag_dout1en,
+      DIN2    => jtag_din2,
+      DOUT2   => jtag_dout2,
+      DOUT2EN => jtag_dout2en);
 
+  jtag_din2 <= encode_debug; 
 --  bufcapture_inst: bufcapture
 --    port map (
 --      CLKA     => CLK,
