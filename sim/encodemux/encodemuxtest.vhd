@@ -128,33 +128,33 @@ begin  -- Behavioral
       EPROCDATAC  => EPROCDATAC,
       EPROCDATAD  => EPROCDATAD);
 
-  eprocbuf_inst : entity eproc.txreqbrambuffer
-    port map (
-      CLK       => CLKHI,
-      SRC       => X"20",
-      ADDRIN    => eprocbuf_addr,
-      WEIN      => eprocbuf_we,
-      DIN       => eprocbuf_data,
-      OUTCLK    => CLK,
-      SENDREQ   => EPROCREQ(0),
-      SENDGRANT => EPROCGRANT(0),
-      SENDDONE  => EPROCDONE(0),
-      DOUT      => EPROCDATAA,
-      DOUTEN    => EPROCDATAEN);
+--  eprocbuf_inst : entity eproc.txreqbrambuffer
+--    port map (
+--      CLK       => CLKHI,
+--      SRC       => X"20",
+--      ADDRIN    => eprocbuf_addr,
+--      WEIN      => eprocbuf_we,
+--      DIN       => eprocbuf_data,
+--      OUTCLK    => CLK,
+--      SENDREQ   => EPROCREQ(0),
+--      SENDGRANT => EPROCGRANT(0),
+--      SENDDONE  => EPROCDONE(0),
+--      DOUT      => EPROCDATAA,
+--      DOUTEN    => EPROCDATAEN);
 
-  eprocbuf_inst2 : entity eproc.txreqbrambuffer
-    port map (
-      CLK       => CLKHI,
-      SRC       => X"21",
-      ADDRIN    => eprocbuf_addr,
-      WEIN      => eprocbuf_we,
-      DIN       => eprocbuf_data,
-      OUTCLK    => CLK,
-      SENDREQ   => EPROCREQ(1),
-      SENDGRANT => EPROCGRANT(1),
-      SENDDONE  => EPROCDONE(1),
-      DOUT      => EPROCDATAB,
-      DOUTEN    => EPROCDATAEN);
+--  eprocbuf_inst2 : entity eproc.txreqbrambuffer
+--    port map (
+--      CLK       => CLKHI,
+--      SRC       => X"21",
+--      ADDRIN    => eprocbuf_addr,
+--      WEIN      => eprocbuf_we,
+--      DIN       => eprocbuf_data,
+--      OUTCLK    => CLK,
+--      SENDREQ   => EPROCREQ(1),
+--      SENDGRANT => EPROCGRANT(1),
+--      SENDDONE  => EPROCDONE(1),
+--      DOUT      => EPROCDATAB,
+--      DOUTEN    => EPROCDATAEN);
 
   eprocbuf_inst3 : entity eproc.txreqbrambuffer
     port map (
@@ -220,98 +220,98 @@ begin  -- Behavioral
   end process datasend;
 
 
---  eventsend_DSP_A : process
---  begin
---    for edspacnt in 0 to 10 loop
---      wait until rising_edge(CLK) and ECYCLE = '1' and (ecyclepos mod 2) = 1;
---      -- send an event
---      EDSPREQ(0) <= '1';
---      wait until rising_edge(CLK) and EDSPGRANT(0) = '1' and EDSPDATAEN = '1';
---      EDSPREQ(0) <= '0';
---      for i in 0 to 21 loop
---        EDSPDATAA <= std_logic_vector(TO_UNSIGNED(i + 0 + edspacnt, 8));
---        if i = 21 then
---          EDSPDONE(0) <= '1';
---        else
---          EDSPDONE(0) <= '0';
---        end if;
---        wait until rising_edge(CLK) and EDSPDATAEN = '1';
---      end loop;  -- i
---      EDSPREQ(0) <= '0';
---    end loop;  -- edspacnt
---    wait;
---  end process eventsend_DSP_A;
+  eventsend_DSP_A : process
+  begin
+    for edspacnt in 0 to 10 loop
+      wait until rising_edge(CLK) and ECYCLE = '1' and (ecyclepos mod 2) = 1;
+      -- send an event
+      EDSPREQ(0) <= '1';
+      wait until rising_edge(CLK) and EDSPGRANT(0) = '1' and EDSPDATAEN = '1';
+      EDSPREQ(0) <= '0';
+      for i in 0 to 21 loop
+        EDSPDATAA <= std_logic_vector(TO_UNSIGNED(i + 0 + edspacnt, 8));
+        if i = 21 then
+          EDSPDONE(0) <= '1';
+        else
+          EDSPDONE(0) <= '0';
+        end if;
+        wait until rising_edge(CLK) and EDSPDATAEN = '1';
+      end loop;  -- i
+      EDSPREQ(0) <= '0';
+    end loop;  -- edspacnt
+    wait;
+  end process eventsend_DSP_A;
 
---  eventsend_PROC_A : process
---  begin
---    for eprocacnt in 0 to 10 loop
---      wait until rising_edge(CLK) and ECYCLE = '1' and (ecyclepos mod 2) = 1;
---      -- send an event
---      EPROCREQ(0) <= '1';
---      wait until rising_edge(CLK) and EPROCGRANT(0) = '1' and EPROCDATAEN = '1';
---      EPROCREQ(0) <= '0';
---      for i in 0 to 21 loop
---        EPROCDATAA <= std_logic_vector(TO_UNSIGNED(i + 128 + eprocacnt, 8));
---        if i = 21 then
---          EPROCDONE(0) <= '1';
---        else
---          EPROCDONE(0) <= '0';
---        end if;
---        wait until rising_edge(CLK) and EPROCDATAEN = '1';
---      end loop;  -- i
---      EPROCREQ(0) <= '0';
---    end loop;
---    wait;
+  eventsend_PROC_A : process
+  begin
+    for eprocacnt in 0 to 10 loop
+      wait until rising_edge(CLK) and ECYCLE = '1' and (ecyclepos mod 2) = 1;
+      -- send an event
+      EPROCREQ(0) <= '1';
+      wait until rising_edge(CLK) and EPROCGRANT(0) = '1' and EPROCDATAEN = '1';
+      EPROCREQ(0) <= '0';
+      for i in 0 to 21 loop
+        EPROCDATAA <= std_logic_vector(TO_UNSIGNED(i + 128 + eprocacnt, 8));
+        if i = 21 then
+          EPROCDONE(0) <= '1';
+        else
+          EPROCDONE(0) <= '0';
+        end if;
+        wait until rising_edge(CLK) and EPROCDATAEN = '1';
+      end loop;  -- i
+      EPROCREQ(0) <= '0';
+    end loop;
+    wait;
 
---  end process eventsend_PROC_A;
-
-
+  end process eventsend_PROC_A;
 
 
---  eventsend_DSP_B : process
---  begin
---    for edspbcnt in 0 to 10 loop
---      wait until rising_edge(CLK) and ECYCLE = '1';
---      -- send an event
---      EDSPREQ(1) <= '1';
---      wait until rising_edge(CLK) and EDSPGRANT(1) = '1' and EDSPDATAEN = '1';
---      EDSPREQ(1) <= '0';
---      for i in 0 to 21 loop
---        EDSPDATAB <= std_logic_vector(TO_UNSIGNED(i + 32 + edspbcnt, 8));
---        if i = 21 then
---          EDSPDONE(1) <= '1';
---        else
---          EDSPDONE(1) <= '0';
---        end if;
---        wait until rising_edge(CLK) and EDSPDATAEN = '1';
---      end loop;  -- i
---      EDSPREQ(1) <= '0';
---    end loop;  -- edspacnt
---    wait;
---  end process eventsend_DSP_B;
 
---  eventsend_PROC_B : process
---  begin
---    for eprocbcnt in 0 to 10 loop
---      wait until rising_edge(CLK) and ECYCLE = '1';
---      -- send an event
---      EPROCREQ(1) <= '1';
---      wait until rising_edge(CLK) and EPROCGRANT(1) = '1' and EPROCDATAEN = '1';
---      EPROCREQ(1) <= '0';
---      for i in 0 to 21 loop
---        EPROCDATAB <= std_logic_vector(TO_UNSIGNED(i + 128 + 32 + eprocbcnt, 8));
---        if i = 21 then
---          EPROCDONE(1) <= '1';
---        else
---          EPROCDONE(1) <= '0';
---        end if;
---        wait until rising_edge(CLK) and EPROCDATAEN = '1';
---      end loop;  -- i
---      EPROCREQ(1) <= '0';
---    end loop;
---    wait;
 
---  end process eventsend_PROC_B;
+  eventsend_DSP_B : process
+  begin
+    for edspbcnt in 0 to 10 loop
+      wait until rising_edge(CLK) and ECYCLE = '1';
+      -- send an event
+      EDSPREQ(1) <= '1';
+      wait until rising_edge(CLK) and EDSPGRANT(1) = '1' and EDSPDATAEN = '1';
+      EDSPREQ(1) <= '0';
+      for i in 0 to 21 loop
+        EDSPDATAB <= std_logic_vector(TO_UNSIGNED(i + 32 + edspbcnt, 8));
+        if i = 21 then
+          EDSPDONE(1) <= '1';
+        else
+          EDSPDONE(1) <= '0';
+        end if;
+        wait until rising_edge(CLK) and EDSPDATAEN = '1';
+      end loop;  -- i
+      EDSPREQ(1) <= '0';
+    end loop;  -- edspacnt
+    wait;
+  end process eventsend_DSP_B;
+
+  eventsend_PROC_B : process
+  begin
+    for eprocbcnt in 0 to 10 loop
+      wait until rising_edge(CLK) and ECYCLE = '1';
+      -- send an event
+      EPROCREQ(1) <= '1';
+      wait until rising_edge(CLK) and EPROCGRANT(1) = '1' and EPROCDATAEN = '1';
+      EPROCREQ(1) <= '0';
+      for i in 0 to 21 loop
+        EPROCDATAB <= std_logic_vector(TO_UNSIGNED(i + 128 + 32 + eprocbcnt, 8));
+        if i = 21 then
+          EPROCDONE(1) <= '1';
+        else
+          EPROCDONE(1) <= '0';
+        end if;
+        wait until rising_edge(CLK) and EPROCDATAEN = '1';
+      end loop;  -- i
+      EPROCREQ(1) <= '0';
+    end loop;
+    wait;
+
+  end process eventsend_PROC_B;
 
 
 
@@ -409,126 +409,126 @@ begin  -- Behavioral
 
 -- now, verify output
 
---  -------------------------------------------------
---  -- verify DATA output
---  -------------------------------------------------
---  process
---  begin
---    for i in 0 to 10 loop
+  -------------------------------------------------
+  -- verify DATA output
+  -------------------------------------------------
+  process
+  begin
+    for i in 0 to 10 loop
 
---      wait until rising_edge(CLK) and KOUT = '1' and DOUT = KDATASTART;
---      for j in 0 to 599 loop
---        wait until rising_edge(CLK);
+      wait until rising_edge(CLK) and KOUT = '1' and DOUT = KDATASTART;
+      for j in 0 to 599 loop
+        wait until rising_edge(CLK);
 
---        assert DOUT = std_logic_vector(TO_UNSIGNED((i + j) mod 256, 8))
---          report "Error in Data" severity error;
---      end loop;  -- j
---      wait until rising_edge(CLK);
---      assert KOUT = '1' and DOUT = KDATAEND report "Error with KDATAEND" severity error;
-
-
---    end loop;  -- i
---    report "Done with Data RX" severity note;
---    data_done <= '1';
---    wait;
---  end process;
-
---  -------------------------------------------------
---  -- verify EVENT A output
---  -------------------------------------------------
---  process
---    variable current_eproca : integer := 0;
---  begin
---    mainloop : while true loop
---      wait until rising_edge(CLK) and KOUT = '1' and
---        DOUT = KEVENTA and douten = '1';
---      wait until rising_edge(CLK);
---      wait until rising_edge(CLK);
---      if DOUT = std_logic_vector(TO_UNSIGNED(128 + current_eproca, 8)) then
---        wait until rising_edge(CLK);
---        current_eproca := current_eproca + 1;
---      end if;
---      if current_eproca = 10 then
---        exit mainloop;
---      end if;
---    end loop;
-
---    report "done with eproca" severity note;
---    eproca_done <= '1';
---    wait;
---  end process;
+        assert DOUT = std_logic_vector(TO_UNSIGNED((i + j) mod 256, 8))
+          report "Error in Data" severity error;
+      end loop;  -- j
+      wait until rising_edge(CLK);
+      assert KOUT = '1' and DOUT = KDATAEND report "Error with KDATAEND" severity error;
 
 
---  process
---    variable current_edspa : integer := 0;
---  begin
---    mainloop : while true loop
---      wait until rising_edge(CLK) and KOUT = '1' and
---        DOUT = KEVENTA and douten = '1';
---      wait until rising_edge(CLK);
---      wait until rising_edge(CLK);
---      if DOUT = std_logic_vector(TO_UNSIGNED(0 + current_edspa, 8)) then
---        wait until rising_edge(CLK);
---        current_edspa := current_edspa + 1;
---      end if;
---      if current_edspa = 10 then
---        exit mainloop;
---      end if;
---    end loop;
+    end loop;  -- i
+    report "Done with Data RX" severity note;
+    data_done <= '1';
+    wait;
+  end process;
 
---    report "done with edspa" severity note;
---    edspa_done <= '1';
+  -------------------------------------------------
+  -- verify EVENT A output
+  -------------------------------------------------
+  process
+    variable current_eproca : integer := 0;
+  begin
+    mainloop : while true loop
+      wait until rising_edge(CLK) and KOUT = '1' and
+        DOUT = KEVENTA and douten = '1';
+      wait until rising_edge(CLK);
+      wait until rising_edge(CLK);
+      if DOUT = std_logic_vector(TO_UNSIGNED(128 + current_eproca, 8)) then
+        wait until rising_edge(CLK);
+        current_eproca := current_eproca + 1;
+      end if;
+      if current_eproca = 10 then
+        exit mainloop;
+      end if;
+    end loop;
 
---    wait;
-
---  end process;
-
---  -------------------------------------------------
---  -- verify EVENT B output (eventb tries to send every ecycle)
---  -------------------------------------------------
---  process
---    variable current_eprocb : integer := 0;
---  begin
---    mainloop : while true loop
---      wait until rising_edge(CLK) and KOUT = '1' and DOUT = KEVENTB and douten = '1';
---      wait until rising_edge(CLK);
---      wait until rising_edge(CLK);
---      if DOUT = std_logic_vector(TO_UNSIGNED(0 + current_eprocb + 128 + 32, 8)) then
---        wait until rising_edge(CLK);
---        current_eprocb := current_eprocb + 1;
---      end if;
---      if current_eprocb = 10 then
---        exit mainloop;
---      end if;
---    end loop;
-
---    report "done with eprocb" severity note;
---    eprocb_done <= '1';
---    wait;
-
---  end process;
+    report "done with eproca" severity note;
+    eproca_done <= '1';
+    wait;
+  end process;
 
 
---  process
---    variable current_edspb : integer := 0;
---  begin
---    mainloop : while true loop
---      wait until rising_edge(CLK) and KOUT = '1' and DOUT = KEVENTB and douten = '1';
---      wait until rising_edge(CLK);
---      wait until rising_edge(CLK);
---      if DOUT = std_logic_vector(TO_UNSIGNED(32 + current_edspb, 8)) then
---        wait until rising_edge(CLK);
---        current_edspb := current_edspb + 1;
---      end if;
---      if current_edspb = 10 then
---        exit mainloop;
---      end if;
---    end loop;
+  process
+    variable current_edspa : integer := 0;
+  begin
+    mainloop : while true loop
+      wait until rising_edge(CLK) and KOUT = '1' and
+        DOUT = KEVENTA and douten = '1';
+      wait until rising_edge(CLK);
+      wait until rising_edge(CLK);
+      if DOUT = std_logic_vector(TO_UNSIGNED(0 + current_edspa, 8)) then
+        wait until rising_edge(CLK);
+        current_edspa := current_edspa + 1;
+      end if;
+      if current_edspa = 10 then
+        exit mainloop;
+      end if;
+    end loop;
 
---    report "done with edspb" severity note;
---    edspb_done <= '1';
---    wait;
---  end process;
+    report "done with edspa" severity note;
+    edspa_done <= '1';
+
+    wait;
+
+  end process;
+
+  -------------------------------------------------
+  -- verify EVENT B output (eventb tries to send every ecycle)
+  -------------------------------------------------
+  process
+    variable current_eprocb : integer := 0;
+  begin
+    mainloop : while true loop
+      wait until rising_edge(CLK) and KOUT = '1' and DOUT = KEVENTB and douten = '1';
+      wait until rising_edge(CLK);
+      wait until rising_edge(CLK);
+      if DOUT = std_logic_vector(TO_UNSIGNED(0 + current_eprocb + 128 + 32, 8)) then
+        wait until rising_edge(CLK);
+        current_eprocb := current_eprocb + 1;
+      end if;
+      if current_eprocb = 10 then
+        exit mainloop;
+      end if;
+    end loop;
+
+    report "done with eprocb" severity note;
+    eprocb_done <= '1';
+    wait;
+
+  end process;
+
+
+  process
+    variable current_edspb : integer := 0;
+  begin
+    mainloop : while true loop
+      wait until rising_edge(CLK) and KOUT = '1' and DOUT = KEVENTB and douten = '1';
+      wait until rising_edge(CLK);
+      wait until rising_edge(CLK);
+      if DOUT = std_logic_vector(TO_UNSIGNED(32 + current_edspb, 8)) then
+        wait until rising_edge(CLK);
+        current_edspb := current_edspb + 1;
+      end if;
+      if current_edspb = 10 then
+        exit mainloop;
+      end if;
+    end loop;
+
+    report "done with edspb" severity note;
+    edspb_done <= '1';
+    wait;
+  end process;
 
 
 --------------------------------------------------

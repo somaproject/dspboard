@@ -16,6 +16,7 @@ entity eventrx is
     MOSI     : in  std_logic;
     SCS      : in  std_logic;
     FIFOFULL : out std_logic;
+    DOUTEN   : in  std_logic;
     DOUT     : out std_logic_vector(7 downto 0);
     REQ      : out std_logic;
     GRANT    : in  std_logic;
@@ -48,7 +49,7 @@ architecture Behavioral of eventrx is
   signal armeda : std_logic := '0';
   signal armedb : std_logic := '0';
 
-  type instates is (startup, none, wordw, wordchk, bufarm, nextisel);
+  type   instates is (startup, none, wordw, wordchk, bufarm, nextisel);
   signal ics, ins : instates := none;
 
   -- OUTPUT SIGNALS
@@ -69,7 +70,7 @@ architecture Behavioral of eventrx is
 
   component regfile
     generic (
-      BITS  :     integer := 16);
+      BITS : integer := 16);
     port (
       CLK   : in  std_logic;
       DIA   : in  std_logic_vector(BITS-1 downto 0);
@@ -103,15 +104,15 @@ begin  -- Behavioral
 --               (armedb = '1' and ics = wordw) else
 --               '0';
 -- which is correct? I do not know! 
-  FIFOFULL <= '1' when (armeda = '1' and armedb = '1' ) or
-              (armeda = '1' and wcntin > 0 ) or
+  FIFOFULL <= '1' when (armeda = '1' and armedb = '1') or
+              (armeda = '1' and wcntin > 0) or
               (armedb = '1' and wcntin > 0) else
               '0';
 
   
   regfile_a : regfile
     generic map (
-      BITS  => 16)
+      BITS => 16)
     port map (
       CLK   => CLK,
       DIA   => din,
@@ -123,7 +124,7 @@ begin  -- Behavioral
 
   regfile_b : regfile
     generic map (
-      BITS  => 16)
+      BITS => 16)
     port map (
       CLK   => CLK,
       DIA   => din,
@@ -132,22 +133,22 @@ begin  -- Behavioral
       WEA   => web,
       DOB   => doutb,
       ADDRB => wcntout);
-  
+
   main : process(clk)
   begin
     if RESET = '1' then
-      ics   <= startup;
-      ocs   <= armaw;
+      ics    <= startup;
+      ocs    <= armaw;
       armeda <= '0';
-      armedb <= '0'; 
+      armedb <= '0';
     else
       if rising_edge(CLK) then
-        ics <= ins;
-        ocs <= ons;
+        ics                <= ins;
+        ocs                <= ons;
         DEBUG(15 downto 8) <= debugEventCounter;
         if ics = bufarm then
           debugEventCounter <= debugEventCounter + 1;
-        end if;         
+        end if;
 
 
         scsl   <= SCS;
@@ -156,7 +157,7 @@ begin  -- Behavioral
         sclkll <= sclkl;
 
         if ics = none then
-          bitcnt     <= 0;
+          bitcnt <= 0;
         else
           if biten = '1' then
             if bitcnt = 15 then
@@ -173,7 +174,7 @@ begin  -- Behavioral
         end if;
 
         if ics = bufarm then
-          wcntin   <= (others => '0');
+          wcntin <= (others => '0');
         else
           if ics = wordchk then
             wcntin <= wcntin + 1;
@@ -182,7 +183,7 @@ begin  -- Behavioral
 
         -- arming regs
         if ics = bufarm and isel = '0' then
-          armeda   <= '1';
+          armeda <= '1';
         else
           if ocs = donea then
             armeda <= '0';
@@ -190,7 +191,7 @@ begin  -- Behavioral
         end if;
 
         if ics = bufarm and isel = '1' then
-          armedb   <= '1';
+          armedb <= '1';
         else
           if ocs = doneb then
             armedb <= '0';
@@ -198,9 +199,9 @@ begin  -- Behavioral
         end if;
 
         if ocs = armaw or ocs = armbw then
-          wcntout   <= (others => '0');
+          wcntout <= (others => '0');
         else
-          if ocs = sendal or ocs = sendbl then
+          if (ocs = sendal or ocs = sendbl) and DOUTEN ='1'  then
             wcntout <= wcntout + 1;
           end if;
         end if;
@@ -233,11 +234,11 @@ begin  -- Behavioral
         if scsl = '1' then
           ins <= none;
         else
-          ins <= startup; 
+          ins <= startup;
         end if;
         
       when none =>
-        DEBUG(3 downto 0) <= X"0"; 
+        DEBUG(3 downto 0) <= X"0";
         if scsl = '0' then
           ins <= wordw;
         else
@@ -245,9 +246,9 @@ begin  -- Behavioral
         end if;
 
       when wordw =>
-        DEBUG(3 downto 0) <= X"1"; 
+        DEBUG(3 downto 0) <= X"1";
         if scsl = '1' then
-          ins   <= none;
+          ins <= none;
         else
           if biten = '1' and bitcnt = 15 then
             ins <= wordchk;
@@ -257,7 +258,7 @@ begin  -- Behavioral
         end if;
 
       when wordchk =>
-        DEBUG(3 downto 0) <= X"2"; 
+        DEBUG(3 downto 0) <= X"2";
         if wcntin = "1010" then
           ins <= bufarm;
         else
@@ -265,15 +266,15 @@ begin  -- Behavioral
         end if;
 
       when bufarm =>
-        DEBUG(3 downto 0) <= X"3"; 
-        ins <= nextisel;
+        DEBUG(3 downto 0) <= X"3";
+        ins               <= nextisel;
 
       when nextisel =>
-        DEBUG(3 downto 0) <= X"4"; 
-        ins <= none;
-      when others   =>
-        DEBUG(3 downto 0) <= X"5"; 
-        ins <= none;
+        DEBUG(3 downto 0) <= X"4";
+        ins               <= none;
+      when others =>
+        DEBUG(3 downto 0) <= X"5";
+        ins               <= none;
     end case;
 
   end process input_fsm;
@@ -281,12 +282,12 @@ begin  -- Behavioral
   -----------------------------------------------------------------------
   -- output finite state machine
   -----------------------------------------------------------------------
-  output_fsm : process(ocs, armeda, armedB, grant, wcntout)
+  output_fsm : process(ocs, armeda, armedB, grant, wcntout, DOUTEN)
   begin
     case ocs is
       when armaw =>
-        osel  <= '0';
-        dsel  <= '0';
+        osel <= '0';
+        dsel <= '0';
         if armeda = '1' then
           ons <= armareq;
         else
@@ -294,8 +295,8 @@ begin  -- Behavioral
         end if;
 
       when armareq =>
-        osel  <= '0';
-        dsel  <= '0';
+        osel <= '0';
+        dsel <= '0';
         if GRANT = '1' then
           ons <= sendah;
         else
@@ -305,15 +306,24 @@ begin  -- Behavioral
       when sendah =>
         osel <= '0';
         dsel <= '0';
-        ons  <= sendal;
+        if DOUTEN = '1' then
+          ons <= sendal;
+        else
+
+          ons <= sendah;
+        end if;
 
       when sendal =>
-        osel  <= '0';
-        dsel  <= '1';
-        if wcntout = "1010" then
-          ons <= donea;
+        osel <= '0';
+        dsel <= '1';
+        if douten = '1' then
+          if wcntout = "1010" then
+            ons <= donea;
+          else
+            ons <= sendah;
+          end if;
         else
-          ons <= sendah;
+          ons <= sendal;
         end if;
 
       when donea =>
@@ -322,8 +332,8 @@ begin  -- Behavioral
         ons  <= armbw;
 
       when armbw =>
-        osel  <= '1';
-        dsel  <= '0';
+        osel <= '1';
+        dsel <= '0';
         if armedb = '1' then
           ons <= armbreq;
         else
@@ -331,8 +341,8 @@ begin  -- Behavioral
         end if;
 
       when armbreq =>
-        osel  <= '1';
-        dsel  <= '0';
+        osel <= '1';
+        dsel <= '0';
         if GRANT = '1' then
           ons <= sendbh;
         else
@@ -342,15 +352,26 @@ begin  -- Behavioral
       when sendbh =>
         osel <= '1';
         dsel <= '0';
-        ons  <= sendbl;
+        if douten = '1'  then
+          ons  <= sendbl;
+        else
+
+          ons <= sendbh; 
+        end if;
+
 
       when sendbl =>
-        osel  <= '1';
-        dsel  <= '1';
+        osel <= '1';
+        dsel <= '1';
+        if douten = '1' then
+          
         if wcntout = "1010" then
           ons <= doneb;
         else
           ons <= sendbh;
+        end if;
+       else
+         ons <= sendbl; 
         end if;
 
       when doneb =>

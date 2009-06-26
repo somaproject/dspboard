@@ -386,6 +386,7 @@ architecture Behavioral of dspboard is
       MOSI     : in  std_logic;
       SCS      : in  std_logic;
       FIFOFULL : out std_logic;
+      DOUTEN   : in  std_logic;
       DOUT     : out std_logic_vector(7 downto 0);
       REQ      : out std_logic;
       GRANT    : in  std_logic;
@@ -626,24 +627,24 @@ architecture Behavioral of dspboard is
 
   signal txkl : std_logic := '0';
 
+
+
+  signal jtag_din1    : std_logic_vector(63 downto 0) := (others => '0');
+  signal jtag_dout1   : std_logic_vector(63 downto 0) := (others => '0');
+  signal jtag_dout1en : std_logic                     := '0';
+
+  signal jtag_din2    : std_logic_vector(63 downto 0) := (others => '0');
+  signal jtag_dout2   : std_logic_vector(63 downto 0) := (others => '0');
+  signal jtag_dout2en : std_logic                     := '0';
+
+  signal capture_din                    : std_logic_vector(31 downto 0) := (others => '0');
+  signal capture_dinl                   : std_logic_vector(31 downto 0) := (others => '0');
+  signal capture_dinll                  : std_logic_vector(31 downto 0) := (others => '0');
+  signal capture_dinen, capture_nextbuf : std_logic                     := '0';
+
+
+
   
-  
-  signal jtag_din1 : std_logic_vector(63 downto 0) := (others => '0');
-  signal jtag_dout1 : std_logic_vector(63 downto 0) := (others => '0');
-  signal jtag_dout1en : std_logic := '0';
-
-  signal jtag_din2 : std_logic_vector(63 downto 0) := (others => '0');
-  signal jtag_dout2 : std_logic_vector(63 downto 0) := (others => '0');
-  signal jtag_dout2en : std_logic := '0';
-  
-  signal capture_din : std_logic_vector(31 downto 0) := (others => '0');
-  signal capture_dinl : std_logic_vector(31 downto 0) := (others => '0');
-  signal capture_dinll : std_logic_vector(31 downto 0) := (others => '0');
-  signal capture_dinen, capture_nextbuf : std_logic := '0';
-
-
-
-    
 begin  -- Behavioral
 
 
@@ -798,6 +799,7 @@ begin  -- Behavioral
       MOSI     => dspimosia,
       SCS      => dspissa,
       FIFOFULL => devtfifofulla,
+      DOUTEN   => edspdataen,
       DOUT     => edspdataa,
       REQ      => edspreq(0),
       GRANT    => edspgrant(0),
@@ -859,6 +861,7 @@ begin  -- Behavioral
       MOSI     => dspimosib,
       SCS      => dspissb,
       FIFOFULL => devtfifofullb,
+      DOUTEN   => edspdataen,
       DOUT     => edspdatab,
       REQ      => edspreq(1),
       GRANT    => edspgrant(1),
@@ -978,6 +981,7 @@ begin  -- Behavioral
       SCLK     => dspiclkc,
       MOSI     => dspimosic,
       SCS      => dspissc,
+      DOUTEN   => edspdataen,
       FIFOFULL => devtfifofullc,
       DOUT     => edspdatac,
       REQ      => edspreq(2),
@@ -1069,6 +1073,7 @@ begin  -- Behavioral
       MOSI     => dspimosid,
       SCS      => dspissd,
       FIFOFULL => devtfifofulld,
+      DOUTEN   => edspdataen,
       DOUT     => edspdatad,
       REQ      => edspreq(3),
       GRANT    => edspgrant(3),
@@ -1279,7 +1284,7 @@ begin  -- Behavioral
       DOUT2   => jtag_dout2,
       DOUT2EN => jtag_dout2en);
 
-  jtag_din2 <= encode_debug; 
+  jtag_din2 <= encode_debug;
 --  bufcapture_inst: bufcapture
 --    port map (
 --      CLKA     => CLK,
@@ -1291,12 +1296,12 @@ begin  -- Behavioral
 --      DOUT     => jtag_din1(35 downto 0));
 
 --  jtag_din1(11 + 48 downto 48) <= jtag_dout1(11 downto 0);
-  
+
 
 --  capture_dinen <= '1';
 
 --  capture_nextbuf <= '1' when txk = '1' and txkl = '0' else '0';
-  
+
 --  process(CLK)
 --    begin
 --      if rising_edge(CLK) then

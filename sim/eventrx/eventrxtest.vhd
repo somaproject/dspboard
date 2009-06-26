@@ -21,6 +21,7 @@ architecture Behavioral of eventrxtest is
       MOSI     : in  std_logic;
       SCS      : in  std_logic;
       FIFOFULL : out std_logic;
+      DOUTEN : in std_logic; 
       DOUT     : out std_logic_vector(7 downto 0);
       REQ      : out  std_logic;
       GRANT    : in  std_logic);
@@ -33,7 +34,8 @@ architecture Behavioral of eventrxtest is
   signal SCS      : std_logic                    := '0';
   signal FIFOFULL : std_logic                    := '0';
   signal DOUT     : std_logic_vector(7 downto 0) := (others => '0');
-
+  signal DOUTEN : std_logic := '0';
+  
   signal REQ   : std_logic := '0';
   signal GRANT : std_logic := '0';
 
@@ -60,10 +62,16 @@ begin  -- Behavioral
       SCS      => SCS,
       FIFOFULL => FIFOFULL,
       DOUT     => DOUT,
+      DOUTEN => DOUTEN, 
       REQ      => REQ,
       GRANT    => GRANT);
 
-
+  process(CLK)
+    begin
+      if rising_edge(CLK) then
+        DOUTEN <= not DOUTEN; 
+      end if;
+    end process; 
 
   writedata : process
   begin
@@ -133,10 +141,10 @@ begin  -- Behavioral
       wait until rising_edge(CLK);
       
       for i in 0 to 10 loop
-        wait until rising_edge(CLK);
+        wait until rising_edge(CLK) and DOUTEN = '1';
         recoveredword(15 downto 8) := DOUT;
         GRANT <= '0'; 
-        wait until rising_edge(CLK);
+        wait until rising_edge(CLK) and DOUTEN = '1';
         recoveredword(7 downto 0) := DOUT;
         recoverdwords(i) <= recoveredword;
       end loop;  -- i
@@ -181,10 +189,10 @@ begin  -- Behavioral
       wait until rising_edge(CLK);
       
       for i in 0 to 10 loop
-        wait until rising_edge(CLK);
+        wait until rising_edge(CLK)  and DOUTEN = '1';
         recoveredword(15 downto 8) := DOUT;
         GRANT <= '0'; 
-        wait until rising_edge(CLK);
+        wait until rising_edge(CLK)  and DOUTEN = '1';
         recoveredword(7 downto 0) := DOUT;
         recoverdwords(i) <= recoveredword;
       end loop;  -- i
@@ -207,10 +215,10 @@ begin  -- Behavioral
       wait until rising_edge(CLK);
       
       for i in 0 to 10 loop
-        wait until rising_edge(CLK);
+        wait until rising_edge(CLK)  and DOUTEN = '1';
         recoveredword(15 downto 8) := DOUT;
         GRANT <= '0'; 
-        wait until rising_edge(CLK);
+        wait until rising_edge(CLK)  and DOUTEN = '1';
         recoveredword(7 downto 0) := DOUT;
         recoverdwords(i) <= recoveredword;
       end loop;  -- i
