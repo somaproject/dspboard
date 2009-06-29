@@ -216,6 +216,14 @@ begin  -- Behavioral
           DONE <= '0';
         end if;
 
+        -- latch output
+--        if DOUTEN = '1' then
+--          if dsel = '0' then
+--            DOUT <= doutsel(15 downto 8);
+--          else
+--            DOUT <= doutsel(7 downto 0);
+--          end if;
+--        end if;
 
       end if;
     end if;
@@ -297,7 +305,7 @@ begin  -- Behavioral
       when armareq =>
         osel <= '0';
         dsel <= '0';
-        if GRANT = '1' then
+        if GRANT = '1'  and DOUTEN = '1' then
           ons <= sendah;
         else
           ons <= armareq;
@@ -343,7 +351,7 @@ begin  -- Behavioral
       when armbreq =>
         osel <= '1';
         dsel <= '0';
-        if GRANT = '1' then
+        if GRANT = '1' and DOUTEN = '1' then
           ons <= sendbh;
         else
           ons <= armbreq;

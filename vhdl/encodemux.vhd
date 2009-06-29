@@ -236,6 +236,27 @@ begin  -- Behavioral
       end if;
 
 
+      if edspdone(0) = '1' then
+        edsp_cnt(0) <= edsp_cnt(0) + 1;
+      end if;
+
+      if ecycle = '1' and cs /= none then
+        edsp_cnt(0) <= edsp_cnt(0) + 1;
+      end if;
+
+      if edspdone(1) = '1' then
+        edsp_cnt(1) <= edsp_cnt(1) + 1;
+      end if;
+
+      if edspdone(2) = '1' then
+        edsp_cnt(2) <= edsp_cnt(2) + 1;
+      end if;
+
+      if edspdone(3) = '1' then
+        edsp_cnt(3) <= edsp_cnt(3) + 1;
+      end if;
+
+
     end if;
   end process main;
 

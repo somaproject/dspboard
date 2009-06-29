@@ -136,14 +136,15 @@ begin  -- Behavioral
 
       wait until rising_edge(REQ);
       wait until rising_edge(sendeventdone); 
-      wait until rising_edge(CLK);
+
+      wait until rising_edge(CLK) and DOUTEN = '1';
       GRANT <= '1' ;
       wait until rising_edge(CLK);
+      GRANT <= '0'; 
       
       for i in 0 to 10 loop
         wait until rising_edge(CLK) and DOUTEN = '1';
         recoveredword(15 downto 8) := DOUT;
-        GRANT <= '0'; 
         wait until rising_edge(CLK) and DOUTEN = '1';
         recoveredword(7 downto 0) := DOUT;
         recoverdwords(i) <= recoveredword;

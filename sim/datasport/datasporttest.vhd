@@ -10,18 +10,19 @@ architecture Behavioral of datasporttest is
 
   component datasport
     port (
-      CLK    : in  std_logic;
-      RESET  : in  std_logic;
+      CLK      : in  std_logic;
+      RESET    : in  std_logic;
       -- serial IO
-      SERCLK : in  std_logic;
-      SERDT  : in  std_logic;
-      SERTFS : in  std_logic;
-      FULL   : out std_logic;
+      SERCLK   : in  std_logic;
+      SERDT    : in  std_logic;
+      SERTFS   : in  std_logic;
+      FULL     : out std_logic;
       -- FiFO interface
-      REQ    : out std_logic;
-      GRANT  : in  std_logic;
-      DOUT   : out std_logic_vector(7 downto 0);
-      DONE   : out std_logic);
+      REQ      : out std_logic;
+      NEXTBYTE : in  std_logic;
+      LASTBYTE : out std_logic;
+      DOUT     : out std_logic_vector(7 downto 0)); 
+
   end component;
 
   signal CLK    : std_logic := '0';
@@ -34,12 +35,12 @@ architecture Behavioral of datasporttest is
 
   -- FiFO interface
   signal REQ   : std_logic                    := '0';
-  signal GRANT : std_logic                    := '0';
+  signal NEXTBYTE : std_logic                    := '0';
   signal DOUT  : std_logic_vector(7 downto 0) := (others => '0');
 
-  signal DONE, donel : std_logic := '0';
+  signal LASTBYTE, lastbytel : std_logic := '0';
 
-  type databuffer_t is array (0 to 1023) of std_logic_vector(7 downto 0);
+  type   databuffer_t is array (0 to 1023) of std_logic_vector(7 downto 0);
   signal databuffer : databuffer_t := (others => (others => '0'));
 
 
@@ -54,9 +55,9 @@ begin
       SERTFS => SERTFS,
       FULL   => FULL,
       REQ    => REQ,
-      GRANT  => GRANT,
+      NEXTBYTE => NEXTBYTE, 
       DOUT   => DOUT,
-      DONE => DONE);
+      LASTBYTE => LASTBYTE);
 
   CLK   <= not CLK after 10 ns;
   RESET <= '0'     after 100 ns;
@@ -66,9 +67,9 @@ begin
   begin
     if rising_edge(CLK) then
       if bpos = 2 then
-        bpos                             := 0;
+        bpos := 0;
       else
-        bpos                             := bpos + 1;
+        bpos := bpos + 1;
       end if;
 
       if bpos = 2 then
@@ -83,7 +84,7 @@ begin
     -- we need the BEswap variables because we must seend each byte
     -- LSB first, but we need to send the high-byte first
     variable tmpword, tmpwordBEswap : std_logic_vector(15 downto 0) := X"0000";
-    variable pktlen, pktlenBEswap : std_logic_vector(15 downto 0) := X"0000";
+    variable pktlen, pktlenBEswap   : std_logic_vector(15 downto 0) := X"0000";
   begin
     wait for 10 us;
 
@@ -98,8 +99,8 @@ begin
       SERTFS <= '0';
 
       -- send the length
-      pktlen := std_logic_vector(TO_UNSIGNED(bufnum*20 + 172, 16 ));
-      pktlenBEswap := pktlen(7 downto 0) & pktlen(15 downto 8); 
+      pktlen       := std_logic_vector(TO_UNSIGNED(bufnum*20 + 172, 16));
+      pktlenBEswap := pktlen(7 downto 0) & pktlen(15 downto 8);
       for bpos in 0 to 15 loop
         SERDT <= pktlenBEswap(bpos);
         wait until falling_edge(SERCLK);
@@ -107,8 +108,8 @@ begin
 
       -- then the body
       for bufpos in 0 to 510 loop
-        tmpword := std_logic_vector(TO_UNSIGNED(bufnum * 256 + bufpos, 16));
-        tmpwordBEswap := tmpword(7 downto 0) & tmpword(15 downto 8); 
+        tmpword       := std_logic_vector(TO_UNSIGNED(bufnum * 256 + bufpos + 4, 16));
+        tmpwordBEswap := tmpword(7 downto 0) & tmpword(15 downto 8);
         for bpos in 0 to 15 loop
           SERDT <= tmpwordBEswap(bpos);
           wait until falling_edge(SERCLK);
@@ -118,18 +119,9 @@ begin
     end loop;  -- bufnum
   end process;
 
-
-  process(clk)
-    begin
-      if rising_edge(clk) then
-        donel <= done; 
-      end if;
-
-    end process;
-    
   -- output read
   process
-    variable bufpos : integer := 0;
+    variable bufpos            : integer                       := 0;
     variable lenword, dataword : std_logic_vector(15 downto 0) := (others => '0');
   begin
     for bufnum in 0 to 19 loop
@@ -137,32 +129,37 @@ begin
       wait until rising_edge(CLK) and REQ = '1';
       wait for 100 us;
       wait until rising_edge(CLK);
-      GRANT <= '1';
       bufpos := 0;
       wait until rising_edge(CLK);
 
-      GRANT                <= '0';
+      NEXTBYTE <= '0';
       wait until rising_edge(CLK);
-      while donel /= '1' loop
-        databuffer(bufpos) <= DOUT;
+      databuffer(bufpos) <= DOUT;
+      while LASTBYTE /= '1' loop
         wait until rising_edge(CLK);
-        bufpos := bufpos + 1;
+        NEXTBYTE <='1'; 
+        wait until rising_edge(CLK);
+        NEXTBYTE <='0';
+        bufpos             := bufpos + 1;
+        wait for 1 ns;
+        databuffer(bufpos) <= DOUT;
+        
       end loop;
 
       -- validate packet
 
-      assert bufpos = bufnum * 20 + 172 -1 report "Incorrect recovered pkt len" severity Error;
+      assert bufpos = bufnum * 20 + 172 -1 report "Incorrect recovered pkt len" severity error;
 
       for i in 0 to (bufpos-2)/2 loop
-        dataword := databuffer(i*2 ) & databuffer(i*2+1 );
-        assert dataword = std_logic_vector(TO_UNSIGNED(bufnum * 256 + i, 16))
-          report "Error reading data word " & integer'image(i) severity Error;
-                                           
+        dataword := databuffer(i*2) & databuffer(i*2+1);
+        assert dataword = std_logic_vector(TO_UNSIGNED(bufnum * 256 + i + 4, 16))
+          report "Error reading data word " & integer'image(i) severity error;
+        
       end loop;  -- i
-      
+
       report "received packet";
     end loop;  -- bufnum
-    report "End of Simulation" severity Failure;
+    report "End of Simulation" severity failure;
     
   end process;
 end Behavioral;
