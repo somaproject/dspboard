@@ -129,6 +129,9 @@ architecture Behavioral of encodedataintegratetest is
 
   signal data_validate_done : std_logic_vector(3 downto 0) := (others => '0');
   
+
+  signal encodemux_dout : std_logic_vector(7 downto 0) := (others => '0');
+  signal encodemux_kout : std_logic := '0';
   
 begin  -- Behavioral
 
@@ -149,8 +152,6 @@ begin  -- Behavioral
       else
         ECYCLE <= '0' after 4 ns;
       end if;
-
-      ENCODEEN <= not ENCODEEN;
 
       if pos = 49 then
         HEADERDONE <= '1';
@@ -206,6 +207,34 @@ begin  -- Behavioral
       DREQ         => datamux_dreq,
       DLASTBYTE    => datamux_dlastbyte);
 
+  encodemux_inst : encodemux
+    port map (
+      CLK        => CLK,
+      ECYCLE     => ECYCLE,
+      DOUT       => encodemux_dout,
+      KOUT       => encodemux_kout,
+      -- data interfaces
+      DREQ       => DREQ,
+      DGRANT     => DGRANT,
+      DDONE      => DDONE,
+      DDATA      => DDATA,
+      DKIN       => DKIN,
+      DATAEN     => ENCODEEN,
+      -- event interfaces
+      EDSPREQ    => "0000",
+      EDSPDONE   => "0000",
+      EDSPDATAA  => "00000000",
+      EDSPDATAB  => "00000000",
+      EDSPDATAC  => "00000000",
+      EDSPDATAD  => "00000000",
+      EPROCREQ   => "0000",
+      EPROCDONE  => "0000",
+      EPROCDATAA => "00000000",
+      EPROCDATAB => "00000000",
+      EPROCDATAC => "00000000",
+      EPROCDATAD => "00000000"
+      );
+
 
   -----------------------------------------------------------------------------
   -- DATAMUX proc -- the process that sends the data, emulating the
@@ -239,19 +268,6 @@ begin  -- Behavioral
   end generate datamux_src_gen;
 
 
-  -----------------------------------------------------------------------------
-  -- Encodemux interface
-  ---------------------------------------------------------------------------
-  encodemux_proc : process
-  begin
-    wait until rising_edge(CLK) and DREQ = '1' and pos = 50;
-    DGRANT <= '1';
-    wait until rising_edge(CLK);
-    DGRANT <= '0';
-    wait until rising_edge(CLK) and DDONE = '1';
-    
-  end process encodemux_proc;
-
   ---------------------------------------------------------------------------
   -- Data validate, there's one of these for each dgrant setting
   -- 
@@ -264,7 +280,7 @@ begin  -- Behavioral
       
     begin
       for i in 0 to PACKETCNT-1 loop
-        wait until rising_edge(CLK) and linkdgrant(src) = '1' and BSTARTCYCLE = '1';
+        wait until rising_edge(CLK) and linkdgrant(src) = '1' and BSTARTCYCLE = '1' and headerdone ='1';
         if packetlen(i) = 0 then
           null;
         else
@@ -273,23 +289,27 @@ begin  -- Behavioral
           bpos   := 0;
 
           for pi in 1 to pktcnt loop
-            wait until rising_edge(CLK) and ENCODEEN = '1' and DKIN = '1' and DDATA = K28_6;
+            wait until rising_edge(CLK) and ENCODEEN = '1'
+              and encodemux_kout = '1' and encodemux_dout = K28_6;
             for j in 0 to 247 loop
               wait until rising_edge(CLK) and ENCODEEN = '1';
 
-              assert DKIN = '0' report "KIN high when it should not be" severity error;
-              assert DDATA = std_logic_vector(to_unsigned((bpos + 16) mod 256, 8))
-                report "incorrect data" severity error;
+              assert encodemux_kout = '0' report "KIN high when it should not be" severity error;
+              assert encodemux_dout = std_logic_vector(to_unsigned((bpos + 16) mod 256, 8))
+                report "src " & integer'image(src) & " incorrect data" severity error;
               bpos := bpos + 1;
               if bpos = packetlen(i) then
                 exit;
               end if;
             end loop;  -- j
             wait until rising_edge(CLK) and ENCODEEN = '1';
-            assert DKIN = '1' and DDATA = K28_7;
+            assert encodemux_kout = '1' and encodemux_dout = K28_7 report
+              "src " & integer'image(src) & " did not have correct burst end K";
           end loop;
 
-          wait until rising_edge(CLK) and ENCODEEN = '1' and DKIN = '1' and DDATA = K28_4;
+          wait until rising_edge(CLK) and ENCODEEN = '1'
+            and encodemux_kout = '1' and encodemux_dout = K28_4;
+          report "src " & integer'image(src) & " received packet i=" & integer'image(i) severity note;
         end if;
       end loop;  -- i
 
@@ -301,6 +321,14 @@ begin  -- Behavioral
   end generate dgrant_validate;
 
 
-  
+  -- check if we're done
+  process
+    begin
+      wait until data_validate_done = "1111";
+      report "End of Simulation" severity failure;
+
+    end process;
+
+    
 end Behavioral;
 

@@ -11,7 +11,11 @@ $(WORKDIR)/datamux/behavioral.dat: $(WORKDIR)/touched ../../vhdl/encodedata.vhd 
 	mkdir -p $(WORKDIR)
 	$(VHDLC) ../../vhdl/datamux.vhd
 
-hw: $(WORKDIR)/encodedata/behavioral.dat $(WORKDIR)/datamux/behavioral.dat 
+$(WORKDIR)/encodemux/behavioral.dat: $(WORKDIR)/touched ../../vhdl/encodedata.vhd ../../vhdl/encodedata.vhd ../../vhdl/datamux.vhd ../../vhdl/datamux.vhd ../../vhdl/encodemux.vhd
+	mkdir -p $(WORKDIR)
+	$(VHDLC) ../../vhdl/encodemux.vhd
+
+hw: $(WORKDIR)/encodedata/behavioral.dat $(WORKDIR)/datamux/behavioral.dat $(WORKDIR)/encodemux/behavioral.dat 
 
 comp: 
 

@@ -72,7 +72,7 @@ architecture Behavioral of encodemux is
   constant KEVENTD : std_logic_vector(7 downto 0) := X"7C";
 
 
-  type states is (none, dcheck, dsend, dwait, ddones,
+  type states is (none, dcheck, dstart, dwait, ddones,
                   echecka, esenda, esendaw, enexta,
                   echeckb, esendb, esendbw, enextb,
                   echeckc, esendc, esendcw, enextc,
@@ -121,7 +121,7 @@ begin  -- Behavioral
   edone(2) <= eprocdone(2) when esel(2) = '0' else edspdone(2);
   edone(3) <= eprocdone(3) when esel(3) = '0' else edspdone(3);
 
-  DGRANT <= '1' when cs = dsend else '0';
+  DGRANT <= '1' when cs = dstart else '0';
 
   EDSPGRANT(0) <= '1' when (cs = esenda) and esel(0) = '1' else '0';
   EDSPGRANT(1) <= '1' when (cs = esendb) and esel(1) = '1' else '0';
@@ -272,23 +272,27 @@ begin  -- Behavioral
       when none =>
         osel <= 0;
         ken  <= '0';
-        if epos = 49 then
+        if epos = 53 then
           ns <= dcheck;
         else
           ns <= none;
         end if;
-
         -----------------------------------------------------------------------
         -- DATA SEND
         -----------------------------------------------------------------------
       when dcheck =>
         osel <= 0;
         ken  <= '0';
-        if DREQ = '1' then              -- FIXME data disable for test
-          ns <= dwait;
+        if DREQ = '1' then              
+          ns <= dstart;
         else
           ns <= echecka;
         end if;
+        
+      when dstart =>
+        osel <= 0;
+        ken  <= '0';
+        ns <= dwait;
         
       when dwait =>
         osel <= 0;

@@ -1,6 +1,6 @@
-Stand-alone unit test for encode data. Things to test: 
+Integrated test for encodedata, testing: 
 
-1. generic single-burst packet
-2. Packets of length 1
-3. packets of length equal to the max byte length
-4. packets of arbitrary size
+encodedata
+encodemux
+datamux
+
