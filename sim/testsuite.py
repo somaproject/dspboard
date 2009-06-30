@@ -25,6 +25,7 @@ else:
     #suite.addTest(vhdlTestCase("decoder"))
     #suite.addTest(vhdlTestCase("devicemuxtx"))
     #suite.addTest(vhdlTestCase("dgranttest"))
+    suite.addTest(vhdlTestCase("encodedata"))
     suite.addTest(vhdlTestCase("encodemux"))
     suite.addTest(vhdlTestCase("encodemuxintegrate"))
     #suite.addTest(vhdlTestCase("eventrx"))

@@ -15,7 +15,7 @@ entity encodemux is
     DDONE       : in  std_logic;
     DDATA       : in  std_logic_vector(7 downto 0);
     DKIN        : in  std_logic;
-    DATAEN : out std_logic; 
+    DATAEN      : out std_logic;
     -- event interface for DSPs
     EDSPREQ     : in  std_logic_vector(3 downto 0);
     EDSPGRANT   : out std_logic_vector(3 downto 0);
@@ -94,7 +94,7 @@ architecture Behavioral of encodemux is
 begin  -- Behavioral
 
   -- output muxes
-  kdout <= DDATA        when osel = 0    else
+  kdout <= DDATA when osel = 0 else
            KEVENTA when osel = 1 else
            KEVENTB when osel = 2 else
            KEVENTC when osel = 3 else
@@ -140,8 +140,8 @@ begin  -- Behavioral
   
   EPROCDATAEN <= douten;
   EDSPDATAEN  <= douten;
-  DATAEN <= douten;
-  
+  DATAEN      <= douten;
+
 
   main : process(CLK)
   begin
@@ -270,8 +270,8 @@ begin  -- Behavioral
   begin
     case cs is
       when none =>
-        osel  <= 0;
-        ken   <= '0';
+        osel <= 0;
+        ken  <= '0';
         if epos = 49 then
           ns <= dcheck;
         else
@@ -282,8 +282,8 @@ begin  -- Behavioral
         -- DATA SEND
         -----------------------------------------------------------------------
       when dcheck =>
-        osel  <= 0;
-        ken   <= '0';
+        osel <= 0;
+        ken  <= '0';
         if DREQ = '1' then              -- FIXME data disable for test
           ns <= dwait;
         else
@@ -291,8 +291,8 @@ begin  -- Behavioral
         end if;
         
       when dwait =>
-        osel  <= 0;
-        ken   <= DKIN; 
+        osel <= 0;
+        ken  <= DKIN;
         if ddone = '1' then
           ns <= ddones;
         else
@@ -300,16 +300,16 @@ begin  -- Behavioral
         end if;
 
       when ddones =>
-        osel  <= 0;
-        ken   <= '0';
-        ns    <= echecka;
+        osel <= 0;
+        ken  <= '0';
+        ns   <= echecka;
 
         -----------------------------------------------------------------------
         -- EVENT A SEND
         -----------------------------------------------------------------------
       when echecka =>
-        osel  <= 1;
-        ken   <= '0';
+        osel <= 1;
+        ken  <= '0';
         if sentthiscycle(0) = '1' then
           ns <= echeckb;
         else
@@ -321,8 +321,8 @@ begin  -- Behavioral
         end if;
 
       when esenda =>
-        osel  <= 1;
-        ken   <= '1';
+        osel <= 1;
+        ken  <= '1';
         if douten = '1' then
           ns <= esendaw;
         else
@@ -330,8 +330,8 @@ begin  -- Behavioral
         end if;
 
       when esendaw =>
-        osel  <= 1;
-        ken   <= '0';
+        osel <= 1;
+        ken  <= '0';
         if edone(0) = '1' then
           ns <= enexta;
         else
@@ -339,16 +339,16 @@ begin  -- Behavioral
         end if;
 
       when enexta =>
-        osel  <= 1;
-        ken   <= '0';
-        ns    <= echeckb;
+        osel <= 1;
+        ken  <= '0';
+        ns   <= echeckb;
 
         -----------------------------------------------------------------------
         -- EVENT B SEND
         -----------------------------------------------------------------------
       when echeckb =>
-        osel  <= 2;
-        ken   <= '0';
+        osel <= 2;
+        ken  <= '0';
         if sentthiscycle(1) = '1' then
           ns <= echeckc;
         else
@@ -361,8 +361,8 @@ begin  -- Behavioral
 
 
       when esendb =>
-        osel  <= 2;
-        ken   <= '1';
+        osel <= 2;
+        ken  <= '1';
         if douten = '1' then
           ns <= esendbw;
         else
@@ -370,8 +370,8 @@ begin  -- Behavioral
         end if;
 
       when esendbw =>
-        osel  <= 2;
-        ken   <= '0';
+        osel <= 2;
+        ken  <= '0';
         if edone(1) = '1' then
           ns <= enextb;
         else
@@ -379,16 +379,16 @@ begin  -- Behavioral
         end if;
 
       when enextb =>
-        osel  <= 2;
-        ken   <= '0';
-        ns    <= echeckc;
+        osel <= 2;
+        ken  <= '0';
+        ns   <= echeckc;
 
         -----------------------------------------------------------------------
         -- EVENT C SEND
         -----------------------------------------------------------------------
       when echeckc =>
-        osel  <= 3;
-        ken   <= '0';
+        osel <= 3;
+        ken  <= '0';
         if sentthiscycle(2) = '1' then
           ns <= echeckd;
         else
@@ -400,8 +400,8 @@ begin  -- Behavioral
         end if;
 
       when esendc =>
-        osel  <= 3;
-        ken   <= '1';
+        osel <= 3;
+        ken  <= '1';
         if douten = '1' then
           ns <= esendcw;
         else
@@ -410,8 +410,8 @@ begin  -- Behavioral
 
 
       when esendcw =>
-        osel  <= 3;
-        ken   <= '0';
+        osel <= 3;
+        ken  <= '0';
         if edone(2) = '1' then
           ns <= enextc;
         else
@@ -419,16 +419,16 @@ begin  -- Behavioral
         end if;
 
       when enextc =>
-        osel  <= 3;
-        ken   <= '0';
-        ns    <= echeckd;
+        osel <= 3;
+        ken  <= '0';
+        ns   <= echeckd;
 
         -----------------------------------------------------------------------
         -- EVENT D SEND
         -----------------------------------------------------------------------
       when echeckd =>
-        osel  <= 4;
-        ken   <= '0';
+        osel <= 4;
+        ken  <= '0';
         if sentthiscycle(3) = '1' then
           ns <= timechk;
         else
@@ -440,8 +440,8 @@ begin  -- Behavioral
         end if;
 
       when esendd =>
-        osel  <= 4;
-        ken   <= '1';
+        osel <= 4;
+        ken  <= '1';
         if douten = '1' then
           ns <= esenddw;
         else
@@ -449,8 +449,8 @@ begin  -- Behavioral
         end if;
 
       when esenddw =>
-        osel  <= 4;
-        ken   <= '0';
+        osel <= 4;
+        ken  <= '0';
         if edone(3) = '1' then
           ns <= enextd;
         else
@@ -458,13 +458,13 @@ begin  -- Behavioral
         end if;
 
       when enextd =>
-        osel  <= 4;
-        ken   <= '0';
-        ns    <= timechk;
+        osel <= 4;
+        ken  <= '0';
+        ns   <= timechk;
         
       when timechk =>
-        osel  <= 0;
-        ken   <= '0';
+        osel <= 0;
+        ken  <= '0';
         if epos < 700 then
           ns <= echecka;
         else
@@ -472,9 +472,9 @@ begin  -- Behavioral
         end if;
 
       when others =>
-        osel  <= 0;
-        ken   <= '0';
-        ns    <= none;
+        osel <= 0;
+        ken  <= '0';
+        ns   <= none;
         
     end case;
   end process fsm;

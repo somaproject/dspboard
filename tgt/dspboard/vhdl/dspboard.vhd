@@ -161,8 +161,10 @@ architecture Behavioral of dspboard is
       KIN    : in std_logic;
       LOCKED : in std_logic;
 
-      ECYCLE : out std_logic;
-      EDATA  : out std_logic_vector(7 downto 0);
+      ECYCLE      : out std_logic;
+      EDATA       : out std_logic_vector(7 downto 0);
+      HEADERDONE  : out std_logic;
+      BSTARTCYCLE : out std_logic;
 
       -- data interface
       DGRANTA      : out std_logic;
@@ -195,6 +197,8 @@ architecture Behavioral of dspboard is
       DGRANT      : out std_logic;
       DDONE       : in  std_logic;
       DDATA       : in  std_logic_vector(7 downto 0);
+      DKIN        : in  std_logic;
+      DATAEN      : out std_logic;
       -- event interface for DSPs
       EDSPREQ     : in  std_logic_vector(3 downto 0);
       EDSPGRANT   : out std_logic_vector(3 downto 0);
@@ -218,50 +222,73 @@ architecture Behavioral of dspboard is
 
   component datamux
     port (
-      CLK       : in  std_logic;
-      ECYCLE    : in  std_logic;
+      CLK          : in  std_logic;
+      ECYCLE       : in  std_logic;
       -- collection of grants
-      DGRANTIN  : in  std_logic_vector(3 downto 0);
-      -- encodemux interface
-      ENCDOUT   : out std_logic_vector(7 downto 0);
-      ENCDGRANT : in  std_logic;
-      ENCDREQ   : out std_logic;
-      ENCDDONE  : out std_logic;
+      DGRANTIN     : in  std_logic_vector(3 downto 0);
+      -- datamux interface
+      ENCDOUT      : out std_logic_vector(7 downto 0);
+      ENCDNEXTBYTE : in  std_logic;
+      ENCDREQ      : out std_logic;
+      ENCDLASTBYTE : out std_logic;
       -- individual datasport interfaces
-      DDATAA    : in  std_logic_vector(7 downto 0);
-      DDATAB    : in  std_logic_vector(7 downto 0);
-      DDATAC    : in  std_logic_vector(7 downto 0);
-      DDATAD    : in  std_logic_vector(7 downto 0);
-      DGRANT    : out std_logic_vector(3 downto 0);
-      DREQ      : in  std_logic_vector(3 downto 0);
-      DDONE     : in  std_logic_vector(3 downto 0)
+      DDATAA       : in  std_logic_vector(7 downto 0);
+      DDATAB       : in  std_logic_vector(7 downto 0);
+      DDATAC       : in  std_logic_vector(7 downto 0);
+      DDATAD       : in  std_logic_vector(7 downto 0);
+      DNEXTBYTE    : out std_logic_vector(3 downto 0);
+      DREQ         : in  std_logic_vector(3 downto 0);
+      DLASTBYTE    : in  std_logic_vector(3 downto 0)
       );
   end component;
 
   component datasport
     port (
-      CLK    : in  std_logic;
-      RESET  : in  std_logic;
+      CLK      : in  std_logic;
+      RESET    : in  std_logic;
       -- serial IO
-      SERCLK : in  std_logic;
-      SERDT  : in  std_logic;
-      SERTFS : in  std_logic;
-      FULL   : out std_logic;
+      SERCLK   : in  std_logic;
+      SERDT    : in  std_logic;
+      SERTFS   : in  std_logic;
+      FULL     : out std_logic;
       -- FiFO interface
-      REQ    : out std_logic;
-      GRANT  : in  std_logic;
-      DOUT   : out std_logic_vector(7 downto 0);
-      DONE   : out std_logic;
-      DEBUG  : out std_logic_vector(15 downto 0));
+      REQ      : out std_logic;
+      NEXTBYTE : in  std_logic;
+      LASTBYTE : out std_logic;
+      DOUT     : out std_logic_vector(7 downto 0)); 
   end component;
 
+
+  component encodedata
+    port (
+      CLK          : in  std_logic;     -- '0'
+      ECYCLE       : in  std_logic;
+      ENCODEEN     : in  std_logic;
+      HEADERDONE   : in  std_logic;
+      -- encodemux interface
+      DREQ         : out std_logic;
+      DGRANT       : in  std_logic;
+      DDONE        : out std_logic;
+      DDATA        : out std_logic_vector(7 downto 0);
+      DKIN         : out std_logic;
+      -- datamux interface
+      BSTARTCYCLE  : in  std_logic;
+      ENCDOUT      : in  std_logic_vector(7 downto 0);
+      ENCDNEXTBYTE : out std_logic;
+      ENCDREQ      : in  std_logic;
+      ENCDLASTBYTE : in  std_logic
+      );
+  end component;
 
 
   signal ECYCLE : std_logic                    := '0';
   signal EDATA  : std_logic_vector(7 downto 0) := (others => '0');
 
   -- decodemux signals interface
-  signal dgrantin     : std_logic_vector(3 downto 0) := (others => '0');
+  signal dgrantin    : std_logic_vector(3 downto 0) := (others => '0');
+  signal headerdone  : std_logic                    := '0';
+  signal bstartcycle : std_logic                    := '0';
+
   signal earxbytea    : std_logic_vector(7 downto 0) := (others => '0');
   signal earxbytesela : std_logic_vector(3 downto 0) := (others => '0');
   signal earxbyteb    : std_logic_vector(7 downto 0) := (others => '0');
@@ -457,14 +484,14 @@ architecture Behavioral of dspboard is
       DOUTEN : out std_logic);
   end component;
 
-  signal dreq   : std_logic_vector(3 downto 0) := (others => '0');
-  signal dgrant : std_logic_vector(3 downto 0) := (others => '0');
-  signal ddone  : std_logic_vector(3 downto 0) := (others => '0');
+  signal dreq      : std_logic_vector(3 downto 0) := (others => '0');
+  signal dnextbyte : std_logic_vector(3 downto 0) := (others => '0');
+  signal dlastbyte : std_logic_vector(3 downto 0) := (others => '0');
 
-  signal encddata  : std_logic_vector(7 downto 0) := (others => '0');
-  signal encdgrant : std_logic                    := '0';
-  signal encdreq   : std_logic                    := '0';
-  signal encddone  : std_logic                    := '0';
+  signal encddata     : std_logic_vector(7 downto 0) := (others => '0');
+  signal encdnextbyte : std_logic                    := '0';
+  signal encdreq      : std_logic                    := '0';
+  signal encdlastbyte : std_logic                    := '0';
 
 
   signal edspreq   : std_logic_vector(3 downto 0) := (others => '0');
@@ -545,6 +572,15 @@ architecture Behavioral of dspboard is
   signal devtfifofulld   : std_logic                    := '0';
   signal ddatad          : std_logic_vector(7 downto 0) := (others => '0');
   signal datafulld       : std_logic                    := '0';
+
+  signal datadataen : std_logic                    := '0';
+  signal datadreq   : std_logic                    := '0';
+  signal datadgrant : std_logic                    := '0';
+  signal dataddone  : std_logic                    := '0';
+  signal dataddata  : std_logic_vector(7 downto 0) := (others => '0');
+  signal datadkin   : std_logic                    := '0';
+
+
 
   signal sportsclk : std_logic := '0';
 
@@ -808,17 +844,16 @@ begin  -- Behavioral
 
   datasport_a : datasport
     port map (
-      CLK    => CLK,
-      RESET  => dspresetaintn,
-      SERCLK => sportsclk,
-      SERDT  => DSPSPORT1DTA,
-      SERTFS => DSPSPORT1TFSA,
-      FULL   => datafulla,
-      REQ    => dreq(0),
-      GRANT  => dgrant(0),
-      DOUT   => ddataa,
-      DONE   => ddone(0),
-      DEBUG  => datadebug);
+      CLK      => CLK,
+      RESET    => dspresetaintn,
+      SERCLK   => sportsclk,
+      SERDT    => DSPSPORT1DTA,
+      SERTFS   => DSPSPORT1TFSA,
+      FULL     => datafulla,
+      REQ      => dreq(0),
+      NEXTBYTE => dnextbyte(0),
+      LASTBYTE => dlastbyte(0),
+      DOUT     => ddataa); 
 
 
   dspcontproc_b : dspcontproc
@@ -901,16 +936,16 @@ begin  -- Behavioral
 
   datasport_b : datasport
     port map (
-      CLK    => CLK,
-      RESET  => dspresetbintn,
-      SERCLK => sportsclk,
-      SERDT  => DSPSPORT1DTB,
-      SERTFS => DSPSPORT1TFSB,
-      FULL   => datafullb,
-      REQ    => dreq(1),
-      GRANT  => dgrant(1),
-      DOUT   => ddatab,
-      DONE   => ddone(1));
+      CLK      => CLK,
+      RESET    => dspresetbintn,
+      SERCLK   => sportsclk,
+      SERDT    => DSPSPORT1DTB,
+      SERTFS   => DSPSPORT1TFSB,
+      FULL     => datafullb,
+      REQ      => dreq(1),
+      NEXTBYTE => dnextbyte(1),
+      LASTBYTE  => dlastbyte(1),
+      DOUT     => ddatab);
 
 
   dspcontproc_c : dspcontproc
@@ -991,18 +1026,16 @@ begin  -- Behavioral
 
   datasport_c : datasport
     port map (
-      CLK    => CLK,
-      RESET  => dspresetcintn,
-      SERCLK => sportsclk,
-      SERDT  => DSPSPORT1DTC,
-      SERTFS => DSPSPORT1TFSC,
-      FULL   => datafullc,
-      REQ    => dreq(2),
-      GRANT  => dgrant(2),
-      DOUT   => ddatac,
-      DONE   => ddone(2));
-
-
+      CLK      => CLK,
+      RESET    => dspresetcintn,
+      SERCLK   => sportsclk,
+      SERDT    => DSPSPORT1DTC,
+      SERTFS   => DSPSPORT1TFSC,
+      FULL     => datafullc,
+      REQ      => dreq(2),
+      NEXTBYTE => dnextbyte(2),
+      LASTBYTE => dlastbyte(2),
+      DOUT     => ddatac); 
 
 
   dspcontproc_d : dspcontproc
@@ -1081,28 +1114,67 @@ begin  -- Behavioral
 
   datasport_d : datasport
     port map (
-      CLK    => CLK,
-      RESET  => dspresetdintn,
-      SERCLK => sportsclk,
-      SERDT  => DSPSPORT1DTD,
-      SERTFS => DSPSPORT1TFSD,
-      FULL   => datafulld,
-      REQ    => dreq(3),
-      GRANT  => dgrant(3),
-      DOUT   => ddatad,
-      DONE   => ddone(3));
+      CLK      => CLK,
+      RESET    => dspresetdintn,
+      SERCLK   => sportsclk,
+      SERDT    => DSPSPORT1DTD,
+      SERTFS   => DSPSPORT1TFSD,
+      FULL     => datafulld,
+      REQ      => dreq(3),
+      NEXTBYTE => dnextbyte(3),
+      LASTBYTE => dlastbyte(3),
+      DOUT     => ddatad);
 
+  datamux_inst : datamux
+    port map (
+      CLK          => CLK,
+      ECYCLe       => ECYCLE,
+      DGRANTIN     => dgrantin,
+      ENCDOUT      => encddata,
+      ENCDNEXTBYTE => encdnextbyte,
+      ENCDREQ      => encdreq,
+      ENCDLASTBYTE => encdlastbyte,
+      DDATAA       => ddataa,
+      DDATAB       => ddatab,
+      DDATAC       => ddatac,
+      DDATAD       => ddatad,
+      DNEXTBYTE    => dnextbyte,
+      DREQ         => dreq,
+      DLASTBYTE    => dlastbyte);
+
+  encodedata_inst : encodedata
+    port map (
+      CLK          => CLK,
+      ECYCLE       => ecycle,
+      ENCODEEN     => datadataen,
+      HEADERDONE   => headerdone,
+      DREQ         => datadreq,
+      DGRANT       => datadgrant,
+      DDONE        => dataddone,
+      DDATA        => dataddata,
+      DKIN         => datadkin,
+      -- to data mux
+      BSTARTCYCLE  => bstartcycle,
+      ENCDOUT      => encddata,
+      ENCDNEXTBYTE => encdnextbyte,
+      ENCDREQ      => encdreq,
+      ENCDLASTBYTE => encdlastbyte
+      );
 
   encodemux_inst : encodemux
     port map (
-      CLK         => CLK,
-      ECYCLE      => ECYCLE,
-      DOUT        => txdata,
-      KOUT        => txk,
-      DREQ        => encdreq,
-      DGRANT      => encdgrant,
-      DDONE       => encddone,
-      DDATA       => encddata,
+      CLK    => CLK,
+      ECYCLE => ECYCLE,
+      DOUT   => txdata,
+      KOUT   => txk,
+
+      DREQ   => datadreq,
+      DGRANT => datadgrant,
+      DDONE  => dataddone,
+      DDATA  => dataddata,
+      DKIN   => datadkin,
+      DATAEN => datadataen,
+
       EDSPREQ     => EDSPREQ,
       EDSPGRANT   => edspgrant,
       EDSPDONE    => edspdone,
@@ -1120,24 +1192,6 @@ begin  -- Behavioral
       EPROCDATAD  => eprocdatad,
       EPROCDATAEN => eprocdataen,
       DEBUG       => encode_debug);
-
-  datamux_inst : datamux
-    port map (
-      CLK       => CLK,
-      ECYCLe    => ECYCLE,
-      DGRANTIN  => dgrantin,
-      ENCDOUT   => encddata,
-      ENCDGRANT => encdgrant,
-      ENCDREQ   => encdreq,
-      ENCDDONE  => encddone,
-      DDATAA    => ddataa,
-      DDATAB    => ddatab,
-      DDATAC    => ddatac,
-      DDATAD    => ddatad,
-      DGRANT    => dgrant,
-      DREQ      => dreq,
-      DDONE     => ddone);
-
 
   acqserial_ab : acqserial
     port map (
@@ -1197,7 +1251,7 @@ begin  -- Behavioral
 --        end if;
 --      end if;
 --    end process;
-  
+
 
   process(CLK)
     variable scnt   : integer range 0 to 2 := 0;
@@ -1268,9 +1322,9 @@ begin  -- Behavioral
     end if;
   end process;
 
-  -----------------------------------------------------------------------------
-  -- JTAG DEBUGGING
-  -----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+-- JTAG DEBUGGING
+-----------------------------------------------------------------------------
   jtagif_inst : jtaginterface
     generic map (
       JTAG1N => 64,
@@ -1311,6 +1365,6 @@ begin  -- Behavioral
 --        capture_dinll <= capture_dinl; 
 --      end if;
 --    end process ;
-  
-  
+
+
 end Behavioral;

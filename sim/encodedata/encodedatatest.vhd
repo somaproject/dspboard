@@ -9,7 +9,6 @@ end encodedatatest;
 
 architecture Behavioral of encodedatatest is
 
-
   component encodedata
     port (
       CLK          : in  std_logic;     -- '0'
