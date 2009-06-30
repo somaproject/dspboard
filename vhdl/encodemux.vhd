@@ -5,34 +5,36 @@ use IEEE.STD_LOGIC_UNSIGNED.all;
 
 entity encodemux is
   port (
-    CLK        : in  std_logic;
-    ECYCLE     : in  std_logic;
-    DOUT       : out std_logic_vector(7 downto 0);
-    KOUT       : out std_logic;
+    CLK         : in  std_logic;
+    ECYCLE      : in  std_logic;
+    DOUT        : out std_logic_vector(7 downto 0);
+    KOUT        : out std_logic;
     -- data interface
-    DREQ       : in  std_logic;
-    DGRANT     : out std_logic;
-    DDONE      : in  std_logic;
-    DDATA      : in  std_logic_vector(7 downto 0);
+    DREQ        : in  std_logic;
+    DGRANT      : out std_logic;
+    DDONE       : in  std_logic;
+    DDATA       : in  std_logic_vector(7 downto 0);
+    DKIN        : in  std_logic;
+    DATAEN : out std_logic; 
     -- event interface for DSPs
-    EDSPREQ    : in  std_logic_vector(3 downto 0);
-    EDSPGRANT  : out std_logic_vector(3 downto 0);
-    EDSPDONE   : in  std_logic_vector(3 downto 0);
-    EDSPDATAEN : out std_logic; 
-    EDSPDATAA  : in  std_logic_vector(7 downto 0);
-    EDSPDATAB  : in  std_logic_vector(7 downto 0);
-    EDSPDATAC  : in  std_logic_vector(7 downto 0);
-    EDSPDATAD  : in  std_logic_vector(7 downto 0);
+    EDSPREQ     : in  std_logic_vector(3 downto 0);
+    EDSPGRANT   : out std_logic_vector(3 downto 0);
+    EDSPDONE    : in  std_logic_vector(3 downto 0);
+    EDSPDATAEN  : out std_logic;
+    EDSPDATAA   : in  std_logic_vector(7 downto 0);
+    EDSPDATAB   : in  std_logic_vector(7 downto 0);
+    EDSPDATAC   : in  std_logic_vector(7 downto 0);
+    EDSPDATAD   : in  std_logic_vector(7 downto 0);
     -- event interface for EPROCs
-    EPROCREQ   : in  std_logic_vector(3 downto 0);
-    EPROCGRANT : out std_logic_vector(3 downto 0);
-    EPROCDONE  : in  std_logic_vector(3 downto 0);
-    EPROCDATAEN : out std_logic; 
-    EPROCDATAA : in  std_logic_vector(7 downto 0);
-    EPROCDATAB : in  std_logic_vector(7 downto 0);
-    EPROCDATAC : in  std_logic_vector(7 downto 0);
-    EPROCDATAD : in  std_logic_vector(7 downto 0);
-    DEBUG      : out std_logic_vector(63 downto 0));
+    EPROCREQ    : in  std_logic_vector(3 downto 0);
+    EPROCGRANT  : out std_logic_vector(3 downto 0);
+    EPROCDONE   : in  std_logic_vector(3 downto 0);
+    EPROCDATAEN : out std_logic;
+    EPROCDATAA  : in  std_logic_vector(7 downto 0);
+    EPROCDATAB  : in  std_logic_vector(7 downto 0);
+    EPROCDATAC  : in  std_logic_vector(7 downto 0);
+    EPROCDATAD  : in  std_logic_vector(7 downto 0);
+    DEBUG       : out std_logic_vector(63 downto 0));
 end encodemux;
 
 architecture Behavioral of encodemux is
@@ -50,6 +52,10 @@ architecture Behavioral of encodemux is
 
   signal sentthiscycle : std_logic_vector(3 downto 0) := (others => '0');
 
+  signal   databurstpos : integer range 0 to 3       := 0;
+  constant DPOSMAX      : integer                    := 247;
+  signal   datapos      : integer range 0 to DPOSMAX := 0;
+
 
   -- data mux control
   signal kdout, kd : std_logic_vector(7 downto 0) := (others => '0');
@@ -60,12 +66,10 @@ architecture Behavioral of encodemux is
 
   signal osel : integer range 0 to 4 := 0;
 
-  constant KDATASTART : std_logic_vector(7 downto 0) := X"DC";
-  constant KDATAEND   : std_logic_vector(7 downto 0) := X"FC";
-  constant KEVENTA    : std_logic_vector(7 downto 0) := X"1C";
-  constant KEVENTB    : std_logic_vector(7 downto 0) := X"3C";
-  constant KEVENTC    : std_logic_vector(7 downto 0) := X"5C";
-  constant KEVENTD    : std_logic_vector(7 downto 0) := X"7C";
+  constant KEVENTA : std_logic_vector(7 downto 0) := X"1C";
+  constant KEVENTB : std_logic_vector(7 downto 0) := X"3C";
+  constant KEVENTC : std_logic_vector(7 downto 0) := X"5C";
+  constant KEVENTD : std_logic_vector(7 downto 0) := X"7C";
 
 
   type states is (none, dcheck, dsend, dwait, ddones,
@@ -90,14 +94,13 @@ architecture Behavioral of encodemux is
 begin  -- Behavioral
 
   -- output muxes
-  kd    <= KDATASTART when kdsel = '0' else KDATAEND;
-  kdout <= kd         when osel = 0    else
+  kdout <= DDATA        when osel = 0    else
            KEVENTA when osel = 1 else
            KEVENTB when osel = 2 else
            KEVENTC when osel = 3 else
            KEVENTD;
 
-  edout <= ddata when osel = 0 else
+  edout <= DDATA when osel = 0 else
            edataa when osel = 1 else
            edatab when osel = 2 else
            edatac when osel = 3 else
@@ -123,46 +126,48 @@ begin  -- Behavioral
   EDSPGRANT(0) <= '1' when (cs = esenda) and esel(0) = '1' else '0';
   EDSPGRANT(1) <= '1' when (cs = esendb) and esel(1) = '1' else '0';
   EDSPGRANT(2) <= '1' when (cs = esendc) and esel(2) = '1' else '0';
-  EDSPGRANT(3) <= '1' when (cs = esendd)and esel(3) = '1' else '0';
+  EDSPGRANT(3) <= '1' when (cs = esendd)and esel(3) = '1'  else '0';
 
   EPROCGRANT(0) <= '1' when (cs = esenda and douten = '1') and esel(0) = '0' else '0';
   EPROCGRANT(1) <= '1' when (cs = esendb and douten = '1') and esel(1) = '0' else '0';
   EPROCGRANT(2) <= '1' when (cs = esendc and douten = '1') and esel(2) = '0' else '0';
   EPROCGRANT(3) <= '1' when (cs = esendd and douten = '1') and esel(3) = '0' else '0';
 
-  DEBUG <= eproc_cnt(0) & edsp_cnt(0) & 
-           eproc_cnt(1) & edsp_cnt(1) & 
+  DEBUG <= eproc_cnt(0) & edsp_cnt(0) &
+           eproc_cnt(1) & edsp_cnt(1) &
            eproc_cnt(2) & edsp_cnt(2) &
            eproc_cnt(3) & edsp_cnt(3);
   
   EPROCDATAEN <= douten;
-  EDSPDATAEN <= douten;
+  EDSPDATAEN  <= douten;
+  DATAEN <= douten;
   
+
   main : process(CLK)
   begin
     if rising_edge(CLK) then
       cs <= ns;
 
-      if douten = '1'  then
+      if douten = '1' then
         KOUT <= ken;
-        if ken = '1'  then
-          DOUT <= kdout ;
+        if ken = '1' then
+          DOUT <= kdout;
         else
-          DOUT <=  edout;          
+          DOUT <= edout;
         end if;
       end if;
 
-      
+
       if ECYCLE = '1' then
-        epos <= 0;
-        douten <= '0'; 
+        epos   <= 0;
+        douten <= '0';
       else
         if epos = 1023 then
           epos <= 0;
         else
           epos <= epos + 1;
         end if;
-        douten <= not douten;     
+        douten <= not douten;
       end if;
 
 
@@ -267,7 +272,6 @@ begin  -- Behavioral
       when none =>
         osel  <= 0;
         ken   <= '0';
-        kdsel <= '0';
         if epos = 49 then
           ns <= dcheck;
         else
@@ -280,24 +284,15 @@ begin  -- Behavioral
       when dcheck =>
         osel  <= 0;
         ken   <= '0';
-        kdsel <= '0';
         if DREQ = '1' then              -- FIXME data disable for test
-          ns <= echecka; 
---          ns <= dsend;
+          ns <= dwait;
         else
           ns <= echecka;
         end if;
         
-      when dsend =>
-        osel  <= 0;
-        ken   <= '1';
-        kdsel <= '0';
-        ns    <= dwait;
-
       when dwait =>
         osel  <= 0;
-        ken   <= '0';
-        kdsel <= '0';
+        ken   <= DKIN; 
         if ddone = '1' then
           ns <= ddones;
         else
@@ -306,8 +301,7 @@ begin  -- Behavioral
 
       when ddones =>
         osel  <= 0;
-        ken   <= '1';
-        kdsel <= '1';
+        ken   <= '0';
         ns    <= echecka;
 
         -----------------------------------------------------------------------
@@ -316,7 +310,6 @@ begin  -- Behavioral
       when echecka =>
         osel  <= 1;
         ken   <= '0';
-        kdsel <= '0';
         if sentthiscycle(0) = '1' then
           ns <= echeckb;
         else
@@ -330,17 +323,15 @@ begin  -- Behavioral
       when esenda =>
         osel  <= 1;
         ken   <= '1';
-        kdsel <= '0';
-        if douten = '1'  then
+        if douten = '1' then
           ns <= esendaw;
         else
-          ns    <= esenda;
+          ns <= esenda;
         end if;
 
       when esendaw =>
         osel  <= 1;
         ken   <= '0';
-        kdsel <= '0';
         if edone(0) = '1' then
           ns <= enexta;
         else
@@ -350,7 +341,6 @@ begin  -- Behavioral
       when enexta =>
         osel  <= 1;
         ken   <= '0';
-        kdsel <= '0';
         ns    <= echeckb;
 
         -----------------------------------------------------------------------
@@ -359,7 +349,6 @@ begin  -- Behavioral
       when echeckb =>
         osel  <= 2;
         ken   <= '0';
-        kdsel <= '0';
         if sentthiscycle(1) = '1' then
           ns <= echeckc;
         else
@@ -374,17 +363,15 @@ begin  -- Behavioral
       when esendb =>
         osel  <= 2;
         ken   <= '1';
-        kdsel <= '0';
-        if douten = '1'  then
-          ns    <= esendbw;
+        if douten = '1' then
+          ns <= esendbw;
         else
-          ns <= esendb; 
+          ns <= esendb;
         end if;
 
       when esendbw =>
         osel  <= 2;
         ken   <= '0';
-        kdsel <= '0';
         if edone(1) = '1' then
           ns <= enextb;
         else
@@ -394,7 +381,6 @@ begin  -- Behavioral
       when enextb =>
         osel  <= 2;
         ken   <= '0';
-        kdsel <= '0';
         ns    <= echeckc;
 
         -----------------------------------------------------------------------
@@ -403,7 +389,6 @@ begin  -- Behavioral
       when echeckc =>
         osel  <= 3;
         ken   <= '0';
-        kdsel <= '0';
         if sentthiscycle(2) = '1' then
           ns <= echeckd;
         else
@@ -417,18 +402,16 @@ begin  -- Behavioral
       when esendc =>
         osel  <= 3;
         ken   <= '1';
-        kdsel <= '0';
-        if douten = '1'  then
-          ns    <= esendcw;
+        if douten = '1' then
+          ns <= esendcw;
         else
-          ns <= esendc; 
+          ns <= esendc;
         end if;
 
 
       when esendcw =>
         osel  <= 3;
         ken   <= '0';
-        kdsel <= '0';
         if edone(2) = '1' then
           ns <= enextc;
         else
@@ -438,7 +421,6 @@ begin  -- Behavioral
       when enextc =>
         osel  <= 3;
         ken   <= '0';
-        kdsel <= '0';
         ns    <= echeckd;
 
         -----------------------------------------------------------------------
@@ -447,8 +429,6 @@ begin  -- Behavioral
       when echeckd =>
         osel  <= 4;
         ken   <= '0';
-        kdsel <= '0';
-
         if sentthiscycle(3) = '1' then
           ns <= timechk;
         else
@@ -462,17 +442,15 @@ begin  -- Behavioral
       when esendd =>
         osel  <= 4;
         ken   <= '1';
-        kdsel <= '0';
         if douten = '1' then
-          ns    <= esenddw;
+          ns <= esenddw;
         else
           ns <= esendd;
-        end if; 
+        end if;
 
       when esenddw =>
         osel  <= 4;
         ken   <= '0';
-        kdsel <= '0';
         if edone(3) = '1' then
           ns <= enextd;
         else
@@ -482,13 +460,11 @@ begin  -- Behavioral
       when enextd =>
         osel  <= 4;
         ken   <= '0';
-        kdsel <= '0';
         ns    <= timechk;
         
       when timechk =>
         osel  <= 0;
         ken   <= '0';
-        kdsel <= '0';
         if epos < 700 then
           ns <= echecka;
         else
@@ -498,7 +474,6 @@ begin  -- Behavioral
       when others =>
         osel  <= 0;
         ken   <= '0';
-        kdsel <= '0';
         ns    <= none;
         
     end case;

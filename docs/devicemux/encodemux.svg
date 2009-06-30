@@ -67,9 +67,9 @@
      showgrid="true"
      inkscape:current-layer="layer1"
      inkscape:document-units="pt"
-     inkscape:cy="394.42412"
-     inkscape:cx="556.03688"
-     inkscape:zoom="0.70000001"
+     inkscape:cy="357.06613"
+     inkscape:cx="414.88229"
+     inkscape:zoom="1.4142136"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
      borderopacity="1.0"
@@ -682,12 +682,12 @@
          id="text5120"
          y="-35"
          x="127.87411"
-         style="font-size:10.19999981px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+         style="font-size:10.19999981px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
          xml:space="preserve"><tspan
            y="-35"
            x="127.87411"
            id="tspan5122"
-           sodipodi:role="line">DCHECK</tspan></text>
+           sodipodi:role="line">DBRCHECK</tspan></text>
     </g>
     <g
        id="g5124"

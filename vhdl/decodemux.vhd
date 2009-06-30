@@ -12,7 +12,7 @@ entity decodemux is
 
     ECYCLE : out std_logic;
     EDATA  : out std_logic_vector(7 downto 0);
-
+    HEADERDONE :  out std_logic; 
     -- data interface
     DGRANTA      : out std_logic;
     EARXBYTEA    : out std_logic_vector(7 downto 0) := (others => '0');
@@ -80,6 +80,8 @@ begin  -- Behavioral
 
   ECYCLE <= '1' when KIN = '1' and DIN = X"BC" else '0';
 
+  HEADERDONE <= '1' when cs = hdrdone else '0';
+  
   EDATA    <= DIN;
   main : process(CLK)
   begin
