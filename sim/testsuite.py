@@ -28,7 +28,7 @@ else:
     suite.addTest(vhdlTestCase("encodedata"))
     suite.addTest(vhdlTestCase("encodemux"))
     suite.addTest(vhdlTestCase("encodemuxintegrate"))
-    #suite.addTest(vhdlTestCase("eventrx"))
+    suite.addTest(vhdlTestCase("eventrx"))
     #suite.addTest(vhdlTestCase("eventtx"))
     suite.addTest(vhdlTestCase("evtendianrev"))
     #suite.addTest(vhdlTestCase("fibertx"))

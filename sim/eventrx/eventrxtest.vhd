@@ -136,8 +136,8 @@ begin  -- Behavioral
 
       wait until rising_edge(REQ);
       wait until rising_edge(sendeventdone); 
-
-      wait until rising_edge(CLK) and DOUTEN = '1';
+      GRANT <= '0'; 
+      wait until rising_edge(CLK);
       GRANT <= '1' ;
       wait until rising_edge(CLK);
       GRANT <= '0'; 
@@ -185,6 +185,7 @@ begin  -- Behavioral
       -- first read
       wait until rising_edge(CLK) and REQ = '1'; 
       wait for 1 us;
+      GRANT <= '0' ;
       wait until rising_edge(CLK);
       GRANT <= '1' ;
       wait until rising_edge(CLK);
@@ -211,9 +212,11 @@ begin  -- Behavioral
       wait until rising_edge(CLK) and REQ = '1'; 
 
       wait for 1 us;
-      wait until rising_edge(CLK);
+      GRANT <= '0'; 
+      wait until rising_edge(CLK) and DOUTEN = '1';
       GRANT <= '1' ;
-      wait until rising_edge(CLK);
+      wait until rising_edge(CLK) and DOUTEN = '1';
+      GRANT <= '0';
       
       for i in 0 to 10 loop
         wait until rising_edge(CLK)  and DOUTEN = '1';

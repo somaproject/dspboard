@@ -1338,6 +1338,8 @@ begin  -- Behavioral
       DOUT2   => jtag_dout2,
       DOUT2EN => jtag_dout2en);
 
+  jtag_din1 <= X"000000000000" & eventrxdebuga;
+  
   jtag_din2 <= encode_debug;
 --  bufcapture_inst: bufcapture
 --    port map (
