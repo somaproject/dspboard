@@ -13,7 +13,7 @@ FakeSource::FakeSource(SystemTimer *pst) :
 void FakeSource::updateTime(somatime_t t) 
 {
   // if time changes by more than x, emit a sample
-  if (t % 10 == 0) {
+  if (t % 50 == 0) {
     buffer_.append(val_); 
     source.newSample(val_); 
     val_++; 

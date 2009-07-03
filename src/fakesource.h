@@ -16,6 +16,10 @@ public:
     return 1712;
   }
 
+  bool setFilterID(filterid_t) {
+    return true; 
+  }
+
 private:
   void updateTime(somatime_t t); 
   somatime_t lasttime_; 

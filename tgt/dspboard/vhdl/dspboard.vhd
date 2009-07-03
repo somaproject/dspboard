@@ -635,7 +635,7 @@ architecture Behavioral of dspboard is
 
   component jtaginterface
     generic (
-      JTAG1N : integer := 32;
+      JTAG1N : integer := 128;
       JTAG2N : integer := 32);
     port (
       CLK     : in  std_logic;
@@ -665,9 +665,9 @@ architecture Behavioral of dspboard is
 
 
 
-  signal jtag_din1    : std_logic_vector(63 downto 0) := (others => '0');
-  signal jtag_dout1   : std_logic_vector(63 downto 0) := (others => '0');
-  signal jtag_dout1en : std_logic                     := '0';
+  signal jtag_din1    : std_logic_vector(127 downto 0) := (others => '0');
+  signal jtag_dout1   : std_logic_vector(127 downto 0) := (others => '0');
+  signal jtag_dout1en : std_logic                      := '0';
 
   signal jtag_din2    : std_logic_vector(63 downto 0) := (others => '0');
   signal jtag_dout2   : std_logic_vector(63 downto 0) := (others => '0');
@@ -679,7 +679,14 @@ architecture Behavioral of dspboard is
   signal capture_dinen, capture_nextbuf : std_logic                     := '0';
 
 
+  type   debugcnt_t is array (0 to 3) of std_logic_vector(7 downto 0);
+  signal datareqcnt      : debugcnt_t := (others => (others => '0'));
+  signal datanextbytecnt : debugcnt_t := (others => (others => '0'));
+  signal datalastbytecnt : debugcnt_t := (others => (others => '0'));
 
+  signal dataddonecnt : std_logic_vector(15 downto 0) := (others => '0');
+
+  signal bstartcyclecnt : std_logic_vector(7 downto 0) := (others => '0');
   
 begin  -- Behavioral
 
@@ -752,6 +759,8 @@ begin  -- Behavioral
       DIN          => rxdatal,
       KIN          => rxkl,
       LOCKED       => linkup,
+      HEADERDONE   => headerdone,
+      BSTARTCYCLE  => bstartcycle,
       ECYCLE       => ecycle,
       EDATA        => edata,
       DGRANTA      => dgrantin(0),
@@ -944,7 +953,7 @@ begin  -- Behavioral
       FULL     => datafullb,
       REQ      => dreq(1),
       NEXTBYTE => dnextbyte(1),
-      LASTBYTE  => dlastbyte(1),
+      LASTBYTE => dlastbyte(1),
       DOUT     => ddatab);
 
 
@@ -1254,9 +1263,7 @@ begin  -- Behavioral
 
 
   process(CLK)
-    variable scnt   : integer range 0 to 2 := 0;
-    variable dreqal : std_logic            := '0';
-
+    variable scnt : integer range 0 to 2 := 0;
   begin
     if RESET = '1' then
     else
@@ -1327,7 +1334,7 @@ begin  -- Behavioral
 -----------------------------------------------------------------------------
   jtagif_inst : jtaginterface
     generic map (
-      JTAG1N => 64,
+      JTAG1N => 128,
       JTAG2N => 64)
     port map (
       CLK     => clk,
@@ -1338,9 +1345,48 @@ begin  -- Behavioral
       DOUT2   => jtag_dout2,
       DOUT2EN => jtag_dout2en);
 
-  jtag_din1 <= X"000000000000" & eventrxdebuga;
-  
+  jtag_din1 <= datareqcnt(0) & datareqcnt(1) & datareqcnt(2) & datareqcnt(3)
+               & X"12" & bstartcyclecnt & dataddonecnt
+               & datanextbytecnt(0) & datanextbytecnt(1) & datanextbytecnt(2) & datanextbytecnt(3)
+               & datalastbytecnt(0) & datalastbytecnt(1) & datalastbytecnt(2) & datalastbytecnt(3);
+
   jtag_din2 <= encode_debug;
+
+  data_gen : for i in 0 to 3 generate
+    
+    process(CLK)
+    begin
+      if rising_edge(CLK) then
+        if dreq(i) = '1' then
+          datareqcnt(i) <= datareqcnt(i) + 1;
+        end if;
+
+        if dnextbyte(i) = '1' then
+          datanextbytecnt(i) <= datanextbytecnt(i) + 1;
+        end if;
+
+        if dlastbyte(i) = '1' then
+          datalastbytecnt(i) <= datalastbytecnt(i) + 1;
+        end if;
+
+        
+      end if;
+    end process;
+  end generate data_gen;
+
+  process(CLK)
+  begin
+    if rising_edge(CLK) then
+      if dataddone = '1' then
+        dataddonecnt <= dataddonecnt + 1;
+      end if;
+
+      if bstartcycle = '1' then
+        bstartcyclecnt <= bstartcyclecnt + 1;
+      end if;
+    end if;
+  end process;
+
 --  bufcapture_inst: bufcapture
 --    port map (
 --      CLKA     => CLK,

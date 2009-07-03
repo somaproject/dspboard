@@ -21,6 +21,7 @@
 #include <mainloops/noopmainloop.h>
 #include <mainloops/rawmainloop.h>
 #include <mainloops/somamainloop.h>
+#include <mainloops/fakerawmainloop.h>
 #include <sinks/rawsink.h>
 #include <sinks/tspikesink.h>
 #include <filterlinks/delta.h>
@@ -141,9 +142,11 @@ int main_loop()
 					  config.getEventDevice()); 
   
 
-  NoOpMainLoop * pMainLoop = new NoOpMainLoop(); 
+  //NoOpMainLoop * pMainLoop = new NoOpMainLoop(); 
   //MemTestProc * mtp = new MemTestProc(ed, etx, config.getEventDevice()); 
   //SomaMainLoop * pMainLoop = new SomaMainLoop();
+  FakeRawMainLoop * pMainLoop = new FakeRawMainLoop();
+
   pMainLoop->setup(ed, etx, acqserial, timer, eep, dataout, &config); 
   acqserial->start(); 
 

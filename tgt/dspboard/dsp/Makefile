@@ -22,7 +22,8 @@ OBJS = $(ASMSRCS:%.asm=%.o) $(CCSRCS:%.cc=%.o) eventtx.o eventrx.o \
 	uarttx.o acqstatecontrol.o systemtimer.o datasport.o acqboardif.o\
 	fakesource.o rawsink.o  tspikesink.o availablefirs.o filterlinkcontroller.o\
 	 rawmainloop.o somamainloop.o noopmainloop.o echoproc.o benchmark.o memtestproc.o\
-	filter.o delta.o fir.o acqdatasourcecontrol.o acqdatasource.o wavesink.o
+	filter.o delta.o fir.o acqdatasourcecontrol.o acqdatasource.o wavesink.o \
+	fakerawmainloop.o
 
 
 AS = bfin-elf-as
@@ -89,6 +90,9 @@ acqstatecontrol.o: $(SRCDIR)/acqstatecontrol.cc
 
 rawmainloop.o: $(SRCDIR)/mainloops/rawmainloop.cc
 	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/mainloops/rawmainloop.cc
+
+fakerawmainloop.o: $(SRCDIR)/mainloops/fakerawmainloop.cc
+	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/mainloops/fakerawmainloop.cc
 
 noopmainloop.o: $(SRCDIR)/mainloops/noopmainloop.cc
 	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/mainloops/noopmainloop.cc
