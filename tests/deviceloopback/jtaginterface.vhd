@@ -123,7 +123,7 @@ begin  -- Behavioral
       if rising_edge(jtagdrck2) then
         if jtagsel2 = '1' and jtagshift = '1' then
           testout2 <= testout2(0) & testout2(JTAG2N-1 downto 1);
-          lldout2 <= jtagTDI & lldout2(JTAG1N-1 downto 1); 
+          lldout2 <= jtagTDI & lldout2(JTAG2N-1 downto 1); 
         end if;
       end if;
 
