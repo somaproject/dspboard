@@ -25,6 +25,8 @@ architecture Behavioral of encodemuxtest is
       DGRANT     : out std_logic;
       DDONE      : in  std_logic;
       DDATA      : in  std_logic_vector(7 downto 0);
+      DKIN : in std_logic;
+      DATAEN : out std_logic; 
       -- event interface for DSPs
       EDSPREQ    : in  std_logic_vector(3 downto 0);
       EDSPGRANT  : out std_logic_vector(3 downto 0);
@@ -58,6 +60,9 @@ architecture Behavioral of encodemuxtest is
   signal DGRANT      : std_logic                    := '0';
   signal DDONE       : std_logic                    := '0';
   signal DDATA       : std_logic_vector(7 downto 0) := (others => '0');
+  signal DKIN : std_logic := '0';
+  signal DATAEN : std_logic := '0';
+    
   -- event interface for DSPs
   signal EDSPREQ     : std_logic_vector(3 downto 0) := (others => '0');
   signal EDSPGRANT   : std_logic_vector(3 downto 0) := (others => '0');
@@ -109,6 +114,8 @@ begin  -- Behavioral
       DGRANT => DGRANT,
       DDONE  => DDONE,
       DDATA  => DDATA,
+      DKIN => DKIN,
+      DATAEN => DATAEN, 
 
       EDSPREQ    => EDSPREQ,
       EDSPGRANT  => EDSPGRANT,
@@ -205,16 +212,23 @@ begin  -- Behavioral
       DREQ <= '1';
       wait until rising_edge(CLK) and DGRANT = '1';
       DREQ <= '0';
-      for i in 0 to 600 loop
+      wait until rising_edge(CLK) and DATAEN = '1';
+      DDATA <= KDATASTART;
+      DKIN <= '1';
+      wait until rising_edge(CLK) and DATAEN = '1'; 
+      DKIN <= '0';
+      for i in 0 to 239 loop
         DDATA <= std_logic_vector(TO_UNSIGNED((i + datapkt) mod 256, 8));
-        if i = 599 then
-          DDONE <= '1';
-        else
-          DDONE <= '0';
-        end if;
-        wait until rising_edge(CLK);
+        wait until rising_edge(CLK) and DATAEN = '1'; 
       end loop;  -- i
-      DREQ <= '0';
+      DDATA <= KDATAEND;
+      DKIN <= '1';
+      wait until rising_edge(CLK) and DATAEN = '1';
+      DKIN <= '0';
+      DDATA <= X"00";
+      DDONE <= '1';
+      wait until rising_edge(CLK) and DATAEN = '1';
+      DDONE <= '0'; 
     end loop;  -- datapkt
     wait;
   end process datasend;
@@ -417,9 +431,10 @@ begin  -- Behavioral
     for i in 0 to 10 loop
 
       wait until rising_edge(CLK) and KOUT = '1' and DOUT = KDATASTART;
-      for j in 0 to 599 loop
+      wait until rising_edge(CLK);
+      for j in 0 to 239 loop
         wait until rising_edge(CLK);
-
+        wait until rising_edge(CLK);
         assert DOUT = std_logic_vector(TO_UNSIGNED((i + j) mod 256, 8))
           report "Error in Data" severity error;
       end loop;  -- j

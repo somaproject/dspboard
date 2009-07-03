@@ -25,6 +25,8 @@ architecture Behavioral of encodemuxintegratetest is
       DGRANT     : out std_logic;
       DDONE      : in  std_logic;
       DDATA      : in  std_logic_vector(7 downto 0);
+      DKIN       : in  std_logic;
+      DATAEN     : out std_logic;
       -- event interface for DSPs
       EDSPREQ    : in  std_logic_vector(3 downto 0);
       EDSPGRANT  : out std_logic_vector(3 downto 0);
@@ -52,14 +54,17 @@ architecture Behavioral of encodemuxintegratetest is
   signal CLK   : std_logic := '0';
   signal CLKHI : std_logic := '0';
 
-  signal ECYCLE     : std_logic                    := '0';
-  signal DOUT       : std_logic_vector(7 downto 0) := (others => '0');
-  signal KOUT       : std_logic                    := '0';
+  signal ECYCLE : std_logic                    := '0';
+  signal DOUT   : std_logic_vector(7 downto 0) := (others => '0');
+  signal KOUT   : std_logic                    := '0';
   -- data interface
-  signal DREQ       : std_logic                    := '0';
-  signal DGRANT     : std_logic                    := '0';
-  signal DDONE      : std_logic                    := '0';
-  signal DDATA      : std_logic_vector(7 downto 0) := (others => '0');
+  signal DREQ   : std_logic                    := '0';
+  signal DGRANT : std_logic                    := '0';
+  signal DDONE  : std_logic                    := '0';
+  signal DDATA  : std_logic_vector(7 downto 0) := (others => '0');
+  signal DKIN   : std_logic                    := '0';
+  signal DATAEN : std_logic                    := '0';
+
   -- event interface for DSPs
   signal EDSPREQ    : std_logic_vector(3 downto 0) := (others => '0');
   signal EDSPGRANT  : std_logic_vector(3 downto 0) := (others => '0');
@@ -238,6 +243,7 @@ begin  -- Behavioral
       DGRANT => DGRANT,
       DDONE  => DDONE,
       DDATA  => DDATA,
+      DKIN   => DKIN,
 
       EDSPREQ    => EDSPREQ,
       EDSPGRANT  => EDSPGRANT,

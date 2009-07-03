@@ -3,3 +3,5 @@ We run 4 EPROCs and 4 DSP event sources simultaneously, and
 generate a series of canonical events. We  then have 8 independent
 receivers that receive and decode these events to verify 
 correctness. 
+
+NOTE: Really just tests events, not data. 

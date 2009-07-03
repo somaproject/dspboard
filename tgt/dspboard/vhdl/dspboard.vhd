@@ -612,7 +612,8 @@ architecture Behavioral of dspboard is
   signal procspienacnt   : std_logic_vector(7 downto 0)  := (others => '0');
   signal devtfifofullal  : std_logic                     := '0';
   signal procdspspienal  : std_logic                     := '0';
-  signal eventrxdebuga   : std_logic_vector(15 downto 0) := (others => '0');
+  signal eventrxdebug_a   : std_logic_vector(15 downto 0) := (others => '0');
+  signal eventrxdebug_b   : std_logic_vector(15 downto 0) := (others => '0');
   signal eventrxreqcnt   : std_logic_vector(15 downto 0) := (others => '0');
   signal reql            : std_logic                     := '0';
   signal reqll           : std_logic                     := '0';
@@ -687,6 +688,10 @@ architecture Behavioral of dspboard is
   signal dataddonecnt : std_logic_vector(15 downto 0) := (others => '0');
 
   signal bstartcyclecnt : std_logic_vector(7 downto 0) := (others => '0');
+
+  signal eventreqcnt : debugcnt_t := (others => (others => '0'));
+  signal eventgrantcnt : debugcnt_t := (others => (others => '0'));
+  signal eventdonecnt : debugcnt_t := (others => (others => '0'));
   
 begin  -- Behavioral
 
@@ -849,7 +854,7 @@ begin  -- Behavioral
       REQ      => edspreq(0),
       GRANT    => edspgrant(0),
       DONE     => edspdone(0),
-      DEBUG    => eventrxdebuga);
+      DEBUG    => eventrxdebug_a);
 
   datasport_a : datasport
     port map (
@@ -909,7 +914,8 @@ begin  -- Behavioral
       DOUT     => edspdatab,
       REQ      => edspreq(1),
       GRANT    => edspgrant(1),
-      DONE     => edspdone(1));
+      DONE     => edspdone(1),
+      DEBUG => eventrxdebug_b);
 
 
   dspiomux_b : dspiomux
@@ -1345,10 +1351,10 @@ begin  -- Behavioral
       DOUT2   => jtag_dout2,
       DOUT2EN => jtag_dout2en);
 
-  jtag_din1 <= datareqcnt(0) & datareqcnt(1) & datareqcnt(2) & datareqcnt(3)
-               & X"12" & bstartcyclecnt & dataddonecnt
-               & datanextbytecnt(0) & datanextbytecnt(1) & datanextbytecnt(2) & datanextbytecnt(3)
-               & datalastbytecnt(0) & datalastbytecnt(1) & datalastbytecnt(2) & datalastbytecnt(3);
+  jtag_din1 <= eventreqcnt(0) & eventreqcnt(1) & eventreqcnt(2) & eventreqcnt(3) & 
+           eventgrantcnt(0) & eventgrantcnt(1) & eventgrantcnt(2) & eventgrantcnt(3) & 
+           eventdonecnt(0) & eventdonecnt(1) & eventdonecnt(2) & eventdonecnt(3) & 
+           eventrxdebug_a & eventrxdebug_b; 
 
   jtag_din2 <= encode_debug;
 
@@ -1357,19 +1363,18 @@ begin  -- Behavioral
     process(CLK)
     begin
       if rising_edge(CLK) then
-        if dreq(i) = '1' then
-          datareqcnt(i) <= datareqcnt(i) + 1;
+        if edspreq(i) = '1' then
+          eventreqcnt(i) <= eventreqcnt(i) + 1; 
         end if;
 
-        if dnextbyte(i) = '1' then
-          datanextbytecnt(i) <= datanextbytecnt(i) + 1;
+        if edspgrant(i) = '1' then
+          eventgrantcnt(i) <= eventgrantcnt(i) + 1; 
         end if;
 
-        if dlastbyte(i) = '1' then
-          datalastbytecnt(i) <= datalastbytecnt(i) + 1;
+        if edspdone(i) = '1' then
+          eventdonecnt(i) <= eventdonecnt(i) + 1; 
         end if;
 
-        
       end if;
     end process;
   end generate data_gen;

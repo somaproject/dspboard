@@ -1,8 +1,6 @@
-EncodeMux test: test the encode muxer by waiting for an ecycle, 
+The encode muxer encodes events and takes encoded data packets, and
+muxes them out off the DSPBoard onto the DeviceLink. 
 
-for ecyclecnt in range (10):
-   if ecyclecnt mod 2 == 0:
-      send data packet
-
-   every Nth event send an event
+Here we simulate sending several events and data, and
+verify that we recover the correct 8b/10b data streams. 
 

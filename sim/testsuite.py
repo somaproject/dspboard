@@ -18,14 +18,15 @@ if len(sys.argv) > 1 :
 else:
     # core components
     
-    suite.addTest(vhdlTestCase("acqserial"))
+    #suite.addTest(vhdlTestCase("acqserial"))
     suite.addTest(vhdlTestCase("bootser"))
     suite.addTest(vhdlTestCase("datasport"))
     suite.addTest(vhdlTestCase("decodemux"))
     #suite.addTest(vhdlTestCase("decoder"))
-    #suite.addTest(vhdlTestCase("devicemuxtx"))
+    suite.addTest(vhdlTestCase("devicemuxtx"))
     #suite.addTest(vhdlTestCase("dgranttest"))
     suite.addTest(vhdlTestCase("encodedata"))
+    suite.addTest(vhdlTestCase("encodedataintegrate"))
     suite.addTest(vhdlTestCase("encodemux"))
     suite.addTest(vhdlTestCase("encodemuxintegrate"))
     suite.addTest(vhdlTestCase("eventrx"))
@@ -33,8 +34,7 @@ else:
     suite.addTest(vhdlTestCase("evtendianrev"))
     #suite.addTest(vhdlTestCase("fibertx"))
     #suite.addTest(vhdlTestCase("proceventio"))
-    #suite.addTest(vhdlTestCase("uartacqrx"))
-
+    suite.addTest(vhdlTestCase("uartacqrx"))
     suite.addTest(vhdlTestCase("uartbyteout"))
 
 runner = unittest.TextTestRunner()
