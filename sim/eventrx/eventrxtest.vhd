@@ -42,7 +42,8 @@ architecture Behavioral of eventrxtest is
 
   type dataword_t is array (0 to 10) of std_logic_vector(15 downto 0 );
 
-  signal txwords, txwordsa, txwordsb   : dataword_t := (others => (others => '0'));
+  signal txwords, txwordsa, txwordsb,
+    txwordsc: dataword_t := (others => (others => '0'));
   signal sendevent : std_logic  := '0';
   signal sendeventdone : std_logic  := '0';
 
@@ -139,7 +140,43 @@ begin  -- Behavioral
       GRANT <= '0'; 
       wait until rising_edge(CLK);
       GRANT <= '1' ;
+      wait until rising_edge(CLK) and DOUTEN = '1'; 
+      GRANT <= '0'; 
+      
+      for i in 0 to 10 loop
+        wait until rising_edge(CLK) and DOUTEN = '1';
+        recoveredword(15 downto 8) := DOUT;
+        wait until rising_edge(CLK) and DOUTEN = '1';
+        recoveredword(7 downto 0) := DOUT;
+        recoverdwords(i) <= recoveredword;
+      end loop;  -- i
+
+      -- check
       wait until rising_edge(CLK);
+      
+      for i in 0 to 10 loop
+        assert recoverdwords(i) = txwords(i)
+          report "Error reading recoverdwords " & integer'image(i) severity Error;
+      end loop;  -- i
+      
+      ---------------------------------------------------------------------
+      -- Transmit second event, test B side of buffer
+      --------------------------------------------------------------------
+      wait for 10 us;
+      for i in 0 to 10 loop
+        txwords(i) <= X"CD" & std_logic_vector(TO_UNSIGNED(i,8));
+      end loop;  -- i      
+      wait until rising_edge(CLK);
+      sendevent <= '1'; 
+      wait until rising_edge(CLK);
+      sendevent <= '0'; 
+
+      wait until rising_edge(REQ);
+      wait until rising_edge(sendeventdone); 
+      GRANT <= '0'; 
+      wait until rising_edge(CLK);
+      GRANT <= '1' ;
+      wait until rising_edge(CLK) and DOUTEN = '1'; 
       GRANT <= '0'; 
       
       for i in 0 to 10 loop
@@ -174,6 +211,8 @@ begin  -- Behavioral
       wait until rising_edge(CLK);
       sendevent <= '0'; 
       wait until rising_edge(sendeventdone); 
+      wait for 10 us;
+      assert REQ = '1'  report "REQ not asserted" severity error;
       
       txwords <= txwordsB; 
       wait until rising_edge(CLK);
@@ -188,7 +227,8 @@ begin  -- Behavioral
       GRANT <= '0' ;
       wait until rising_edge(CLK);
       GRANT <= '1' ;
-      wait until rising_edge(CLK);
+      wait until rising_edge(CLK) and DOUTEN = '1';
+      GRANT <= '0' ;
       
       for i in 0 to 10 loop
         wait until rising_edge(CLK)  and DOUTEN = '1';
@@ -235,6 +275,60 @@ begin  -- Behavioral
           report "Error reading recoverdwords for txwordsB " & integer'image(i) severity Error;
       end loop;  -- i
 
+      ---------------------------------------------------------------------
+      -- Transmit an event, but assert reset in the middle of it
+      --------------------------------------------------------------------
+      wait for 10 us;
+      for i in 0 to 10 loop
+        txwordsA(i) <= X"56" & std_logic_vector(TO_UNSIGNED(i,8));
+        txwordsB(i) <= X"78" & std_logic_vector(TO_UNSIGNED(i,8));
+      end loop;  -- i
+      wait until rising_edge(CLK);      
+      txwords <= txwordsA; 
+      wait until rising_edge(CLK);
+      sendevent <= '1'; 
+      wait until rising_edge(CLK);
+      sendevent <= '0';
+      wait for 10 us;
+      RESET <= '1';
+      wait until rising_edge(sendeventdone); 
+      RESET <= '0';
+      wait until rising_edge(CLK);      
+      txwords <= txwordsB; 
+      wait until rising_edge(CLK);
+      sendevent <= '1'; 
+      wait until rising_edge(CLK);
+      sendevent <= '0'; 
+      wait until rising_edge(sendeventdone); 
+          
+      -- now verify the sent event
+      wait until rising_edge(CLK) and REQ = '1'; 
+
+      wait for 1 us;
+      GRANT <= '0'; 
+      wait until rising_edge(CLK) and DOUTEN = '1';
+      GRANT <= '1' ;
+      wait until rising_edge(CLK) and DOUTEN = '1';
+      GRANT <= '0';
+      
+      for i in 0 to 10 loop
+        wait until rising_edge(CLK)  and DOUTEN = '1';
+        recoveredword(15 downto 8) := DOUT;
+        GRANT <= '0'; 
+        wait until rising_edge(CLK)  and DOUTEN = '1';
+        recoveredword(7 downto 0) := DOUT;
+        recoverdwords(i) <= recoveredword;
+      end loop;  -- i
+
+      -- check
+      wait until rising_edge(CLK);
+      
+      for i in 0 to 10 loop
+        assert recoverdwords(i) = txwords(i)
+          report "Error reading recoverdwords for txwordsB " & integer'image(i) severity Error;
+      end loop;  -- i
+      
+      
       report "End of Simulation" severity Failure;
       
       wait; 

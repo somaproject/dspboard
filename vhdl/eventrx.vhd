@@ -31,7 +31,7 @@ architecture Behavioral of eventrx is
   signal sclkl, sclkll : std_logic := '0';
 
   -- debug
-  signal debugEventCounter : std_logic_vector(7 downto 0) := (others => '0');
+  signal debugEventCounter : std_logic_vector(3 downto 0) := (others => '0');
 
   -- INPUT SIGNALS
 
@@ -58,6 +58,8 @@ architecture Behavioral of eventrx is
 
   signal wcntout : std_logic_vector(3 downto 0) := (others => '0');
 
+  signal reqint : std_logic := '0';
+  
   signal osel : std_logic := '0';
   signal dsel : std_logic := '0';
 
@@ -94,8 +96,9 @@ begin  -- Behavioral
   doutsel <= douta                when osel = '0' else doutb;
   DOUT    <= doutsel(15 downto 8) when dsel = '0' else doutsel(7 downto 0);
 
-  REQ <= '1' when ocs = armareq or ocs = armbreq else '0';
-
+  reqint <= '1' when ocs = armareq or ocs = armbreq else '0';
+  REQ <= reqint;
+  
 --     FIFOFULL <= armeda and armedb;       -- causes race conditions
 -- THE ABOVE MESSAGE WAS IN THE CODE BEFORE IT WAS CHANGED TO THIS:
 --
@@ -109,7 +112,7 @@ begin  -- Behavioral
               (armedb = '1' and wcntin > 0) else
               '0';
 
-  
+  DEBUG(15) <= '0'; 
   regfile_a : regfile
     generic map (
       BITS => 16)
@@ -141,15 +144,21 @@ begin  -- Behavioral
       ocs    <= armaw;
       armeda <= '0';
       armedb <= '0';
+      wcntin <= (others => '0');
+      wcntout <= (others => '0');
+      isel <= '0'; 
+                
     else
       if rising_edge(CLK) then
         ics                <= ins;
         ocs                <= ons;
-        DEBUG(15 downto 8) <= debugEventCounter;
+        DEBUG(11 downto 8) <= wcntin; -- debugEventCounter;
         if ics = bufarm then
           debugEventCounter <= debugEventCounter + 1;
         end if;
-
+        DEBUG(12) <= armeda;
+        DEBUG(13) <= armedb;
+        DEBUG(14) <= reqint; 
 
         scsl   <= SCS;
         mosil  <= MOSI;
@@ -294,6 +303,7 @@ begin  -- Behavioral
   begin
     case ocs is
       when armaw =>
+        DEBUG(7 downto 4) <= X"0";
         osel <= '0';
         dsel <= '0';
         if armeda = '1' then
@@ -303,6 +313,7 @@ begin  -- Behavioral
         end if;
 
       when armareq =>
+        DEBUG(7 downto 4) <= X"1";
         osel <= '0';
         dsel <= '0';
         if GRANT = '1'  and DOUTEN = '1' then
@@ -312,6 +323,7 @@ begin  -- Behavioral
         end if;
 
       when sendah =>
+        DEBUG(7 downto 4) <= X"2";
         osel <= '0';
         dsel <= '0';
         if DOUTEN = '1' then
@@ -322,6 +334,7 @@ begin  -- Behavioral
         end if;
 
       when sendal =>
+        DEBUG(7 downto 4) <= X"3";
         osel <= '0';
         dsel <= '1';
         if douten = '1' then
@@ -335,11 +348,13 @@ begin  -- Behavioral
         end if;
 
       when donea =>
+        DEBUG(7 downto 4) <= X"4";
         osel <= '0';
         dsel <= '0';
         ons  <= armbw;
 
       when armbw =>
+        DEBUG(7 downto 4) <= X"5";
         osel <= '1';
         dsel <= '0';
         if armedb = '1' then
@@ -349,6 +364,7 @@ begin  -- Behavioral
         end if;
 
       when armbreq =>
+        DEBUG(7 downto 4) <= X"6";
         osel <= '1';
         dsel <= '0';
         if GRANT = '1' and DOUTEN = '1' then
@@ -358,6 +374,7 @@ begin  -- Behavioral
         end if;
 
       when sendbh =>
+        DEBUG(7 downto 4) <= X"7";
         osel <= '1';
         dsel <= '0';
         if douten = '1'  then
@@ -369,6 +386,7 @@ begin  -- Behavioral
 
 
       when sendbl =>
+        DEBUG(7 downto 4) <= X"8";
         osel <= '1';
         dsel <= '1';
         if douten = '1' then
@@ -383,11 +401,13 @@ begin  -- Behavioral
         end if;
 
       when doneb =>
+        DEBUG(7 downto 4) <= X"9";
         osel <= '1';
         dsel <= '0';
         ons  <= armaw;
 
       when others =>
+        DEBUG(7 downto 4) <= X"A";
         osel <= '0';
         dsel <= '0';
         ons  <= armaw;
