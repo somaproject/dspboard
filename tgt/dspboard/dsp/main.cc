@@ -144,8 +144,8 @@ int main_loop()
 
   //NoOpMainLoop * pMainLoop = new NoOpMainLoop(); 
   //MemTestProc * mtp = new MemTestProc(ed, etx, config.getEventDevice()); 
-  //SomaMainLoop * pMainLoop = new SomaMainLoop();
-  FakeRawMainLoop * pMainLoop = new FakeRawMainLoop();
+  SomaMainLoop * pMainLoop = new SomaMainLoop();
+  //FakeRawMainLoop * pMainLoop = new FakeRawMainLoop();
 
   pMainLoop->setup(ed, etx, acqserial, timer, eep, dataout, &config); 
   acqserial->start(); 

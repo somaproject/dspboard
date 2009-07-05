@@ -1356,7 +1356,7 @@ begin  -- Behavioral
            eventdonecnt(0) & eventdonecnt(1) & eventdonecnt(2) & eventdonecnt(3) & 
            eventrxdebug_a & eventrxdebug_b; 
 
-  jtag_din2 <= encode_debug;
+  jtag_din2 <= asdebuga & asdebugb; 
 
   data_gen : for i in 0 to 3 generate
     

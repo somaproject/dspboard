@@ -255,11 +255,10 @@ begin  -- Behavioral
 --      if newcmda = '1' then
 --        cmdina_cmdidl <= cmdina(7 downto 4); 
 --      end if;
-      DEBUG <= X"0000" & cmdoutll & "000" & successll & cmdidll;  --  & cmdinb_cmdidl & cmdina_cmdidl & lcmdid  & lcmdsts;
+      DEBUG <= "00000" & inwe & code_err & disp_err
+               & X"00" & cmdoutll & "000" & successll & cmdidll;  --  & cmdinb_cmdidl & cmdina_cmdidl & lcmdid  & lcmdsts;
     end if;
   end process;
-
-
 
   fibertx_inst : fibertx
     port map (
