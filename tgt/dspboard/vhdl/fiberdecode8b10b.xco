@@ -1,7 +1,7 @@
 ##############################################################
 #
 # Xilinx Core Generator version 11.1
-# Date: Sun Jul  5 00:29:40 2009
+# Date: Mon Jul  6 15:17:27 2009
 #
 ##############################################################
 #
@@ -49,13 +49,13 @@ CSET code_violation_out=true
 CSET component_name=fiberdecode8b10b
 CSET disparity_violation_out=true
 CSET implementation=LUT_Based
-CSET new_data=false
+CSET new_data=true
 CSET running_disparity_in=false
 CSET running_disparity_out=false
 CSET secondary_decoder=false
 CSET symbol_disparity_out=false
-CSET synchronous_reset=false
+CSET synchronous_reset=true
 CSET synchronous_reset_value=D_0_0_pos
 # END Parameters
 GENERATE
-# CRC: e4863226
+# CRC: 16ad4afc

@@ -37,14 +37,13 @@ architecture Behavioral of acqserial is
   signal fiberdata          : std_logic_vector(7 downto 0) := (others => '0');
   signal inwe               : std_logic                    := '0';
   signal kin                : std_logic                    := '0';
-  signal code_err, disp_err : std_logic                    := '0';
-  signal rxerr              : std_logic                    := '0';
 
   -- frame disassembled
   signal frameout   : std_logic_vector(255 downto 0) := (others => '0');
   signal newsamples : std_logic                      := '0';
 
-  signal linkup : std_logic := '0';
+  signal rxlinkup : std_logic := '0';
+  signal linkup   : std_logic := '0';
 
 
   -- recovered inputs
@@ -84,32 +83,31 @@ architecture Behavioral of acqserial is
 
   -- input componnets
   component fiberrx
-    port (CLK       : in  std_logic;
-           DIN      : in  std_logic;
-           DATAOUT  : out std_logic_vector(7 downto 0);
-           KOUT     : out std_logic;
-           CODE_ERR : out std_logic;
-           DISP_ERR : out std_logic;
-           DATALOCK : out std_logic;
-           RESET    : in  std_logic);
+    port (CLK     : in  std_logic;
+          DIN     : in  std_logic;
+          DATAOUT : out std_logic_vector(7 downto 0);
+          KOUT    : out std_logic;
+          LINKUP  : out std_logic;
+          DATAEN  : out std_logic;
+          RESET   : in  std_logic);
   end component;
 
 
   component framedis
-    port (CLK         : in  std_logic;
-           RESET      : in  std_logic;
-           DIN        : in  std_logic_vector(7 downto 0);
-           INWE       : in  std_logic;
-           KIN        : in  std_logic;
-           ERRIN      : in  std_logic;
-           LINKUP     : out std_logic;
-           NEWSAMPLES : out std_logic;
-           SAMPLE     : out std_logic_vector(15 downto 0);
-           SAMPLESEL  : in  std_logic_vector(3 downto 0);
-           CMDID      : out std_logic_vector(3 downto 0);
-           CMDST      : out std_logic_vector(3 downto 0);
-           SUCCESS    : out std_logic;
-           VERSION    : out std_logic_vector(7 downto 0));
+    port (CLK        : in  std_logic;
+          RESET      : in  std_logic;
+          DIN        : in  std_logic_vector(7 downto 0);
+          INWE       : in  std_logic;
+          KIN        : in  std_logic;
+          LINKUPIN   : in  std_logic;
+          LINKUP     : out std_logic;
+          NEWSAMPLES : out std_logic;
+          SAMPLE     : out std_logic_vector(15 downto 0);
+          SAMPLESEL  : in  std_logic_vector(3 downto 0);
+          CMDID      : out std_logic_vector(3 downto 0);
+          CMDST      : out std_logic_vector(3 downto 0);
+          SUCCESS    : out std_logic;
+          VERSION    : out std_logic_vector(7 downto 0));
   end component;
 
   component acqcmdmux
@@ -139,16 +137,16 @@ architecture Behavioral of acqserial is
       CMDSTS    : in  std_logic_vector(3 downto 0);
       CMDID     : in  std_logic_vector(3 downto 0);
       SUCCESS   : in  std_logic;
-      VERSION : in std_logic_vector(7 downto 0)
+      VERSION   : in  std_logic_vector(7 downto 0)
       );
   end component;
 
 -- output
   component fibertx
-    port (CLK       : in  std_logic;
-           CMDIN    : in  std_logic_vector(47 downto 0);
-           SENDCMD  : in  std_logic;
-           FIBEROUT : out std_logic);
+    port (CLK      : in  std_logic;
+          CMDIN    : in  std_logic_vector(47 downto 0);
+          SENDCMD  : in  std_logic;
+          FIBEROUT : out std_logic);
   end component;
 
   component uartacqrx
@@ -165,14 +163,13 @@ begin  -- Behavioral
 
   fiberrx_inst : fiberrx
     port map (
-      CLK      => clk,
-      DIN      => FIBERIN,
-      DATAOUT  => fiberdata,
-      KOUT     => kin,
-      CODE_ERR => code_err,
-      DISP_ERR => disp_err,
-      DATALOCK => inwe,
-      RESET    => '0');
+      CLK     => clk,
+      DIN     => FIBERIN,
+      DATAOUT => fiberdata,
+      KOUT    => kin,
+      LINKUP  => rxlinkup,
+      DATAEN  => inwe,
+      RESET   => '0');
 
   framedis_inst : framedis
     port map (
@@ -181,7 +178,7 @@ begin  -- Behavioral
       DIN        => fiberdata,
       INWE       => inwe,
       KIN        => kin,
-      ERRIN      => rxerr,
+      LINKUPIN   => rxlinkup,
       LINKUP     => linkup,
       NEWSAMPLES => newsamples,
       CMDID      => cmdid,
@@ -189,7 +186,7 @@ begin  -- Behavioral
       SAMPLESEL  => samplesel,
       SAMPLE     => sample,
       success    => success,
-      VERSION => version);
+      VERSION    => version);
 
 
   sportacqser_inst : sportacqser
@@ -205,7 +202,7 @@ begin  -- Behavioral
       CMDSTS    => cmdsts,
       CMDID     => cmdid,
       SUCCESS   => success,
-      VERSION => version);
+      VERSION   => version);
 
 
   acqcmdmux_inst : acqcmdmux
@@ -255,7 +252,7 @@ begin  -- Behavioral
 --      if newcmda = '1' then
 --        cmdina_cmdidl <= cmdina(7 downto 4); 
 --      end if;
-      DEBUG <= "00000" & inwe & code_err & disp_err
+      DEBUG <= "00000" & inwe & linkup & rxlinkup
                & X"00" & cmdoutll & "000" & successll & cmdidll;  --  & cmdinb_cmdidl & cmdina_cmdidl & lcmdid  & lcmdsts;
     end if;
   end process;
@@ -268,7 +265,6 @@ begin  -- Behavioral
       FIBEROUT => FIBEROUT);
 
   NEWCMDDEBUG <= sendcmd;
-  rxerr       <= code_err or disp_err;
 
   DSPASERDT  <= serdt;
   DSPASERTFS <= sertfs;

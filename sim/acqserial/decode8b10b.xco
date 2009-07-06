@@ -1,7 +1,7 @@
 ##############################################################
 #
-# Xilinx Core Generator version J.40
-# Date: Fri Mar 28 16:46:00 2008
+# Xilinx Core Generator version 11.1
+# Date: Mon Jul  6 15:00:27 2009
 #
 ##############################################################
 #
@@ -18,21 +18,21 @@ SET asysymbol = True
 SET busformat = BusFormatAngleBracketNotRipped
 SET createndf = False
 SET designentry = VHDL
-SET device = xc2s15
-SET devicefamily = Spartan2
+SET device = xc3s400
+SET devicefamily = spartan3
 SET flowvendor = Foundation_iSE
 SET formalverification = False
 SET foundationsym = False
-SET implementationfiletype = Edif
-SET package = cs144
+SET implementationfiletype = Ngc
+SET package = ft256
 SET removerpms = False
 SET simulationfiles = Behavioral
-SET speedgrade = -6
+SET speedgrade = -5
 SET verilogsim = True
 SET vhdlsim = True
 # END Project Options
 # BEGIN Select
-SELECT Decode_8b/10b family Xilinx,_Inc. 5.0
+SELECT Decode_8b/10b family Xilinx,_Inc. 7.1
 # END Select
 # BEGIN Parameters
 CSET b_clock_enable=false
@@ -46,7 +46,7 @@ CSET b_synchronous_reset=false
 CSET b_synchronous_reset_value=B_D_0_0_pos
 CSET clock_enable=true
 CSET code_violation_out=true
-CSET component_name=fiberdecode8b10b
+CSET component_name=decode8b10b
 CSET disparity_violation_out=true
 CSET implementation=LUT_Based
 CSET new_data=false
@@ -58,5 +58,4 @@ CSET synchronous_reset=false
 CSET synchronous_reset_value=D_0_0_pos
 # END Parameters
 GENERATE
-# CRC: 8f89606c
-
+# CRC: 769fddd6

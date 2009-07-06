@@ -14,7 +14,7 @@ entity framedis is
          DIN        : in  std_logic_vector(7 downto 0);
          INWE       : in  std_logic;
          KIN        : in  std_logic;
-         ERRIN      : in  std_logic;
+         LINKUPIN : in std_logic; 
          LINKUP     : out std_logic;
          NEWSAMPLES : out std_logic;
          SAMPLE     : out std_logic_vector(15 downto 0);
@@ -127,7 +127,7 @@ begin
         inwel <= inwe;
 
         if (kin = '1' and DIN = X"BC") or
-          errin = '1' then
+          linkupin = '0' then
           incnt   <= 0;
         else
           if inwe = '1' and incnt /= 24 then
@@ -177,12 +177,12 @@ begin
     end if;
   end process clock;
 
-  fsm : process(cs, ERRIN, donef) is
+  fsm : process(cs, linkupin, donef) is
   begin
     case cs is
       when up     =>
         LINKUP <= '1';
-        if ERRIN = '1' then
+        if linkupin = '0' then
           ns   <= down;
         else
           ns   <= up;
