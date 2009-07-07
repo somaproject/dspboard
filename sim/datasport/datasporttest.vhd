@@ -84,6 +84,7 @@ begin
     -- we need the BEswap variables because we must seend each byte
     -- LSB first, but we need to send the high-byte first
     variable tmpword, tmpwordBEswap : std_logic_vector(15 downto 0) := X"0000";
+    variable pktlen_bytes : integer := 0;
     variable pktlen, pktlenBEswap   : std_logic_vector(15 downto 0) := X"0000";
   begin
     wait for 10 us;
@@ -98,8 +99,10 @@ begin
       wait until falling_edge(SERCLK);
       SERTFS <= '0';
 
-      -- send the length
-      pktlen       := std_logic_vector(TO_UNSIGNED(bufnum*20 + 172, 16));
+      -- send the length, which is the number of bytes AFTER THE HEADER
+      
+      pktlen_bytes   := bufnum*20 + 172;
+      pktlen := std_logic_vector(to_unsigned(pktlen_bytes, 16)); 
       pktlenBEswap := pktlen(7 downto 0) & pktlen(15 downto 8);
       for bpos in 0 to 15 loop
         SERDT <= pktlenBEswap(bpos);
@@ -108,7 +111,11 @@ begin
 
       -- then the body
       for bufpos in 0 to 510 loop
-        tmpword       := std_logic_vector(TO_UNSIGNED(bufnum * 256 + bufpos + 4, 16));
+        if bufpos < (pktlen_bytes / 2) then 
+          tmpword := std_logic_vector(TO_UNSIGNED(bufnum * 256 + bufpos + 4, 16));
+         else
+          tmpword := (others => '0');
+         end if;        
         tmpwordBEswap := tmpword(7 downto 0) & tmpword(15 downto 8);
         for bpos in 0 to 15 loop
           SERDT <= tmpwordBEswap(bpos);
@@ -120,8 +127,9 @@ begin
   end process;
 
   -- output read
-  process
+  validate : process
     variable bufpos            : integer                       := 0;
+    variable pktlen_bytes : integer := 0;
     variable lenword, dataword : std_logic_vector(15 downto 0) := (others => '0');
   begin
     for bufnum in 0 to 19 loop
@@ -140,20 +148,32 @@ begin
         NEXTBYTE <='1'; 
         wait until rising_edge(CLK);
         NEXTBYTE <='0';
+        -- this is a dummy wait
+        for waiti in 0 to (bufpos mod 4) loop
+          wait until rising_edge(CLK);
+        end loop; 
+
+
+                                             
         bufpos             := bufpos + 1;
         wait for 1 ns;
         databuffer(bufpos) <= DOUT;
-        
       end loop;
+      wait until rising_edge(CLK);
 
       -- validate packet
+      pktlen_bytes := bufnum * 20 + 172;
 
-      assert bufpos = bufnum * 20 + 172 -1 report "Incorrect recovered pkt len" severity error;
+      -- the -1 below is because we are comparing a _length_ with a (0-indexed)
+      -- position
+      
+      assert bufpos  = pktlen_bytes - 1  report "Incorrect recovered pkt len" severity error;
 
-      for i in 0 to (bufpos-2)/2 loop
+      for i in 0 to (pktlen_bytes -1)/2  loop
         dataword := databuffer(i*2) & databuffer(i*2+1);
         assert dataword = std_logic_vector(TO_UNSIGNED(bufnum * 256 + i + 4, 16))
-          report "Error reading data word " & integer'image(i) severity error;
+          report "Error reading data word " & integer'image(i)
+          & " read " & integer'image(to_integer(unsigned(dataword))) severity error;
         
       end loop;  -- i
 
@@ -161,5 +181,5 @@ begin
     end loop;  -- bufnum
     report "End of Simulation" severity failure;
     
-  end process;
+  end process validate; 
 end Behavioral;

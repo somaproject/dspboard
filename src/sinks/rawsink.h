@@ -17,7 +17,8 @@ public:
 
   }
   void toBuffer(unsigned char * c) {
-    const short len = BUFSIZE * sizeof(uint32_t) + 4 + (8 + 2 + 4); 
+    const short len =  2 + 8 + 2 + 4 + BUFSIZE * sizeof(uint32_t); 
+
     *c = len >> 8; 
     c++; 
     *c = len & 0xFF; 

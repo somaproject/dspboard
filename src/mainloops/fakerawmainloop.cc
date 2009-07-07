@@ -34,6 +34,9 @@ void FakeRawMainLoop::setup(EventDispatch * ed, EventTX * etx,
   RawSink * pRawSinkD_ = new RawSink(timer_, pDataOut_, pConfig_->getDataSrc(), 3); 
 
   pFakeSource_->source.connect(pRawSinkA_->sink); 
+  pFakeSource_->source.connect(pRawSinkB_->sink); 
+  pFakeSource_->source.connect(pRawSinkC_->sink); 
+  pFakeSource_->source.connect(pRawSinkD_->sink); 
 
 }
 

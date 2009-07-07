@@ -26,7 +26,9 @@ entity datasport is
 end datasport;
 
 architecture Behavioral of datasport is
-
+  -- note that the length transmitted at the beginning of the
+  -- burst is the number of FOLLOWING bytes
+  -- thus an empty packet has a len = 0 (NOT 2) 
   -- input side
   signal incnt : std_logic_vector(12 downto 0) := (others => '0');
   signal insel : std_logic                     := '0';
@@ -40,6 +42,8 @@ architecture Behavioral of datasport is
   signal addrb  : std_logic_vector(10 downto 0) := (others => '0');
   signal len    : std_logic_vector(15 downto 0) := (others => '0');
 
+  signal lastbyteint : std_logic := '0';
+  
   type   instates is (none, instart, low, high, bufdone);
   signal ics, ins : instates := none;
 
@@ -115,6 +119,8 @@ begin  -- Behavioral
           insel <= not insel;
         end if;
 
+        -- len is the number of bytes following the header
+        
         if ocs = len1 then
           len(15 downto 8) <= dob;
         end if;
@@ -152,10 +158,10 @@ begin  -- Behavioral
         end if;
 
         if ocs = reqs then
-          LASTBYTE <= '0';
+          LASTBYTEint <= '0';
         else
           if ocs = ddone then
-            LASTBYTE <= '1';
+            LASTBYTEint <= '1';
           end if;
         end if;
         
@@ -163,6 +169,8 @@ begin  -- Behavioral
     end if;
 
   end process main;
+
+  LASTBYTE <= '1' when ocs = ddone else lastbyteint; 
 
 
   infsm : process(ics, seren, SERTFS, incnt)
@@ -239,7 +247,7 @@ begin  -- Behavioral
 
       when dwait =>
         ocnten <= '0';
-        if addrb(9 downto 0) = (len(9 downto 0)+1) then
+        if addrb(9 downto 0) = (len(9 downto 0)+1) and NEXTBYTE = '1' then
           ons <= ddone;
         else
           ons <= dwait;

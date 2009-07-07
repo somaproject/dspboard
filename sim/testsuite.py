@@ -18,7 +18,7 @@ if len(sys.argv) > 1 :
 else:
     # core components
     
-    #suite.addTest(vhdlTestCase("acqserial"))
+    suite.addTest(vhdlTestCase("acqserial"))
     suite.addTest(vhdlTestCase("bootser"))
     suite.addTest(vhdlTestCase("datasport"))
     suite.addTest(vhdlTestCase("decodemux"))
