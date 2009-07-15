@@ -55,8 +55,17 @@ void AcqDataSourceControl::query(dsp::Event_t * et)
   case CHANHPF:
     sendChanHPFEvent(et->data[1]); 
     break; 
+
   case CHANSEL:
     sendChanSelEvent(); 
+    break; 
+
+  case RANGEMIN:
+    sendChanRangeEvents(et->data[1]); 
+    break; 
+
+  case RANGEMAX:
+    sendChanRangeEvents(et->data[1]); 
     break; 
   } 
   
