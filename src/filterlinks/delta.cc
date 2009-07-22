@@ -1,5 +1,7 @@
 #include <filterlinks/delta.h>
 
+namespace dspboard { 
+
 Delta::Delta() :
   input(fastdelegate::MakeDelegate(this, &Delta::newSample)),
   buffer_(1), 
@@ -14,6 +16,11 @@ filterid_t Delta::getFilterID() {
   return 1; 
 }
 
+
+bool Delta::setFilterID(filterid_t) {
+  return false; 
+}
+
 void Delta::newSample(sample_t data)
 {
   buffer_.append(data); 
@@ -25,4 +32,5 @@ Delta::~Delta()
 {
 
 
+}
 }

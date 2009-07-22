@@ -1,5 +1,5 @@
-#ifndef ECHOPROC
-#define ECHOPROC
+#ifndef DSPBOARD_ECHOPROC
+#define DSPBOARD_ECHOPROC
 
 #include <event.h>
 #include <hw/eventtx.h>
@@ -12,6 +12,8 @@
 /*
 
 */ 
+namespace dspboard { 
+
 class EventEchoProc
 {
   
@@ -43,6 +45,7 @@ private:
   Benchmark * pBenchmark_; 
 
 };
+}
 
 
 #endif // ECHOPROC

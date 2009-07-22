@@ -1,11 +1,12 @@
-#ifndef SYSTEMTIMER_H
-#define SYSTEMTIMER_H
+#ifndef DSPBOARD_SYSTEMTIMER_H
+#define DSPBOARD_SYSTEMTIMER_H
 
 #include <stdint.h>
 #include <eventdispatch.h>
 
 #include <FastDelegate.h>
 
+namespace dspboard { 
 typedef uint64_t somatime_t; 
 
 class SystemTimer
@@ -34,5 +35,5 @@ class SystemTimer
   
 }; 
 
-
+}
 #endif // SYSTEMTIMER_H

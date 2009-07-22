@@ -2,13 +2,14 @@ SRCDIR = ../
 HWDIR = $(SRCDIR)/host
 CXXFLAGS=-I$(SRCDIR) -I$(HWDIR) -g `pkg-config somanetwork-1.0 sigc++-2.0 --cflags`
 
-LDFLAGS=-lboost_unit_test_framework `pkg-config somanetwork-1.0 sigc++-2.0 --libs` -lboost_thread
+LDFLAGS=-lboost_unit_test_framework-mt \
+	 `pkg-config somanetwork-1.0 sigc++-2.0 --libs` -lboost_thread-mt
 
 BUILDDIR=build
 
 all: runner
 
-builddir: $(BUILDDIR)
+builddir: 
 	mkdir -p $(BUILDDIR)
 
 runner.o: runner.cc
@@ -64,6 +65,9 @@ $(BUILDDIR)/availablefirs.o: $(SRCDIR)/filterlinks/availablefirs.cc builddir
 $(BUILDDIR)/tspikesink.o: $(SRCDIR)/sinks/tspikesink.cc builddir
 	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/sinks/tspikesink.cc -o $(BUILDDIR)/tspikesink.o
 
+$(BUILDDIR)/wavesink.o: $(SRCDIR)/sinks/wavesink.cc builddir
+	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/sinks/wavesink.cc -o $(BUILDDIR)/wavesink.o
+
 $(BUILDDIR)/hostdataout.o: $(HWDIR)/hostdataout.o builddir
 	$(CXX) $(CXXFLAGS) -c $(HWDIR)/hostdataout.cc -o $(BUILDDIR)/hostdataout.o
 
@@ -82,7 +86,7 @@ $(BUILDDIR)/test_util.o : $(SRCDIR)/tests/utils/util.cc builddir
 COREOBJS = $(BUILDDIR)/systemtimer.o $(BUILDDIR)/filterlinkcontroller.o $(BUILDDIR)/delta.o $(BUILDDIR)/fir.o \
 	$(BUILDDIR)/eventdispatch.o $(BUILDDIR)/echoproc.o $(BUILDDIR)/benchmark.o $(BUILDDIR)/fakesource.o $(BUILDDIR)/hostdataout.o \
 	 $(BUILDDIR)/rawsink.o $(BUILDDIR)/rawmainloop.o  $(BUILDDIR)/somamainloop.o \
-	$(BUILDDIR)/tspikesink.o $(BUILDDIR)/acqdatasource.o $(BUILDDIR)/acqdatasourcecontrol.o \
+	$(BUILDDIR)/tspikesink.o $(BUILDDIR)/wavesink.o $(BUILDDIR)/acqdatasource.o $(BUILDDIR)/acqdatasourcecontrol.o \
 	 $(BUILDDIR)/acqboardif.o $(BUILDDIR)/filter.o\
 	$(BUILDDIR)/acqstatecontrol.o $(BUILDDIR)/acqserial.o $(BUILDDIR)/eventtx.o
 

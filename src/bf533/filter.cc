@@ -1,4 +1,6 @@
 #include "filter.h"
+namespace dspboard { 
+
 int32_t convolve(int32_t * x, short xlen, int32_t * xpos, 
 		 int32_t * h, short hlen) {
 
@@ -22,5 +24,4 @@ int32_t convolve(int32_t * x, short xlen, int32_t * xpos,
   return value >> 32; 
 }
 
-
-
+}

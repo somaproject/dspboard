@@ -2,6 +2,7 @@
 #include <cdefBF533.h>
 #include <hw/misc.h>
 
+namespace dspboard { 
 
 uint16_t EventTX::buffer_[EVTBUFLEN][BUFSIZE]; 
 
@@ -171,5 +172,7 @@ uint16_t EventTX::getFIFOFullCount()
 uint16_t EventTX::getFPGAFullCount()
 {
   return fpga_full_count_; 
+
+}
 
 }

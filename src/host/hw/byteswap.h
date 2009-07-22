@@ -4,6 +4,7 @@
 #include <arpa/inet.h>
 #include <iostream>
 
+namespace dspboard { 
 
 inline unsigned int hostToNet(unsigned int x) 
 {
@@ -42,3 +43,4 @@ inline unsigned long long  hostToNet(unsigned long long x)
 
 } 
 
+}

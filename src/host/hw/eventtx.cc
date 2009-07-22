@@ -1,6 +1,8 @@
 #include "eventtx.h"
 #include <iostream>
 
+namespace dspboard { 
+
 EventTX::EventTX() :
   eventBuffer_()
 {
@@ -44,3 +46,4 @@ uint16_t EventTX::getFPGAFullCount(){
 
 }
 
+}

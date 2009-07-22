@@ -1,5 +1,5 @@
-#ifndef MAINLOOP_H
-#define MAINLOOP_H
+#ifndef DSPBOARD_MAINLOOP_H
+#define DSPBOARD_MAINLOOP_H
 
 #include <eventdispatch.h>
 #include <dataout.h>
@@ -16,6 +16,8 @@
 
 */
 
+namespace dspboard { 
+
 class MainLoop 
 {
 public:
@@ -26,6 +28,8 @@ public:
   virtual void runloop() = 0; 
 
 }; 
+
+}
 
 
 #endif // MAINLOOP_H

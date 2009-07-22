@@ -1,6 +1,8 @@
-#ifndef SAMPLEBUFFER_H
-#define SAMPLEBUFFER_H
+#ifndef DSPBOARD_SAMPLEBUFFER_H
+#define DSPBOARD_SAMPLEBUFFER_H
 #include <types.h>
+
+namespace dspboard { 
 
 typedef int32_t sample_t; 
 
@@ -72,6 +74,7 @@ private:
 
 }; 
 
+}
 
 
 #endif // SAMPLEBUFFER_H

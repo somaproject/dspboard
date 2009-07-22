@@ -1,5 +1,5 @@
-#ifndef FAKERAWMAINLOOP_H
-#define FAKERAWMAINLOOP_H
+#ifndef DSPBOARD_FAKERAWMAINLOOP_H
+#define DSPBOARD_FAKERAWMAINLOOP_H
 
 #include "mainloop.h"
 #include <systemtimer.h>
@@ -9,6 +9,8 @@
 #include <fakesource.h>
 #include <sinks/rawsink.h>
 #include <dsp.h>
+
+namespace dspboard { 
 
 class FakeRawMainLoop : public MainLoop
 {
@@ -46,5 +48,6 @@ class FakeRawMainLoop : public MainLoop
   
 }; 
 
+}
 
 #endif 

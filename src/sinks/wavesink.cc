@@ -1,4 +1,7 @@
 #include <sinks/wavesink.h>
+
+namespace dspboard {
+
 const uint16_t WaveSink::valid_downsample_N[] = {1, 2, 4, 8, 16, 32}; 
 const uint32_t WaveSink::samprates_num[] = {ACQRATE/1,  ACQRATE/2, 
 					   ACQRATE/4,  ACQRATE/8,
@@ -208,5 +211,7 @@ void WaveSink::sendError(dsp::Event_t * et, ERRORS)
 
   // FIXME
 
+
+}
 
 }

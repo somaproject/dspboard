@@ -1,5 +1,6 @@
 #include "availablefirs.h"
 
+namespace dspboard { 
 
 AvailableFIRs::AvailableFIRs()
 {
@@ -13,4 +14,6 @@ AvailableFIRs::AvailableFIRs()
     }
     
   }
+}
+
 }

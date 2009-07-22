@@ -1,5 +1,6 @@
 #include "fakesource.h"
 
+namespace  dspboard { 
 FakeSource::FakeSource(SystemTimer *pst) :
   pSystemTimer_(pst), 
   buffer_(BUFSIZE), 
@@ -19,4 +20,5 @@ void FakeSource::updateTime(somatime_t t)
     val_++; 
   }
 
+}
 }

@@ -1,6 +1,7 @@
-#ifndef CALLBACK_H
-#define CALLBACK_H
+#ifndef DSPBOARD_CALLBACK_H
+#define DSPBOARD_CALLBACK_H
 
+namespace dspboard { 
 class CallbackBase
 {
 public:
@@ -23,6 +24,7 @@ private:
   T* object;
   Func f; 
 };
+}
 
 
 #endif // CALLBACK_H

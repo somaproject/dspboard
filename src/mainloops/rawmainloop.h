@@ -1,5 +1,5 @@
-#ifndef DEFAULTMAINLOOP_H
-#define DEFAULTMAINLOOP_H
+#ifndef DSPBOARD_DEFAULTMAINLOOP_H
+#define DSPBOARD_DEFAULTMAINLOOP_H
 
 #include "mainloop.h"
 #include <systemtimer.h>
@@ -9,6 +9,8 @@
 #include <acqdatasource.h>
 #include <sinks/rawsink.h>
 #include <dsp.h>
+
+namespace dspboard { 
 
 class RawMainLoop : public MainLoop
 {
@@ -46,5 +48,6 @@ class RawMainLoop : public MainLoop
   
 }; 
 
+}
 
 #endif 

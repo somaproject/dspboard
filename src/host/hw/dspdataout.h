@@ -1,7 +1,7 @@
-#ifndef DSPDATAOUT_H
-#define DSPDATAOUT_H
+#ifndef DSPBOARD_DSPDATAOUT_H
+#define DSPBOARD_DSPDATAOUT_H
 
-
+namespace dspboard { 
 
 class DSPDataOut
 {
@@ -14,5 +14,7 @@ class DSPDataOut
   bool doneState; 
 
 }; 
+
+}
 
 #endif // DSPDATAOUT_H

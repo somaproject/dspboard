@@ -1,10 +1,11 @@
-#ifndef FILTERIO_H
-#define FILTERIO_H
+#ifndef DSPBOARD_FILTERIO_H
+#define DSPBOARD_FILTERIO_H
 
 #include <samplebuffer.hpp>
 #include <types.h>
 #include <FastDelegate.h>
 
+namespace dspboard { 
 typedef uint32_t filterid_t; 
 
 class FilterLink
@@ -113,5 +114,5 @@ private:
   
 }; 
 
-
+}
 #endif // FILTERIO_H

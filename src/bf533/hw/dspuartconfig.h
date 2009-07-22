@@ -1,8 +1,9 @@
-#ifndef DSPUARTCONFIG_H
-#define DSPUARTCONFIG_H
+#ifndef DSPBOARD_DSPUARTCONFIG_H
+#define DSPBOARD_DSPUARTCONFIG_H
 
 #include <dsp.h>
 
+namespace dspboard { 
 class DSPUARTConfig: public DSPConfig
 {
 public:
@@ -24,5 +25,7 @@ private:
   void disableSerial(); 
 
 }; 
+
+}
 
 #endif // DSPUARTCONFIG_H

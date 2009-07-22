@@ -1,10 +1,12 @@
-#ifndef FAKESOURCE_H
-#define FAKESOURCE_H
+#ifndef DSPBOARD_FAKESOURCE_H
+#define DSPBOARD_FAKESOURCE_H
 
 #include "systemtimer.h"
 #include "FastDelegate.h" 
 #include "filterio.h"
 #include "samplebuffer.hpp"
+
+namespace dspboard { 
 
 class FakeSource : public FilterLink
 {
@@ -32,5 +34,6 @@ public:
   sample_t val_; 
 }; 
 
+}
 
 #endif 

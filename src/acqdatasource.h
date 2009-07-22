@@ -1,11 +1,13 @@
-#ifndef ACQDATASOURCE_H
-#define ACQDATASOURCE_H
+#ifndef DSPBOARD_ACQDATASOURCE_H
+#define DSPBOARD_ACQDATASOURCE_H
 
 #include <samplebuffer.hpp>
 #include <acqboardif.h>
 #include <filterio.h>
 #include <dsp.h>
 #include <types.h>
+
+namespace dspboard { 
 
 class AcqDataSource : public FilterLink
 {
@@ -56,7 +58,7 @@ public:
   
 }; 
 
-
+}
 
 
 #endif // ACQDATASOURCE_H

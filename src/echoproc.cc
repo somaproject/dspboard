@@ -3,6 +3,7 @@
 #include <hw/misc.h>
 #include <hw/memory.h>
 
+namespace dspboard { 
 EventEchoProc::EventEchoProc(EventDispatch * ed, EventTX* etx, 
 			     SystemTimer * ptimer, Benchmark * bm, 
 			     unsigned char device) : 
@@ -139,4 +140,6 @@ void EventEchoProc::benchStart(short counter)
 void EventEchoProc::benchStop(short counter)
 {
   pBenchmark_->stop(counter); 
+}
+
 }

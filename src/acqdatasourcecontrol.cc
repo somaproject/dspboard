@@ -1,6 +1,8 @@
 #include "acqdatasourcecontrol.h"
 #include "FastDelegate.h"
 
+namespace dspboard  { 
+
 AcqDataSourceControl::AcqDataSourceControl(EventDispatch * ed, EventTX* etx, 
 					   AcqStateControl * as):
   pEventTX_(etx), 
@@ -317,4 +319,6 @@ void  AcqDataSourceControl::decodeChanMask(uint16_t chanmask, chanmask_t * cmout
     }
     chanmask = chanmask >> 1; 
   }
+}
+
 }

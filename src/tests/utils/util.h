@@ -10,7 +10,7 @@
 #include <somanetwork/tspike.h>
 #include <somanetwork/datapacket.h>
 
-
+using namespace dspboard;
 uint16_t * createEventBuffer(std::vector<bool> amask, std::vector<bool> bmask, 
 			     std::vector<bool> cmask, std::vector<bool> dmask, 
 			     std::vector<dsp::Event_t> events); 

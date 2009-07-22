@@ -1,5 +1,5 @@
-#ifndef TYPES_H
-#define TYPES_H
+#ifndef DSPBOARD_TYPES_H
+#define DSPBOARD_TYPES_H
 
 #include </usr/include/stdint.h>
 
@@ -7,6 +7,9 @@
 HOST Types
 
 */
-typedef short int16_t; 
+namespace dspboard { 
+
+  //typedef short int16_t; 
+}
 
 #endif

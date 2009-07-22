@@ -1,4 +1,6 @@
 
+BFROOT = /home/jonas/blackfin/opt/uClinux/bfin-elf
+
 CCSRCS   = main.cc
 ASMSRCS = crt0.asm
 SRCDIR= ../../../src/
@@ -11,7 +13,7 @@ CXXFLAGS = -mcpu=bf533 $(INCLUDES) -O3  -g -DBOARD_$(BOARD) -save-temps
 CXXFLAGS += $(CPUDEFINES) -fno-rtti --no-exceptions -ffast-math -mfast-fp -funsafe-math-optimizations
 BOARD=SOMA_DSPBOARD4X
 
-BFROOT = /home/jonas/blackfin/out-elf/
+
 BFROOTVER = 4.1.2
 LDFLAGS =  -g -T bftiny.x  -L$(BFROOT)lib/ -L$(BFROOT)/lib/gcc/bfin-elf/$(BFROOTVER)/ \
 	 -lsupc++ -lc -lgcc -lnosys

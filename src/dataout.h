@@ -1,7 +1,9 @@
-#ifndef DATAOUT_H
-#define DATAOUT_H
+#ifndef DSPBOARD_DATAOUT_H
+#define DSPBOARD_DATAOUT_H
 
 #include <types.h>
+
+namespace dspboard { 
 
 class Data_t {
 
@@ -24,5 +26,6 @@ public:
 
 }; 
 
+}
 #endif
 

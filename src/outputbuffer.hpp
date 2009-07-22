@@ -1,8 +1,11 @@
-#ifndef OUTPUTBUFFER_H
-#define OUTPUTBUFFER_H
+#ifndef DSPBOARD_OUTPUTBUFFER_H
+#define DSPBOARD_OUTPUTBUFFER_H
 
 #include <iostream>
 #include <samplebuffer.hpp>
+
+namespace dspboard { 
+
 
 template <class T>
 class OutputBuffer
@@ -94,6 +97,6 @@ private:
 
 }; 
 
-
+}
 
 #endif // OUTPUTBUFFER_H

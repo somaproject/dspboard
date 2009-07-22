@@ -1,10 +1,11 @@
-#ifndef ACQSTATECONTROL_H
-#define ACQSTATECONTROL_H
+#ifndef DSPBOARD_ACQSTATECONTROL_H
+#define DSPBOARD_ACQSTATECONTROL_H
 #include "FastDelegate.h"
 #include <acqboardif.h>
 #include <dsp.h>
 #include <types.h>
 
+namespace dspboard { 
 class AcqStateReceiver; 
 
 enum OPS {NONE, SETGAIN, SETHPF, SETINSEL, CHANGEMODE, 
@@ -107,5 +108,7 @@ public:
   COMMAND_STATES cmdstate_; 
 
 }; 
+
+}
 
 #endif // ACQSTATECONTROL_H

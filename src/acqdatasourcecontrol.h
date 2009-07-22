@@ -1,10 +1,14 @@
-#ifndef ACQDATASOURCECONTROL_H
-#define ACQDATASOURCECONTROL_H
+#ifndef DSPBOARD_ACQDATASOURCECONTROL_H
+#define DSPBOARD_ACQDATASOURCECONTROL_H
 
 #include <eventdispatch.h>
 #include <hw/eventtx.h>
 #include <acqstatecontrol.h>
 #include "acqstatereceiver.h"
+
+
+namespace dspboard { 
+
 class AcqDataSourceControl : public AcqStateReceiver
 {
   enum INCMDS {
@@ -73,6 +77,7 @@ class AcqDataSourceControl : public AcqStateReceiver
   void decodeChanMask(uint16_t cm, chanmask_t *  cmout); 
 
 }; 
-
+}
 
 #endif // ACQDATASOURCECONTROL_H
+

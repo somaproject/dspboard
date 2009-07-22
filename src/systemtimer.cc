@@ -1,5 +1,7 @@
 #include <systemtimer.h>
 
+namespace dspboard { 
+
 SystemTimer::SystemTimer() :
   time_(0)
 {
@@ -61,3 +63,4 @@ void SystemTimer::connect(timeUpdateDelegate_t update) {
   
 }
 
+}

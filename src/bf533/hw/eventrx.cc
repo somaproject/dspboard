@@ -1,5 +1,7 @@
 #include "eventrx.h"
 
+namespace dspboard { 
+
 EventRX * eventrx; 
 
 
@@ -130,4 +132,5 @@ void EventRX::RXDMAdoneISR() {
   if (currentWriteBuffer_ == currentReadBuffer_) {
     errorCount++; 
   }
+}
 }

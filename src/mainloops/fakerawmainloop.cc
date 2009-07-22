@@ -1,5 +1,7 @@
 #include "fakerawmainloop.h"
 
+namespace dspboard { 
+
 void FakeRawMainLoop::setup(EventDispatch * ed, EventTX * etx, 
 			AcqSerial * as, 
 			SystemTimer * timer, EventEchoProc * eep, 
@@ -52,4 +54,5 @@ void FakeRawMainLoop::runloop()
       }
   }
   
+}
 }

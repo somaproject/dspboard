@@ -1,5 +1,7 @@
 #include <sinks/tspikesink.h>
 
+namespace dspboard { 
+
 TSpikeSink::TSpikeSink(SystemTimer * st, DataOut * dout, EventDispatch *ed,
 		       EventTX * etx, FilterLinkController * fl,
 		       unsigned char datasrc) : 
@@ -246,4 +248,5 @@ void TSpikeSink::sendFilterIDResponse(char chan){
   pEventTX_->newEvent(bcastEventTX_); 
 
   
+}
 }

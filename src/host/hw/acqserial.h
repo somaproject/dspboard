@@ -1,5 +1,5 @@
-#ifndef ACQSERIAL_H
-#define ACQSERIAL_H
+#ifndef DSPBOARD_ACQSERIAL_H
+#define DSPBOARD_ACQSERIAL_H
 
 #include <acqboardif.h>
 #include <vector>
@@ -11,6 +11,8 @@
   otherwise we can put new sample sets in via appendSamples(); 
 
 */
+
+namespace dspboard { 
 
 class AcqSerial: public AcqSerialBase
 {
@@ -41,5 +43,6 @@ public:
   short fpos_; 
 }; 
 
+}
 
 #endif // ACQSERIAL_H

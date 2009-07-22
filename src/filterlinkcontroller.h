@@ -1,5 +1,5 @@
-#ifndef FILTERLINKCONTROLLER_H
-#define FILTERLINKCONTROLLER_H
+#ifndef DSPBOARD_FILTERLINKCONTROLLER_H
+#define DSPBOARD_FILTERLINKCONTROLLER_H
 
 #include "filterio.h"
 #include "hw/eventtx.h"
@@ -18,6 +18,7 @@
   
 */ 
 
+namespace dspboard { 
 class FilterLinkController
 {
 public:
@@ -50,6 +51,6 @@ private:
   void fir_recompute_id(char fir); 
 
 }; 
-
+}
 
 #endif // FILTERLINK_CONTROLLER

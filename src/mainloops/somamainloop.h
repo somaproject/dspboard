@@ -1,5 +1,5 @@
-#ifndef SOMAMAINLOOP_H
-#define SOMAMAINLOOP_H
+#ifndef DSPBOARD_SOMAMAINLOOP_H
+#define DSPBOARD_SOMAMAINLOOP_H
 
 #include "mainloop.h"
 #include <systemtimer.h>
@@ -16,6 +16,8 @@
 #include <filterlinks/fir.h>
 
 //making this static
+
+namespace dspboard { 
 
 static AvailableFIRs availableFIRs; 
 
@@ -62,6 +64,6 @@ class SomaMainLoop : public MainLoop
   FIR * pWaveFilter_; 
   
 }; 
-
+}
 
 #endif 

@@ -1,5 +1,5 @@
-#ifndef TSPIKESINK_H
-#define TSPIKESINK_H
+#ifndef DSPBOARD_TSPIKESINK_H
+#define DSPBOARD_TSPIKESINK_H
 
 #include <systemtimer.h>
 #include <samplebuffer.hpp>
@@ -10,6 +10,8 @@
 
 #include <hw/eventtx.h>
 #include <hw/memory.h>
+
+namespace dspboard { 
 
 class TSpikeData_t : public Data_t {
 public:
@@ -171,5 +173,6 @@ private:
 
 }; 
 
+}
 
 #endif // TSPIKESINK_H

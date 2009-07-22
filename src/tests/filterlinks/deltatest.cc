@@ -13,6 +13,8 @@
 
 BOOST_AUTO_TEST_SUITE(delta_filterlink_test); 
 
+using namespace dspboard; 
+
 BOOST_AUTO_TEST_CASE(simple_test)
 {
   SystemTimer timer; 

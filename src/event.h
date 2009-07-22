@@ -1,8 +1,9 @@
-#ifndef EVENT_H
-#define EVENT_H
+#ifndef DSPBOARD_EVENT_H
+#define DSPBOARD_EVENT_H
 
 #include <types.h>
 
+namespace dspboard { 
 namespace dsp { 
   typedef uint8_t eventsource_t ; 
   typedef uint8_t eventcmd_t; 
@@ -62,4 +63,6 @@ namespace dsp {
 
   }; 
 }
+}
+
 #endif // EVENT_H

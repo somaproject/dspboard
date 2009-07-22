@@ -28,7 +28,7 @@
 #include <hw/misc.h>
 #include <filter.h>
 #include <memtestproc.h>
-AcqSerial * acqserial;  // global so we can get function wrappers for ISR. 
+dspboard::AcqSerial * acqserial;  // global so we can get function wrappers for ISR. 
 
 
 extern "C" {
@@ -80,7 +80,7 @@ int main_loop()
   *pFIO_DIR    = 0x0100;
   *pFIO_FLAG_D = 0x0000;
   *pFIO_INEN   = 0x0000; 
-
+  using namespace dspboard;
   DSPUARTConfig config; 
   
   /*     This code is legacy debugging code for when we find ourselves wanting

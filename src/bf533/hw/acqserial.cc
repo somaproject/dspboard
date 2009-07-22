@@ -3,6 +3,8 @@
 #include <types.h>
 #include <cdefBF533.h>
 
+namespace dspboard {
+
 AcqSerial::AcqSerial() :
   curRXpos_(0), 
   curReadPos_(0),
@@ -163,5 +165,7 @@ void AcqSerial::setupLink()
 
   *pFIO_DIR    &= ~FIBERLINKUP_MASK; 
   *pFIO_INEN   |= FIBERLINKUP_MASK; 
+
+}
 
 }

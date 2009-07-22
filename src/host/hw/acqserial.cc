@@ -3,6 +3,8 @@
 #include <iostream>
 #include <stdexcept>
 
+namespace dspboard { 
+
 AcqSerial::AcqSerial(bool autosend) :
   autosend(autosend),
   gains_(10), 
@@ -115,4 +117,6 @@ void AcqSerial::getNextFrame(AcqFrame * af) {
 
   acDelaycnt_--; 
   
+}
+
 }

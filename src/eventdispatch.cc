@@ -1,6 +1,7 @@
 #include "eventdispatch.h"
 //#include <cdefBF533.h>
 
+namespace dspboard { 
 EventDispatch::EventDispatch(DSP_POSITION dsppos) :
   dsppos_ (dsppos), 
   currentBuffer_(0)
@@ -74,4 +75,6 @@ void EventDispatch::dispatchEventByte(uint8_t eventpos, uint8_t addrbyte)
     }
   }
   
+}
+
 }

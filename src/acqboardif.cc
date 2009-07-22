@@ -1,5 +1,7 @@
 #include "acqboardif.h"
 
+namespace dspboard {
+
 const int AcqState::RANGEMIN[8] = {0, 
 				 -2048000, // gain = 100
 				 -1024000, // gain = 200
@@ -19,3 +21,4 @@ const int AcqState::RANGEMAX[8] = {0,
 				 20480};   // gain = 10000,
 				 
 
+}

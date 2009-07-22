@@ -1,11 +1,12 @@
-#ifndef MEMORY_H
-#define MEMORY_H
+#ifndef DSPBOARD_MEMORY_H
+#define DSPBOARD_MEMORY_H
 
 // this is our custom new handler for small bits of memory
 
 #include <sys/types.h>
 #include <types.h>
 
+namespace dspboard { 
 uint32_t inline memory_in_use()
 {
   return 0; 
@@ -91,5 +92,6 @@ public:
   }
 }; 
 
+}
 
 #endif // MEMORY_H

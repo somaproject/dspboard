@@ -1,5 +1,5 @@
-#ifndef WAVESINK_H
-#define WAVESINK_H
+#ifndef DSPBOARD_WAVESINK_H
+#define DSPBOARD_WAVESINK_H
 
 #include <systemtimer.h>
 #include <samplebuffer.hpp>
@@ -18,6 +18,8 @@
   3. FIXME: Should also do this for tspikes
 
  */ 
+
+namespace dspboard { 
 class WaveData_t : public Data_t {
 public:
 
@@ -155,6 +157,7 @@ private:
   bool isValidDownsample_; 
   uint8_t chansrc_; 
 }; 
+}
 
 
 #endif // WAVESINK_H

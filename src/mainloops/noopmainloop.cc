@@ -1,5 +1,7 @@
 #include "noopmainloop.h"
 
+namespace dspboard { 
+
 void NoOpMainLoop::setup(EventDispatch * ed, EventTX * etx, 
 			AcqSerial * as, 
 			SystemTimer * timer, EventEchoProc * eep, 
@@ -54,4 +56,5 @@ void NoOpMainLoop::runloop()
       }
     eep_->benchStop(0); 
   }
+}
 }

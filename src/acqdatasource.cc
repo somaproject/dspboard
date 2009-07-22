@@ -1,5 +1,7 @@
 #include "acqdatasource.h"
 #include "dsp.h"
+namespace dspboard {
+
 const int32_t AcqDataSource::GAINS[] = {0, 100, 200, 500, 1000, 
 				      2000, 5000, 10000}; 
 
@@ -78,4 +80,6 @@ filterid_t AcqDataSource::getFilterID()
 bool AcqDataSource::setFilterID(filterid_t) 
 {
 
+}
+ 
 }

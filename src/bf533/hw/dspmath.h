@@ -32,6 +32,7 @@ Damn, this is actually harder than it looks.
 
 
 */
+namespace dspboard { 
 
 sample_t dsp_dot_circbuffer(sample_t[] xbuf, sample_t * xpos, sample_t *xlen, sample_t[] hbuf, unsigned int hlen)
 {
@@ -43,5 +44,7 @@ sample_t dsp_dot_circbuffer(sample_t[] xbuf, sample_t * xpos, sample_t *xlen, sa
     }
 
   return result >> (sizeof(sample_t) -2); 
+
+}
 
 }

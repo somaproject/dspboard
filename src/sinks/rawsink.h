@@ -1,5 +1,5 @@
-#ifndef RAWSINK_H
-#define RAWSINK_H
+#ifndef DSPBOARD_RAWSINK_H
+#define DSPBOARD_RAWSINK_H
 
 #include <systemtimer.h>
 #include <samplebuffer.hpp>
@@ -7,6 +7,7 @@
 #include <dataout.h>
 #include <hw/memory.h>
 
+namespace dspboard { 
 class RawData_t : public Data_t {
 public:
   RawData_t (unsigned char src, unsigned char chansrc) :
@@ -81,5 +82,6 @@ private:
 
 }; 
 
+}
 
 #endif // RAWSINK_H

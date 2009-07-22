@@ -1,6 +1,8 @@
 #include "datasport.h"
 #include <cdefBF533.h>
 
+namespace dspboard { 
+
 uint8_t DataSPORT::buffer_[DATABUFLEN][BUFSIZE]  ; 
 
 DataSPORT::DataSPORT() :
@@ -146,5 +148,7 @@ bool DataSPORT::isDMADone()
 
     return true; 
   }
+
+}
 
 }

@@ -1,8 +1,9 @@
-#ifndef EVENTTX_H
-#define EVENTTX_H
+#ifndef DSPBOARD_EVENTTX_H
+#define DSPBOARD_EVENTTX_H
 
 #include <event.h>
 
+namespace dspboard { 
 
 class EventTX
 {
@@ -42,6 +43,7 @@ public:
 
 }; 
 
+}
 
 #endif
 

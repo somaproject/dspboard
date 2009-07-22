@@ -1,6 +1,8 @@
 #include "somamainloop.h"
 #include <filter.h>
 
+namespace dspboard { 
+
 SomaMainLoop::SomaMainLoop()
 {
 
@@ -103,4 +105,6 @@ void SomaMainLoop::runloop()
 	eep_->benchStop(1); 
       }
   }
+}
+
 }

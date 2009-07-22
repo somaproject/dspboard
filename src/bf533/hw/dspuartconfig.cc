@@ -1,6 +1,8 @@
 #include <cdefBF533.h>
 #include "dspuartconfig.h"
 
+namespace dspboard { 
+
 DSPUARTConfig::DSPUARTConfig() :
   pos_(DSPNONE), 
   device_(255)
@@ -85,5 +87,4 @@ unsigned char DSPUARTConfig::getDataSrc()
   return datasrc_; 
 }
 
-
-
+}

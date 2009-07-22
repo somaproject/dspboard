@@ -1,9 +1,11 @@
-#ifndef FILTERLINK_FIR_H
-#define FILTERLINK_FIR_H
+#ifndef DSPBOARD_FILTERLINK_FIR_H
+#define DSPBOARD_FILTERLINK_FIR_H
 
 #include <filterio.h>
 #include <samplebuffer.hpp>
 #include <filterlinks/availablefirs.h>
+
+namespace dspboard { 
 
 class FIR : FilterLink
 {
@@ -27,5 +29,8 @@ class FIR : FilterLink
   void newSample(sample_t); 
   AvailableFIRs* afs; 
 }; 
+
+}
+
 
 #endif // FILTERLINK_FIR_H

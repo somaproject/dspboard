@@ -1,9 +1,10 @@
-#ifndef DATASPORT_H
-#define DATASPORT_H
+#ifndef DSPBOARD_DATASPORT_H
+#define DSPBOARD_DATASPORT_H
 
 #include <types.h>
 #include <dataout.h>
 
+namespace dspboard { 
 
 class DataSPORT : public DataOut
 {
@@ -38,6 +39,9 @@ class DataSPORT : public DataOut
 
 
 }; 
+
+}
+
 
 
 #endif // DATASPORT_H

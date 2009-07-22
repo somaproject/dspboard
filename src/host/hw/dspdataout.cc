@@ -1,6 +1,8 @@
 #include <hw/dspdataout.h>
 #include <iostream>
 
+namespace dspboard { 
+
 
 DSPDataOut::DSPDataOut():
   doneState(true)
@@ -23,3 +25,4 @@ bool DSPDataOut::done()
 }
 
 
+}

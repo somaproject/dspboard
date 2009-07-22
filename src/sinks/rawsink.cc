@@ -1,4 +1,6 @@
 #include <sinks/rawsink.h>
+namespace dspboard { 
+
 RawSink::RawSink(SystemTimer * st, DataOut * dout, 
 		 unsigned char datasrc, unsigned char chansrc ) : 
   pSystemTimer_(st), 
@@ -30,5 +32,7 @@ void RawSink::processSample(sample_t samp)
   } else {
     pendingPos_++; 
   }
+
+}
 
 }

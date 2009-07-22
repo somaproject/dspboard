@@ -1,5 +1,8 @@
 #include "memory.h"
 #define MEMORY_START 0xff900000
+
+
+
 static void * memory_alloc_pos = (void*) MEMORY_START;  
 
 void * operator new (size_t size)
@@ -30,3 +33,4 @@ uint32_t memory_in_use()
   return x; 
 
 }
+

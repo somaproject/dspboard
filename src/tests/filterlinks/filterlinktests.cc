@@ -12,6 +12,8 @@
 
 BOOST_AUTO_TEST_SUITE(filterlinks_test); 
 
+using namespace dspboard; 
+
 BOOST_AUTO_TEST_CASE(fakesource_rawsink_test)
 {
   SystemTimer timer; 

@@ -10,6 +10,8 @@
 
 */ 
 
+namespace dspboard { 
+
 class Benchmark
 {
   static const short NUMBENCH = 6; 
@@ -45,5 +47,6 @@ private:
 }; 
 
 
+}
 
 #endif // BENCHMARKH

@@ -4,10 +4,13 @@
 
 #include <hw/acqserial.h>
 #include <acqstatecontrol.h>
+#include <iostream> 
+
 #include "mock_receiver.h"
 
 BOOST_AUTO_TEST_SUITE(acqstatecontrol_test); 
 
+using namespace dspboard; 
 
 BOOST_AUTO_TEST_CASE(simple_linkup_test)
 {

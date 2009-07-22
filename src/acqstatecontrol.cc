@@ -2,7 +2,8 @@
 #include <acqstatereceiver.h>
 #define NULL 0
 
-
+namespace dspboard {
+ 
 AcqStateControl::AcqStateControl(AcqSerialBase * aserial, AcqState *astate) :
   pAcqSerial_(aserial), 
   pAcqState_(astate), 
@@ -545,4 +546,5 @@ void AcqStateControl::commandStateAdvance(AcqFrame * af)
 
   }
   
+}
 }

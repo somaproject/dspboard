@@ -1,8 +1,10 @@
-#ifndef DATASRC_H
-#define DATASRC_H
+#ifndef DSPBOARD_DATASRC_H
+#define DSPBOARD_DATASRC_H
 
 #include <samplebuffer.hpp>
 #include <filterlinkbase.h>
+
+namespace dspboard { 
 
 template<class sampT, int CHANNUM> 
 class DataSourceBase
@@ -44,6 +46,6 @@ protected:
   }
   
 }; 
-
+}
 #endif // DATASRC_H
 

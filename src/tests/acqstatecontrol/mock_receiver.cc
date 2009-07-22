@@ -1,4 +1,7 @@
 #include "mock_receiver.h"
+#include <string.h>
+
+using namespace dspboard; 
 
 MockReceiver::MockReceiver() :
   count(0)

@@ -1,5 +1,5 @@
-#ifndef MEMTESTPROC
-#define MEMTESTPROC
+#ifndef DSPBOARD_MEMTESTPROC
+#define DSPBOARD_MEMTESTPROC
 
 #include <event.h>
 #include <hw/eventtx.h>
@@ -13,6 +13,7 @@
   is to run on-device tests of our custom, optimized memtest routine. 
 
 */ 
+namespace dspboard { 
 class MemTestProc
 {
   
@@ -67,5 +68,6 @@ private:
   
 };
 
+}
 
 #endif // MEMTESTPROC

@@ -1,5 +1,6 @@
 #include "uarttx.h"
 
+namespace dspboard { 
 UARTTX::UARTTX() {
 }
 
@@ -74,5 +75,7 @@ bool UARTTX::checkSendDone()
     return false;     
   }
 
+
+}
 
 }

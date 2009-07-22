@@ -1,9 +1,11 @@
-#ifndef HOSTDATAOUT
-#define HOSTDATAOUT
+#ifndef DSPBOARD_HOSTDATAOUT
+#define DSPBOARD_HOSTDATAOUT
 
 #include <vector>
 
 #include <dataout.h>
+
+namespace dspboard { 
 
 class HostDataOut : public DataOut
 {
@@ -20,5 +22,7 @@ public:
   void printBuffer(unsigned char * buffer) ; 
 
 };
+
+}
 
 #endif 

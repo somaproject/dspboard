@@ -10,11 +10,13 @@
 void * operator new (size_t size); 
 void * operator new[] (size_t size); 
 
+
+
 uint32_t memory_in_use(); 
 
-
-
 #include "byteswap.h"
+
+namespace dspboard { 
 
 class Memcopy {
 public:
@@ -196,5 +198,5 @@ public:
 
 }; 
 
-
+}
 #endif // MEMORY_H

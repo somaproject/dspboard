@@ -2,6 +2,8 @@
 #include <filter.h>
 #include <filterlinks/delta.h>
 
+namespace dspboard { 
+
 FIR::FIR(AvailableFIRs * afirs) :
   input(fastdelegate::MakeDelegate(this, &FIR::newSample)),
   buffer_(1), 
@@ -59,4 +61,6 @@ bool FIR::setFilterID(filterid_t fid) {
 filterid_t FIR::getFilterID()
 {
   return filterID_; 
+}
+
 }

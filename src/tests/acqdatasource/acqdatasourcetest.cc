@@ -14,6 +14,8 @@
 
 BOOST_AUTO_TEST_SUITE(acqdatasource_test); 
 
+using namespace dspboard; 
+
 BOOST_AUTO_TEST_CASE(acqdatasource_simple)
 {
   SystemTimer timer; 

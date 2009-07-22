@@ -5,6 +5,8 @@
 #include <vector>
 #include "acqstatereceiver.h"
 
+using namespace dspboard; 
+
 class MockReceiver : public AcqStateReceiver
 {
 public:

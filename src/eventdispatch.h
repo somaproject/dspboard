@@ -1,10 +1,11 @@
-#ifndef EVENTDISPATCH_H
-#define EVENTDISPATCH_H
+#ifndef DSPBOARD_EVENTDISPATCH_H
+#define DSPBOARD_EVENTDISPATCH_H
 #include "dsp.h"
 #include "event.h"
 
 #include "FastDelegate.h" 
 
+namespace dspboard { 
 typedef fastdelegate::FastDelegate1<dsp::Event_t *>  EventDispatchProc_t; 
 
 class EventDispatch
@@ -62,6 +63,6 @@ private:
 
 
 }; 
-
+}
 
 #endif // EVENTDISPATCH_H

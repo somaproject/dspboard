@@ -1,5 +1,6 @@
 #include "benchmark.h"
 
+namespace dspboard { 
 
 Benchmark::Benchmark()
 {
@@ -20,3 +21,5 @@ uint32_t Benchmark::read(short i) {
 uint32_t Benchmark::max(short i) {
   return max_[i];
 }
+
+} 

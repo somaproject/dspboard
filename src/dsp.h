@@ -1,5 +1,7 @@
-#ifndef DSP_H
-#define DSP_H
+#ifndef DSPBOARD_DSP_H
+#define DSPBOARD_DSP_H
+
+namespace dspboard { 
 
 enum DSP_POSITION { DSPA, DSPB, DSPC, DSPD, DSPNONE}; 
 
@@ -64,6 +66,8 @@ inline int encodeGain(char gval){
     return 0; 
   }
   
+
+}
 
 }
 #endif // DSP_H

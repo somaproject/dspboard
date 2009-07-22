@@ -1,6 +1,7 @@
 #include "filterlinkcontroller.h"
 #include "event.h"
 
+namespace dspboard { 
 FilterLinkController::FilterLinkController(EventDispatch * ed, EventTX* etx, 
 					   AvailableFIRs * firs) :
   pEventDispatch_(ed), 
@@ -146,5 +147,7 @@ void FilterLinkController::fir_recompute_id(char firnum)
     fid  ^= pFIRs_->filters[firnum][i]; 
   }
   pFIRs_->filterids[firnum] = fid; 
+
+}
 
 }

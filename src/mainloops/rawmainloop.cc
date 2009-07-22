@@ -1,5 +1,7 @@
 #include "rawmainloop.h"
 
+namespace dspboard { 
+
 void RawMainLoop::setup(EventDispatch * ed, EventTX * etx, 
 			AcqSerial * as, 
 			SystemTimer * timer, EventEchoProc * eep, 
@@ -66,4 +68,6 @@ void RawMainLoop::runloop()
       }
     eep_->benchStop(0); 
   }
+}
+
 }

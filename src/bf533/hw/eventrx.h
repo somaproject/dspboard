@@ -3,6 +3,8 @@
 #include <cdefBF533.h>
 #include <types.h>
 
+namespace dspboard { 
+
 class EventRX
 {
 public:
@@ -29,4 +31,5 @@ private:
 
 extern EventRX * eventrx; 
 
+}
 #endif // EVENTRX

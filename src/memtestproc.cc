@@ -3,6 +3,7 @@
 #include <hw/misc.h>
 #include <hw/memory.h>
 
+namespace dspboard { 
 MemTestProc::MemTestProc(EventDispatch * ed, EventTX* etx, 
 			     unsigned char device) : 
   eventpos(0), 
@@ -290,4 +291,6 @@ void MemTestProc::run_reverse_copy_32_test_misaligned(dsp::Event_t * et)
 //   }
   
   
+}
+
 }

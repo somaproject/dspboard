@@ -1,6 +1,7 @@
-#ifndef ACQBOARDIF_H
-#define ACQBOARDIF_H
+#ifndef DSPBOARD_ACQBOARDIF_H
+#define DSPBOARD_ACQBOARDIF_H
 
+namespace dspboard { 
 typedef bool chanmask_t; 
 
 class AcqFrame
@@ -77,4 +78,5 @@ class AcqSerialBase
 
 }; 
 
+}
 #endif //ACQBOARDIF_H

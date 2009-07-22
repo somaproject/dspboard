@@ -1,7 +1,9 @@
-#ifndef AVAILABLE_FIRS_H
-#define AVAILABLE_FIRS_H
+#ifndef DSPBOARD_AVAILABLE_FIRS_H
+#define DSPBOARD_AVAILABLE_FIRS_H
 
 #include "filterio.h"
+
+namespace dspboard { 
 
 class AvailableFIRs
 {
@@ -17,6 +19,8 @@ public:
   filterid_t filterids[FILTERNUM]; 
   
 }; 
+
+}
 
 //static AvailableFIRs availableFIRs; 
 

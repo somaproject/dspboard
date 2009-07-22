@@ -1,5 +1,5 @@
-#ifndef NOOPMAINLOOP_H
-#define NOOPMAINLOOP_H
+#ifndef DSPBOARD_NOOPMAINLOOP_H
+#define DSPBOARD_NOOPMAINLOOP_H
 
 #include "mainloop.h"
 #include <systemtimer.h>
@@ -10,6 +10,7 @@
 #include <sinks/rawsink.h>
 #include <dsp.h>
 
+namespace dspboard { 
 class NoOpMainLoop : public MainLoop
 {
  public:  
@@ -42,5 +43,6 @@ class NoOpMainLoop : public MainLoop
   
 }; 
 
+}
 
 #endif 

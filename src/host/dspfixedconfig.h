@@ -1,7 +1,7 @@
-#ifndef DSPFIXEDCONFIG_H
-#define DSPFIXEDCONFIG_H
+#ifndef DSPBOARD_DSPFIXEDCONFIG_H
+#define DSPBOARD_DSPFIXEDCONFIG_H
 
-
+namespace dspboard { 
 class DSPFixedConfig : public DSPConfig
 {
 public:
@@ -31,6 +31,6 @@ public:
   unsigned char data_; 
   
 }; 
-
+}
 
 #endif // DSPFIXEDCONFIG_H

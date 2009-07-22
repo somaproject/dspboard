@@ -7,6 +7,8 @@
 
 BOOST_AUTO_TEST_SUITE(filterio_test); 
 
+using namespace dspboard; 
+
 class SourceObject  : FilterLink {
 public:
   SampleRingBuffer<int> bufA_; 

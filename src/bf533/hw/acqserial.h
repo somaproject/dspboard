@@ -1,8 +1,10 @@
-#ifndef ACQSERIAL_H
-#define ACQSERIAL_H
+#ifndef DSPBOARD_ACQSERIAL_H
+#define DSPBOARD_ACQSERIAL_H
 
 #include <hw/uarttx.h>
 #include <acqboardif.h>
+
+namespace dspboard { 
 
 class AcqSerial : public AcqSerialBase
 {
@@ -51,4 +53,7 @@ private:
   UARTTX pUARTTX_; 
   
 }; 
+
+}
+
 #endif // ACQSERIAL_H

@@ -2,6 +2,8 @@
 #include <iostream>
 #include <string.h>
 
+namespace dspboard { 
+
 HostDataOut::HostDataOut() :
   dataCount_(0)
 {
@@ -35,4 +37,6 @@ void HostDataOut::sendPending() {
 
 bool HostDataOut::txBufferFull() {
   return false; 
+}
+
 }

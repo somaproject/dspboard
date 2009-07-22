@@ -1,8 +1,9 @@
-#ifndef MISC_H
-#define MISC_H
+#ifndef DSPBOARD_MISC_H
+#define DSPBOARD_MISC_H
 
 #include <cdefBF533.h>
 
+namespace dspboard { 
 
 inline void setEventLED(bool on) {
   *pFIO_DIR    |= 0x0100;
@@ -21,6 +22,8 @@ inline int cycles()
 		:"=d"(ret));
  
 	return ret;
+}
+
 }
 
 #endif

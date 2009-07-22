@@ -1,5 +1,5 @@
-#ifndef ACQSTATERECEIVER_H
-#define ACQSTATERECEIVER_H
+#ifndef DSPBOARD_ACQSTATERECEIVER_H
+#define DSPBOARD_ACQSTATERECEIVER_H
 
 /*
   A set of interfaces that receive state updates. 
@@ -7,6 +7,8 @@
 */ 
 
 #include "acqstatecontrol.h"
+
+namespace dspboard { 
 
 class AcqStateReceiver {
 public:
@@ -17,5 +19,6 @@ public:
   virtual void onInputSelChange(char chan) = 0; 
 }; 
 
+}
 
 #endif // ACQSTATERECEIVER_H
