@@ -1,7 +1,7 @@
 #ifndef DSPBOARD_EVENT_H
 #define DSPBOARD_EVENT_H
 
-#include <types.h>
+#include "types.h"
 
 namespace dspboard { 
 namespace dsp { 

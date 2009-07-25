@@ -1,10 +1,10 @@
 #ifndef DSPBOARD_ACQSERIAL_H
 #define DSPBOARD_ACQSERIAL_H
 
-#include <acqboardif.h>
+#include "acqboardif.h"
 #include <vector>
 #include <list>
-#include <types.h>
+#include "types.h"
 
 /*
   if autosend = 1, then we always have data to send, 
