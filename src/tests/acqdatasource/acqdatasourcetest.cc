@@ -80,10 +80,10 @@ BOOST_AUTO_TEST_CASE(acqdatasource_simple)
   
   for (int bufnum = 0; bufnum < 4; bufnum++) {
     unsigned char * buffer = dataout.allbuffers[bufnum]; 
-    const int BUFOFFSET = 4 +  8 + 2 + 4; 
-    int LEN = 128 * 4 + BUFOFFSET; 
-    BOOST_CHECK_EQUAL(buffer[0], LEN >> 8); 
-    BOOST_CHECK_EQUAL(buffer[1], LEN & 0xFF ); 
+    const int BUFOFFSET = 2 +  8 + 2 + 4 + 2; 
+    int LEN = 128 * 4 + BUFOFFSET -2; 
+    BOOST_CHECK_EQUAL(buffer[0], (LEN >> 8)); 
+    BOOST_CHECK_EQUAL(buffer[1], (LEN & 0xFF));
     
     //   // check SRC and TYP
     const char TYP = 2; 

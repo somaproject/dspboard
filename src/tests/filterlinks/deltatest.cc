@@ -34,13 +34,13 @@ BOOST_AUTO_TEST_CASE(simple_test)
   // now we run a loop of 12800 timestamps, which should give us 
   // 128 samples, and trigger the TX
 
-  for (int i  = 1; i < 1290; i++) {
+  for (int i  = 1; i < 129*50; i++) {
     timer.setTime(i); 
   }
   
   BOOST_CHECK_EQUAL(dataout.dataCount_,  1); 
   // now the painstaking process of checking the buffer
-  int LEN = 128 * 4 + 4 + (8 + 2 + 4); 
+  int LEN = 128 * 4 + 4 + (8 + 2 + 4) - 2; 
   BOOST_CHECK_EQUAL(dataout.mostrecentbuffer[0], LEN >> 8); 
   BOOST_CHECK_EQUAL(dataout.mostrecentbuffer[1], LEN & 0xFF ); 
   

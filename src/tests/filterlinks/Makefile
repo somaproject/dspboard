@@ -1,7 +1,7 @@
 SRCDIR = ../../
 HWDIR = $(SRCDIR)/host
 CXXFLAGS=-I$(SRCDIR) -I$(HWDIR) -g
-LDFLAGS=-lboost_unit_test_framework
+LDFLAGS=-lboost_unit_test_framework-mt
 
 
 all: runner
@@ -35,7 +35,8 @@ clean:
 	rm *.o
 
 
-runner: runner.o filterlinktests.o deltatest.o systemtimer.o eventdispatch.o fakesource.o \
+runner: runner.o filterlinktests.o deltatest.o \
+	 systemtimer.o eventdispatch.o fakesource.o \
 	hostdataout.o rawsink.o delta.o
 
 

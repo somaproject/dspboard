@@ -88,7 +88,7 @@ COREOBJS = $(BUILDDIR)/systemtimer.o $(BUILDDIR)/filterlinkcontroller.o $(BUILDD
 	 $(BUILDDIR)/rawsink.o $(BUILDDIR)/rawmainloop.o  $(BUILDDIR)/somamainloop.o \
 	$(BUILDDIR)/tspikesink.o $(BUILDDIR)/wavesink.o $(BUILDDIR)/acqdatasource.o $(BUILDDIR)/acqdatasourcecontrol.o \
 	 $(BUILDDIR)/acqboardif.o $(BUILDDIR)/filter.o\
-	$(BUILDDIR)/acqstatecontrol.o $(BUILDDIR)/acqserial.o $(BUILDDIR)/eventtx.o
+	$(BUILDDIR)/acqstatecontrol.o $(BUILDDIR)/acqserial.o $(BUILDDIR)/eventtx.o  $(BUILDDIR)/availablefirs.o
 
 # Actual tests
 
@@ -97,21 +97,21 @@ ACQSTATECONTROL_OBJS = acqstatecontrol/acqstatecontroltest.o acqstatecontrol/moc
 CALLBACK_OBJS = 
 EVENTDISPATCH_OBJS = 
 FILTERIO_OBJS = filterio/filteriotest.o
-FILTERLINKS_OBJS = filterlinks/filterlinktests.o filterlinks/deltatest.o $(BUILDDIR)/availablefirs.o
+FILTERLINKS_OBJS = filterlinks/filterlinktests.o filterlinks/deltatest.o
 RAWMAINLOOP_OBJS = rawmainloop/rawmainlooptest.o 
 SAMPLEBUFFERS_OBJ = 
 TSPIKESINK_OBJS = tspikesink/tspikesinktest.o
 
 runner: runner.o $(BUILDDIR)/test_util.o $(COREOBJS)  \
 	$(ACQDATASOURCE_OBJS) \
+	$(TSPIKESINK_OBJS) \
 	$(ACQSTATECONTROL_OBJS) \
 	$(CALLBACK_OBJS) \
 	$(EVENTDISPATCH_OBJS) \
-	$(FILTERIO_OBJS) \
-	$(FILTERLINKS_OBJS) \
 	$(RAWMAINLOOP_OBJS) \
 	$(SAMPLEBUFFERS_OBJ) \
-	$(TSPIKESINK_OBJS) 
+	$(FILTERIO_OBJS) \
+	$(FILTERLINKS_OBJS) \
 
 
 clean: 
