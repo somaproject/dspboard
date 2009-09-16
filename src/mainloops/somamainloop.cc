@@ -33,7 +33,19 @@ void SomaMainLoop::setup(EventDispatch * ed, EventTX * etx,
   pAcqDataSourceControl_ = new AcqDataSourceControl(pEventDispatch_,
 							   pEventTX_,
 							   pAcqStateControl_);
+  
 
+
+  // audio monitor
+  pAudioMonitor_ = new AudioMonitor(pEventDispatch_, pEventTX_); 
+
+  pAcqDataSource_->sourceA.connect(pAudioMonitor_->sink1); 
+  pAcqDataSource_->sourceB.connect(pAudioMonitor_->sink2); 
+  pAcqDataSource_->sourceC.connect(pAudioMonitor_->sink3); 
+  pAcqDataSource_->sourceD.connect(pAudioMonitor_->sink4); 
+  pAcqDataSource_->sourceCont.connect(pAudioMonitor_->sinkC); 
+
+  
 
   pFilterLinkController_ = new FilterLinkController(pEventDispatch_, 
 						    pEventTX_, 

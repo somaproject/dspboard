@@ -32,6 +32,9 @@ $(BUILDDIR)/eventtx.o: $(HWDIR)/hw/eventtx.cc builddir
 $(BUILDDIR)/filter.o: $(HWDIR)/filter.cc builddir
 	$(CXX) $(CXXFLAGS) -c $(HWDIR)/filter.cc -o $(BUILDDIR)/filter.o
 
+$(BUILDDIR)/audiomon.o: $(SRCDIR)/audiomon.cc builddir
+	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/audiomon.cc -o $(BUILDDIR)/audiomon.o
+
 $(BUILDDIR)/eventdispatch.o: $(SRCDIR)/eventdispatch.cc builddir
 	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/eventdispatch.cc -o $(BUILDDIR)/eventdispatch.o
 
@@ -87,7 +90,7 @@ COREOBJS = $(BUILDDIR)/systemtimer.o $(BUILDDIR)/filterlinkcontroller.o $(BUILDD
 	$(BUILDDIR)/eventdispatch.o $(BUILDDIR)/echoproc.o $(BUILDDIR)/benchmark.o $(BUILDDIR)/fakesource.o $(BUILDDIR)/hostdataout.o \
 	 $(BUILDDIR)/rawsink.o $(BUILDDIR)/rawmainloop.o  $(BUILDDIR)/somamainloop.o \
 	$(BUILDDIR)/tspikesink.o $(BUILDDIR)/wavesink.o $(BUILDDIR)/acqdatasource.o $(BUILDDIR)/acqdatasourcecontrol.o \
-	 $(BUILDDIR)/acqboardif.o $(BUILDDIR)/filter.o\
+	 $(BUILDDIR)/acqboardif.o $(BUILDDIR)/filter.o $(BUILDDIR)/audiomon.o \
 	$(BUILDDIR)/acqstatecontrol.o $(BUILDDIR)/acqserial.o $(BUILDDIR)/eventtx.o  $(BUILDDIR)/availablefirs.o
 
 # Actual tests
@@ -101,6 +104,7 @@ FILTERLINKS_OBJS = filterlinks/filterlinktests.o filterlinks/deltatest.o
 RAWMAINLOOP_OBJS = rawmainloop/rawmainlooptest.o 
 SAMPLEBUFFERS_OBJ = 
 TSPIKESINK_OBJS = tspikesink/tspikesinktest.o
+MISC_OBJS = audiomon/audiomontest.o
 
 runner: runner.o $(BUILDDIR)/test_util.o $(COREOBJS)  \
 	$(ACQDATASOURCE_OBJS) \
@@ -112,6 +116,7 @@ runner: runner.o $(BUILDDIR)/test_util.o $(COREOBJS)  \
 	$(SAMPLEBUFFERS_OBJ) \
 	$(FILTERIO_OBJS) \
 	$(FILTERLINKS_OBJS) \
+	$(MISC_OBJS)
 
 
 clean: 

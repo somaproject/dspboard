@@ -14,6 +14,7 @@
 #include <filterlinkcontroller.h>
 
 #include <filterlinks/fir.h>
+#include <audiomon.h>
 
 //making this static
 
@@ -50,6 +51,7 @@ class SomaMainLoop : public MainLoop
   AcqStateControl * pAcqStateControl_; 
   AcqDataSourceControl * pAcqDataSourceControl_; 
   AcqDataSource * pAcqDataSource_; 
+  AudioMonitor * pAudioMonitor_; 
   FilterLinkController * pFilterLinkController_; 
   AvailableFIRs * pAvailableFIRs_; 
 

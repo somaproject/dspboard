@@ -1,0 +1,7 @@
+Tests for the wave sink: 
+
+1. can we put in data and get out packets, downsampled? 
+2. can we set the downsample ratio, and: 
+   a. are we alerted to the result
+   b. the response 
+3. check errors. 
