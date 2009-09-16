@@ -12,6 +12,7 @@
 #include <somanetwork/datapacket.h>
 #include <tests/utils/util.h>
 #include <event.h>
+#include <dspfixedconfig.h>
 
 
 BOOST_AUTO_TEST_SUITE(audiomon_test); 
@@ -159,9 +160,13 @@ BOOST_AUTO_TEST_CASE(simple_compile_test)
   */
   SourceObject source1; 
   SourceObject source4; 
-  EventDispatch ed(DSPA); 
+  int SRC = 0; 
+  DSPFixedConfig config(DSPA, 8, SRC); 
+
+  EventDispatch ed(config.getDSPPos()); 
+
   EventTX etx; 
-  AudioMonitor mon(&ed, &etx); 
+  AudioMonitor mon(&ed, &etx, &config); 
   
   source1.source.connect(mon.sink1); 
   source4.source.connect(mon.sink4); 
@@ -203,6 +208,7 @@ BOOST_AUTO_TEST_CASE(simple_compile_test)
   int pos = 0; 
   for(; ei != etx.eventBuffer_.end(); ei++) {
     BOOST_CHECK_EQUAL(ei->event.cmd, 0x18); 
+    BOOST_CHECK_EQUAL(ei->event.src, 8); 
     BOOST_CHECK_EQUAL(ei->event.data[1], (pos * 0x1000) >> 8); 
     pos += 4; 
   }

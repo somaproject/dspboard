@@ -37,7 +37,7 @@ void SomaMainLoop::setup(EventDispatch * ed, EventTX * etx,
 
 
   // audio monitor
-  pAudioMonitor_ = new AudioMonitor(pEventDispatch_, pEventTX_); 
+  pAudioMonitor_ = new AudioMonitor(pEventDispatch_, pEventTX_, pConfig_); 
 
   pAcqDataSource_->sourceA.connect(pAudioMonitor_->sink1); 
   pAcqDataSource_->sourceB.connect(pAudioMonitor_->sink2); 

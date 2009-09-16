@@ -27,7 +27,7 @@ class AudioMonitor
   
 public:
   AudioMonitor(EventDispatch *, 
-	       EventTX * etx); 
+	       EventTX * etx,  DSPConfig * ); 
 
   FilterLinkSink<sample_t> sink1; 
   FilterLinkSink<sample_t> sink2; 

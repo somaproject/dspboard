@@ -3,7 +3,7 @@
 namespace dspboard {
 
 
-AudioMonitor::AudioMonitor(EventDispatch * ed, EventTX * etx) :
+AudioMonitor::AudioMonitor(EventDispatch * ed, EventTX * etx, DSPConfig * conf) :
   sink1(fastdelegate::MakeDelegate(this, &AudioMonitor::processSample1)),
   sink2(fastdelegate::MakeDelegate(this, &AudioMonitor::processSample2)),
   sink3(fastdelegate::MakeDelegate(this, &AudioMonitor::processSample3)),
@@ -22,6 +22,7 @@ AudioMonitor::AudioMonitor(EventDispatch * ed, EventTX * etx) :
   
   bcastEventTX_.clear(); 
   bcastEventTX_.setall();   
+  bcastEventTX_.event.src = conf->getEventDevice(); 
   bcastEventTX_.event.cmd = AUDIO_OUTPUT_CMD; 
 
 
