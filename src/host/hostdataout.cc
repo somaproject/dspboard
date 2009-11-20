@@ -1,6 +1,7 @@
 #include "hostdataout.h" 
 #include <iostream>
 #include <string.h>
+#include <stdio.h>
 
 namespace dspboard { 
 
