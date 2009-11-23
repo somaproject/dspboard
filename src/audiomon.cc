@@ -13,7 +13,8 @@ AudioMonitor::AudioMonitor(EventDispatch * ed, EventTX * etx, DSPConfig * conf) 
   etx_(etx), 
   enabled_(false), 
   chansel_(0),
-  samplepos_(0)
+  samplepos_(0), 
+  volume_(8)
 {
   
   // link the outputs
@@ -91,10 +92,10 @@ void AudioMonitor::processSample(sample_t s) {
     bcastEventTX_.event.data[0] = 1; 
     // This is a hack to let us send 4 samples per ecycle, by pulling
     // off the most interesting 16 bits. FIXME 
-    bcastEventTX_.event.data[1] = samples_[0] >> 8;  
-    bcastEventTX_.event.data[2] = samples_[1] >> 8; 
-    bcastEventTX_.event.data[3] = samples_[2] >> 8;
-    bcastEventTX_.event.data[4] = samples_[3] >> 8; 
+    bcastEventTX_.event.data[1] = samples_[0] >> volume_;  
+    bcastEventTX_.event.data[2] = samples_[1] >> volume_; 
+    bcastEventTX_.event.data[3] = samples_[2] >> volume_;
+    bcastEventTX_.event.data[4] = samples_[3] >> volume_; 
     
     etx_->newEvent(bcastEventTX_); 
   }
@@ -121,18 +122,18 @@ void AudioMonitor::command(dsp::Event_t* et) {
     if(et->data[2] < 5) { 
       chansel_ = et->data[2]; 
     }
-
-    // now send the state change update
-    bcastEventTX_.event.data[0] = 0; 
-    bcastEventTX_.event.data[1] = enabled_; 
-    bcastEventTX_.event.data[2] = chansel_; 
-    etx_->newEvent(bcastEventTX_); 
+    
+    volume_ = et->data[3]; 
     
   }
-
+  
+  // now send the state change update
+  bcastEventTX_.event.data[0] = 0; 
+  bcastEventTX_.event.data[1] = enabled_; 
+  bcastEventTX_.event.data[2] = chansel_; 
+  bcastEventTX_.event.data[3] = volume_; 
+  etx_->newEvent(bcastEventTX_); 
+  
 }
-
-
-
 
 }

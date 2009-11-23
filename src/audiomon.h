@@ -56,7 +56,7 @@ private:
   char chansel_; 
   sample_t samples_[4]; 
   char samplepos_; 
-
+  unsigned char volume_;
 }; 
 
 
