@@ -1,0 +1,7 @@
+Version information: 
+
+There are two sets of version information we can extract
+out of the DSPboard:
+
+FPGA firmware version      : field 0
+DSPboard firmware version  : field 1

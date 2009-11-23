@@ -141,11 +141,16 @@ int main_loop()
   EventEchoProc * eep = new EventEchoProc(ed, etx, timer, bm, 
 					  config.getEventDevice()); 
   
-
-  //NoOpMainLoop * pMainLoop = new NoOpMainLoop(); 
-  //MemTestProc * mtp = new MemTestProc(ed, etx, config.getEventDevice()); 
+  // This is a total hack way of accomplishing this, but I don't have
+  // the time to properly refactor this at the moment
+  #if MAINLOOP == 1
+  NoOpMainLoop * pMainLoop = new NoOpMainLoop(); 
+  #elif MAINLOOP == 2
   SomaMainLoop * pMainLoop = new SomaMainLoop();
-  //RawMainLoop * pMainLoop = new RawMainLoop();
+  #elif MAINLOOP == 3
+  RawMainLoop * pMainLoop = new RawMainLoop();
+  #endif
+  //MemTestProc * mtp = new MemTestProc(ed, etx, config.getEventDevice()); 
   //FakeRawMainLoop * pMainLoop = new FakeRawMainLoop();
 
   pMainLoop->setup(ed, etx, acqserial, timer, eep, dataout, &config); 

@@ -19,7 +19,7 @@ LDFLAGS =  -g -T bftiny.x  -L$(BFROOT)lib/ -L$(BFROOT)/lib/gcc/bfin-elf/$(BFROOT
 	 -lsupc++ -lc -lgcc -lnosys
 
 
-OBJS = $(ASMSRCS:%.asm=%.o) $(CCSRCS:%.cc=%.o) eventtx.o eventrx.o \
+OBJS = $(ASMSRCS:%.asm=%.o) eventtx.o eventrx.o \
 	eventdispatch.o memory.o dspuartconfig.o  acqserial.o audiomon.o \
 	uarttx.o acqstatecontrol.o systemtimer.o datasport.o acqboardif.o\
 	fakesource.o rawsink.o  tspikesink.o availablefirs.o filterlinkcontroller.o\
@@ -34,10 +34,18 @@ CXX = bfin-elf-g++
 
 LD = bfin-elf-ld
 
-all: $(OBJS) dspboard.dxe dspboard.ldr
+all: $(OBJS) dspboard_noop.dxe dspboard_noop.ldr \
+	 dspboard_soma.dxe dspboard_soma.ldr \
+	dspboard_raw.dxe dspboard_raw.ldr
 
-main.o: main.cc
-	$(CXX) $(CXXFLAGS)  -c -o main.o main.cc
+main_noop.o: main.cc
+	$(CXX) $(CXXFLAGS) -DMAINLOOP=1 -c -o main_noop.o main.cc
+
+main_soma.o: main.cc
+	$(CXX) $(CXXFLAGS) -DMAINLOOP=2 -c -o main_soma.o main.cc
+
+main_raw.o: main.cc
+	$(CXX) $(CXXFLAGS) -DMAINLOOP=3 -c -o main_raw.o main.cc
 
 memory.o: $(HWDIR)hw/memory.cc
 	$(CXX) $(CXXFLAGS)  -c  $(HWDIR)hw/memory.cc
@@ -138,8 +146,16 @@ uarttx.o: $(HWDIR)hw/uarttx.cc
 	$(CC) $(ASMFLAGS) -c -o $@ $<
 
 
-dspboard.dxe: $(OBJS)
-	$(LD) $(OBJS)  $(LDFLAGS) -o dspboard.dxe
+dspboard_noop.dxe: $(OBJS) main_noop.o
+	$(LD) $(OBJS) main_noop.o  $(LDFLAGS) -o dspboard_noop.dxe
+
+
+dspboard_soma.dxe: $(OBJS) main_soma.o
+	$(LD) $(OBJS) main_soma.o  $(LDFLAGS) -o dspboard_soma.dxe
+
+
+dspboard_raw.dxe: $(OBJS) main_raw.o
+	$(LD) $(OBJS) main_raw.o  $(LDFLAGS) -o dspboard_raw.dxe
 
 clean:
 	rm -f *.o
@@ -150,6 +166,14 @@ ldr: simpletest.ldr
 dspboard.dump: dspboard.dxe
 	bfin-elf-objdump -s --disassemble --line-numbers dspboard.dxe > dspboard.dump
 
-dspboard.ldr: dspboard.dxe
-	rm -f dspboard.ldr
-	bfin-elf-ldr -T BF533 -c -p f --gpio=1  dspboard.ldr dspboard.dxe
+dspboard_soma.ldr: dspboard_soma.dxe
+	rm -f dspboard_soma.ldr
+	bfin-elf-ldr -T BF533 -c -p f --gpio=1  dspboard_soma.ldr dspboard_soma.dxe
+
+dspboard_noop.ldr: dspboard_noop.dxe
+	rm -f dspboard_noop.ldr
+	bfin-elf-ldr -T BF533 -c -p f --gpio=1  dspboard_noop.ldr dspboard_noop.dxe
+
+dspboard_raw.ldr: dspboard_raw.dxe
+	rm -f dspboard_raw.ldr
+	bfin-elf-ldr -T BF533 -c -p f --gpio=1  dspboard_raw.ldr dspboard_raw.dxe
