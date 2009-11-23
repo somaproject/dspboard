@@ -29,8 +29,9 @@ class FPGAPing(object):
         self.pingtgts = set(tgts)
         
         for i in self.pingtgts:
-            self.eio.addRXMask(0x09, i)
-
+            #self.eio.addRXMask(0x09, i)
+            self.eio.addRXMask(xrange(256), xrange(1, 70))
+            self.eio.addRXMask(xrange(256), xrange(80, 256))
         self.eio.start()
         
     def ping(self):
@@ -54,6 +55,8 @@ class FPGAPing(object):
         while len(eventsrxed) < len(self.pingtgts):
             erx = self.eio.getEvents(blocking=False)
             if erx != None:
+                for eias in erx:
+                    print eias
                 eventsrxed += erx
             if time.time() > starttime + PINGWAIT:
                 break
