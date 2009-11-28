@@ -23,6 +23,7 @@ def setparse(args):
             pingtgts.add(int(who))
     return pingtgts
 
+PING_RESPONSE_CMD = 0x09
 class FPGAPing(object):
     def __init__(self, somaIP, tgts):
         self.eio = NetEventIO(somaIP)
@@ -30,8 +31,7 @@ class FPGAPing(object):
         
         for i in self.pingtgts:
             #self.eio.addRXMask(0x09, i)
-            self.eio.addRXMask(xrange(256), xrange(1, 70))
-            self.eio.addRXMask(xrange(256), xrange(80, 256))
+            self.eio.addRXMask(PING_RESPONSE_CMD, xrange(1, 255))
         self.eio.start()
         
     def ping(self):
