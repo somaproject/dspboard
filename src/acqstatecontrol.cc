@@ -108,11 +108,11 @@ void AcqStateControl::serialCommandSend()
     {
       AcqCommand icmd; 
       char cmdid = getNextCMDID(); 
-      char chan = cmdCurrentVal_; 
+      unsigned int chan = cmdCurrentVal_; 
       icmd.cmdid = cmdid; 
       icmd.cmd = 2; 
-      icmd.data = chan; 
-      icmd.data = icmd.data << 24; 
+      icmd.data = 0 | (chan << 16); 
+
       pendingSerialCMDID_ = cmdid; 
       pAcqSerial_->sendCommand(&icmd); 
       break; 
