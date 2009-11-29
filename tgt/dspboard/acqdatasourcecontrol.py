@@ -32,6 +32,10 @@ print "acq link status query sent, waiting for response"
 erx = eio.getEvents()
 for q in erx:
     print q
+if erx[0].data[1] == 1:
+    print "Link status: UP"
+else:
+    print "Link status: DOWN"
 
 
 ## # now we send the "set gain" event and wait for response
