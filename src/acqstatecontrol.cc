@@ -96,7 +96,7 @@ void AcqStateControl::serialCommandSend()
       AcqCommand hcmd; 
       char cmdid = getNextCMDID(); 
       hcmd.cmdid = cmdid; 
-      hcmd.cmd = 2; 
+      hcmd.cmd = 3; 
       hcmd.data = (currentMaskPos_ << 24) | cmdCurrentVal_ << 16; 
       
       pendingSerialCMDID_ = cmdid; 
@@ -110,7 +110,7 @@ void AcqStateControl::serialCommandSend()
       char cmdid = getNextCMDID(); 
       char chan = cmdCurrentVal_; 
       icmd.cmdid = cmdid; 
-      icmd.cmd = 3; 
+      icmd.cmd = 2; 
       icmd.data = chan; 
       icmd.data = icmd.data << 24; 
       pendingSerialCMDID_ = cmdid; 

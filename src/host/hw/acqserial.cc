@@ -81,7 +81,7 @@ void AcqSerial::getNextFrame(AcqFrame * af) {
       std::cout << "AcqSerial setting gain[" << (int)chan << "] = " 
 		<< (int) val << std::endl ; 
       gains_[chan] = val; 
-    } else  if (acPending_.cmd == 0x02) {
+    } else  if (acPending_.cmd == 0x03) {
       // set hpf
       char chan = acPending_.data >> 24; 
       bool val = (acPending_.data >> 16) & 0xFF; 
@@ -89,7 +89,7 @@ void AcqSerial::getNextFrame(AcqFrame * af) {
       hpfs_[chan] = val; 
       std::cout << "AcqSerial setting hpf[" << (int)chan << "] = " 
 		<< (int) val << std::endl ;
-    } else if (acPending_.cmd == 0x3) {
+    } else if (acPending_.cmd == 0x2) {
       char chan = acPending_.data >> 24; 
       chanSel_ = chan; 
       std::cout << "AcqSerial setting insel = " 
