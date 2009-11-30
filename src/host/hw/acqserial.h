@@ -31,7 +31,8 @@ public:
 
   std::vector<int> gains_; 
   std::vector<bool> hpfs_; 
-  int chanSel_;
+  int chanSelA_;
+  int chanSelB_;
   int recentCMDID_; 
   int mode_; 
 
