@@ -186,6 +186,7 @@ BOOST_AUTO_TEST_CASE(simple_compile_test)
   evts[0].data[0] = 1; 
   evts[0].data[1] = 1; // turn on
   evts[0].data[2] = 3; // enable channel A.4
+  evts[0].data[3] = 0; 
 
   
   uint16_t * event_buffer = createEventBuffer(en, en, en, en, evts); 
@@ -209,7 +210,7 @@ BOOST_AUTO_TEST_CASE(simple_compile_test)
   for(; ei != etx.eventBuffer_.end(); ei++) {
     BOOST_CHECK_EQUAL(ei->event.cmd, 0x18); 
     BOOST_CHECK_EQUAL(ei->event.src, 8); 
-    BOOST_CHECK_EQUAL(ei->event.data[1], (pos * 0x1000) >> 8); 
+    BOOST_CHECK_EQUAL(ei->event.data[1], (pos * 0x1000) & 0xFFFF); 
     pos += 4; 
   }
 
