@@ -22,6 +22,7 @@
 #include <mainloops/rawmainloop.h>
 #include <mainloops/somamainloop.h>
 #include <mainloops/fakerawmainloop.h>
+#include <mainloops/somastimmainloop.h>
 #include <sinks/rawsink.h>
 #include <sinks/tspikesink.h>
 #include <filterlinks/delta.h>
@@ -149,6 +150,8 @@ int main_loop()
   SomaMainLoop * pMainLoop = new SomaMainLoop();
   #elif MAINLOOP == 3
   RawMainLoop * pMainLoop = new RawMainLoop();
+  #elif MAINLOOP == 4
+  SomaStimMainLoop * pMainLoop = new SomaStimMainLoop();
   #endif
   //MemTestProc * mtp = new MemTestProc(ed, etx, config.getEventDevice()); 
   //FakeRawMainLoop * pMainLoop = new FakeRawMainLoop();
