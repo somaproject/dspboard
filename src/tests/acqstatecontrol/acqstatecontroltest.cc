@@ -110,6 +110,72 @@ BOOST_AUTO_TEST_CASE(simple_linkup_state_initialize)
 }
 
 
+BOOST_AUTO_TEST_CASE(simple_linkup_state_initialize_B)
+{
+  /*
+    The same as the above test, but for the B set
+     of channels
+
+  */ 
+  AcqSerial acqs(true); 
+  AcqState as; 
+
+  // Set to a bunch of wrong values
+  as.mode = 7; 
+  as.gain[0] = -1; 
+  as.gain[1] = -1; 
+  as.gain[2] = -1; 
+  as.gain[3] = -1; 
+  as.gain[4] = -1; 
+
+  as.hpfen[0] = false; 
+  as.hpfen[1] = true; 
+  as.hpfen[2] = false; 
+  as.hpfen[3] = true; 
+  as.hpfen[4] = true; 
+
+  as.inputSel = 7; 
+
+  MockReceiver mockReceiver; 
+
+  AcqStateControl asc(&acqs, &as); 
+  asc.setAcqStateReceiver(&mockReceiver); 
+
+  asc.setDSPPos(DSPB); 
+  
+  // call the linkups
+  asc.setLinkStatus(true); 
+
+  
+  while(1) {
+    if (! acqs.checkRxEmpty()){
+      AcqFrame af; 
+      acqs.getNextFrame(&af); 
+      asc.newAcqFrame(&af); 
+      if(asc.isReady() == true) {
+	break; 
+      }
+      
+    }
+
+  }
+
+  BOOST_CHECK_EQUAL(mockReceiver.linkChanges.size(), 1);
+  if (mockReceiver.linkChanges.size() > 0) {
+    BOOST_CHECK_EQUAL(mockReceiver.linkChanges[0], true); 
+  }
+  BOOST_CHECK_EQUAL(as.mode, 0); 
+  for (int i = 0; i < 5; i++) {
+    BOOST_CHECK_EQUAL(as.gain[i], 0); 
+    BOOST_CHECK_EQUAL(as.hpfen[i], false); 
+  }
+  
+  BOOST_CHECK_EQUAL(as.inputSel, 0); 
+
+  
+}
+
+
 
 
 BOOST_AUTO_TEST_CASE(simple_gain_test)
@@ -174,6 +240,77 @@ BOOST_AUTO_TEST_CASE(simple_gain_test)
   BOOST_CHECK_EQUAL(acqs.gains_[2], 1); 
   BOOST_CHECK_EQUAL(acqs.gains_[3], 0); 
   BOOST_CHECK_EQUAL(acqs.gains_[4], 1); 
+
+  
+}
+
+
+
+
+BOOST_AUTO_TEST_CASE(simple_gain_test_B)
+{
+  /* same as above, but for set B */ 
+
+  AcqSerial acqs(true); 
+  AcqState as; 
+  
+  MockReceiver mockReceiver; 
+
+  AcqStateControl asc(&acqs, &as); 
+  asc.setAcqStateReceiver(&mockReceiver); 
+
+  asc.setDSPPos(DSPB); 
+  
+  asc.setLinkStatus(true); // bring up the interface
+
+  AcqFrame af;  // update mode
+  acqs.getNextFrame(&af); 
+  asc.newAcqFrame(&af); 
+
+  bool enables[5]; 
+  enables[0] = true; 
+  enables[1] = false; 
+  enables[2] = true; 
+  enables[3] = false; 
+  enables[4] = true; 
+
+  while(1) {
+    if (! acqs.checkRxEmpty()){
+      AcqFrame af; 
+      acqs.getNextFrame(&af); 
+      asc.newAcqFrame(&af); 
+      if(mockReceiver.count > 1 and asc.isReady()) {
+	break; 
+      }
+    }
+
+  }
+  std::cout << "ABOUT TO SET ---------------------------------------------------"
+	    << std::endl; 
+
+  std::cout << "-------------------------------------------------------"
+	    << std::endl; 
+
+  // now, setup the callbacks
+  BOOST_CHECK_EQUAL(asc.setGain(enables, 100), true); 
+
+  while(1) {
+    if (! acqs.checkRxEmpty()){
+      AcqFrame af; 
+      acqs.getNextFrame(&af); 
+      asc.newAcqFrame(&af); 
+      std::cout << "mockReceiver.count = " << mockReceiver.count << std::endl; 
+      if(mockReceiver.count > 5) {
+	break; 
+      }
+    }
+
+  }
+  BOOST_CHECK_EQUAL(acqs.gains_[5], 1); 
+  BOOST_CHECK_EQUAL(acqs.gains_[6], 0); 
+  BOOST_CHECK_EQUAL(acqs.gains_[7], 1); 
+  BOOST_CHECK_EQUAL(acqs.gains_[8], 0); 
+  BOOST_CHECK_EQUAL(acqs.gains_[9], 1); 
 
   
 }

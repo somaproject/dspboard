@@ -83,7 +83,10 @@ void AcqStateControl::serialCommandSend()
       char cmdid = getNextCMDID(); 
       gcmd.cmdid = cmdid; 
       gcmd.cmd = 1; 
-      gcmd.data = (currentMaskPos_ << 24) | cmdCurrentVal_ << 16; 
+      char pos = currentMaskPos_; 
+      if(dsppos_ == DSPB) 
+	pos += 5; 
+      gcmd.data = (pos << 24) | cmdCurrentVal_ << 16; 
 
       pendingSerialCMDID_ = cmdid; 
       //std::cout << "sending gain command" << std::endl; 
@@ -96,8 +99,11 @@ void AcqStateControl::serialCommandSend()
       AcqCommand hcmd; 
       char cmdid = getNextCMDID(); 
       hcmd.cmdid = cmdid; 
-      hcmd.cmd = 2; 
-      hcmd.data = (currentMaskPos_ << 24) | cmdCurrentVal_ << 16; 
+      hcmd.cmd = 3; 
+      char pos = currentMaskPos_; 
+      if(dsppos_ == DSPB) 
+	pos += 5; 
+      hcmd.data = (pos << 24) | cmdCurrentVal_ << 16; 
       
       pendingSerialCMDID_ = cmdid; 
       pAcqSerial_->sendCommand(&hcmd); 
@@ -108,11 +114,14 @@ void AcqStateControl::serialCommandSend()
     {
       AcqCommand icmd; 
       char cmdid = getNextCMDID(); 
-      char chan = cmdCurrentVal_; 
+      unsigned int chan = cmdCurrentVal_; 
       icmd.cmdid = cmdid; 
-      icmd.cmd = 3; 
-      icmd.data = chan; 
-      icmd.data = icmd.data << 24; 
+      icmd.cmd = 2; 
+      if (dsppos_ == DSPA) {
+	icmd.data = 0 | (chan << 16); 
+      } else {
+	icmd.data = 1 | (chan << 16); 
+      }
       pendingSerialCMDID_ = cmdid; 
       pAcqSerial_->sendCommand(&icmd); 
       break; 
