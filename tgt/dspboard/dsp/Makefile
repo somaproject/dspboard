@@ -23,9 +23,8 @@ OBJS = $(ASMSRCS:%.asm=%.o) eventtx.o eventrx.o \
 	eventdispatch.o memory.o dspuartconfig.o  acqserial.o audiomon.o \
 	uarttx.o acqstatecontrol.o systemtimer.o datasport.o acqboardif.o\
 	fakesource.o rawsink.o  tspikesink.o availablefirs.o filterlinkcontroller.o\
-	 rawmainloop.o somamainloop.o noopmainloop.o echoproc.o benchmark.o memtestproc.o\
-	filter.o delta.o fir.o acqdatasourcecontrol.o acqdatasource.o wavesink.o \
-	fakerawmainloop.o
+	echoproc.o benchmark.o memtestproc.o stimsink.o\
+	filter.o delta.o fir.o acqdatasourcecontrol.o acqdatasource.o wavesink.o
 
 
 AS = bfin-elf-as
@@ -36,7 +35,8 @@ LD = bfin-elf-ld
 
 all: $(OBJS) dspboard_noop.dxe dspboard_noop.ldr \
 	 dspboard_soma.dxe dspboard_soma.ldr \
-	dspboard_raw.dxe dspboard_raw.ldr
+	dspboard_raw.dxe dspboard_raw.ldr \
+	dspboard_soma_stim.dxe dspboard_soma_stim.ldr 
 
 main_noop.o: main.cc
 	$(CXX) $(CXXFLAGS) -DMAINLOOP=1 -c -o main_noop.o main.cc
@@ -46,6 +46,9 @@ main_soma.o: main.cc
 
 main_raw.o: main.cc
 	$(CXX) $(CXXFLAGS) -DMAINLOOP=3 -c -o main_raw.o main.cc
+
+main_soma_stim.o: main.cc
+	$(CXX) $(CXXFLAGS) -DMAINLOOP=4 -c -o main_soma_stim.o main.cc
 
 memory.o: $(HWDIR)hw/memory.cc
 	$(CXX) $(CXXFLAGS)  -c  $(HWDIR)hw/memory.cc
@@ -110,6 +113,9 @@ noopmainloop.o: $(SRCDIR)/mainloops/noopmainloop.cc
 somamainloop.o: $(SRCDIR)/mainloops/somamainloop.cc
 	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/mainloops/somamainloop.cc
 
+somastimmainloop.o: $(SRCDIR)/mainloops/somastimmainloop.cc
+	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/mainloops/somastimmainloop.cc
+
 systemtimer.o: $(SRCDIR)/systemtimer.cc
 	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/systemtimer.cc
 
@@ -124,6 +130,9 @@ tspikesink.o: $(SRCDIR)/sinks/tspikesink.cc
 
 wavesink.o: $(SRCDIR)/sinks/wavesink.cc
 	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/sinks/wavesink.cc
+
+stimsink.o: $(SRCDIR)/sinks/stimsink.cc
+	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/sinks/stimsink.cc
 
 delta.o: $(SRCDIR)/filterlinks/delta.cc
 	$(CXX) $(CXXFLAGS)  -c  $(SRCDIR)/filterlinks/delta.cc
@@ -146,16 +155,19 @@ uarttx.o: $(HWDIR)hw/uarttx.cc
 	$(CC) $(ASMFLAGS) -c -o $@ $<
 
 
-dspboard_noop.dxe: $(OBJS) main_noop.o
-	$(LD) $(OBJS) main_noop.o  $(LDFLAGS) -o dspboard_noop.dxe
+dspboard_noop.dxe: $(OBJS) main_noop.o noopmainloop.o
+	$(LD) $(OBJS) main_noop.o noopmainloop.o  $(LDFLAGS) -o dspboard_noop.dxe
 
 
-dspboard_soma.dxe: $(OBJS) main_soma.o
-	$(LD) $(OBJS) main_soma.o  $(LDFLAGS) -o dspboard_soma.dxe
+dspboard_soma.dxe: $(OBJS) main_soma.o somamainloop.o
+	$(LD) $(OBJS) main_soma.o somamainloop.o  $(LDFLAGS) -o dspboard_soma.dxe
 
 
-dspboard_raw.dxe: $(OBJS) main_raw.o
-	$(LD) $(OBJS) main_raw.o  $(LDFLAGS) -o dspboard_raw.dxe
+dspboard_raw.dxe: $(OBJS) main_raw.o rawmainloop.o
+	$(LD) $(OBJS) main_raw.o rawmainloop.o  $(LDFLAGS) -o dspboard_raw.dxe
+
+dspboard_soma_stim.dxe: $(OBJS) main_soma_stim.o somastimmainloop.o
+	$(LD) $(OBJS) main_soma_stim.o somastimmainloop.o  $(LDFLAGS) -o dspboard_soma_stim.dxe
 
 clean:
 	rm -f *.o
@@ -177,3 +189,9 @@ dspboard_noop.ldr: dspboard_noop.dxe
 dspboard_raw.ldr: dspboard_raw.dxe
 	rm -f dspboard_raw.ldr
 	bfin-elf-ldr -T BF533 -c -p f --gpio=1  dspboard_raw.ldr dspboard_raw.dxe
+
+
+dspboard_soma_stim.ldr: dspboard_soma_stim.dxe
+	rm -f dspboard_soma_stim.ldr
+	bfin-elf-ldr -T BF533 -c -p f --gpio=1  dspboard_soma_stim.ldr dspboard_soma_stim.dxe
+
