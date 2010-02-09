@@ -51,22 +51,6 @@ void StimSink::processSample(sample_t data)
 
   lastdata_ = data; 
 
-//   downsamplepos_ = (downsamplepos_ + 1) % downSampleN_; 
-
-//   if(downsamplepos_ != 0) {
-//     return; 
-//   }
-  
-//   pendingWaveData_.data[bufferPos_] = data; 
-
-//   if(bufferPos_ == 0) {
-//     bufferStartTime_ = pSystemTimer_->getTime(); 
-//   }
-//   bufferPos_++; 
-//   if (bufferPos_ == WaveData_t::BUFSIZE) {
-//     sendWave(); 
-//     bufferPos_ = 0; 
-//   }
     
 }
 void StimSink::setstate(dsp::Event_t * et) {
