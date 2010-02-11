@@ -29,6 +29,18 @@
 #include <hw/misc.h>
 #include <filter.h>
 #include <memtestproc.h>
+
+#if MAINLOOP == 1
+#include "ver_noop.h"
+#elif MAINLOOP == 2
+#include "ver_soma.h"
+#elif MAINLOOP == 3
+#include "ver_raw.h"
+#elif MAINLOOP == 4
+#include "ver_stim.h"
+#endif
+
+
 dspboard::AcqSerial * acqserial;  // global so we can get function wrappers for ISR. 
 
 

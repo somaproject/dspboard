@@ -1,0 +1,16 @@
+The DSPBoard consists of two pieces of firmware, the FPGA bitcode and
+the DSP firmware.
+
+The version fields are as follows: 
+0: FPGA firmware name
+1: FPGA firmware revision
+2: last 64 bits of git commit of repo
+3: build time, sec since epoch
+
+for the DSP firmware:
+8: name
+9: revision
+10: last 64 bits of sha-1
+11: build date. 
+
+

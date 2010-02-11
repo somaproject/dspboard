@@ -14,6 +14,12 @@
 */ 
 namespace dspboard { 
 
+extern const uint16_t VERSION_MAJOR;
+extern const uint16_t VERSION_MINOR;
+extern const char * FIRMWARENAME;
+extern const uint64_t GITHASH; 
+extern const uint32_t BUILDTIME; 
+
 class EventEchoProc
 {
   
@@ -26,6 +32,10 @@ public:
   void eventMemCheck(dsp::Event_t * et); 
   void eventBenchQuery(dsp::Event_t * et); 
   void eventDebugQuery(dsp::Event_t * et); 
+  void eventVersionQuery(dsp::Event_t * et); 
+
+  static const int ECMD_VERSION_QUERY = 0x04; 
+
   
   uint16_t debugdata[6]; 
   void benchStart(short counter); 
