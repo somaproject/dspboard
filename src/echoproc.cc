@@ -17,6 +17,10 @@ EventEchoProc::EventEchoProc(EventDispatch * ed, EventTX* etx,
   pBenchmark_(bm)
 {
   
+  ed->registerCallback( ECMD_VERSION_QUERY, 
+			fastdelegate::MakeDelegate(this, 
+						   &EventEchoProc::eventVersionQuery)); 
+  
   ed->registerCallback(0xF0, fastdelegate::MakeDelegate(this, 
 							&EventEchoProc::eventEcho)); 
   
@@ -140,6 +144,40 @@ void EventEchoProc::benchStart(short counter)
 void EventEchoProc::benchStop(short counter)
 {
   pBenchmark_->stop(counter); 
+}
+
+
+void EventEchoProc::eventVersionQuery(dsp::Event_t * et) {
+
+  if(et->data[0] && 0x8000) { // query
+    unsigned char field = et->data[0]; 
+    
+
+    dsp::EventTX_t etx ;
+    etx.addr[0] = 0xF; // FIXME actually send to requester
+    etx.event.cmd = ECMD_VERSION_QUERY; 
+    etx.event.src = device_;
+    etx.event.data[0] = field;  // response; 
+
+    if (field == 8) { 
+      // name 
+      memcpy(&etx.event.data[1], FIRMWARENAME, 8); 
+    } else if (field == 9) { 
+      etx.event.data[1] = VERSION_MAJOR; 
+      etx.event.data[2] = VERSION_MINOR; 
+    } else if (field == 10) { 
+      uint64_t val = GITHASH; 
+      memcpy(&etx.event.data[1], &val, 8); 
+    } else if (field == 11) { 
+      etx.event.data[1] = BUILDTIME >> 16; 
+
+      etx.event.data[2] = BUILDTIME & 0xFFFF; 
+    }
+    
+    if (! petx->newEvent(etx)) {
+      etx_errors++; 
+    }
+  }  
 }
 
 }

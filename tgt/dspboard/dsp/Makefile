@@ -39,15 +39,19 @@ all: $(OBJS) dspboard_noop.dxe dspboard_noop.ldr \
 	dspboard_soma_stim.dxe dspboard_soma_stim.ldr 
 
 main_noop.o: main.cc
+	python version.py ver_noop.in.h ver_noop.h
 	$(CXX) $(CXXFLAGS) -DMAINLOOP=1 -c -o main_noop.o main.cc
 
 main_soma.o: main.cc
+	python version.py ver_soma.in.h ver_soma.h
 	$(CXX) $(CXXFLAGS) -DMAINLOOP=2 -c -o main_soma.o main.cc
 
 main_raw.o: main.cc
+	python version.py ver_raw.in.h ver_raw.h
 	$(CXX) $(CXXFLAGS) -DMAINLOOP=3 -c -o main_raw.o main.cc
 
 main_soma_stim.o: main.cc
+	python version.py ver_stim.in.h ver_stim.h
 	$(CXX) $(CXXFLAGS) -DMAINLOOP=4 -c -o main_soma_stim.o main.cc
 
 memory.o: $(HWDIR)hw/memory.cc
