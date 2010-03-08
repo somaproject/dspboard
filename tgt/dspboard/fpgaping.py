@@ -31,7 +31,7 @@ class FPGAPing(object):
         
         for i in self.pingtgts:
             #self.eio.addRXMask(0x09, i)
-            self.eio.addRXMask(PING_RESPONSE_CMD, xrange(1, 255))
+            self.eio.addRXMask(PING_RESPONSE_CMD, i)
         self.eio.start()
         
     def ping(self):

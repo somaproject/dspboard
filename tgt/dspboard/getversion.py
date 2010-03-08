@@ -52,13 +52,13 @@ ECMD_VERSION_QUERY = 0x04
 eio.addRXMask(ECMD_VERSION_QUERY, DSPBOARDADDR)
 
 eio.start()
-for field in range(8, 12):
+for field in range(0, 4):
     # Create event and set mask
     e = Event()
     e.src = eaddr.NETWORK
     e.cmd =  ECMD_VERSION_QUERY
-    e.data[0] = (1 << 15) | field
-
+    e.data[0] = (1 << 15) |  field
+    
 
     ea = eaddr.TXDest()
     ea[DSPBOARDADDR] = 1
@@ -68,7 +68,8 @@ for field in range(8, 12):
 
     erx = eio.getEvents()
     for q in erx:
-        funcs[field](q)
+        print q
+        #funcs[field](q)
 
         
 eio.stop()
